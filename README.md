@@ -1,4 +1,4 @@
-# Download về chỉ cài npm i !
+# Download về chỉ cài `npm i` !
 
 
 Thư viện :
