@@ -1,14 +1,14 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { toast } from 'react-toastify';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import FormValidator from '../components/FormValidator';
 import ApiService from '../api/ApiService';
-import { useNavigate } from 'react-router-dom';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 interface FormData {
-    username: string;
     password: string;
     confirmPassword: string;
     email: string;
@@ -18,7 +18,6 @@ interface FormData {
 
 const Register: React.FC = () => {
     const [formData, setFormData] = useState<FormData>({
-        username: '',
         password: '',
         confirmPassword: '',
         email: '',
@@ -28,6 +27,7 @@ const Register: React.FC = () => {
     const navigate = useNavigate();
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -47,6 +47,7 @@ const Register: React.FC = () => {
     const handleLoginClick = (): void => {
         navigate('/');
     };
+
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         setIsButtonDisabled(true);
@@ -58,18 +59,10 @@ const Register: React.FC = () => {
                 return;
             }
 
-            const accounts = await ApiService.getAccounts();
-            const findUsername = accounts.find((account: FormData) => account.username === formData.username);
-
-
-            if (findUsername) {
-                toast.error('Username already exists');
-                setIsButtonDisabled(false);
-                return;
-            }
-
+            const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
+            console.log('Registration successful:', userCredential.user);
             const dataToSubmit = {
-                username: formData.username,
+
                 password: formData.password,
                 email: formData.email,
                 createdAt: formData.creationDate,
@@ -80,21 +73,23 @@ const Register: React.FC = () => {
                 avatar: null,
                 updateAt: null,
                 address: null,
+                fullName: null,
             };
 
+
             const response = await ApiService.registerAccount(dataToSubmit);
-            toast.success('Registration successful');
-            console.log('Registration successful:', response.data);
+            toast.success('Registration successful ');
+            console.log('Registration successful with External API:', response.data);
             setFormData({
-                username: '',
                 password: '',
                 confirmPassword: '',
                 email: '',
                 creationDate: new Date().toISOString(),
                 role: 'student',
             });
-        } catch (error) {
-            toast.error('Error registering');
+
+        } catch (error: any) {
+            toast.error('Error registering: ' + error.message);
             console.error('Error registering:', error);
         } finally {
             setIsButtonDisabled(false);
@@ -102,6 +97,9 @@ const Register: React.FC = () => {
     };
     const togglePasswordVisibility = (): void => {
         setShowPassword(!showPassword);
+    };
+    const toggleConfirmPasswordVisibility = (): void => {
+        setShowConfirmPassword(!showConfirmPassword);
     };
 
     return (
@@ -114,18 +112,18 @@ const Register: React.FC = () => {
                     <h2 className="font-bold text-2xl text-[#6C6EDD]">Register</h2>
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                         <input
-                            type="text"
-                            id="username"
-                            name="username"
-                            value={formData.username}
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formData.email}
                             onChange={handleChange}
                             required
-                            placeholder='Username'
+                            placeholder='Email'
                             className="p-2 mt-5 rounded-xl border"
                         />
                         <div className='relative'>
                             <input
-                                type="password"
+                                type={showPassword ? "text" : "password"}
                                 id="password"
                                 name="password"
                                 value={formData.password}
@@ -142,9 +140,10 @@ const Register: React.FC = () => {
                                 {showPassword ? <FaEyeSlash /> : <FaEye />}
                             </button>
                         </div>
+
                         <div className='relative'>
                             <input
-                                type="password"
+                                type={showConfirmPassword ? "text" : "password"}
                                 id="confirmPassword"
                                 name="confirmPassword"
                                 value={formData.confirmPassword}
@@ -155,22 +154,13 @@ const Register: React.FC = () => {
                             />
                             <button
                                 type="button"
-                                onClick={togglePasswordVisibility}
+                                onClick={toggleConfirmPasswordVisibility}
                                 className="absolute top-1/2 right-3 transform -translate-y-1/5"
                             >
-                                {showPassword ? <FaEyeSlash /> : <FaEye />}
+                                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
                             </button>
                         </div>
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                            placeholder='Email'
-                            className="p-2 mt-5 rounded-xl border"
-                        />
+
                         <div className="flex items-center">
                             <label htmlFor="role" className="mr-2 text-gray-700">Role:</label>
                             <select

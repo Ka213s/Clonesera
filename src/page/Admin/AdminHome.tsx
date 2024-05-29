@@ -5,7 +5,7 @@ const Home = () => {
     return (
         <div>
             <RedirectToLoginIfNoUserData />
-            <div>Home</div>
+            <div>Admin Home</div>
         </div>
     );
 };

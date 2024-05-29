@@ -8,13 +8,13 @@ import { FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa';
 
 
 interface LoginData {
-    username: string;
+    email: string;
     password: string;
 }
 
 const Login: React.FC = () => {
     const [loginData, setLoginData] = useState<LoginData>({
-        username: '',
+        email: '',
         password: '',
     });
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -35,23 +35,33 @@ const Login: React.FC = () => {
 
         try {
             const response = await ApiService.login(loginData);
-            const findRoleId = response.find((account: LoginData) => account.username === loginData.username && account.password === loginData.password);
-            toast.success('Login successful');
-            switch (findRoleId.roleId) {
-                case 1:
-                    navigate('/adminhome');
-                    break;
-                case 2:
-                    navigate('/studenthome');
-                    break;
-                case 3:
-                    navigate('/instructorhome');
-                    break;
-                default:
-                    break;
+            const account = response.find((account: any) =>
+                account.email === loginData.email &&
+                account.password === loginData.password &&
+                account.status === true
+            );
+            console.log(account);
+            if (account) {
+                toast.success('Login successful');
+                localStorage.setItem('userData', JSON.stringify(account));
+                switch (account.roleId) {
+                    case 1:
+                        navigate('/adminhome');
+                        break;
+                    case 2:
+                        navigate('/studenthome');
+                        break;
+                    case 3:
+                        navigate('/instructorhome');
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                toast.error('Invalid email or password, or account is inactive');
             }
         } catch (error) {
-            toast.error('Invalid username or password');
+            toast.error('Error logging in');
             console.error('Error logging in:', error);
         } finally {
             setIsButtonDisabled(false);
@@ -78,10 +88,10 @@ const Login: React.FC = () => {
                     <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                         <input
                             type="text"
-                            id="username"
-                            name="username"
-                            placeholder='Username'
-                            value={loginData.username}
+                            id="email"
+                            name="email"
+                            placeholder='Email'
+                            value={loginData.email}
                             onChange={handleChange}
                             required
                             className="p-2 mt-5 rounded-xl border"
