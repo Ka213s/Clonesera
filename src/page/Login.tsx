@@ -32,23 +32,32 @@ const Login: React.FC = () => {
 
         try {
             const response = await ApiService.login(loginData);
-            const findRoleId = response.find((account: LoginData) => account.username === loginData.username && account.password === loginData.password);
-            toast.success('Login successful');
-            switch (findRoleId.roleId) {
-                case 1:
-                    navigate('/adminhome');
-                    break;
-                case 2:
-                    navigate('/studenthome');
-                    break;
-                case 3:
-                    navigate('/instructorhome');
-                    break;
-                default:
-                    break;
+            const account = response.find((account: any) =>
+                account.username === loginData.username &&
+                account.password === loginData.password &&
+                account.status === true
+            );
+
+            if (account) {
+                toast.success('Login successful');
+                switch (account.roleId) {
+                    case 1:
+                        navigate('/adminhome');
+                        break;
+                    case 2:
+                        navigate('/studenthome');
+                        break;
+                    case 3:
+                        navigate('/instructorhome');
+                        break;
+                    default:
+                        break;
+                }
+            } else {
+                toast.error('Invalid username or password, or account is inactive');
             }
         } catch (error) {
-            toast.error('Invalid username or password');
+            toast.error('Error logging in');
             console.error('Error logging in:', error);
         } finally {
             setIsButtonDisabled(false);
@@ -89,7 +98,6 @@ const Login: React.FC = () => {
                     {isButtonDisabled ? 'Please wait...' : 'Login'}
                 </button>
             </form>
-            {/* Thay thế nút chuyển hướng đến trang đăng ký bằng button */}
             <button onClick={handleRegisterClick}>Register</button>
             <ToastContainer />
         </div>
