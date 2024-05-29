@@ -71,6 +71,7 @@ const Register: React.FC = () => {
                 avatar: null,
                 updateAt: null,
                 address: null,
+                fullName: null,
             };
 
             const response = await ApiService.registerAccount(dataToSubmit);
