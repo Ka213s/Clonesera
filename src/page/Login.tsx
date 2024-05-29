@@ -143,7 +143,7 @@ const Login: React.FC = () => {
                     <button
                          className='text-base py-4 text-[#6C6EDD] text-left cursor-pointer'
 
-                    >Forgot your password?</button>
+                    >Forgot your password???</button>
                     </div>
                     <div className='mt-3 text-base flex justify-between items-center'>
                         <p>Don't have account?</p>
