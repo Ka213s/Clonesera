@@ -1,19 +1,23 @@
 import { toast } from 'react-toastify';
 
 interface FormData {
-    username: string;
+    email: string;
     password: string;
+    confirmPassword: string;
 }
 
 class FormValidator {
     static validate(formData: FormData): boolean {
-        const { username, password } = formData;
+        const { email, password, confirmPassword } = formData;
 
-        if (username.length < 6) {
-            toast.error('Username must be at least 6 characters long');
+        // Validate email format
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+            toast.error('Please enter a valid email address');
             return false;
         }
 
+        // Validate password length
         if (password.length < 6) {
             toast.error('Password must be at least 6 characters long');
             return false;
@@ -30,6 +34,12 @@ class FormValidator {
         const uppercaseRegex = /[A-Z]/;
         if (!uppercaseRegex.test(password)) {
             toast.error('Password must contain at least one uppercase letter');
+            return false;
+        }
+
+        // Check if password and confirm password match
+        if (password !== confirmPassword) {
+            toast.error('Passwords do not match');
             return false;
         }
 

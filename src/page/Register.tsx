@@ -1,13 +1,12 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import { toast } from 'react-toastify';
-import { ToastContainer } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import FormValidator from '../components/FormValidator';
-import ApiService from '../api/ApiService';
 import { useNavigate } from 'react-router-dom';
+import { auth } from '../firebaseConfig';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import FormValidator from '../components/FormValidator';
 
 interface FormData {
-    username: string;
     password: string;
     confirmPassword: string;
     email: string;
@@ -17,7 +16,6 @@ interface FormData {
 
 const Register: React.FC = () => {
     const [formData, setFormData] = useState<FormData>({
-        username: '',
         password: '',
         confirmPassword: '',
         email: '',
@@ -27,7 +25,6 @@ const Register: React.FC = () => {
     const navigate = useNavigate();
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
         setFormData({
@@ -35,9 +32,11 @@ const Register: React.FC = () => {
             [name]: value,
         });
     };
+
     const handleLoginClick = (): void => {
         navigate('/');
     };
+
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
         e.preventDefault();
         setIsButtonDisabled(true);
@@ -49,44 +48,20 @@ const Register: React.FC = () => {
                 return;
             }
 
-            const accounts = await ApiService.getAccounts();
-            const findUsername = accounts.find((account: FormData) => account.username === formData.username);
-
-
-            if (findUsername) {
-                toast.error('Username already exists');
-                setIsButtonDisabled(false);
-                return;
-            }
-
-            const dataToSubmit = {
-                username: formData.username,
-                password: formData.password,
-                email: formData.email,
-                createdAt: formData.creationDate,
-                roleId: formData.role === 'student' ? 2 : 3,
-                status: true,
-                walletId: null,
-                phonenumber: null,
-                avatar: null,
-                updateAt: null,
-                address: null,
-                fullName: null,
-            };
-
-            const response = await ApiService.registerAccount(dataToSubmit);
+            const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
             toast.success('Registration successful');
-            console.log('Registration successful:', response.data);
+            console.log('Registration successful:', userCredential.user);
+
             setFormData({
-                username: '',
                 password: '',
                 confirmPassword: '',
                 email: '',
                 creationDate: new Date().toISOString(),
                 role: 'student',
             });
-        } catch (error) {
-            toast.error('Error registering');
+
+        } catch (error: any) {
+            toast.error('Error registering: ' + error.message);
             console.error('Error registering:', error);
         } finally {
             setIsButtonDisabled(false);
@@ -97,17 +72,6 @@ const Register: React.FC = () => {
         <div>
             <h2>Register</h2>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={formData.username}
-                        onChange={handleChange}
-                        required
-                    />
-                </div>
                 <div>
                     <label htmlFor="password">Password:</label>
                     <input

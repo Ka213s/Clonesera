@@ -1,18 +1,22 @@
-// firebaseConfig.ts
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getStorage } from "firebase/storage";
+import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA2P695koTkrdM4f0d71e5_kyovUtWJH_k",
-  authDomain: "managerpost-eb04e.firebaseapp.com",
-  projectId: "managerpost-eb04e",
-  storageBucket: "managerpost-eb04e.appspot.com",
-  messagingSenderId: "1040324841373",
-  appId: "1:1040324841373:web:83d445def2142931322974",
-  measurementId: "G-DC26S31889",
+  apiKey: "AIzaSyBvczJhODXC1XOweFDDqkwvZuKcUqPNp9A",
+  authDomain: "clonesera.firebaseapp.com",
+  projectId: "clonesera",
+  storageBucket: "clonesera.appspot.com",
+  messagingSenderId: "275060669998",
+  appId: "1:275060669998:web:594890b79df54757db69bf",
+  measurementId: "G-9DY231DPQL",
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const auth = getAuth(app);
 const storage = getStorage(app);
 
-export { storage };
+export { auth, storage, analytics };

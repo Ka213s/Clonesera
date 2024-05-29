@@ -6,13 +6,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import ApiService from '../api/ApiService';
 
 interface LoginData {
-    username: string;
+    email: string;
     password: string;
 }
 
 const Login: React.FC = () => {
     const [loginData, setLoginData] = useState<LoginData>({
-        username: '',
+        email: '',
         password: '',
     });
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -33,13 +33,14 @@ const Login: React.FC = () => {
         try {
             const response = await ApiService.login(loginData);
             const account = response.find((account: any) =>
-                account.username === loginData.username &&
+                account.email === loginData.email &&
                 account.password === loginData.password &&
                 account.status === true
             );
-
+            console.log(account);
             if (account) {
                 toast.success('Login successful');
+                localStorage.setItem('userData', JSON.stringify(account));
                 switch (account.roleId) {
                     case 1:
                         navigate('/adminhome');
@@ -54,7 +55,7 @@ const Login: React.FC = () => {
                         break;
                 }
             } else {
-                toast.error('Invalid username or password, or account is inactive');
+                toast.error('Invalid email or password, or account is inactive');
             }
         } catch (error) {
             toast.error('Error logging in');
@@ -73,12 +74,12 @@ const Login: React.FC = () => {
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
                 <div>
-                    <label htmlFor="username">Username:</label>
+                    <label htmlFor="email">Email:</label>
                     <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={loginData.username}
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={loginData.email}
                         onChange={handleChange}
                         required
                     />
