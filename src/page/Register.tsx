@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import FormValidator from '../components/FormValidator';
+import ApiService from '../api/ApiService';
 
 interface FormData {
     password: string;
@@ -49,8 +50,28 @@ const Register: React.FC = () => {
             }
 
             const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
-            toast.success('Registration successful');
             console.log('Registration successful:', userCredential.user);
+
+
+            const dataToSubmit = {
+
+                password: formData.password,
+                email: formData.email,
+                createdAt: formData.creationDate,
+                roleId: formData.role === 'student' ? 2 : 3,
+                status: true,
+                walletId: null,
+                phonenumber: null,
+                avatar: null,
+                updateAt: null,
+                address: null,
+                fullName: null,
+            };
+
+
+            const response = await ApiService.registerAccount(dataToSubmit);
+            toast.success('Registration successful ');
+            console.log('Registration successful with External API:', response.data);
 
             setFormData({
                 password: '',
