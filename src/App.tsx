@@ -4,6 +4,7 @@ import Register from './page/Register';
 import AdminHome from './page/Admin/AdminHome';
 import StudentHome from './page/Student/StudentHome';
 import InstructorHome from './page/Instructor/InstructorHome';
+import './App.css';
 
 function App() {
   return (
