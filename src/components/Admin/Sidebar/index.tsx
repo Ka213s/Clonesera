@@ -5,7 +5,7 @@ const Sidebar = () => {
   return (
     <aside className="w-full h-full p-4 bg-white shadow-md">
       <div className="p-4 flex items-center justify-center">
-        <h2 className="text-2xl font-bold text-gray-800">Clonesera</h2>
+        <h2 className="text-2xl font-bold text-gray-800">LOGO</h2>
       </div>
       <nav className="mt-10">
         <ul>

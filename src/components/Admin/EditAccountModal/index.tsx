@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import ApiService from "../../../api/ApiService";
 
 const EditAccountModal = ({ account, onClose }: any) => {
   const [formData, setFormData] = useState({
@@ -16,19 +17,14 @@ const EditAccountModal = ({ account, onClose }: any) => {
     });
   };
 
-  const handleSubmit = (e: any) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    axios
-      .put(
-        `https://66557e453c1d3b602939b8f1.mockapi.io/Account/${account.id}`,
-        formData
-      )
-      .then((response) => {
-        onClose(response.data);
-      })
-      .catch((error) => {
-        console.error("There was an error updating the account!", error);
-      });
+    const updatedAccount = await ApiService.updateAccount(account.id, formData);
+    if (updatedAccount) {
+      onClose(updatedAccount);
+    } else {
+      console.error("There was an error updating the account!");
+    }
   };
 
   return (
