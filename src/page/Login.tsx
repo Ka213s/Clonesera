@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ApiService from '../api/ApiService';
 import { FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa';
-
+import Artwork from '../assets/Artwork.jpg';
 
 interface LoginData {
     email: string;
@@ -140,10 +140,10 @@ const Login: React.FC = () => {
                         Login with Google
                     </button>
                     <div className='w-full mt-5 border-b border-gray-400'>
-                    <button
-                         className='text-base py-4 text-[#6C6EDD] text-left cursor-pointer'
+                        <button
+                            className='text-base py-4 text-[#6C6EDD] text-left cursor-pointer'
 
-                    >Forgot your password?</button>
+                        >Forgot your password?</button>
                     </div>
                     <div className='mt-3 text-base flex justify-between items-center'>
                         <p>Don't have account?</p>
@@ -158,7 +158,7 @@ const Login: React.FC = () => {
                 </div>
 
                 <div className='md:block hidden w-1/2'>
-                    <img className='rounded-2xl' src="Artwork.jpg" alt="" />
+                    <img className='rounded-2xl' src={Artwork} alt="" />
                 </div>
                 <ToastContainer />
             </div>
