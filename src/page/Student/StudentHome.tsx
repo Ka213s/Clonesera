@@ -15,7 +15,7 @@ interface UserData {
     fullName: string | null;
     phoneNumber: string | null;
     avatar: string | null;
-    roleId: number; // Role ID should be changed to match the selected role.
+    roleId: number;
     address: string | null;
     status: boolean;
     createdAt: string | null;
@@ -50,7 +50,7 @@ const StudentHome: React.FC = () => {
 
     const handleInputChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
-        setUserData((prevState: UserData | null) => {
+        setUserData(prevState => {
             if (prevState) {
                 return {
                     ...prevState,
@@ -101,12 +101,12 @@ const StudentHome: React.FC = () => {
             }
         }
     };
-    
+
     const uploadFile = (file: File, folder: string) => {
         return new Promise<string>((resolve, reject) => {
             const storageRef = ref(storage, `${folder}/${file.name}`);
             const uploadTask = uploadBytesResumable(storageRef, file);
-    
+
             uploadTask.on(
                 'state_changed',
                 (snapshot) => {
@@ -129,7 +129,7 @@ const StudentHome: React.FC = () => {
             );
         });
     };
-    
+
 
     if (!userData) {
         return <div>Loading...</div>;

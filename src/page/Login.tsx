@@ -39,7 +39,8 @@ const Login: React.FC = () => {
             const account = response.find((account: UserData) =>
                 account.email === loginData.email &&
                 account.password === loginData.password &&
-                account.status === true
+                account.status === true &&
+                !account.isGoogle
             );
             if (account) {
                 toast.success('Login successful');
@@ -86,7 +87,31 @@ const Login: React.FC = () => {
                 const fullName = profile.displayName ?? '';
                 const email = profile.email ?? ''; 
                 const photoURL = profile.photoURL ?? ''; 
-
+    
+                const existingUser = await ApiService.getUserByEmail(email);
+                if (existingUser && existingUser.length > 0) {
+                    if (!existingUser[0].isGoogle) {
+                        toast.error('This email is already registered. Please use your password to log in.');
+                        return;
+                    }
+                    toast.success('Login successful');
+                    localStorage.setItem('userData', JSON.stringify(existingUser[0]));
+                    switch (existingUser[0].roleId) {
+                        case 1:
+                            navigate('/adminhome');
+                            break;
+                        case 2:
+                            navigate('/studenthome');
+                            break;
+                        case 3:
+                            navigate('/instructorhome');
+                            break;
+                        default:
+                            break;
+                    }
+                    return;
+                }
+                
                 const userData: UserData = {
                     fullName,
                     email,
@@ -98,13 +123,15 @@ const Login: React.FC = () => {
                     updateAt: null,
                     phonenumber: null,
                     walletId: null,
-                    roleId: 2 
+                    roleId: 2, 
+                    isGoogle: true 
                 };
-
+    
                 try {
                     await ApiService.saveGoogleUserData(userData);
                     toast.success("User logged in successfully!");
-
+                    localStorage.setItem('userData', JSON.stringify(userData));
+    
                     switch (userData.roleId) {
                         case 1:
                             navigate('/adminhome');
@@ -127,7 +154,8 @@ const Login: React.FC = () => {
             toast.error('Error logging in with Google');
             console.error('Error logging in with Google:', error);
         }
-    };    
+    };
+    
     
     return (
         <div className="bg-gray-50 min-h-screen flex items-center justify-center">

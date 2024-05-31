@@ -1,4 +1,7 @@
 import axios from 'axios';
+
+const BASE_URL = 'https://66557e453c1d3b602939b8f1.mockapi.io/Account';
+
 export interface UserData {
     fullName: string;
     email: string;
@@ -11,18 +14,30 @@ export interface UserData {
     phonenumber: string | null;
     walletId: string | null;
     roleId: number;
+    isGoogle: boolean; // Add this property
 }
+
 class ApiService {
-    static async saveGoogleUserData(userData: UserData): Promise<void> {
+    static async saveGoogleUserData(userData: UserData) {
         try {
-            await axios.post('https://66557e453c1d3b602939b8f1.mockapi.io/Account', userData);
+            await axios.post(BASE_URL, userData);
         } catch (error) {
-            throw new Error('Error saving user data to API');
+            console.error('Error saving user data to API', error);
+            return null;
+        }
+    }
+    static async getUserByEmail(email: string) {
+        try {
+            const response = await axios.get(`${BASE_URL}?email=${email}`);
+            return response.data; 
+        } catch (error) {
+            console.error('Error fetching user by email:', error);
+            return null;
         }
     }
     static async getAccounts(role: string) {
         try {
-            const response = await axios.get(`https://66557e453c1d3b602939b8f1.mockapi.io/Account?roleId=${role}`);
+            const response = await axios.get(`${BASE_URL}?roleId=${role}`);
             return response.data;
         } catch (error) {
             console.error('Error fetching account data:', error);
@@ -32,51 +47,51 @@ class ApiService {
 
     static async registerAccount(data: any) {
         try {
-            const response = await axios.post('https://66557e453c1d3b602939b8f1.mockapi.io/Account', data);
+            const response = await axios.post(BASE_URL, data);
             return response.data;
         } catch (error) {
             console.error('Error registering account:', error);
-            throw error;
+            return null;
         }
     }
 
     static async login(data: { email: string; password: string }) {
         try {
-            const response = await axios.get(`https://66557e453c1d3b602939b8f1.mockapi.io/Account?email=${data.email}&password=${data.password}`);
+            const response = await axios.get(`${BASE_URL}?email=${data.email}&password=${data.password}`);
             return response.data;
         } catch (error) {
             console.error('Error logging in:', error);
-            throw error;
+            return null;
         }
     }
 
     static async getAccountById(roleId: string) {
         try {
-            const response = await axios.get(`https://66557e453c1d3b602939b8f1.mockapi.io/Account/${roleId}`);
+            const response = await axios.get(`${BASE_URL}/${roleId}`);
             return response.data;
         } catch (error) {
             console.error('Error fetching account data:', error);
-            throw error;
+            return null;
         }
     }
 
     static async updateAccount(id: string, data: any) {
         try {
-            const response = await axios.put(`https://66557e453c1d3b602939b8f1.mockapi.io/Account/${id}`, data);
+            const response = await axios.put(`${BASE_URL}/${id}`, data);
             return response.data;
         } catch (error) {
             console.error('Error updating account:', error);
-            throw error;
+            return null;
         }
     }
 
     static async changePassword(id: string, currentPassword: string, newPassword: string) {
         try {
-            const response = await axios.put(`https://66557e453c1d3b602939b8f1.mockapi.io/Account/${id}/changePassword`, { currentPassword, newPassword });
+            const response = await axios.put(`${BASE_URL}/${id}/changePassword`, { currentPassword, newPassword });
             return response.data;
         } catch (error) {
             console.error('Error changing password:', error);
-            throw error;
+            return null;
         }
     }
 }
