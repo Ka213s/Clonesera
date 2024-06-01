@@ -1,5 +1,5 @@
 import React, { useState, FormEvent } from 'react';
-import ApiService from '../api/ApiService';
+import ApiService from '../services/ApiService';
 import { toast } from 'react-toastify';
 
 interface ChangePasswordProps {

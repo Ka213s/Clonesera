@@ -1,5 +1,5 @@
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
-import ApiService from '../../api/ApiService';
+import ApiService from '../../services/ApiService';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';

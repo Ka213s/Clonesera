@@ -1,10 +1,11 @@
+import '../src/styles/App.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './page/Login';
 import Register from './page/Register';
 import AdminHome from './page/Admin/AdminHome';
 import StudentHome from './page/Student/StudentHome';
 import InstructorHome from './page/Instructor/InstructorHome';
-import './App.css';
+
 
 function App() {
   return (
@@ -14,8 +15,8 @@ function App() {
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/adminhome" element={<AdminHome />} />
-          <Route path="/studenthome" element={<StudentHome />} />
-          <Route path="/instructorhome" element={<InstructorHome />} />
+          <Route path="/profile-student" element={<StudentHome />} />
+          <Route path="/profile-instructor" element={<InstructorHome />} />
 
         </Routes>
       </div>
