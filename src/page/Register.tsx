@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import FormValidator from '../components/FormValidator';
-import ApiService from '../api/ApiService';
+import ApiService from '../services/ApiService';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Artwork from '../assets/Artwork.jpg';
 

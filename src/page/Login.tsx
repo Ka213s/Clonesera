@@ -2,16 +2,12 @@ import React, { useState, ChangeEvent, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ApiService, { UserData } from '../api/ApiService';
+import ApiService, { UserData } from '../services/ApiService';
 import { FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
 import Artwork from '../assets/Artwork.jpg';
-
-interface LoginData {
-    email: string;
-    password: string;
-}
+import { LoginData } from '../models/interfaces/LoginData';
 
 const Login: React.FC = () => {
     const [loginData, setLoginData] = useState<LoginData>({
@@ -50,10 +46,10 @@ const Login: React.FC = () => {
                         navigate('/adminhome');
                         break;
                     case 2:
-                        navigate('/studenthome');
+                        navigate('/profile-student');
                         break;
                     case 3:
-                        navigate('/instructorhome');
+                        navigate('/profile-instructor');
                         break;
                     default:
                         break;
@@ -101,10 +97,10 @@ const Login: React.FC = () => {
                             navigate('/adminhome');
                             break;
                         case 2:
-                            navigate('/studenthome');
+                            navigate('/profile-student');
                             break;
                         case 3:
-                            navigate('/instructorhome');
+                            navigate('/profile-instructor');
                             break;
                         default:
                             break;
@@ -137,10 +133,10 @@ const Login: React.FC = () => {
                             navigate('/adminhome');
                             break;
                         case 2:
-                            navigate('/studenthome');
+                            navigate('/profile-student');
                             break;
                         case 3:
-                            navigate('/instructorhome');
+                            navigate('/profile-instructor');
                             break;
                         default:
                             break;
@@ -155,7 +151,6 @@ const Login: React.FC = () => {
             console.error('Error logging in with Google:', error);
         }
     };
-    
     
     return (
         <div className="bg-gray-50 min-h-screen flex items-center justify-center">
