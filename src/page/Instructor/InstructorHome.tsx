@@ -15,7 +15,7 @@ interface UserData {
     fullName: string | null;
     phoneNumber: string | null;
     avatar: string | null;
-    roleId: number; // Role ID should be changed to match the selected role.
+    roleId: number;
     address: string | null;
     status: boolean;
     createdAt: string | null;
@@ -42,7 +42,7 @@ const InstructorHome: React.FC = () => {
                     console.error('Error fetching user data:', error);
                 }
             } else {
-                navigate('/'); // Redirect to login page if no user is found
+                navigate('/');
             }
         };
         fetchUserData();
@@ -88,7 +88,6 @@ const InstructorHome: React.FC = () => {
         const file = e.target.files?.[0];
         if (file && userData) {
             try {
-                // Create folder name using user's ID
                 const folderName = userData.id;
                 const avatarUrl = await uploadFile(file, folderName);
                 const updatedUserData = { ...userData, avatar: avatarUrl };
@@ -101,12 +100,12 @@ const InstructorHome: React.FC = () => {
             }
         }
     };
-    
+
     const uploadFile = (file: File, folder: string) => {
         return new Promise<string>((resolve, reject) => {
             const storageRef = ref(storage, `${folder}/${file.name}`);
             const uploadTask = uploadBytesResumable(storageRef, file);
-    
+
             uploadTask.on(
                 'state_changed',
                 (snapshot) => {
@@ -129,7 +128,6 @@ const InstructorHome: React.FC = () => {
             );
         });
     };
-    
 
     if (!userData) {
         return <div>Loading...</div>;
@@ -140,111 +138,98 @@ const InstructorHome: React.FC = () => {
     }
 
     return (
-        <div>
-            <h2>Instructor Home</h2>
-            <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="username">Username:</label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={userData.username}
-                        onChange={handleInputChange}
-                        disabled
-                    />
-                </div>
-                <div>
-                    <label htmlFor="email">Email:</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={userData.email}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="fullName">Full Name:</label>
-                    <input
-                        type="text"
-                        id="fullName"
-                        name="fullName"
-                        value={userData.fullName || ''}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="phoneNumber">Phone Number:</label>
-                    <input
-                        type="text"
-                        id="phoneNumber"
-                        name="phoneNumber"
-                        value={userData.phoneNumber || ''}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="address">Address:</label>
-                    <input
-                        type="text"
-                        id="address"
-                        name="address"
-                        value={userData.address || ''}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="avatar">Avatar URL:</label>
-                    <input
-                        type="text"
-                        id="avatar"
-                        name="avatar"
-                        value={userData.avatar || ''}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="avatarFile">Upload Avatar:</label>
-                    <input
-                        type="file"
-                        id="avatarFile"
-                        name="avatarFile"
-                        accept="image/*"
-                        onChange={handleFileChange}
-                        disabled={!isEditing}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="roleId">Role ID:</label>
-                    <input
-                        type="text"
-                        id="roleId"
-                        name="roleId"
-                        value="Instructor" // Display role name instead of ID
-                        disabled
-                    />
-                </div>
-                <div>
-                    <img src={userData.avatar || 'default-avatar.png'} alt="Avatar" width="100" />
-                </div>
-                {isEditing ? (
+        <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+            <div className="bg-white shadow-md rounded-lg p-6 max-w-2xl w-full">
+                <h2 className="text-2xl font-semibold mb-6">Instructor Profile</h2>
+                <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <button type="submit">Save</button>
-                        <button type="button" onClick={handleCancel}>Cancel</button>
+                        <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email:</label>
+                        <input
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={userData.email}
+                            onChange={handleInputChange}
+                            disabled={!isEditing}
+                            className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                        />
                     </div>
-                ) : (
-                    <button type="button" onClick={handleEdit}>Edit</button>
-                )}
-            </form>
-            <ChangePassword userId={userData.id} />
-            <ToastContainer />
+                    <div>
+                        <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">Full Name:</label>
+                        <input
+                            type="text"
+                            id="fullName"
+                            name="fullName"
+                            value={userData.fullName || ''}
+                            onChange={handleInputChange}
+                            disabled={!isEditing}
+                            className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700">Phone Number:</label>
+                        <input
+                            type="text"
+                            id="phoneNumber"
+                            name="phoneNumber"
+                            value={userData.phoneNumber || ''}
+                            onChange={handleInputChange}
+                            disabled={!isEditing}
+                            className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address:</label>
+                        <input
+                            type="text"
+                            id="address"
+                            name="address"
+                            value={userData.address || ''}
+                            onChange={handleInputChange}
+                            disabled={!isEditing}
+                            className="mt-1 p-2 block w-full border border-gray-300 rounded-md"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="avatarFile" className="block text-sm font-medium text-gray-700">Upload Avatar:</label>
+                        <input
+                            type="file"
+                            id="avatarFile"
+                            name="avatarFile"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            disabled={!isEditing}
+                            className="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:bg-gray-50 file:text-gray-700 hover:file:bg-gray-100"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="roleId" className="block text-sm font-medium text-gray-700">Role ID:</label>
+                        <input
+                            type="text"
+                            id="roleId"
+                            name="roleId"
+                            value="Instructor"
+                            disabled
+                            className="mt-1 p-2 block w-full border border-gray-300 rounded-md bg-gray-100"
+                        />
+                    </div>
+                    <div>
+                        <img src={userData.avatar || 'default-avatar.png'} alt="Avatar" className="w-24 h-24 rounded-full mx-auto mt-4" />
+                    </div>
+                    {isEditing ? (
+                        <div className="flex space-x-4 mt-4">
+                            <button type="submit" className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Save</button>
+                            <button type="button" onClick={handleCancel} className="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">Cancel</button>
+                        </div>
+                    ) : (
+                        <button type="button" onClick={handleEdit} className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 mt-4">Edit</button>
+                    )}
+                </form>
+                <ChangePassword userId={userData.id} />
+                <ToastContainer />
+            </div>
         </div>
     );
 };
+
 export default InstructorHome;

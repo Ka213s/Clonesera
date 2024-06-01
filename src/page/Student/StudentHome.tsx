@@ -1,4 +1,4 @@
-import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
+    import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import ApiService from '../../api/ApiService';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
@@ -141,19 +141,8 @@ const StudentHome: React.FC = () => {
 
     return (
         <div>
-            <h2>Student Home</h2>
+            <h2>Student Proflie</h2>
             <form onSubmit={handleSubmit}>
-                <div>
-                    <label htmlFor="username">Username: </label>
-                    <input
-                        type="text"
-                        id="username"
-                        name="username"
-                        value={userData.username}
-                        onChange={handleInputChange}
-                        disabled
-                    />
-                </div>
                 <div>
                     <label htmlFor="email">Email: </label>
                     <input
@@ -194,17 +183,6 @@ const StudentHome: React.FC = () => {
                         id="address"
                         name="address"
                         value={userData.address || ''}
-                        onChange={handleInputChange}
-                        disabled={!isEditing}
-                    />
-                </div>
-                <div>
-                    <label htmlFor="avatar">Avatar URL: </label>
-                    <input
-                        type="text"
-                        id="avatar"
-                        name="avatar"
-                        value={userData.avatar || ''}
                         onChange={handleInputChange}
                         disabled={!isEditing}
                     />
