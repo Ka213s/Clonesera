@@ -16,7 +16,6 @@ export interface UserData {
     roleId: number;
     isGoogle: boolean; // Add this property
 }
-
 class ApiService {
     static async saveGoogleUserData(userData: UserData) {
         try {

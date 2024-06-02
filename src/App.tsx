@@ -3,20 +3,26 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './page/Login';
 import Register from './page/Register';
 import AdminHome from './page/Admin/AdminHome';
+import StudentProfile from './page/Student/StudentProfile';
+import InstructorProfile from './page/Instructor/InstructorProfile';
 import StudentHome from './page/Student/StudentHome';
-import InstructorHome from './page/Instructor/InstructorHome';
+import HomePage from './page/Body/Home-page/HomePage';
+import Header from './components/Header/Header';
 
 
 function App() {
   return (
     <Router>
       <div className="App">
+        <Header/>
         <Routes>
-          <Route path="/" element={<Login />} />
+        <Route path="/" element={<HomePage/>}></Route>
+          <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/adminhome" element={<AdminHome />} />
-          <Route path="/profile-student" element={<StudentHome />} />
-          <Route path="/profile-instructor" element={<InstructorHome />} />
+          {/* <Route path="/profile-student" element={<StudentProfile />} />
+          <Route path="/profile-instructor" element={<InstructorProfile/>} />
+          <Route path="/studenthome" element={<StudentHome/>} /> */}
 
         </Routes>
       </div>

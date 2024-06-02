@@ -23,7 +23,7 @@ interface UserData {
     walletId: string | null;
 }
 
-const InstructorHome: React.FC = () => {
+const InstructorProfile: React.FC = () => {
     const [userData, setUserData] = useState<UserData | null>(null);
     const [isEditing, setIsEditing] = useState(false);
     const [progress, setProgress] = useState(0);
@@ -232,4 +232,4 @@ const InstructorHome: React.FC = () => {
     );
 };
 
-export default InstructorHome;
+export default InstructorProfile;
