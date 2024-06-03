@@ -1,13 +1,20 @@
 import React from 'react';
 import { FaShoppingCart, FaEnvelope, FaBell, FaUserCircle, FaBars, FaSearch } from 'react-icons/fa';
 
-interface HeaderProps {
-  toggleMenu: () => void;
-}
+const Header: React.FC = () => {
+  const [showMenu, setShowMenu] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
 
-const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
+  };
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
   return (
-    <header className="flex items-center justify-between p-4 bg-white shadow-md fixed w-full z-10">
+    <header className="relative flex items-center justify-between p-4 bg-white shadow-md">
       <div className="flex items-center">
         <FaBars className="text-2xl cursor-pointer mr-4" onClick={toggleMenu} />
         <img src="path_to_logo.png" alt="Logo" className="h-10" />
@@ -20,29 +27,33 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         />
         <FaSearch className="absolute left-3 text-gray-500" />
       </div>
-      <div className="flex items-center ml-auto space-x-6">
-        <button className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
-          Create New Course
-        </button>
+      <button className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
+        Tạo Khóa Học Mới
+      </button>
+      <div className="flex items-center ml-4 space-x-4">
+        <FaShoppingCart className="text-xl cursor-pointer" />
+        <FaEnvelope className="text-xl cursor-pointer" />
+        <FaBell className="text-xl cursor-pointer" />
         <div className="relative">
-          <FaShoppingCart className="text-xl cursor-pointer" />
-          <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-            2
-          </div>
+          <FaUserCircle
+            className="text-2xl cursor-pointer"
+            onClick={toggleDropdown}
+          />
+          {showDropdown && (
+            <div className="absolute right-0 w-48 mt-2 bg-white border border-gray-300 rounded-md shadow-lg">
+              <ul>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">View Instructor Profile</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Litemode</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Crusus Dashboard</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Paid Memberships</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Setting</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Help</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Send Feedback</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Sign Out</li>
+              </ul>
+            </div>
+          )}
         </div>
-        <div className="relative">
-          <FaEnvelope className="text-xl cursor-pointer" />
-          <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-            3
-          </div>
-        </div>
-        <div className="relative">
-          <FaBell className="text-xl cursor-pointer" />
-          <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-            3
-          </div>
-        </div>
-        <FaUserCircle className="text-2xl cursor-pointer" />
       </div>
     </header>
   );
