@@ -10,6 +10,8 @@ import ProtectedRoute from './ProtectedRoute';
 import StudentDashboard from '../page/Student/StudentDashboard';
 import PurchasedCourses from '../page/Student/PurchasedCourse';
 import StudentCertificates from '../page/Student/StudentCertificates';
+import InstructorLayout from "../layouts/InstructorLayout";
+import ListCourse from "../page/Instructor/ListCourse";
 
 const AppRouters: React.FC = () => {
   return (
@@ -26,6 +28,12 @@ const AppRouters: React.FC = () => {
         <Route path="/student_purchased_courses" element={<ProtectedRoute allowedRoles={[2]}><PurchasedCourses /></ProtectedRoute>} />
         <Route path="/student_my_certificates" element={<ProtectedRoute allowedRoles={[2]}><StudentCertificates /></ProtectedRoute>} />
         {/* <Route path="/studenthome" element={<ProtectedRoute allowedRoles={[2]}><StudentHome /></ProtectedRoute>} /> */}
+        <Route path="/instructorhome" element={
+              <InstructorLayout>
+                <ListCourse />
+              </InstructorLayout>
+            }
+          />
       </Routes>
     </Router>
   );
