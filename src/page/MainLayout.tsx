@@ -6,6 +6,7 @@ import Sidebar from '../components/Sidebar/Sidebar';
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
+    
     <div className="flex">
       <Sidebar />
       <div className="flex flex-col flex-1 ml-64">
