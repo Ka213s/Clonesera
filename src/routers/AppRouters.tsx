@@ -5,7 +5,7 @@ import Login from '../page/Login';
 import Register from '../page/Register';
 import AdminHome from '../page/Admin/AdminHome';
 import StudentProfile from '../page/Student/StudentProfile';
-import InstructorProfile from '../page/Instructor/InstructorProfile';
+
 import ProtectedRoute from './ProtectedRoute';
 import StudentDashboard from '../page/Student/StudentDashboard';
 import PurchasedCourses from '../page/Student/PurchasedCourse';
@@ -21,7 +21,7 @@ const AppRouters: React.FC = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/adminhome" element={<ProtectedRoute allowedRoles={[1]}><AdminHome /></ProtectedRoute>} />
         <Route path="/profile-student" element={<ProtectedRoute allowedRoles={[2]}><StudentProfile /></ProtectedRoute>} />
-        <Route path="/profile-instructor" element={<ProtectedRoute allowedRoles={[3]}><InstructorProfile /></ProtectedRoute>} />
+        {/* <Route path="/profile-instructor" element={<ProtectedRoute allowedRoles={[3]}><InstructorProfile /></ProtectedRoute>} /> */}
         <Route path="/student_dashboard" element={<ProtectedRoute allowedRoles={[2]}><StudentDashboard /></ProtectedRoute>} />
         <Route path="/student_purchased_courses" element={<ProtectedRoute allowedRoles={[2]}><PurchasedCourses /></ProtectedRoute>} />
         <Route path="/student_my_certificates" element={<ProtectedRoute allowedRoles={[2]}><StudentCertificates /></ProtectedRoute>} />
