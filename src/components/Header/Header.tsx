@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FaShoppingCart, FaEnvelope, FaBell, FaUserCircle, FaBars, FaSearch } from 'react-icons/fa';
 
 interface HeaderProps {
@@ -6,6 +6,12 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
+  const [showDropdown, setShowDropdown] = useState(false);
+
+  const toggleDropdown = () => {
+    setShowDropdown(!showDropdown);
+  };
+
   return (
     <header className="flex items-center justify-between p-4 bg-white shadow-md fixed top-0 left-0 w-full z-30">
       <div className="flex items-center">
@@ -23,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         <FaSearch className="absolute left-3 text-gray-500" />
       </div>
       <div className="flex items-center ml-auto space-x-6">
-        <button className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
+        <button className="px-4 py-2 text-white bg-[#9997F5] rounded-md hover:bg-[#8886E5]">
           Create New Course
         </button>
         <div className="relative">
@@ -44,7 +50,23 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             3
           </div>
         </div>
-        <FaUserCircle className="text-2xl cursor-pointer" />
+        <div className="relative" onClick={toggleDropdown}>
+          <FaUserCircle className="text-2xl cursor-pointer" />
+          {showDropdown && (
+            <div className="absolute right-0 mt-2 py-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
+              <ul>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">View Instructor Profile</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Litemode</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Crusus Dashboard</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Paid Memberships</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Setting</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Help</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Send Feedback</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Sign Out</li>
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
     </header>
   );
