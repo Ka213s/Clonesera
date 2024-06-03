@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaShoppingCart, FaEnvelope, FaBell, FaUserCircle, FaBars, FaSearch } from 'react-icons/fa';
+import { useNavigate, NavigateFunction , Link } from 'react-router-dom'; // Import NavigateFunction type
+import { handleLogout } from '../../components/Logout';
 
 interface HeaderProps {
-  toggleMenu: () => void;
+    toggleMenu: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
