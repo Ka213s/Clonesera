@@ -1,26 +1,35 @@
 import React, { useState, useEffect } from 'react';
 import { FaShoppingCart, FaEnvelope, FaBell, FaUserCircle, FaBars, FaSearch } from 'react-icons/fa';
-import { useNavigate, NavigateFunction , Link } from 'react-router-dom'; // Import NavigateFunction type
+import { useNavigate, NavigateFunction, Link } from 'react-router-dom'; // Import NavigateFunction type
 import { handleLogout } from '../../components/Logout';
 
 interface HeaderProps {
-    toggleMenu: () => void;
+  toggleMenu: () => void;
 }
 
 const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
+  const navigate: NavigateFunction = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const [showBellNotification, setShowBellNotification] = useState(false);
   const [showEmailNotifications, setShowEmailNotifications] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
   const toggleEmailNotifications = () => {
-    setShowEmailNotifications(!showEmailNotifications); 
+    setShowEmailNotifications(!showEmailNotifications);
   };
   const toggleBellNotification = () => {
-    setShowBellNotification(!showBellNotification); 
+    setShowBellNotification(!showBellNotification);
   };
+
+  useEffect(() => {
+    const userData = localStorage.getItem('userData');
+    if (userData) {
+      setIsLoggedIn(true);
+    }
+  }, []);
 
   return (
     <header className="flex items-center justify-between p-4 bg-white shadow-md fixed top-0 left-0 w-full z-30">
@@ -64,7 +73,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
           </div>
         </div>
         <div className="relative" onClick={toggleBellNotification}>
-          <FaBell className="text-xl cursor-pointer" onClick={() => setShowBellNotification(true)}/>
+          <FaBell className="text-xl cursor-pointer" onClick={() => setShowBellNotification(true)} />
           {showBellNotification && (
             <div className="absolute top-0 right-0 mt-10 py-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
               <ul>
@@ -78,23 +87,29 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             3
           </div>
         </div>
-        <div className="relative" onClick={toggleDropdown}>
-          <FaUserCircle className="text-2xl cursor-pointer" />
-          {showDropdown && (
-            <div className="absolute right-0 mt-2 py-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
-              <ul>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">View Instructor Profile</li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Litemode</li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Crusus Dashboard</li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Paid Memberships</li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Setting</li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Help</li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Send Feedback</li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Sign Out</li>
-              </ul>
-            </div>
-          )}
-        </div>
+        {isLoggedIn ? (
+          <div className="relative" onClick={toggleDropdown}>
+            <FaUserCircle className="text-2xl cursor-pointer" />
+            {showDropdown && (
+              <div className="absolute right-0 mt-2 py-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
+                <ul>
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">View Instructor Profile</li>
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Litemode</li>
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Crusus Dashboard</li>
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Paid Memberships</li>
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Setting</li>
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Help</li>
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Send Feedback</li>
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleLogout(navigate)}>Sign Out</li>
+                </ul>
+              </div>
+            )}
+          </div>
+        ) : (
+          <Link to="/login" className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
+            Login
+          </Link>
+        )}
       </div>
     </header>
   );
