@@ -23,7 +23,6 @@ const socialMediaIcons = {
 };
 
 const Footer: React.FC = () => {
-  // Split links into three columns
   const columnCount = 3;
   const itemsPerColumn = Math.ceil(footerLinksData.links.length / columnCount);
   const columns = Array.from({ length: columnCount }, (_, index) =>
@@ -54,7 +53,7 @@ const Footer: React.FC = () => {
       </div>
       <div className="container mx-auto flex justify-between items-center mt-4">
         <span className="text-gray-600">© 2024 Cursus. All Rights Reserved.</span>
-        <ul className="flex justify-end">
+        <ul className="flex">
           {socialMediaLinksData.socialMedia.map((link: SocialMediaLink, index: number) => (
             <li key={index} className="mx-2">
               <a href={link.url} className="text-gray-600 hover:text-gray-900 text-xl">

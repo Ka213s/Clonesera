@@ -2,14 +2,14 @@ import React from 'react';
 import sidebarMenuItemsData from '../../models/FileJson/sidebarMenuItems.json';
 import { FaHome, FaVideo, FaCompass, FaThList, FaBook, FaSave, FaBell, FaCogs, FaQuestionCircle, FaHistory, FaPaperPlane } from 'react-icons/fa';
 
+interface SidebarProps {
+  showMenu: boolean;
+}
+
 interface MenuItem {
   text: string;
   icon: string;
   url: string;
-}
-
-interface SidebarProps {
-  showMenu: boolean;
 }
 
 const iconComponents = {
@@ -28,7 +28,7 @@ const iconComponents = {
 
 const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
   return (
-    <aside className={`fixed top-0 left-0 h-full bg-gray-100 shadow-md transition-transform duration-300 ${showMenu ? 'translate-x-0' : '-translate-x-full'}`}>
+    <aside className={`fixed top-16 left-0 h-full bg-gray-100 shadow-md transition-all duration-300 z-30 ${showMenu ? 'w-64' : 'w-0 overflow-hidden'}`}>
       <ul className="mt-8">
         {sidebarMenuItemsData.menuItems.map((item: MenuItem, index: number) => (
           <li key={index} className="flex items-center p-4 hover:bg-gray-200">
