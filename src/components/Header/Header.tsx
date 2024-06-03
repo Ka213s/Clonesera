@@ -1,17 +1,15 @@
-// Header.tsx
-import React, { useState } from 'react';
+import React from 'react';
 import { FaShoppingCart, FaEnvelope, FaBell, FaUserCircle, FaBars, FaSearch } from 'react-icons/fa';
 
-const Header: React.FC = () => {
-  const [showMenu, setShowMenu] = useState(false);
+interface HeaderProps {
+  toggleMenu: () => void;
+}
 
-  const toggleMenu = () => {
-    setShowMenu(!showMenu);
-  };
-
+const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   return (
-    <header className="flex items-center justify-between p-4 bg-white shadow-md">
+    <header className="flex items-center justify-between p-4 bg-white shadow-md fixed w-full z-10">
       <div className="flex items-center">
+        <FaBars className="text-2xl cursor-pointer mr-4" onClick={toggleMenu} />
         <img src="path_to_logo.png" alt="Logo" className="h-10" />
       </div>
       <div className="relative flex items-center mx-4">
@@ -46,7 +44,6 @@ const Header: React.FC = () => {
         </div>
         <FaUserCircle className="text-2xl cursor-pointer" />
       </div>
-
     </header>
   );
 };
