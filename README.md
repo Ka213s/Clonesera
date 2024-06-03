@@ -1,6 +1,14 @@
 # Download về chỉ cài `npm i` !
 
+## Link Trello : `https://trello.com/b/8ZiVrljC/ojt-final-project`
 
-Thư viện :
-npm install react-toastify
-npm i axios
+## Link mockApi : `https://mockapi.io/projects`
+
+## Link firebase : `https://console.firebase.google.com/project/clonesera`
+
+
+**(Đăng nhập bằng tài khoản google cho mockApi và firebase !)**
+
+**Acoount : `luuk65903@gmail.com`**
+
+**Password : `Luukaka2003!`**

@@ -1,0 +1,16 @@
+{
+    "menuItems": [
+      { "text": "Home", "icon": "FaHome", "url": "/home" },
+      { "text": "LiveStream", "icon": "FaVideo", "url": "/livestream" },
+      { "text": "Explore", "icon": "FaCompass", "url": "/explore" },
+      { "text": "Categories", "icon": "FaThList", "url": "/categories" },
+      { "text": "Tests", "icon": "FaBook", "url": "/tests" },
+      { "text": "Saved Course", "icon": "FaSave", "url": "/saved" },
+      { "text": "Page Subscription", "icon": "FaBell", "url": "/subscription" },
+      { "text": "Setting", "icon": "FaCogs", "url": "/settings" },
+      { "text": "Help", "icon": "FaQuestionCircle", "url": "/help" },
+      { "text": "Report History", "icon": "FaHistory", "url": "/report-history" },
+      { "text": "Send Feedback", "icon": "FaPaperPlane", "url": "/feedback" }
+    ]
+  }
+  
