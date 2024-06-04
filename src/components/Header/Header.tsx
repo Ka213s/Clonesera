@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaShoppingCart, FaEnvelope, FaBell, FaUserCircle, FaBars, FaSearch } from 'react-icons/fa';
 import { useNavigate, NavigateFunction, Link } from 'react-router-dom'; // Import NavigateFunction type
 import { handleLogout } from '../../components/Logout';
-
+import logo from '../../assets/Logo-cousera-v1.jpg';
 interface HeaderProps {
   toggleMenu: () => void;
 }
@@ -37,7 +37,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         <button className="mr-4" onClick={toggleMenu}>
           <FaBars className="text-xl" />
         </button>
-        <img src="path_to_logo.png" alt="Logo" className="h-10" />
+        <img src={logo} alt="Logo" className="h-10" />
       </div>
       <div className="relative flex items-center mx-4">
         <input
