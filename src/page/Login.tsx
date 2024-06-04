@@ -49,7 +49,7 @@ const Login: React.FC = () => {
                         navigate('/studenthome');
                         break;
                     case 3:
-                        navigate('/instructorhome');
+                        navigate('/profile-instructor');
                         break;
                     default:
                         break;
