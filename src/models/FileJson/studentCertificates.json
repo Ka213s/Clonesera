@@ -1,0 +1,29 @@
+{
+    "certificates": [
+      {
+        "itemNo": 1,
+        "title": "WordPress Certificate",
+        "marks": 15,
+        "outOf": 20,
+        "uploadDate": "6 April 2019",
+        "certificate": "path_to_certificate.pdf"
+      },
+      {
+        "itemNo": 2,
+        "title": "WordPress Pro Certificate",
+        "marks": 14,
+        "outOf": 20,
+        "uploadDate": "4 April 2019",
+        "certificate": "path_to_certificate.pdf"
+      },
+      {
+        "itemNo": 3,
+        "title": "HTML CSS Certificate",
+        "marks": 18,
+        "outOf": 20,
+        "uploadDate": "3 April 2019",
+        "certificate": "path_to_certificate.pdf"
+      }
+    ]
+  }
+  

@@ -1,0 +1,20 @@
+{
+    "testimonials": [
+      {
+        "name": "Emily Davis",
+        "avatar": "path/to/avatar1.jpg",
+        "description": "This platform has transformed my career. The courses are comprehensive and the instructors are highly knowledgeable."
+      },
+      {
+        "name": "Michael Brown",
+        "avatar": "path/to/avatar2.jpg",
+        "description": "I love the flexibility of learning at my own pace. The course selection is diverse and engaging."
+      },
+      {
+        "name": "Sophia Martinez",
+        "avatar": "path/to/avatar3.jpg",
+        "description": "Edututs+ has been a game-changer for me. The quality of content and the ease of access make it my go-to learning resource."
+      }
+    ]
+  }
+  
