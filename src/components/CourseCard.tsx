@@ -11,7 +11,7 @@ interface CourseCardProps {
 
 const CourseCard: React.FC<CourseCardProps> = ({ name, views, date, description, author, price }) => {
   return (
-    <div className="border p-4 rounded shadow-md h-full flex flex-col justify-between">
+    <div className="border p-4 rounded shadow-md h-full flex flex-col justify-between bg-white">
       <div>
         <video controls className="w-full h-40 object-cover rounded-t-lg mb-4">
           <source src={require('../assets/30 Second Timer.mp4')} type="video/mp4" />

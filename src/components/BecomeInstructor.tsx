@@ -7,7 +7,7 @@ const BecomeInstructor: React.FC = () => {
       <p className="text-gray-600 mb-4">
         Top instructors from around the world teach millions of students on Cursus. We provide the tools and skills to teach what you love.
       </p>
-      <button className="bg-blue-500 text-white font-bold py-2 px-4 rounded hover:bg-blue-700">
+      <button className="bg-[#9997F5] text-white font-bold py-2 px-4 rounded hover:bg-[#8886E5]">
         Become Instructor
       </button>
     </div>
