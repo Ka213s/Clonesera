@@ -1,6 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
-import MainLayout from './MainLayout';
+import MainLayout from '../layouts/MainLayout';
 import CourseCard from '../components/CourseCard';
 import FeatureButtons from '../components/FeatureButtons';
 import InstructorCard from '../components/InstructorCard';
