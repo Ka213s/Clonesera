@@ -1,7 +1,7 @@
 import React from 'react';
-import purchasedCourseData from '../../models/FileJson/purchasedCourse.json'; 
+// import purchasedCourseData from '../../models/FileJson/purchasedCourse.json'; 
 import { FaTrash, FaPrint, FaDownload } from 'react-icons/fa';
-import StudentSidebar from '../../components/Sidebar/Student_Sidebar';
+// import StudentSidebar from '../../components/Sidebar/Student_Sidebar';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 
@@ -18,7 +18,7 @@ interface Course {
 const PurchasedCourses: React.FC = () => {
   return (
     <div className="flex h-screen">
-      <StudentSidebar />
+      {/* <StudentSidebar /> */}
       <div className="flex-grow flex flex-col">
       <Header toggleMenu={() => {}} />
         <main className="flex-grow p-6 bg-gray-100">
@@ -38,7 +38,7 @@ const PurchasedCourses: React.FC = () => {
                 </tr>
               </thead>
               <tbody>
-                {purchasedCourseData.courses.map((course: Course, index: number) => (
+                {/* {purchasedCourseData.courses.map((course: Course, index: number) => (
                   <tr key={index}>
                     <td className="px-4 py-2 border-b">{course.itemNo}</td>
                     <td className="px-4 py-2 border-b">{course.title}</td>
@@ -53,7 +53,7 @@ const PurchasedCourses: React.FC = () => {
                       <FaPrint className="text-xl cursor-pointer" />
                     </td>
                   </tr>
-                ))}
+                ))} */}
               </tbody>
             </table>
           </div>

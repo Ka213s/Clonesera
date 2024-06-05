@@ -3,7 +3,7 @@ import ApiService from '../../services/ApiService';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { storage } from '../../firebaseConfig';
+// import { storage } from '../../firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 

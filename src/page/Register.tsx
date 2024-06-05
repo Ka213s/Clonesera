@@ -5,10 +5,16 @@ import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebaseConfig';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import FormValidator from '../components/FormValidator';
-import ApiService from '../services/ApiService';
+import ApiService from '../api/ApiService';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import Artwork from '../assets/Artwork.jpg';
-import { FormData } from '../models/FormData';
+
+interface FormData {
+    password: string;
+    confirmPassword: string;
+    email: string;
+    creationDate: string;
+    role: string;
+}
 
 const Register: React.FC = () => {
     const [formData, setFormData] = useState<FormData>(new FormData('', '', '', 'student'));
@@ -17,6 +23,7 @@ const Register: React.FC = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
+
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
         setFormData({
@@ -24,7 +31,13 @@ const Register: React.FC = () => {
             [name]: value,
         });
     };
-
+    const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>): void => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
     const handleLoginClick = (): void => {
         navigate('/login');
     };
@@ -42,8 +55,8 @@ const Register: React.FC = () => {
 
             const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
             console.log('Registration successful:', userCredential.user);
-
             const dataToSubmit = {
+
                 password: formData.password,
                 email: formData.email,
                 createdAt: formData.creationDate,
@@ -57,10 +70,17 @@ const Register: React.FC = () => {
                 fullName: null,
             };
 
+
             const response = await ApiService.registerAccount(dataToSubmit);
             toast.success('Registration successful ');
             console.log('Registration successful with External API:', response.data);
-            setFormData(new FormData('', '', '', 'student'));
+            setFormData({
+                password: '',
+                confirmPassword: '',
+                email: '',
+                creationDate: new Date().toISOString(),
+                role: 'student',
+            });
 
         } catch (error: any) {
             toast.error('Error registering: ' + error.message);
@@ -69,11 +89,9 @@ const Register: React.FC = () => {
             setIsButtonDisabled(false);
         }
     };
-
     const togglePasswordVisibility = (): void => {
         setShowPassword(!showPassword);
     };
-
     const toggleConfirmPasswordVisibility = (): void => {
         setShowConfirmPassword(!showConfirmPassword);
     };
@@ -82,7 +100,7 @@ const Register: React.FC = () => {
         <div className="bg-gray-50 min-h-screen flex items-center justify-center">
             <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-5xl p-5 items-center">
                 <div className='md:block hidden w-1/2'>
-                    <img className='rounded-2xl' src={Artwork} alt="" />
+                    <img className='rounded-2xl' src="Artwork.jpg" alt="" />
                 </div>
                 <div className='md:w-1/2 px-16'>
                     <h2 className="font-bold text-2xl text-[#6C6EDD]">Register</h2>
@@ -138,35 +156,21 @@ const Register: React.FC = () => {
                         </div>
 
                         <div className="flex items-center">
-                            
-                            <label className="inline-flex items-center">
-                                <input
-                                    type="radio"
-                                    id="student"
-                                    name="role"
-                                    value="student"
-                                    checked={formData.role === 'student'}
-                                    onChange={handleChange}
-                                    className="form-radio h-5 w-5 text-blue-600"
-                                />
-                                <span className="ml-2">Student</span>
-                            </label>
-                            <label className="inline-flex items-center ml-6">
-                                <input
-                                    type="radio"
-                                    id="instructor"
-                                    name="role"
-                                    value="instructor"
-                                    checked={formData.role === 'instructor'}
-                                    onChange={handleChange}
-                                    className="form-radio h-5 w-5 text-blue-600"
-                                />
-                                <span className="ml-2">Instructor</span>
-                            </label>
+                            <label htmlFor="role" className="mr-2 text-gray-700">Role:</label>
+                            <select
+                                id="role"
+                                name="role"
+                                value={formData.role}
+                                onChange={handleSelectChange}
+                                className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200 focus:border-indigo-300"
+                            >
+                                <option value="student">Student</option>
+                                <option value="instructor">Instructor</option>
+                            </select>
                         </div>
 
-                        <button
-                            type="submit"
+
+                        <button type="submit"
                             disabled={isButtonDisabled}
                             className='px-5 py-2 bg-[#9997F5]
                                 rounded-2xl text-white w-full
@@ -178,7 +182,7 @@ const Register: React.FC = () => {
                         <p>Already have an account?</p>
                         <button onClick={handleLoginClick}
                             className="py-2 px-5 bg-white border rounded-xl
-                                hover:scale-110 duration-300">Sign In</button>
+                    hover:scale-110 duration-300 ">Sign Up</button>
                     </div>
                     <ToastContainer />
                 </div>

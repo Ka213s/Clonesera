@@ -9,7 +9,7 @@ import CategoryList from '../components/CategoryList';
 import BecomeInstructor from '../components/BecomeInstructor';
 import coursesData from '../models/FileJson/courses.json';
 import testimonialsData from '../models/FileJson/testimonials.json';
-import instructorsData from '../models/FileJson/instructors.json';
+// import instructorsData from '../models/FileJson/instructors.json';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
@@ -96,7 +96,7 @@ const HomePage: React.FC = () => {
               See all
             </button>
           </div>
-          <div className="w-full">
+          {/* <div className="w-full">
             <Slider {...settings}>
               {instructorsData.instructors.map((instructor, index) => (
                 <div key={index} className="px-2">
@@ -111,7 +111,7 @@ const HomePage: React.FC = () => {
                 </div>
               ))}
             </Slider>
-          </div>
+          </div> */}
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">What Our Students Have to Say</h1>
             <button className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
