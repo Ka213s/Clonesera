@@ -25,14 +25,6 @@ const Register: React.FC = () => {
         });
     };
 
-    const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>): void => {
-        const { name, value } = e.target;
-        setFormData({
-            ...formData,
-            [name]: value,
-        });
-    };
-
     const handleLoginClick = (): void => {
         navigate('/login');
     };
@@ -146,17 +138,31 @@ const Register: React.FC = () => {
                         </div>
 
                         <div className="flex items-center">
-                            <label htmlFor="role" className="mr-2 text-gray-700">Role:</label>
-                            <select
-                                id="role"
-                                name="role"
-                                value={formData.role}
-                                onChange={handleSelectChange}
-                                className="block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-indigo-200 focus:border-indigo-300"
-                            >
-                                <option value="student">Student</option>
-                                <option value="instructor">Instructor</option>
-                            </select>
+                            
+                            <label className="inline-flex items-center">
+                                <input
+                                    type="radio"
+                                    id="student"
+                                    name="role"
+                                    value="student"
+                                    checked={formData.role === 'student'}
+                                    onChange={handleChange}
+                                    className="form-radio h-5 w-5 text-blue-600"
+                                />
+                                <span className="ml-2">Student</span>
+                            </label>
+                            <label className="inline-flex items-center ml-6">
+                                <input
+                                    type="radio"
+                                    id="instructor"
+                                    name="role"
+                                    value="instructor"
+                                    checked={formData.role === 'instructor'}
+                                    onChange={handleChange}
+                                    className="form-radio h-5 w-5 text-blue-600"
+                                />
+                                <span className="ml-2">Instructor</span>
+                            </label>
                         </div>
 
                         <button

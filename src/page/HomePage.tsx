@@ -15,17 +15,35 @@ import "slick-carousel/slick/slick-theme.css";
 
 const HomePage: React.FC = () => {
   const settings = {
-    dots: false,
+    dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
-    arrows: true,
+    arrows: false,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 2,
+          slidesToScroll: 1,
+          infinite: true,
+          dots: true,
+        },
+      },
+      {
+        breakpoint: 600,
+        settings: {
+          slidesToShow: 1,
+          slidesToScroll: 1,
+        },
+      },
+    ],
   };
 
   return (
     <MainLayout>
-      <div className="p-4 grid grid-cols-4 gap-4">
+      <div className="p-4 grid grid-cols-4 gap-4 bg-[#F7F7F7]">
         <div className="col-span-3">
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">Courses</h1>
@@ -33,10 +51,10 @@ const HomePage: React.FC = () => {
               See all
             </button>
           </div>
-          <div className="grid grid-cols-1">
+          <div className="w-full">
             <Slider {...settings}>
               {coursesData.courses.map((course, index) => (
-                <div key={index} className="px-2">
+                <div key={index} className="px-2 h-full">
                   <CourseCard
                     name={course.name}
                     views={course.views}
@@ -55,7 +73,7 @@ const HomePage: React.FC = () => {
               See all
             </button>
           </div>
-          <div className="grid grid-cols-1">
+          <div className="w-full">
             <Slider {...settings}>
               {coursesData.newestCourses.map((course, index) => (
                 <div key={index} className="px-2">
@@ -78,7 +96,7 @@ const HomePage: React.FC = () => {
               See all
             </button>
           </div>
-          <div className="grid grid-cols-1">
+          <div className="w-full">
             <Slider {...settings}>
               {instructorsData.instructors.map((instructor, index) => (
                 <div key={index} className="px-2">
@@ -100,7 +118,7 @@ const HomePage: React.FC = () => {
               See all
             </button>
           </div>
-          <div className="grid grid-cols-1">
+          <div className="w-full">
             <Slider {...settings}>
               {testimonialsData.testimonials.map((testimonial, index) => (
                 <div key={index} className="px-2">
