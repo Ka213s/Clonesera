@@ -5,7 +5,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { storage } from '../../firebaseConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import ChangePassword from '../../components/ChangePassword';
+
 
 interface UserData {
     id: string;
@@ -220,7 +220,6 @@ const StudentProfile: React.FC = () => {
                     <button type="button" onClick={handleEdit}>Edit</button>
                 )}
             </form>
-            <ChangePassword userId={userData.id} />
             <ToastContainer />
         </div>
     );

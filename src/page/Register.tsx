@@ -8,28 +8,14 @@ import FormValidator from '../components/FormValidator';
 import ApiService from '../services/ApiService';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Artwork from '../assets/Artwork.jpg';
-
-interface FormData {
-    password: string;
-    confirmPassword: string;
-    email: string;
-    creationDate: string;
-    role: string;
-}
+import { FormData } from '../models/FormData';
 
 const Register: React.FC = () => {
-    const [formData, setFormData] = useState<FormData>({
-        password: '',
-        confirmPassword: '',
-        email: '',
-        creationDate: new Date().toISOString(),
-        role: 'student',
-    });
+    const [formData, setFormData] = useState<FormData>(new FormData('', '', '', 'student'));
     const navigate = useNavigate();
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -38,6 +24,7 @@ const Register: React.FC = () => {
             [name]: value,
         });
     };
+
     const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>): void => {
         const { name, value } = e.target;
         setFormData({
@@ -45,8 +32,9 @@ const Register: React.FC = () => {
             [name]: value,
         });
     };
+
     const handleLoginClick = (): void => {
-        navigate('/');
+        navigate('/login');
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
@@ -62,8 +50,8 @@ const Register: React.FC = () => {
 
             const userCredential = await createUserWithEmailAndPassword(auth, formData.email, formData.password);
             console.log('Registration successful:', userCredential.user);
-            const dataToSubmit = {
 
+            const dataToSubmit = {
                 password: formData.password,
                 email: formData.email,
                 createdAt: formData.creationDate,
@@ -77,17 +65,10 @@ const Register: React.FC = () => {
                 fullName: null,
             };
 
-
             const response = await ApiService.registerAccount(dataToSubmit);
             toast.success('Registration successful ');
             console.log('Registration successful with External API:', response.data);
-            setFormData({
-                password: '',
-                confirmPassword: '',
-                email: '',
-                creationDate: new Date().toISOString(),
-                role: 'student',
-            });
+            setFormData(new FormData('', '', '', 'student'));
 
         } catch (error: any) {
             toast.error('Error registering: ' + error.message);
@@ -96,9 +77,11 @@ const Register: React.FC = () => {
             setIsButtonDisabled(false);
         }
     };
+
     const togglePasswordVisibility = (): void => {
         setShowPassword(!showPassword);
     };
+
     const toggleConfirmPasswordVisibility = (): void => {
         setShowConfirmPassword(!showConfirmPassword);
     };
@@ -176,8 +159,8 @@ const Register: React.FC = () => {
                             </select>
                         </div>
 
-
-                        <button type="submit"
+                        <button
+                            type="submit"
                             disabled={isButtonDisabled}
                             className='px-5 py-2 bg-[#9997F5]
                                 rounded-2xl text-white w-full
@@ -189,7 +172,7 @@ const Register: React.FC = () => {
                         <p>Already have an account?</p>
                         <button onClick={handleLoginClick}
                             className="py-2 px-5 bg-white border rounded-xl
-                    hover:scale-110 duration-300 ">Sign In</button>
+                                hover:scale-110 duration-300">Sign In</button>
                     </div>
                     <ToastContainer />
                 </div>
