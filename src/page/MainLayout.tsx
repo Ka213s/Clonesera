@@ -11,11 +11,11 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   return (
-    <div className="flex overflow-auto relative">
+    <div className="flex overflow-hidden"> {/* Thay đổi overflow thành overflow-hidden */}
       <Header toggleMenu={toggleMenu} />
       <Sidebar showMenu={showMenu} />
       <div className={`flex flex-col flex-1 transition-all duration-300 ${showMenu ? 'ml-64' : 'ml-0'}`}>
-        <div className="flex-grow pt-16 p-4 overflow-auto">
+        <div className="pt-16 p-4 overflow-auto"> {/* Thay đổi overflow thành overflow-auto */}
           {children}
         </div>
         <Footer />
