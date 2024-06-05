@@ -34,6 +34,22 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       setIsLoggedIn(true);
     }
   }, []);
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (showDropdown) {
+        const target = e.target as HTMLElement;
+        if (!target.closest('.relative')) {
+          setShowDropdown(false);
+        }
+      }
+    };
+  
+    document.addEventListener('mousedown', handleClickOutside);
+  
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDropdown]);
 
   const handleCreateCourse = () => {
     navigate('/create-course');
@@ -71,9 +87,9 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
           </div>
         </div>
         <div className="relative" onClick={toggleEmailNotifications}>
-          <FaEnvelope className="text-xl cursor-pointer" onClick={() => setShowEmailNotifications(true)} /> {/* Thêm sự kiện onClick */}
+          <FaEnvelope className="text-xl cursor-pointer" onClick={() => setShowEmailNotifications(true)} />
           {showEmailNotifications && (
-            <div className="absolute top-0 right-0 mt-10 py-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
+            <div className="absolute top-full right-0 mt-2 w-56 bg-white border border-gray-300 rounded-md shadow-lg">
               <ul>
                 <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Notification 1</li>
                 <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Notification 2</li>
@@ -81,50 +97,50 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               </ul>
             </div>
           )}
-          <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-            3
-          </div>
+        <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+          3
         </div>
-        <div className="relative" onClick={toggleBellNotification}>
-          <FaBell className="text-xl cursor-pointer" onClick={() => setShowBellNotification(true)} />
-          {showBellNotification && (
-            <div className="absolute top-0 right-0 mt-10 py-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
-              <ul>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Notification 1</li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Notification 2</li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Notification 3</li>
-              </ul>
-            </div>
-          )}
-          <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-            3
-          </div>
-        </div>
-        {isLoggedIn ? (
-          <div className="relative" onClick={toggleDropdown}>
-            <FaUserCircle className="text-2xl cursor-pointer" />
-            {showDropdown && (
-              <div className="absolute right-0 mt-2 py-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
-                <ul>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">View Instructor Profile</li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Litemode</li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Crusus Dashboard</li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Paid Memberships</li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Setting</li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Help</li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Send Feedback</li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleLogout(navigate)}>Sign Out</li>
-                </ul>
-              </div>
-            )}
-          </div>
-        ) : (
-          <Link to="/login" className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
-            Login
-          </Link>
-        )}
       </div>
-    </header>
+      <div className="relative" onClick={toggleBellNotification}>
+        <FaBell className="text-xl cursor-pointer" onClick={() => setShowBellNotification(true)} />
+        {showBellNotification && (
+          <div className="absolute top-0 right-0 mt-10 py-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
+            <ul>
+              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Notification 1</li>
+              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Notification 2</li>
+              <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Notification 3</li>
+            </ul>
+          </div>
+        )}
+        <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
+          3
+        </div>
+      </div>
+      {isLoggedIn ? (
+        <div className="relative" onClick={toggleDropdown}>
+          <FaUserCircle className="text-2xl cursor-pointer" />
+          {showDropdown && (
+            <div className="absolute right-0 mt-2 py-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
+              <ul>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">View Instructor Profile</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Litemode</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Crusus Dashboard</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Paid Memberships</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Setting</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Help</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Send Feedback</li>
+                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleLogout(navigate)}>Sign Out</li>
+              </ul>
+            </div>
+          )}
+        </div>
+      ) : (
+        <Link to="/login" className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
+          Login
+        </Link>
+      )}
+    </div>
+    </header >
   );
 };
 
