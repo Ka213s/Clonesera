@@ -97,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Litemode</li>
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Crusus Dashboard</li>
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Paid Memberships</li>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Setting</li>
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer"  onClick={() => navigate('/setting')}>Setting</li>
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Help</li>
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Send Feedback</li>
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={() => handleLogout(navigate)}>Sign Out</li>
