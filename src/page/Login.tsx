@@ -7,13 +7,10 @@ import { FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
 import Artwork from '../assets/Artwork.jpg';
-import { LoginData } from '../models/interfaces/LoginData';
+import { LoginData } from '../models/LoginData'; // Import the LoginData class
 
 const Login: React.FC = () => {
-    const [loginData, setLoginData] = useState<LoginData>({
-        email: '',
-        password: '',
-    });
+    const [loginData, setLoginData] = useState<LoginData>(new LoginData('', ''));
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();

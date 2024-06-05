@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'https://665fbf915425580055b0b389.mockapi.io/Account';
+const BASE_URL = 'https://665fbf915425580055b0b389.mockapi.io/GR3_Account';
 
 export interface UserData {
     fullName: string;
