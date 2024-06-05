@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import Sidebar from "../components/Sidebar/InstructorSidebar";
+import Sidebar from "../components/Sidebar/Instructor_Sidebar";
 import Header from "../components/Header/Header";
 import Footer from "../components/Instructor/Footer";
 
