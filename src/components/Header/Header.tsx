@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { FaShoppingCart, FaEnvelope, FaBell, FaUserCircle, FaBars, FaSearch } from 'react-icons/fa';
-import { useNavigate, NavigateFunction, Link } from 'react-router-dom'; // Import NavigateFunction type
+import { useNavigate, NavigateFunction, Link } from 'react-router-dom';
 import { handleLogout } from '../../components/Logout';
 import logo from '../../assets/Logo-cousera-v1.jpg';
+
 interface HeaderProps {
   toggleMenu: () => void;
 }
@@ -13,6 +14,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const [showBellNotification, setShowBellNotification] = useState(false);
   const [showEmailNotifications, setShowEmailNotifications] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState<number | null>(null);
 
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
@@ -27,9 +29,15 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   useEffect(() => {
     const userData = localStorage.getItem('userData');
     if (userData) {
+      const parsedUserData = JSON.parse(userData);
+      setUserRole(parsedUserData.roleId);
       setIsLoggedIn(true);
     }
   }, []);
+
+  const handleCreateCourse = () => {
+    navigate('/create-course');
+  };
 
   return (
     <header className="flex items-center justify-between p-4 bg-white shadow-md fixed top-0 left-0 w-full z-30">
@@ -48,9 +56,14 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         <FaSearch className="absolute left-3 text-gray-500" />
       </div>
       <div className="flex items-center ml-auto space-x-6">
-        <button className="px-4 py-2 text-white bg-[#9997F5] rounded-md hover:bg-[#8886E5]">
-          Create New Course
-        </button>
+        {userRole === 3 && (
+          <button
+            onClick={handleCreateCourse}
+            className="px-4 py-2 text-white bg-[#9997F5] rounded-md hover:bg-[#8886E5]"
+          >
+            Create New Course
+          </button>
+        )}
         <div className="relative">
           <FaShoppingCart className="text-xl cursor-pointer" />
           <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
