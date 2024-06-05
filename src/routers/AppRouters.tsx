@@ -10,6 +10,10 @@ import StudentDashboard from '../page/Student/StudentDashboard';
 import PurchasedCourses from '../page/Student/PurchasedCourse';
 import StudentCertificates from '../page/Student/StudentCertificates';
 import CreateNewCousre from '../components/CreateNewCousre';
+import InstructorLayout from "../layouts/InstructorLayout";
+import ListCourse from "../page/Instructor/ListCourse";
+import Dashboard from "../page/Instructor/Dashboard";
+
 const AppRouters: React.FC = () => {
   return (
     // ADMIN LÀ 1 - STUDENT LÀ 2 - INSTRUCTOR LÀ 3
@@ -26,6 +30,22 @@ const AppRouters: React.FC = () => {
         <Route path="/student_my_certificates" element={<ProtectedRoute allowedRoles={[2]}><StudentCertificates /></ProtectedRoute>} />
         <Route path="/create-course" element={<ProtectedRoute allowedRoles={[3]}><CreateNewCousre /></ProtectedRoute>} />
         {/* <Route path="/studenthome" element={<ProtectedRoute allowedRoles={[2]}><StudentHome /></ProtectedRoute>} /> */}
+        <Route
+            path="/instructorhome/list-courses"
+            element={
+              <InstructorLayout>
+                <ListCourse />
+              </InstructorLayout>
+            }
+          />
+          <Route
+            path="/instructorhome"
+            element={
+              <InstructorLayout>
+                <Dashboard />
+              </InstructorLayout>
+            }
+          />
       </Routes>
     </Router>
   );
