@@ -8,9 +8,6 @@ interface PriceProps {
 }
 
 const Price: React.FC<PriceProps> = ({ formData, setFormData, nextStep, prevStep }) => {
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
 
   return (
     <div>

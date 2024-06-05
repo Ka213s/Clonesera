@@ -60,7 +60,9 @@ const StudentDashboard: React.FC = () => {
               <div>
                 <h3 className="text-lg font-semibold text-gray-700">{currentNews.title}</h3>
                 <p className="mt-2 text-gray-600">{currentNews.description}</p>
-                <a href="#" className="text-gray-700 hover:underline mt-2 inline-block">LEARN MORE</a>
+                <button className="text-gray-700 hover:underline mt-2 inline-block" onClick={() => { }}>
+                  LEARN MORE
+                </button>
               </div>
             </div>
           </div>
