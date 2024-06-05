@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#slider-boxes {
+    display: flex !important;
+}
+@layer components {
+    .card {
+        @apply rounded-xl shadow-lg;
+    }
+    
+    }

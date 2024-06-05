@@ -1,0 +1,17 @@
+{
+    "links": [
+      { "text": "About", "url": "/about" },
+      { "text": "Blog", "url": "/blog" },
+      { "text": "Careers", "url": "/careers" },
+      { "text": "Press", "url": "/press" },
+      { "text": "Help", "url": "/help" },
+      { "text": "Advertise", "url": "/advertise" },
+      { "text": "Developers", "url": "/developers" },
+      { "text": "Contact Us", "url": "/contact" },
+      { "text": "Copyright Policy", "url": "/copyright" },
+      { "text": "Terms", "url": "/terms" },
+      { "text": "Privacy Policy", "url": "/privacy" },
+      { "text": "Sitemap", "url": "/sitemap" }
+    ]
+  }
+  

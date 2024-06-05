@@ -17,13 +17,7 @@ interface FormData {
 }
 
 const Register: React.FC = () => {
-    const [formData, setFormData] = useState<FormData>({
-        password: '',
-        confirmPassword: '',
-        email: '',
-        creationDate: new Date().toISOString(),
-        role: 'student',
-    });
+    const [formData, setFormData] = useState<FormData>(new FormData('', '', '', 'student'));
     const navigate = useNavigate();
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
@@ -45,7 +39,7 @@ const Register: React.FC = () => {
         });
     };
     const handleLoginClick = (): void => {
-        navigate('/');
+        navigate('/login');
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {

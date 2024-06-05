@@ -1,0 +1,78 @@
+{
+  "courses": [
+    {
+      "name": "Learn Python",
+      "views": 1500,
+      "date": "2024-01-01",
+      "description": "An introductory course to Python programming.",
+      "author": "John Doe",
+      "price": 29.99,
+      "vid": "path/to/video1.jpg"
+    },
+    {
+      "name": "Master JavaScript",
+      "views": 2000,
+      "date": "2024-01-15",
+      "description": "Advanced JavaScript course for web development.",
+      "author": "Jane Smith",
+      "price": 39.99,
+      "vid": "path/to/video2.jpg"
+    },
+    {
+      "name": "React for Beginners",
+      "views": 1800,
+      "date": "2024-02-01",
+      "description": "A complete guide to React for new developers.",
+      "author": "Alice Johnson",
+      "price": 24.99,
+      "vid": "path/to/video3.jpg"
+    },
+    {
+      "name": "Data Structures and Algorithms",
+      "views": 2200,
+      "date": "2024-03-01",
+      "description": "In-depth course on data structures and algorithms.",
+      "author": "Bob Brown",
+      "price": 49.99,
+      "vid": "path/to/video4.jpg"
+    },
+    {
+      "name": "Full Stack Web Development",
+      "views": 2500,
+      "date": "2024-04-01",
+      "description": "Comprehensive full stack web development course.",
+      "author": "Carol White",
+      "price": 59.99,
+      "vid": "path/to/video5.jpg"
+    }
+  ],
+  "newestCourses": [
+    {
+      "name": "Advanced Python",
+      "views": 500,
+      "date": "2024-05-01",
+      "description": "Deep dive into advanced Python concepts.",
+      "author": "John Doe",
+      "price": 34.99,
+      "vid": "path/to/video6.jpg"
+    },
+    {
+      "name": "Vue.js Essentials",
+      "views": 800,
+      "date": "2024-06-01",
+      "description": "Essential guide to Vue.js for web developers.",
+      "author": "Jane Smith",
+      "price": 29.99,
+      "vid": "path/to/video7.jpg"
+    },
+    {
+      "name": "Machine Learning Basics",
+      "views": 1200,
+      "date": "2024-07-01",
+      "description": "Introduction to machine learning and its applications.",
+      "author": "Alice Johnson",
+      "price": 39.99,
+      "vid": "path/to/video8.jpg"
+    }
+  ]
+}

@@ -79,7 +79,7 @@ const ProfileUpdate: React.FC = () => {
   };
 
   const handleBackClick = (): void => {
-    navigate('/studenthome');
+    navigate('/profile-student');
   };
 
   return (
