@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import MainLayout from '../layouts/MainLayout';
-import { toast } from 'react-toastify';
+import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebaseConfig";
+import ApiService from '../services/ApiService';  
+
 const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Account');
   const [avatar, setAvatar] = useState<string | ArrayBuffer | null>(null);
@@ -13,20 +15,24 @@ const SettingsPage: React.FC = () => {
   const [description, setDescription] = useState('');
   const [email, setEmail] = useState('');
   const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-  const userId = userData.id || ''; 
+  const userId = userData.id || '';
+
   useEffect(() => {
-    // Fetch user data from the API and set the state
-    fetch(`https://665fbf915425580055b0b389.mockapi.io/GR3_Account/${userId}`)
-      .then(response => response.json())
-      .then(data => {
+    const fetchUserData = async () => {
+      try {
+        const data = await ApiService.getAccountById(userId);
         setFullName(data.fullName || '');
         setAddress(data.address || '');
         setPhoneNumber(data.phonenumber || '');
         setDescription(data.description || '');
         setEmail(data.email || '');
         setAvatar(data.avatar || null);
-      });
-  }, []);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+      }
+    };
+    fetchUserData();
+  }, [userId]);
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -34,8 +40,6 @@ const SettingsPage: React.FC = () => {
       try {
         const storageRef = ref(storage, `avatars/${userId}/${file.name}`);
         const snapshot = await uploadBytes(storageRef, file);
-        
-        // Upload hoàn thành, lấy URL và cập nhật avatar
         const downloadURL = await getDownloadURL(snapshot.ref);
         setAvatar(downloadURL);
       } catch (error) {
@@ -45,7 +49,7 @@ const SettingsPage: React.FC = () => {
     }
   };
 
-  const handleSaveChanges = () => {
+  const handleSaveChanges = async () => {
     const updatedProfile = {
       fullName,
       address,
@@ -55,21 +59,12 @@ const SettingsPage: React.FC = () => {
       avatar
     };
 
-    fetch(`https://665fbf915425580055b0b389.mockapi.io/GR3_Account/${userId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(updatedProfile)
-    })
-      .then(response => response.json())
-      .then(data => {
-        console.log('Profile updated successfully:', data);
-        toast.success('Profile updated successfully');
-      })
-      .catch(error => {
-        console.error('Error updating profile:', error);
-      });
+    try {
+      await ApiService.updateAccount(userId, updatedProfile);
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      toast.error('Error updating profile');
+    }
   };
 
   const renderTabContent = () => {
@@ -85,26 +80,18 @@ const SettingsPage: React.FC = () => {
               <div className="relative mt-4">
                 <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200">
                   {avatar ? (
-                    <img src={avatar as string} alt="Profile" className="w-full h-full object-cover" />
+                    <img src={avatar as string} alt="Profile" className="w-full h-full object-cover cursor-pointer" onClick={() => document.getElementById('avatarUpload')?.click()} />
                   ) : (
-                    <div className="w-full h-full flex items-center justify-center text-4xl text-gray-400">+</div>
+                    <div className="w-full h-full flex items-center justify-center text-4xl text-gray-400 cursor-pointer" onClick={() => document.getElementById('avatarUpload')?.click()}></div>
                   )}
                 </div>
-                <label
-                  htmlFor="avatarUpload"
-                  className="absolute bottom-0 right-0 bg-white border rounded-full p-1 cursor-pointer"
-                >
-                  <svg className="w-6 h-6 text-gray-600" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M17.414 3H14V0H6v3H2.586A2.586 2.586 0 000 5.586V17a3 3 0 003 3h14a3 3 0 003-3V5.586A2.586 2.586 0 0017.414 3zM6 2h8v1H6V2zM2 5.586A.586.586 0 012.586 5H5v2H2V5.586zM4 19a1 1 0 01-1-1V9h16v9a1 1 0 01-1 1H4zm14-1V8H2v10a1 1 0 001 1h14a1 1 0 001-1zM9 12a3 3 0 100-6 3 3 0 000 6zm0-2a1 1 0 110-2 1 1 0 010 2zm4 2H5v2h8v-2zm-6 3H5v2h2v-2zm4 0H9v2h2v-2zm4 0h-2v2h2v-2z" />
-                  </svg>
-                  <input
-                    id="avatarUpload"
-                    type="file"
-                    className="hidden"
-                    accept="image/*"
-                    onChange={handleAvatarChange}
-                  />
-                </label>
+                <input
+                  id="avatarUpload"
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleAvatarChange}
+                />
               </div>
             </div>
             <div className="mt-6">
@@ -185,6 +172,7 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
+    
     <MainLayout>
       <div className="p-4 max-w-4xl mx-auto">
         <h1 className="text-2xl font-bold mb-4">Setting</h1>
@@ -212,8 +200,11 @@ const SettingsPage: React.FC = () => {
         <div className="mt-4">
           {renderTabContent()}
         </div>
+        
       </div>
+      <ToastContainer />
     </MainLayout>
+    
   );
 };
 
