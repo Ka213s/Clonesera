@@ -2,8 +2,6 @@ import React from "react";
 import socialMediaLinksData from '../../models/FileJson/socialMediaLinks.json';
 import { FaFacebook, FaTwitter, FaGoogle, FaInstagram, FaYoutube } from 'react-icons/fa';
 
-
-
 interface SocialMediaLink {
   name: string;
   url: string;
