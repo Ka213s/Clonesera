@@ -1,5 +1,5 @@
 import React from 'react';
-
+import MainLayout from '../layouts/MainLayout';
 interface BasicInformationProps {
   formData: any;
   setFormData: React.Dispatch<React.SetStateAction<any>>;
@@ -12,6 +12,7 @@ const BasicInformation: React.FC<BasicInformationProps> = ({ formData, setFormDa
   };
 
   return (
+    <MainLayout>
     <div>
       <h2 className="text-2xl font-bold mb-4">Basic Information</h2>
       <form>
@@ -94,6 +95,7 @@ const BasicInformation: React.FC<BasicInformationProps> = ({ formData, setFormDa
         </button>
       </form>
     </div>
+    </MainLayout>
   );
 };
 

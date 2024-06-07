@@ -1,5 +1,5 @@
 import React from 'react';
-
+import MainLayout from '../layouts/MainLayout';
 interface PublishProps {
   formData: any;
   setFormData: React.Dispatch<React.SetStateAction<any>>;
@@ -14,6 +14,7 @@ const Publish: React.FC<PublishProps> = ({ formData, setFormData, prevStep }) =>
   };
 
   return (
+    <MainLayout>
     <div>
       <h2 className="text-2xl font-bold mb-4">Publish</h2>
       <form onSubmit={handleSubmit}>
@@ -26,6 +27,7 @@ const Publish: React.FC<PublishProps> = ({ formData, setFormData, prevStep }) =>
         </button>
       </form>
     </div>
+    </MainLayout>
   );
 };
 
