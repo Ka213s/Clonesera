@@ -31,7 +31,7 @@ const iconComponents = {
 
 const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
   return (
-    <aside className={`fixed top-16 left-0 h-full bg-gray-100 shadow-md transition-all duration-300 z-30 ${showMenu ? 'w-64' : 'w-0 overflow-hidden'}`}>
+    <aside className={`fixed top-16 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-64' : 'w-0 overflow-hidden'}`}>
       <ul className="mt-8">
         {instructorSidebar.insSidebarItem.map((item: MenuItem, index: number) => (
           <li key={index} className="flex items-center p-4 hover:bg-gray-200">
