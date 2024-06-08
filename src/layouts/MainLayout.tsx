@@ -6,7 +6,7 @@ import SidebarStudent from '../components/Sidebar/Student_Sidebar';
 import SidebarInstructor from '../components/Sidebar/Instructor_Sidebar';
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [showMenu, setShowMenu] = useState(false);
+  const [showMenu, setShowMenu] = useState(true); // Initialize to true to show the sidebar by default
   const [roleId, setRoleId] = useState<number | null>(null);
 
   useEffect(() => {

@@ -23,7 +23,7 @@ const iconComponents = {
 
 const StudentSidebar: React.FC<{ showMenu: boolean }> = ({ showMenu }) => {
   return (
-    <aside className={`w-64 h-full bg-gray-100 shadow-md fixed top-0 left-0 transition-transform duration-300 ${showMenu ? 'transform translate-x-0' : 'transform -translate-x-full'}`}>
+    <aside className={`fixed top-16 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-64' : 'w-0 overflow-hidden'}`}>
       <ul className="mt-8">
         {studentSidebarItemData.studentSidebarItem.map((item: MenuItem, index: number) => (
           <li key={index} className="flex items-center p-4 hover:bg-gray-200">

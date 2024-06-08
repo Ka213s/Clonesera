@@ -8,13 +8,13 @@ import Publish from './Publish';
 const CreateCourse: React.FC = () => {
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    courseTitle: '',
+    title: '',
     shortDescription: '',
-    courseDescription: '',
-    learningObjectives: '',
+    description: '',
+    skillCourse: '',
+    price: '',
     requirements: '',
-    closeCaption: '',
-    courseCategory: '',
+    created_at: '',
   });
 
   const nextStep = () => {
@@ -36,26 +36,27 @@ const CreateCourse: React.FC = () => {
       case 4:
         return <Price formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />;
       case 5:
-        return <Publish formData={formData} setFormData={setFormData} prevStep={prevStep} />;
+        return <Publish formData={formData} prevStep={prevStep} />;
       default:
         return null;
     }
   };
+  
 
-  // Tính toán tiến trình (progress) dựa trên step
+  // Calculate progress based on step
   const progress = ((step - 1) / 4) * 100;
 
   return (
     <div className="container mx-auto p-6">
       <div className="mb-4">
-        {/* Thanh tiến trình */}
+        {/* Progress bar */}
         <div className="bg-gray-200 h-2 w-full rounded-md">
           <div className="bg-blue-500 h-2 rounded-md" style={{ width: `${progress}%` }}></div>
         </div>
-        {/* Hiển thị số bước đã hoàn thành */}
+        {/* Display step information */}
         <div className="flex justify-between mt-2">
           <span>Step {step} of 5</span>
-          {/* Bạn có thể thêm các biểu tượng hoặc thông tin khác ở đây */}
+          {/* You can add additional icons or information here */}
         </div>
       </div>
       {renderStep()}

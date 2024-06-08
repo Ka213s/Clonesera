@@ -1,0 +1,37 @@
+{
+    "studentNotifications": [
+        {
+            "id": 1,
+            "user": "Rock William",
+            "action": "Like Your Comment On Video",
+            "target": "How to create sidebar menu.",
+            "time": "2 min ago",
+            "avatar": ""
+          },
+          {
+            "id": 2,
+            "user": "Jassica Smith",
+            "action": "Added New Review In Video",
+            "target": "Full Stack PHP Developer.",
+            "time": "12 min ago",
+            "avatar": ""
+          },
+          {
+            "id": 3,
+            "user": "",
+            "action": "Your Membership Activated.",
+            "target": "",
+            "time": "20 min ago",
+            "avatar": ""
+          },
+          {
+            "id": 4,
+            "user": "",
+            "action": "You buy a new course.",
+            "target": "How to create sidebar menu.",
+            "time": "20 min ago",
+            "avatar": ""
+          }
+    ]
+  }
+  
