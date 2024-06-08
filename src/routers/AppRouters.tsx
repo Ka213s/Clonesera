@@ -15,6 +15,7 @@ import SettingsPage from "../components/SettingsPage";
 import Reviews from '../page/Student/Reviews';
 import Notifications from '../page/Student/Notifications';
 import Statements from '../page/Student/Statements';
+import SendFeedback from '../page/Student/SendFeedback';
 
 const AppRouters: React.FC = () => {
   return (
@@ -35,6 +36,7 @@ const AppRouters: React.FC = () => {
         <Route path="/student_reviews" element={<ProtectedRoute allowedRoles={[2]}><Reviews /></ProtectedRoute>} />
         <Route path="/student_notifications" element={<ProtectedRoute allowedRoles={[2]}><Notifications /></ProtectedRoute>} />
         <Route path="/student_statements" element={<ProtectedRoute allowedRoles={[2]}><Statements /></ProtectedRoute>} />
+        <Route path="/feedback" element={<ProtectedRoute allowedRoles={[2]}><SendFeedback /></ProtectedRoute>} />
       </Routes>
     </Router>
   );

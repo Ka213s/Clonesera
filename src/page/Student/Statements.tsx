@@ -9,7 +9,7 @@ const Statements: React.FC = () => {
   return (
     <MainLayout>
       <div className="bg-white rounded-lg shadow-lg p-8">
-        <h2 className="text-2xl font-bold mb-4">Statements</h2>
+      <h1 className="text-2xl font-bold text-gray-700 mb-4">Statements</h1>
         <div className="flex justify-between mb-8">
           <div className="bg-gray-100 p-6 rounded-lg shadow-md w-3/4 mr-4">
             <h5 className="text-lg font-semibold mb-4">Earning</h5>

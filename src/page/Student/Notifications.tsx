@@ -8,7 +8,7 @@ const Notifications: React.FC = () => {
   return (
     <MainLayout>
       <div className="bg-white p-8 rounded-lg shadow-lg">
-        <h2 className="text-3xl font-bold mb-6">Notifications</h2>
+      <h1 className="text-2xl font-bold text-gray-700 mb-6">Notifications</h1>
         <div className="mb-8 flex justify-between items-center">
           <button className="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
             Notification Settings

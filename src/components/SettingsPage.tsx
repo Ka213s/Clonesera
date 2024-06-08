@@ -4,7 +4,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebaseConfig";
-import ApiService from '../services/ApiService';  
+import ApiService from '../services/ApiService';
 
 const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Account');
@@ -172,10 +172,9 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    
     <MainLayout>
       <div className="p-4 max-w-4xl mx-auto">
-        <h1 className="text-2xl font-bold mb-4">Setting</h1>
+        <h1 className="text-2xl font-bold text-gray-700 mb-4">Setting</h1>
         <div className="border-b border-gray-200">
           <ul className="flex -mb-px">
             <li className="mr-2">
@@ -200,11 +199,11 @@ const SettingsPage: React.FC = () => {
         <div className="mt-4">
           {renderTabContent()}
         </div>
-        
+
       </div>
       <ToastContainer />
     </MainLayout>
-    
+
   );
 };
 
