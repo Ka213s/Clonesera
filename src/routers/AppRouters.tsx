@@ -12,6 +12,9 @@ import CreateNewCousre from '../components/CreateNewCousre';
 import ListCourse from "../page/Instructor/ListCourse";
 import Dashboard from "../page/Instructor/Dashboard";
 import SettingsPage from "../components/SettingsPage";
+import Reviews from '../page/Student/Reviews';
+import Notifications from '../page/Student/Notifications';
+import Statements from '../page/Student/Statements';
 
 const AppRouters: React.FC = () => {
   return (
@@ -28,7 +31,10 @@ const AppRouters: React.FC = () => {
         <Route path="/create-course" element={<ProtectedRoute allowedRoles={[3]}><CreateNewCousre /></ProtectedRoute>} />
         <Route path="/instructorhome/list-courses" element={<ProtectedRoute allowedRoles={[3]}><ListCourse /></ProtectedRoute>} />
         <Route path="/instructorhome" element={<ProtectedRoute allowedRoles={[3]}><Dashboard /></ProtectedRoute>} />
-        <Route path="/setting" element={<ProtectedRoute allowedRoles={[2]}><SettingsPage /></ProtectedRoute>} />
+        <Route path="/settingS" element={<ProtectedRoute allowedRoles={[2]}><SettingsPage /></ProtectedRoute>} />
+        <Route path="/student_reviews" element={<ProtectedRoute allowedRoles={[2]}><Reviews /></ProtectedRoute>} />
+        <Route path="/student_notifications" element={<ProtectedRoute allowedRoles={[2]}><Notifications /></ProtectedRoute>} />
+        <Route path="/student_statements" element={<ProtectedRoute allowedRoles={[2]}><Statements /></ProtectedRoute>} />
       </Routes>
     </Router>
   );
