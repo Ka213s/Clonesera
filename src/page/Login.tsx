@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,6 +14,13 @@ const Login: React.FC = () => {
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        const userData = localStorage.getItem('userData');
+        if (userData) {
+            navigate('/home');
+        }
+    }, [navigate]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
         const { name, value } = e.target;
@@ -40,13 +47,13 @@ const Login: React.FC = () => {
                 localStorage.setItem('userData', JSON.stringify(account));
                 switch (account.roleId) {
                     case 1:
-                        navigate('/adminhome');
+                        navigate('/home');
                         break;
                     case 2:
-                        navigate('/studenthome');
+                        navigate('/home');
                         break;
                     case 3:
-                        navigate('/profile-instructor');
+                        navigate('/home');
                         break;
                     default:
                         break;
@@ -78,9 +85,9 @@ const Login: React.FC = () => {
                 const user = result.user;
                 const profile = user.providerData[0];
                 const fullName = profile.displayName ?? '';
-                const email = profile.email ?? ''; 
-                const photoURL = profile.photoURL ?? ''; 
-    
+                const email = profile.email ?? '';
+                const photoURL = profile.photoURL ?? '';
+
                 const existingUser = await ApiService.getUserByEmail(email);
                 if (existingUser && existingUser.length > 0) {
                     if (!existingUser[0].isGoogle) {
@@ -104,7 +111,7 @@ const Login: React.FC = () => {
                     }
                     return;
                 }
-                
+
                 const userData: UserData = {
                     fullName,
                     email,
@@ -116,15 +123,15 @@ const Login: React.FC = () => {
                     updateAt: null,
                     phonenumber: null,
                     walletId: null,
-                    roleId: 2, 
-                    isGoogle: true 
+                    roleId: 2,
+                    isGoogle: true
                 };
-    
+
                 try {
                     await ApiService.saveGoogleUserData(userData);
                     toast.success("User logged in successfully!");
                     localStorage.setItem('userData', JSON.stringify(userData));
-    
+
                     switch (userData.roleId) {
                         case 1:
                             navigate('/adminhome');
@@ -148,7 +155,7 @@ const Login: React.FC = () => {
             console.error('Error logging in with Google:', error);
         }
     };
-    
+
     return (
         <div className="bg-gray-50 min-h-screen flex items-center justify-center">
             <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-5xl p-5 items-center">
@@ -228,7 +235,7 @@ const Login: React.FC = () => {
                 </div>
 
                 <div className='md:block hidden w-1/2'>
-                <img className='rounded-2xl' src={Artwork} alt="" />
+                    <img className='rounded-2xl' src={Artwork} alt="" />
                 </div>
                 <ToastContainer />
             </div>

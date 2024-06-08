@@ -2,13 +2,37 @@
     "news": [
       {
         "id": "001",
-        "title": "COVID-19 Updates & Resources",
-        "description": "See the latest updates to coronavirus-related content, including changes to monetization, and access new Creator support resources.",
+        "title": "title 1",
+        "description": "Discover the new features added to the Cursus platform, including improved course management and student engagement tools.",
         "media_url": "path_to_news_image1.png"
       },
       {
         "id": "002",
-        "title": "New Features in Cursus",
+        "title": "title 2",
+        "description": "Discover the new features added to the Cursus platform, including improved course management and student engagement tools.",
+        "media_url": "path_to_news_image2.png"
+      },
+      {
+        "id": "003",
+        "title": "title 3",
+        "description": "Discover the new features added to the Cursus platform, including improved course management and student engagement tools.",
+        "media_url": "path_to_news_image2.png"
+      },
+      {
+        "id": "004",
+        "title": "title 4",
+        "description": "Discover the new features added to the Cursus platform, including improved course management and student engagement tools.",
+        "media_url": "path_to_news_image1.png"
+      },
+      {
+        "id": "005",
+        "title": "title 5",
+        "description": "Discover the new features added to the Cursus platform, including improved course management and student engagement tools.",
+        "media_url": "path_to_news_image2.png"
+      },
+      {
+        "id": "006",
+        "title": "title 6",
         "description": "Discover the new features added to the Cursus platform, including improved course management and student engagement tools.",
         "media_url": "path_to_news_image2.png"
       }

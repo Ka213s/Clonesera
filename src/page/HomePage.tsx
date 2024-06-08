@@ -1,6 +1,6 @@
 import React from 'react';
 import Slider from 'react-slick';
-import MainLayout from './MainLayout';
+import MainLayout from '../layouts/MainLayout';
 import CourseCard from '../components/CourseCard';
 import FeatureButtons from '../components/FeatureButtons';
 import InstructorCard from '../components/InstructorCard';
@@ -43,7 +43,7 @@ const HomePage: React.FC = () => {
 
   return (
     <MainLayout>
-      <div className="p-4 grid grid-cols-4 gap-4">
+      <div className="p-4 grid grid-cols-4 gap-4 bg-[#F7F7F7]">
         <div className="col-span-3">
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">Courses</h1>
