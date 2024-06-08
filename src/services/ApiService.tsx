@@ -28,7 +28,7 @@ class ApiService {
     static async getUserByEmail(email: string) {
         try {
             const response = await axios.get(`${BASE_URL}?email=${email}`);
-            return response.data; 
+            return response.data;
         } catch (error) {
             console.error('Error fetching user by email:', error);
             return null;
@@ -93,6 +93,31 @@ class ApiService {
             return null;
         }
     }
+    
+    static async getAccountsByRole(roleId: number) {
+        try {
+            const response = await axios.get(`${BASE_URL}/${roleId}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching account data:", error);
+            return null;
+        }
+    }
+    
+    static async updateAccountStatus(id: number, currentStatus: boolean) {
+        try {
+          const response = await axios.put(`${BASE_URL}/${id}`,
+            {
+              status: !currentStatus,
+            }
+          );
+          return response.data;
+        } catch (error) {
+          console.error("Error updating account status:", error);
+          return null;
+        }
+      }
+
 }
 
 export default ApiService;
