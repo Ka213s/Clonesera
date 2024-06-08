@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
 import Section from './Section';
 import MainLayout from '../layouts/MainLayout';
+
 interface CurriculumProps {
   formData: {
-    courseTitle: string;
+    title: string;
     shortDescription: string;
-    courseDescription: string;
-    learningObjectives: string;
+    description: string;
+    skillCourse: string;
+    price: string;
     requirements: string;
-    closeCaption: string;
-    courseCategory: string;
+    created_at: string;
   };
   setFormData: React.Dispatch<React.SetStateAction<any>>;
   nextStep: () => void;
@@ -27,26 +28,34 @@ const Curriculum: React.FC<CurriculumProps> = ({ formData, setFormData, nextStep
 
   return (
     <MainLayout>
-    <div>
-      <h2 className="text-2xl font-bold mb-4">Curriculum</h2>
-      <button 
-        type="button" 
-        onClick={addSection} 
-        className="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600">
-        New Section
-      </button>
-      
-      {sections.map((sectionId) => (
-        <Section key={sectionId} sectionId={sectionId} formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />
-      ))}
-        <button type="button" onClick={prevStep} className="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600">
-          Previous
+      <div>
+        <h2 className="text-2xl font-bold mb-4">Curriculum</h2>
+        <button 
+          type="button" 
+          onClick={addSection} 
+          className="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600">
+          New Section
         </button>
-        <button type="button" onClick={nextStep} className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
-          Next
-        </button>
-
-    </div>
+        
+        {sections.map((sectionId) => (
+          <Section
+            key={sectionId}
+            sectionId={sectionId}
+            formData={formData}
+            setFormData={setFormData}
+            nextStep={nextStep}
+            prevStep={prevStep}
+          />
+        ))}
+        <div className="mt-4">
+          <button type="button" onClick={prevStep} className="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 mr-2">
+            Previous
+          </button>
+          <button type="button" onClick={nextStep} className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
+            Next
+          </button>
+        </div>
+      </div>
     </MainLayout>
   );
 };

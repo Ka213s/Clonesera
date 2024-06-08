@@ -30,7 +30,7 @@ const CreateCourse: React.FC = () => {
       case 1:
         return <BasicInformation formData={formData} setFormData={setFormData} nextStep={nextStep} />;
       case 2:
-        // return <Curriculum formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />;
+        return <Curriculum formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />;
       case 3:
         return <Media formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />;
       case 4:
