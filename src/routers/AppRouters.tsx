@@ -21,6 +21,7 @@ import Reviews from "../page/Instructor/Reviews";
 import Earning from "../page/Instructor/Earning";
 import PayOut from "../page/Instructor/PayOut";
 import Statements from "../page/Instructor/Statements";
+import Verification from "../page/Instructor/Verification";
 import SettingsPage from "../components/SettingsPage";
 const AppRouters: React.FC = () => {
   return (
@@ -46,6 +47,7 @@ const AppRouters: React.FC = () => {
         <Route path="/instructor_earning" element={<InstructorLayout><Earning /></InstructorLayout>} />
         <Route path="/instructor_payout" element={<InstructorLayout><PayOut /></InstructorLayout>} />
         <Route path="/instructor_statements" element={<InstructorLayout><Statements /></InstructorLayout>} />
+        <Route path="/instructor_verification" element={<InstructorLayout><Verification /></InstructorLayout>} />
         <Route path="/setting" element={<ProtectedRoute allowedRoles={[2]}><SettingsPage /></ProtectedRoute>} />
       </Routes>
     </Router>

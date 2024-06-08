@@ -11,7 +11,7 @@
       { "text": "Earning", "icon": "FaDollarSign", "url": "/instructor_earning" },
       { "text": "Payout", "icon": "FaWallet", "url": "/instructor_payout" },
       { "text": "Statements", "icon": "FaFile", "url": "/instructor_statements" },
-      { "text": "Verification", "icon": "FaCircleCheck", "url": "/instructor_verification" },
+      { "text": "Verification", "icon": "FaCheck", "url": "/instructor_verification" },
       { "text": "Setting", "icon": "FaCogs", "url": "/settings" },
       { "text": "Send Feedback", "icon": "FaPaperPlane", "url": "/feedback" }
     ]

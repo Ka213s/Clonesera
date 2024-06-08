@@ -32,7 +32,7 @@ const Footer: React.FC = () => {
   return (
     <footer className="p-4 shadow-md bg-gray-900 bg-opacity-90">
       <div className="container mx-auto flex justify-between">
-        <div className="flex flex-wrap justify-center w-3/4">
+        <div className="flex flex-wrap justify-center w-1/2">
           {columns.map((column, colIndex) => (
             <ul key={colIndex} className="w-1/3">
               {column.map((link: FooterLink, index: number) => (

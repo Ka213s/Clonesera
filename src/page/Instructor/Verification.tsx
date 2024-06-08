@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import { FaChartLine, FaChevronLeft as ChevronLeftIcon, FaChevronRight as ChevronRightIcon } from "react-icons/fa";
+import { FaCheck, FaChevronLeft as ChevronLeftIcon, FaChevronRight as ChevronRightIcon } from "react-icons/fa";
 
-class Analyics extends Component {
+class Verification extends Component {
     render() {
         return (
             <div className="bg-gray-100 p-6">
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center space-x-2">
-                        <FaChartLine className="h-6 w-6 text-gray-700" />
-                        <h1 className="text-2xl font-bold">Analyics</h1>
+                        <FaCheck className="h-6 w-6 text-gray-700" />
+                        <h1 className="text-2xl font-bold">Verification</h1>
                     </div>
                 </div>
 
@@ -25,21 +25,12 @@ class Analyics extends Component {
                     </div>
                     {/* Weekly Sales */}
                     <div className="bg-white p-4 rounded shadow">
-                        <h2 className="text-2xl font-bold">768</h2>
-                        <p className="text-gray-700 text-lg font-bold">Weekly Sales</p>
+                        <h2 className="text-gray-700 text-lg font-bold">768</h2>
+                        <p className="text-2xl font-bold">Weekly Sales</p>
                     </div>
                     
                 </div>
 
-                <div className="bg-white p-4 rounded shadow mb-6 flex justify-between items-center">
-                    <div className="flex items-center space-x-2">
-                        <FaChartLine className="h-6 w-6 text-gray-700" />
-                        <h2 className="text-xl">Jump Into Course Creation</h2>
-                    </div>
-                    <button className="bg-red-500 text-white px-4 py-2 rounded">
-                        Create Your Course
-                    </button>
-                </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
                     {/* Latest Courses Performance */}
@@ -144,5 +135,5 @@ class Analyics extends Component {
     }
 }
 
-export default Analyics;
+export default Verification;
 
