@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import Section from './Section';
-import MainLayout from '../layouts/MainLayout';
+import MainLayout from '../../layouts/MainLayout';
+import SectionNamePopup from './SectionNamePopup';
+
+interface SectionData {
+  id: number;
+  name: string;
+}
 
 interface CurriculumProps {
   formData: {
@@ -18,12 +24,18 @@ interface CurriculumProps {
 }
 
 const Curriculum: React.FC<CurriculumProps> = ({ formData, setFormData, nextStep, prevStep }) => {
-  const [sections, setSections] = useState<number[]>([]);
+  const [sections, setSections] = useState<SectionData[]>([]);
   const [sectionCounter, setSectionCounter] = useState(0);
+  const [showSectionNamePopup, setShowSectionNamePopup] = useState(false);
 
   const addSection = () => {
-    setSections([...sections, sectionCounter]);
+    setShowSectionNamePopup(true);
+  };
+
+  const saveSectionName = (sectionName: string) => {
+    setSections([...sections, { id: sectionCounter, name: sectionName }]);
     setSectionCounter(sectionCounter + 1);
+    setShowSectionNamePopup(false);
   };
 
   return (
@@ -37,10 +49,11 @@ const Curriculum: React.FC<CurriculumProps> = ({ formData, setFormData, nextStep
           New Section
         </button>
         
-        {sections.map((sectionId) => (
+        {sections.map((sectionData) => (
           <Section
-            key={sectionId}
-            sectionId={sectionId}
+            key={sectionData.id}
+            sectionId={sectionData.id}
+            sectionName={sectionData.name}
             formData={formData}
             setFormData={setFormData}
             nextStep={nextStep}
@@ -56,6 +69,13 @@ const Curriculum: React.FC<CurriculumProps> = ({ formData, setFormData, nextStep
           </button>
         </div>
       </div>
+      
+      {showSectionNamePopup && (
+        <SectionNamePopup
+          onClose={() => setShowSectionNamePopup(false)}
+          onSave={saveSectionName}
+        />
+      )}
     </MainLayout>
   );
 };

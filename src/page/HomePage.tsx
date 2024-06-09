@@ -5,7 +5,7 @@ import CourseCard from '../components/CourseCard';
 import FeatureButtons from '../components/FeatureButtons';
 import InstructorCard from '../components/InstructorCard';
 import TestimonialCard from '../components/TestimonialCard';
-import CategoryList from '../components/CategoryList';
+import CategoryList from '../components/Create_Course/CategoryList';
 import BecomeInstructor from '../components/BecomeInstructor';
 import coursesData from '../models/FileJson/courses.json';
 import testimonialsData from '../models/FileJson/testimonials.json';

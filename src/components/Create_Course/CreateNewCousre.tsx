@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import BasicInformation from './BasicInformation';
+import BasicInformation from '../BasicInformation';
 import Curriculum from './Curriculum';
 import Media from './Media';
 import Price from './Price';
