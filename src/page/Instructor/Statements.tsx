@@ -4,8 +4,8 @@ import { FaFile, FaChevronLeft as ChevronLeftIcon, FaChevronRight as ChevronRigh
 class Statements extends Component {
     render() {
         return (
-            <div className="bg-gray-100 p-6">
-                <div className="flex justify-between items-center mb-6">
+            <div className="bg-gray-100 p-10">
+                <div className="flex justify-between items-center mb-10">
                     <div className="flex items-center space-x-2">
                         <FaFile className="h-6 w-6 text-gray-700" />
                         <h1 className="text-2xl font-bold">Statements</h1>

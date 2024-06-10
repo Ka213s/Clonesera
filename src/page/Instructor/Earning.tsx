@@ -4,8 +4,8 @@ import { FaDollarSign, FaChevronLeft as ChevronLeftIcon, FaChevronRight as Chevr
 class Earning extends Component {
     render() {
         return (
-            <div className="bg-gray-100 p-6">
-                <div className="flex justify-between items-center mb-6">
+            <div className="bg-gray-100 p-10">
+                <div className="flex justify-between items-center mb-10">
                     <div className="flex items-center space-x-2">
                         <FaDollarSign className="h-6 w-6 text-gray-700" />
                         <h1 className="text-2xl font-bold">Earning</h1>
@@ -14,19 +14,19 @@ class Earning extends Component {
 
                 <div className="grid grid-cols-3 gap-4 mb-6">
                     {/* Sales earnings this month (month), after edututs+ fees, & before taxes: */}
-                    <div className="bg-white p-4 rounded shadow">
-                        <p className="text-2x font-bold">Sales earnings this month (April), after edututs+ fees, & before taxes:</p>
-                        <h2 className="text-2xl font-bold">$1146.78</h2>
+                    <div className="bg-black p-4 rounded shadow">
+                        <p className="text-white text-2x font-bold ">Sales earnings this month (April), after edututs+ fees, & before taxes:</p>
+                        <h2 className="text-white text-2xl font-bold">$1146.78</h2>
                     </div>
                     {/* Weekly Visitors */}
-                    <div className="bg-white p-4 rounded shadow">
-                        <p className="text-2x font-bold">Your balance:</p>
-                        <h2 className="text-2xl font-bold">$1146.77</h2>
+                    <div className="bg-black p-4 rounded shadow">
+                        <p className="text-white text-2x font-bold">Your balance:</p>
+                        <h2 className="text-white text-2xl font-bold">$1146.77</h2>
                     </div>
                     {/* Weekly Sales */}
-                    <div className="bg-white p-4 rounded shadow">
-                        <h2 className="text-2x font-bold">Total value of your sales, before taxes:</h2>
-                        <p className="text-2xl font-bold">$95895.58</p>
+                    <div className="bg-black p-4 rounded shadow">
+                        <h2 className="text-white text-2x font-bold">Total value of your sales, before taxes:</h2>
+                        <p className="text-white text-2xl font-bold">$95895.58</p>
                     </div>
                     
                 </div>

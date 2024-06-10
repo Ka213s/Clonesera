@@ -1,13 +1,13 @@
 import React, { Component } from "react";
-import { FaBookOpen as BookOpenIcon, FaChevronLeft as ChevronLeftIcon, FaChevronRight as ChevronRightIcon } from "react-icons/fa";
+import { FaHome, FaBook, FaChevronLeft as ChevronLeftIcon, FaChevronRight as ChevronRightIcon } from "react-icons/fa";
 
 class Dashboard extends Component {
   render() {
     return (
-      <div className="bg-gray-100 p-6">
-        <div className="flex justify-between items-center mb-6">
+      <div className="bg-gray-100 p-10">
+        <div className="flex justify-between items-center mb-10">
           <div className="flex items-center space-x-2">
-            <BookOpenIcon className="h-6 w-6 text-gray-700" />
+            <FaHome className="h-6 w-6 text-gray-700" />
             <h1 className="text-2xl font-bold">Instructor Dashboard</h1>
           </div>
         </div>
@@ -39,9 +39,9 @@ class Dashboard extends Component {
           </div>
         </div>
 
-        <div className="bg-white p-4 rounded shadow mb-6 flex justify-between items-center">
+        <div className="bg-white p-8 rounded shadow mb-6 flex justify-between items-center">
           <div className="flex items-center space-x-2">
-            <BookOpenIcon className="h-6 w-6 text-gray-700" />
+            <FaBook className="h-6 w-6 text-gray-700" />
             <h2 className="text-xl">Jump Into Course Creation</h2>
           </div>
           <button className="bg-red-500 text-white px-4 py-2 rounded">

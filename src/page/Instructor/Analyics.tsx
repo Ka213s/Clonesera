@@ -1,18 +1,20 @@
 import React, { Component } from "react";
 import { FaChartLine, FaChevronLeft as ChevronLeftIcon, FaChevronRight as ChevronRightIcon } from "react-icons/fa";
+import MainLayout from "../../layouts/MainLayout";
 
 class Analyics extends Component {
     render() {
         return (
-            <div className="bg-gray-100 p-6">
-                <div className="flex justify-between items-center mb-6">
+
+            <div className="bg-gray-100 p-10">
+                <div className="flex justify-between items-center mb-10">
                     <div className="flex items-center space-x-2">
                         <FaChartLine className="h-6 w-6 text-gray-700" />
                         <h1 className="text-2xl font-bold">Analyics</h1>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-4 gap-4 mb-6">
+                <div className="grid grid-cols-3 gap-6 mb-9">
                     {/* Subscribers */}
                     <div className="bg-white p-4 rounded shadow">
                         <p className="text-2xl font-bold">5556</p>
@@ -28,17 +30,14 @@ class Analyics extends Component {
                         <h2 className="text-2xl font-bold">768</h2>
                         <p className="text-gray-700 text-lg font-bold">Weekly Sales</p>
                     </div>
-                    
+
                 </div>
 
                 <div className="bg-white p-4 rounded shadow mb-6 flex justify-between items-center">
                     <div className="flex items-center space-x-2">
-                        <FaChartLine className="h-6 w-6 text-gray-700" />
-                        <h2 className="text-xl">Jump Into Course Creation</h2>
+                        <h2 className="text-2xl font-bold">Sales of the year</h2>
                     </div>
-                    <button className="bg-red-500 text-white px-4 py-2 rounded">
-                        Create Your Course
-                    </button>
+
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 mb-6">
@@ -103,44 +102,98 @@ class Analyics extends Component {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                    {/* Profile Analytics */}
-                    <div className="bg-white p-4 rounded shadow">
-                        <h2 className="text-lg font-bold mb-4">Profile Analytics</h2>
-                        <p className="text-xl font-bold">Current subscribers</p>
-                        <p className="text-3xl font-bold mb-4">856</p>
-                        <p className="text-sm text-gray-500">View: 17k ⬇ 75%</p>
-                        <p className="text-sm text-gray-500">
-                            Purchased (per hour): 1 ⬆ 100%
-                        </p>
-                        <p className="text-sm text-gray-500">Enroll (per hour): 50 ⬇ 70%</p>
-                        <button className="text-blue-500">
-                            GO TO PROFILE ANALYTICS
-                        </button>
-                    </div>
+                <table className="min-w-full bg-white">
+                    <thead>
+                        <tr className="text-left">
+                            <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                                Item No.
+                            </th>
+                            <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                                Thumbnail
+                            </th>
+                            <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                                Title
+                            </th>
+                            <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                                Purchases
+                            </th>
+                            <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                                Comments
+                            </th>
+                            <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                                Views
+                            </th>
 
-                    {/* Submit Courses */}
-                    <div className="bg-white p-4 rounded shadow">
-                        <h2 className="text-lg font-bold mb-4">Submit Courses</h2>
-                        <p className="text-gray-700 font-bold">
-                            The Complete JavaScript Course 2020: Build Real Projects!
-                        </p>
-                        <p className="text-sm text-red-500">Pending</p>
-                        <p className="text-sm text-gray-500">Submitted 1 days ago</p>
-                        <button className="text-red-500">Delete</button>
-                    </div>
-                </div>
+                        </tr>
+                    </thead>
 
-                <div className="bg-white p-4 rounded shadow">
-                    <h2 className="text-lg font-bold mb-4">What's new in Cursus</h2>
-                    <ul className="list-disc list-inside text-gray-700">
-                        <li>Improved performance on Studio Dashboard</li>
-                        <li>See more Dashboard updates</li>
-                        <li>See issues-at-glance for Live</li>
-                    </ul>
-                </div>
+                    <tbody>
+                        <tr className="hover:bg-gray-50">
+                            <td className="py-2 px-4 border-b border-gray-200">IT-001</td>
+                            <td className="py-2 px-4 border-b border-gray-200">
+                                Course Title Here
+                            </td>
+                            <td className="py-2 px-4 border-b border-gray-200">
+                                Course Title Here
+                            </td>
+                            <td className="py-2 px-4 border-b border-gray-200">70</td>
+                            <td className="py-2 px-4 border-b border-gray-200">86</td>
+                            <td className="py-2 px-4 border-b border-gray-200">100</td>
+
+                        </tr>
+
+
+                        <tr className="hover:bg-gray-50">
+                            <td className="py-2 px-4 border-b border-gray-200">IT-002</td>
+                            <td className="py-2 px-4 border-b border-gray-200">
+                                Course Title Here
+                            </td>
+                            <td className="py-2 px-4 border-b border-gray-200">
+                                Course Title Here
+                            </td>
+                            <td className="py-2 px-4 border-b border-gray-200">60</td>
+                            <td className="py-2 px-4 border-b border-gray-200">70</td>
+                            <td className="py-2 px-4 border-b border-gray-200">201</td>
+
+                        </tr>
+
+
+                        <tr className="hover:bg-gray-50">
+                            <td className="py-2 px-4 border-b border-gray-200">IT-003</td>
+                            <td className="py-2 px-4 border-b border-gray-200">
+                                Course Title Here
+                            </td>
+                            <td className="py-2 px-4 border-b border-gray-200">
+                                Course Title Here
+                            </td>
+                            <td className="py-2 px-4 border-b border-gray-200">75</td>
+                            <td className="py-2 px-4 border-b border-gray-200">50</td>
+                            <td className="py-2 px-4 border-b border-gray-200">125</td>
+
+                        </tr>
+
+
+                        <tr className="hover:bg-gray-50">
+                            <td className="py-2 px-4 border-b border-gray-200">IT-004</td>
+                            <td className="py-2 px-4 border-b border-gray-200">
+                                Course Title Here
+                            </td>
+                            <td className="py-2 px-4 border-b border-gray-200">
+                                Course Title Here
+                            </td>
+                            <td className="py-2 px-4 border-b border-gray-200">90</td>
+                            <td className="py-2 px-4 border-b border-gray-200">70</td>
+                            <td className="py-2 px-4 border-b border-gray-200">111</td>
+
+                        </tr>
+
+
+                    </tbody>
+                </table>
             </div>
+
         );
+
     }
 }
 
