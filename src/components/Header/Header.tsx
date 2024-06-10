@@ -80,7 +80,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       </div>
       <div className="flex items-center flex-grow justify-center">
         <Link to="/">
-          <img src={logo} alt="Logo" className="h-16 cursor-pointer" /> {/* Thay đổi chiều cao logo tại đây */}
+          <img src={logo} alt="Logo" className="h-12 cursor-pointer" /> 
         </Link>
       </div>
       <div className="flex items-center ml-auto space-x-6">
