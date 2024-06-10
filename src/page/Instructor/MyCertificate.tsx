@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { FaCertificate } from "react-icons/fa";
-
+import MainLayout from "../../layouts/MainLayout";
 class MyCertificate extends Component {
     render() {
         return (
+            <MainLayout>
             <div className="bg-gray-100 p-6">
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center space-x-2">
@@ -21,8 +22,8 @@ class MyCertificate extends Component {
                         New Certificate
                     </button>
                 </div>
-
             </div>
+            </MainLayout>
         );
     }
 }

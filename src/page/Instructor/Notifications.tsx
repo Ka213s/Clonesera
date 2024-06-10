@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { FaBell, FaChevronLeft as ChevronLeftIcon, FaChevronRight as ChevronRightIcon } from "react-icons/fa";
-
+import MainLayout from "../../layouts/MainLayout";
 class Notifications extends Component {
     render() {
         return (
+<MainLayout>
             <div className="bg-gray-100 p-6">
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center space-x-2">
@@ -44,8 +45,8 @@ class Notifications extends Component {
                         <li>See issues-at-glance for Live</li>
                     </ul>
                 </div>
-
             </div>
+            </MainLayout>
         );
     }
 }

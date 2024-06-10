@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import BasicTab from './BasicTab';
 import QuestionTab from './QuestionTab';
 import SettingTab from './SettingTab';
@@ -13,6 +13,16 @@ interface AddQuizPopupProps {
 
 const AddQuizPopup: React.FC<AddQuizPopupProps> = ({ formData, setFormData, onClose }) => {
   const [activeTab, setActiveTab] = useState<string>('basic');
+  let activeTab2 = 'basic';
+  const activeTab3 = useRef(false);
+  useEffect(() => {
+  setActiveTab('basic2');
+  activeTab2 = 'basic3';
+  activeTab3.current = true;
+  },[])
+  console.log('activetab2 : ',activeTab2);
+  console.log('activetab : ' , activeTab);
+  console.log('activetab3 : ' , activeTab3.current);
   const [questions, setQuestions] = useState<any[]>(formData.questions || []);
 
   const handleTabChange = (tab: string) => setActiveTab(tab);
