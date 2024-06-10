@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import MainLayout from '../layouts/MainLayout';
+import MainLayout from '../../layouts/MainLayout';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../firebaseConfig";
-import ApiService from '../services/ApiService';
+import { storage } from "../../firebaseConfig";
+import ApiService from '../../services/ApiService';
 
 const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Account');

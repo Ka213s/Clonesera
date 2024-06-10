@@ -1,5 +1,5 @@
 import React from 'react';
-import categoriesData from '../models/FileJson/categories.json';
+import categoriesData from '../../models/FileJson/categories.json';
 
 const CategoryList: React.FC = () => {
   return (

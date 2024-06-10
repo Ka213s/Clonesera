@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import MainLayout from '../layouts/MainLayout';
+import MainLayout from '../../layouts/MainLayout';
 
 interface PublishProps {
   formData: any;
@@ -43,20 +43,24 @@ const Publish: React.FC<PublishProps> = ({ formData, prevStep }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://665fbf915425580055b0b389.mockapi.io/GR3_Crouse', formData, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const formDataToSend = { ...formData };
+    delete formDataToSend.courseCategory;
+    delete formDataToSend.categoryName;
+
+    const response = await axios.post('https://665fbf915425580055b0b389.mockapi.io/GR3_Crouse', formDataToSend, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
       const categoryResponse = await axios.post('https://665fbf915425580055b0b389.mockapi.io/Category', {
-        Cate_name: formData.courseCategory
+        Cate_name: formData.categoryName 
       });
       const categoryId = categoryResponse.data.id;
 
       const subcategoryResponse = await axios.post('https://665fbf915425580055b0b389.mockapi.io/SubCategory', {
         Category_Id: parseInt(categoryId),
-        SubCate_name: formData.subcategory
+        SubCate_name: formData.courseCategory
       });
 
       // Use the Course_Id from the response of GR3_Crouse API call

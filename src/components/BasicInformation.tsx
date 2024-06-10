@@ -23,16 +23,24 @@ const BasicInformation: React.FC<BasicInformationProps> = ({ formData, setFormDa
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCategory(e.target.value);
-    setFormData({ ...formData, courseCategory: e.target.value });
+    const selectedSubcategory = e.target.value;
+    let categoryName = '';
+    categoriesData.forEach(category => {
+      if (category.subcategories.includes(selectedSubcategory)) {
+        categoryName = category.name;
+      }
+    });
+    setSelectedCategory(selectedSubcategory);
+    setFormData({ ...formData, courseCategory: selectedSubcategory, categoryName: categoryName });
   };
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title || !formData.shortDescription || !formData.description || !formData.courseCategory) {
       alert('Please fill in all required fields.');
       return;
     }
-    nextStep(); // Move to the next step
+    nextStep(); 
   };
 
   return (

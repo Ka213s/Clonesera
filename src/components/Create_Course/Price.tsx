@@ -1,5 +1,5 @@
 import React from 'react';
-import MainLayout from '../layouts/MainLayout';
+import MainLayout from '../../layouts/MainLayout';
 interface PriceProps {
   formData: any;
   setFormData: React.Dispatch<React.SetStateAction<any>>;
