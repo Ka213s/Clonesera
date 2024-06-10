@@ -24,6 +24,7 @@ interface QuestionTabProps {
 
 const QuestionTab: React.FC<QuestionTabProps> = ({ formData, setFormData, handleAddQuestion }) => {
   const [options, setOptions] = useState<Option[]>(formData.options || []);
+  const { questionType, questionTitle, questionScore } = formData;
 
   useEffect(() => {
     setOptions(formData.options || []);
@@ -59,7 +60,12 @@ const QuestionTab: React.FC<QuestionTabProps> = ({ formData, setFormData, handle
   };
 
   const saveQuestion = () => {
-    const newQuestion = { ...formData, options };
+    const newQuestion = {
+      options,
+      questionType,
+      questionTitle,
+      questionScore,
+    };
     handleAddQuestion(newQuestion);
     setFormData({
       questionType: '',
@@ -80,7 +86,7 @@ const QuestionTab: React.FC<QuestionTabProps> = ({ formData, setFormData, handle
         <select
           name="questionType"
           onChange={handleInputChange}
-          value={formData.questionType || ''}
+          value={questionType || ''}
           className="w-full p-2 border rounded-md mb-4"
         >
           <option value="">Select Question Type</option>
@@ -90,25 +96,24 @@ const QuestionTab: React.FC<QuestionTabProps> = ({ formData, setFormData, handle
           <option value="multi_line_text">Multi Line Text</option>
         </select>
         <label className="block mb-2">Question Title*</label>
-        <input 
-          type="text" 
+        <input
+          type="text"
           name="questionTitle"
-          value={formData.questionTitle || ''}
+          value={questionTitle || ''}
           onChange={handleInputChange}
-          className="w-full p-2 border rounded-md mb-4" 
-          placeholder="Write question title" 
+          className="w-full p-2 border rounded-md mb-4"
+          placeholder="Write question title"
         />
-        <label className="block mb-2">Score*</label>
-        <input 
-          type="number" 
+        <input
+          type="number"
           name="questionScore"
-          value={formData.questionScore || ''}
+          value={questionScore || ''}
           onChange={handleInputChange}
-          className="w-full p-2 border rounded-md mb-4" 
-          placeholder="Score" 
+          className="w-full p-2 border rounded-md mb-4"
+          placeholder="Score"
         />
 
-        {['single_choice', 'multiple_choice'].includes(formData.questionType) && (
+        {['single_choice', 'multiple_choice'].includes(questionType) && (
           <>
             <label className="block mb-2">Options</label>
             {options.map((option) => (
@@ -146,3 +151,5 @@ const QuestionTab: React.FC<QuestionTabProps> = ({ formData, setFormData, handle
 };
 
 export default QuestionTab;
+
+
