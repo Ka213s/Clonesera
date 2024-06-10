@@ -18,7 +18,7 @@ const InstructorSidebar: React.FC<{ children: React.ReactNode }> = ({ children }
           <div className="pt-16 p-4 overflow-auto"> {/* Thay đổi overflow thành overflow-auto */}
             {children}
           </div>
-          <Footer />
+          {/* <Footer /> */}
         </div>
       </div>
     );

@@ -2,7 +2,7 @@
     "insSidebarItem": [
       { "text": "Dashboard", "icon": "FaHome", "url": "/instructor_dashboard" },
       { "text": "Courses", "icon": "FaBook", "url": "/instructor_courses" },
-      { "text": "Analyics", "icon": "FaChartLine", "url": "/instructor_analyics" },
+      { "text": "Analysis", "icon": "FaChartLine", "url": "/instructor_analysis" },
       { "text": "Create Course", "icon": "FaPlus", "url": "/instructor_create_course" },
       { "text": "Messages", "icon": "FaComments", "url": "/instructor_messages" },
       { "text": "Notifications", "icon": "FaBell", "url": "/instructor_notifications" },

@@ -1,11 +1,12 @@
 import React, { Component } from "react";
 import { FaWallet, FaChevronLeft as ChevronLeftIcon, FaChevronRight as ChevronRightIcon } from "react-icons/fa";
-
+import MainLayout from "../../layouts/MainLayout";
 class PayOut extends Component {
     render() {
         return (
-            <div className="bg-gray-100 p-10">
-                <div className="flex justify-between items-center mb-10">
+            <MainLayout>
+            <div className="bg-gray-100 p-6">
+                <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center space-x-2">
                         <FaWallet className="h-6 w-6 text-gray-700" />
                         <h1 className="text-2xl font-bold">Pay Out</h1>
@@ -121,9 +122,8 @@ class PayOut extends Component {
                         <button className="text-red-500">Delete</button>
                     </div>
                 </div>
-
-                
             </div>
+            </MainLayout>
         );
     }
 }
