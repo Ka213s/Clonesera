@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { FaBell } from "react-icons/fa";
-import MainLayout from "../../layouts/MainLayout";
-import logoavatar from "../../assets/Avatar01.jpg";
+import MainLayout from "../layouts/MainLayout";
+import logoavatar from "../assets/Avatar01.jpg";
 class Notifications extends Component {
     render() {
         return (

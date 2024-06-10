@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import MainLayout from '../../layouts/MainLayout';
+import MainLayout from '../layouts/MainLayout';
 import { FaSearch } from 'react-icons/fa';
 
 const StarIcon: React.FC<{ className: string }> = ({ className }) => (

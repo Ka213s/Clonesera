@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa';
 import newsData from '../../models/FileJson/news.json';
 import MainLayout from '../../layouts/MainLayout';
-
+import img from "../../assets/clothes.jpg"
 const StudentDashboard: React.FC = () => {
   const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
 
@@ -61,7 +61,7 @@ const StudentDashboard: React.FC = () => {
             return (
               <div key={newsItemIndex} className="bg-white p-6 rounded-md shadow-md">
                 <img
-                  src={newsItem.media_url}
+                  src={img}
                   alt={newsItem.title}
                   className="w-full h-40 object-cover rounded-md mb-4"
                 />

@@ -7,21 +7,22 @@ import AdminHome from '../page/Admin/AdminHome';
 import ProtectedRoute from './ProtectedRoute';
 import StudentDashboard from '../page/Student/StudentDashboard';
 import PurchasedCourses from '../page/Student/PurchasedCourse';
-import StudentCertificates from '../page/Student/StudentCertificates';
+import StudentCertificates from '../components/StudentCertificates';
 import CreateNewCousre from '../components/Create_Course/CreateNewCousre';
 import ListCourse from "../page/Instructor/ListCourse";
 import Dashboard from "../page/Instructor/Dashboard";
 import Analysis from "../page/Instructor/Analysis";
-import Messages from "../page/Instructor/Messages";
-import Notifications from "../page/Instructor/Notifications";
-import MyCertificate from "../page/Instructor/MyCertificate";
+import Messages from "../components/Messages";
+import Notifications from "../components/Notifications";
+import MyCertificate from "../components/StudentCertificates";
 import CreateCourse from "../page/Instructor/CreateCourse";
-import Reviews from "../page/Instructor/Reviews";
+import Reviews from "../components/Reviews";
 import Earning from "../page/Instructor/Earning";
 import PayOut from "../page/Instructor/PayOut";
-import Statements from "../page/Instructor/Statements";
+import Statements from "../page/Student/Statements";
 import Verification from "../page/Instructor/Verification";
 import SettingsPage from "../components/Create_Course/SettingsPage";
+import SendFeedback from '../page/Student/SendFeedback';
 const AppRouters: React.FC = () => {
   return (
     <Router>
@@ -34,6 +35,11 @@ const AppRouters: React.FC = () => {
         <Route path="/student_dashboard" element={<ProtectedRoute allowedRoles={[2]}><StudentDashboard /></ProtectedRoute>} />
         <Route path="/student_purchased_courses" element={<ProtectedRoute allowedRoles={[2]}><PurchasedCourses /></ProtectedRoute>} />
         <Route path="/student_my_certificates" element={<ProtectedRoute allowedRoles={[2]}><StudentCertificates /></ProtectedRoute>} />
+        <Route path="/student_notifications" element={<ProtectedRoute allowedRoles={[2]}><Notifications /></ProtectedRoute>} />
+        <Route path="/student_reviews" element={<ProtectedRoute allowedRoles={[2]}><Reviews /></ProtectedRoute>} />
+        <Route path="/student_messages" element={<ProtectedRoute allowedRoles={[2]}><Messages /></ProtectedRoute>} />
+        <Route path="/student_statements" element={<ProtectedRoute allowedRoles={[2]}><Statements /></ProtectedRoute>} />
+        <Route path="/feedback" element={<ProtectedRoute allowedRoles={[2]}><SendFeedback /></ProtectedRoute>} />
         <Route path="/create-course" element={<ProtectedRoute allowedRoles={[3]}><CreateNewCousre /></ProtectedRoute>} />
         <Route path="/instructor_courses" element={<ProtectedRoute allowedRoles={[3]}><ListCourse /></ProtectedRoute>} />
         <Route path="/instructor_dashboard" element={<ProtectedRoute allowedRoles={[3]}><Dashboard /></ProtectedRoute>} />

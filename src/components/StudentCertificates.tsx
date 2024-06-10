@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaTrash, FaCertificate } from 'react-icons/fa';
-import studentCertificatesData from '../../models/FileJson/studentCertificates.json';
-import MainLayout from '../../layouts/MainLayout';
+import studentCertificatesData from '../models/FileJson/studentCertificates.json';
+import MainLayout from '../layouts/MainLayout';
 
 interface Certificate {
     itemNo: number;
