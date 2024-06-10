@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { FaShoppingCart, FaEnvelope, FaBell, FaUserCircle, FaBars, FaSearch } from 'react-icons/fa';
 import { useNavigate, NavigateFunction, Link } from 'react-router-dom';
 import { handleLogout } from '../../components/Logout';
-import logo from '../../assets/Logo-cousera-v1.jpg';
+import logo from '../../assets/Logo-2.png';
 
 interface HeaderProps {
   toggleMenu: () => void;
@@ -80,7 +80,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       </div>
       <div className="flex items-center flex-grow justify-center">
         <Link to="/">
-          <img src={logo} alt="Logo" className="h-10 cursor-pointer" />
+          <img src={logo} alt="Logo" className="h-16 cursor-pointer" /> {/* Thay đổi chiều cao logo tại đây */}
         </Link>
       </div>
       <div className="flex items-center ml-auto space-x-6">
