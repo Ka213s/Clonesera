@@ -21,7 +21,7 @@ import Earning from "../page/Instructor/Earning";
 import PayOut from "../page/Instructor/PayOut";
 import Statements from "../page/Student/Statements";
 import Verification from "../page/Instructor/Verification";
-import SettingsPage from "../components/Create_Course/SettingsPage";
+import SettingsPage from "../components/SettingsPage";
 import SendFeedback from '../page/Student/SendFeedback';
 const AppRouters: React.FC = () => {
   return (
