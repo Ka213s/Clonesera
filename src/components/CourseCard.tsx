@@ -11,8 +11,8 @@ interface CourseCardProps {
 
 const CourseCard: React.FC<CourseCardProps> = ({ name, views, date, description, author, price }) => {
   return (
-    <div className="border p-4 rounded shadow-md h-full flex flex-col justify-between bg-white">
-      <div>
+    <div className="bg-gray-100 w-full gap-6 flex-wrap justify-center items-center">
+      <div className='w-full p-2 bg-white rounded-xl transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2xl mt-4 mb-4 lg:mt-0'>
         <video controls className="w-full h-40 object-cover rounded-t-lg mb-4">
           <source src={require('../assets/30 Second Timer.mp4')} type="video/mp4" />
           {/* Your browser does not support the video tag. */}
@@ -22,9 +22,9 @@ const CourseCard: React.FC<CourseCardProps> = ({ name, views, date, description,
         <p className="text-sm text-gray-600"><strong>Date:</strong> {date}</p>
         <p className="text-sm text-gray-600 mt-4 truncate"><strong>Description:</strong> {description}</p>
         <p className="text-sm text-gray-600 mt-2"><strong>Author:</strong> {author}</p>
-      </div>
-      <div className="mt-4">
+        <div className="mt-4">
         <p className="text-lg font-semibold text-gray-900"><strong>Price:</strong> ${price.toFixed(2)}</p>
+      </div>
       </div>
     </div>
   );

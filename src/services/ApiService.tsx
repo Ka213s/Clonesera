@@ -1,4 +1,6 @@
 import axios from 'axios';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const BASE_URL = 'https://665fbf915425580055b0b389.mockapi.io/GR3_Account';
 
@@ -28,7 +30,7 @@ class ApiService {
     static async getUserByEmail(email: string) {
         try {
             const response = await axios.get(`${BASE_URL}?email=${email}`);
-            return response.data; 
+            return response.data;
         } catch (error) {
             console.error('Error fetching user by email:', error);
             return null;
@@ -77,6 +79,7 @@ class ApiService {
     static async updateAccount(id: string, data: any) {
         try {
             const response = await axios.put(`${BASE_URL}/${id}`, data);
+            toast.success('Update successful ');
             return response.data;
         } catch (error) {
             console.error('Error updating account:', error);
@@ -93,6 +96,31 @@ class ApiService {
             return null;
         }
     }
+    
+    static async getAccountsByRole(roleId: number) {
+        try {
+            const response = await axios.get(`${BASE_URL}/${roleId}`);
+            return response.data;
+        } catch (error) {
+            console.error("Error fetching account data:", error);
+            return null;
+        }
+    }
+    
+    static async updateAccountStatus(id: number, currentStatus: boolean) {
+        try {
+          const response = await axios.put(`${BASE_URL}/${id}`,
+            {
+              status: !currentStatus,
+            }
+          );
+          return response.data;
+        } catch (error) {
+          console.error("Error updating account status:", error);
+          return null;
+        }
+      }
+
 }
 
 export default ApiService;

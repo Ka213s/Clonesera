@@ -1,7 +1,7 @@
 // InstructorCard.tsx
 import React from 'react';
 import { FaYoutube, FaTwitter, FaInstagram, FaFacebook } from 'react-icons/fa';
-// import Avatar02 from '../assets/Avatar02.jpg'
+import Avatar02 from '../assets/Avatar02.jpg'
 
 interface InstructorCardProps {
   name: string;
@@ -20,7 +20,7 @@ interface InstructorCardProps {
 const InstructorCard: React.FC<InstructorCardProps> = ({ name, avatar, content, social, followers, courses }) => {
   return (
     <div className="border p-4 rounded shadow-md mb-4 flex flex-col items-center bg-white">
-      {/* <img src={Avatar02} alt={`${name}'s avatar`} className="w-16 h-16 rounded-full mb-2" /> */}
+      <img src={Avatar02} alt={`${name}'s avatar`} className="w-16 h-16 rounded-full mb-2" />
       <div className="text-center">
         <h2 className="text-xl font-bold">{name}</h2>
         <p className="mt-2">{content}</p>
