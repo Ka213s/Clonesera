@@ -8,7 +8,7 @@ import ProtectedRoute from './ProtectedRoute';
 import StudentDashboard from '../page/Student/StudentDashboard';
 import PurchasedCourses from '../page/Student/PurchasedCourse';
 import StudentCertificates from '../page/Student/StudentCertificates';
-import CreateNewCousre from '../components/CreateNewCousre';
+import CreateNewCousre from '../components/Create_Course/CreateNewCousre';
 import InstructorLayout from '../layouts/InstructorLayout';
 import ListCourse from "../page/Instructor/ListCourse";
 import Dashboard from "../page/Instructor/Dashboard";
@@ -22,7 +22,7 @@ import Earning from "../page/Instructor/Earning";
 import PayOut from "../page/Instructor/PayOut";
 import Statements from "../page/Instructor/Statements";
 import Verification from "../page/Instructor/Verification";
-import SettingsPage from "../components/SettingsPage";
+import SettingsPage from "../components/Create_Course/SettingsPage";
 const AppRouters: React.FC = () => {
   return (
     <Router>
