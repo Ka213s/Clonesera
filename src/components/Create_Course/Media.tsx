@@ -1,5 +1,5 @@
 import React from 'react';
-import MainLayout from '../layouts/MainLayout';
+import MainLayout from '../../layouts/MainLayout';
 interface MediaProps {
   formData: any;
   setFormData: React.Dispatch<React.SetStateAction<any>>;

@@ -23,9 +23,19 @@ const BasicInformation: React.FC<BasicInformationProps> = ({ formData, setFormDa
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setSelectedCategory(e.target.value);
-    setFormData({ ...formData, courseCategory: e.target.value });
+    const selectedSubcategory = e.target.value;
+    let categoryName = '';
+    // Duyệt qua danh sách categories để tìm tên của category chứa selectedSubcategory
+    categoriesData.forEach(category => {
+      if (category.subcategories.includes(selectedSubcategory)) {
+        categoryName = category.name;
+      }
+    });
+    setSelectedCategory(selectedSubcategory);
+    // Lưu cả tên category vào formData khi chọn subcategory
+    setFormData({ ...formData, courseCategory: selectedSubcategory, categoryName: categoryName });
   };
+  
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.title || !formData.shortDescription || !formData.description || !formData.courseCategory) {
