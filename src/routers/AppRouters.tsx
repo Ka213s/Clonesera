@@ -11,7 +11,7 @@ import StudentCertificates from '../page/Student/StudentCertificates';
 import CreateNewCousre from '../components/Create_Course/CreateNewCousre';
 import ListCourse from "../page/Instructor/ListCourse";
 import Dashboard from "../page/Instructor/Dashboard";
-import Analyics from "../page/Instructor/Analyics";
+import Analysis from "../page/Instructor/Analysis";
 import Messages from "../page/Instructor/Messages";
 import Notifications from "../page/Instructor/Notifications";
 import MyCertificate from "../page/Instructor/MyCertificate";
@@ -37,7 +37,7 @@ const AppRouters: React.FC = () => {
         <Route path="/create-course" element={<ProtectedRoute allowedRoles={[3]}><CreateNewCousre /></ProtectedRoute>} />
         <Route path="/instructor_courses" element={<ProtectedRoute allowedRoles={[3]}><ListCourse /></ProtectedRoute>} />
         <Route path="/instructor_dashboard" element={<ProtectedRoute allowedRoles={[3]}><Dashboard /></ProtectedRoute>} />
-        <Route path="/instructor_analysis" element={<ProtectedRoute allowedRoles={[3]}><Analyics /></ProtectedRoute>} />
+        <Route path="/instructor_analysis" element={<ProtectedRoute allowedRoles={[3]}><Analysis /></ProtectedRoute>} />
         <Route path="/instructor_messages" element={<ProtectedRoute allowedRoles={[3]}><Messages /></ProtectedRoute>} />
         <Route path="/instructor_notifications" element={<ProtectedRoute allowedRoles={[3]}><Notifications /></ProtectedRoute>} />
         <Route path="/instructor_my_certificates" element={<ProtectedRoute allowedRoles={[3]}><MyCertificate /></ProtectedRoute>} />

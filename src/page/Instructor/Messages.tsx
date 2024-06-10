@@ -1,115 +1,113 @@
-import React, { Component } from "react";
-import { FaComments, FaChevronLeft as ChevronLeftIcon, FaChevronRight as ChevronRightIcon } from "react-icons/fa";
-import MainLayout from "../../layouts/MainLayout";
-class Messages extends Component {
-    render() {
-        return (
-            <MainLayout>
-                <div className="bg-gray-100 p-6">
-                    <div className="flex justify-between items-center mb-6">
-                        <div className="flex items-center space-x-2">
-                            <FaComments className="h-6 w-6 text-gray-700" />
-                            <h1 className="text-2xl font-bold">Messages</h1>
-                        </div>
-                    </div>
+import React, { useState } from 'react';
+import MainLayout from '../../layouts/MainLayout';
 
-
-
-
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                        {/* Latest Courses Performance */}
-                        <div className="bg-white p-4 rounded shadow">
-                            <div className="flex justify-between items-center mb-4">
-                                <h2 className="text-lg font-bold">Latest Courses Performance</h2>
-                                <div className="flex space-x-2">
-                                    <button className="p-1 rounded-full bg-gray-200 hover:bg-gray-300">
-                                        <ChevronLeftIcon className="h-5 w-5 text-gray-600" />
-                                    </button>
-                                    <button className="p-1 rounded-full bg-gray-200 hover:bg-gray-300">
-                                        <ChevronRightIcon className="h-5 w-5 text-gray-600" />
-                                    </button>
-                                </div>
-                            </div>
-                            <div className="flex items-center space-x-4">
-                                <div>
-                                    <h3 className="text-gray-700 font-bold">
-                                        Complete Python Bootcamp: Go from zero to hero in Python 3
-                                    </h3>
-                                    <p className="text-sm text-gray-500">First 2 days 22 hours</p>
-                                    <p className="text-sm text-gray-500">
-                                        View: 1.5k | Purchased: 150 | Total Like: 1k
-                                    </p>
-                                </div>
-                            </div>
-                            <div className="mt-4">
-                                <button className="text-blue-500">
-                                    GO TO COURSE ANALYTICS
-                                </button>
-                                <br />
-                                <button className="text-blue-500">
-                                    SEE COMMENTS (875)
-                                </button>
-                                <br />
-                                <button className="text-blue-500">
-                                    SEE REVIEWS (105)
-                                </button>
-                            </div>
-                        </div>
-
-                        {/* News */}
-                        <div className="bg-white p-4 rounded shadow">
-                            <h2 className="text-lg font-bold mb-4">News</h2>
-                            <div className="flex items-center space-x-4">
-                                <img src="news-image.png" alt="News" className="h-16 w-16" />
-                                <div>
-                                    <h3 className="text-gray-700 font-bold">
-                                        COVID-19 Updates & Resources
-                                    </h3>
-                                    <p className="text-sm text-gray-500">
-                                        See the latest updates to coronavirus-related content, including
-                                        changes to monetization, and access new Creator support
-                                        resources
-                                    </p>
-                                    <button className="text-blue-500">
-                                        LEARN MORE
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                        {/* Profile Analytics */}
-                        <div className="bg-white p-4 rounded shadow">
-                            <h2 className="text-lg font-bold mb-4">Profile Analytics</h2>
-                            <p className="text-xl font-bold">Current subscribers</p>
-                            <p className="text-3xl font-bold mb-4">856</p>
-                            <p className="text-sm text-gray-500">View: 17k ⬇ 75%</p>
-                            <p className="text-sm text-gray-500">
-                                Purchased (per hour): 1 ⬆ 100%
-                            </p>
-                            <p className="text-sm text-gray-500">Enroll (per hour): 50 ⬇ 70%</p>
-                            <button className="text-blue-500">
-                                GO TO PROFILE ANALYTICS
-                            </button>
-                        </div>
-
-                        {/* Submit Courses */}
-                        <div className="bg-white p-4 rounded shadow">
-                            <h2 className="text-lg font-bold mb-4">Submit Courses</h2>
-                            <p className="text-gray-700 font-bold">
-                                The Complete JavaScript Course 2020: Build Real Projects!
-                            </p>
-                            <p className="text-sm text-red-500">Pending</p>
-                            <p className="text-sm text-gray-500">Submitted 1 days ago</p>
-                            <button className="text-red-500">Delete</button>
-                        </div>
-                    </div>
-                </div>
-            </MainLayout>
-        );
-    }
+interface Contact {
+  name: string;
+  online: boolean;
+  lastMessage: string;
+  unread: number;
+  lastActive: string;
 }
 
-export default Messages;
+interface Message {
+    text: string;
+    timestamp: string;
+    typing?: boolean; // Thuộc tính optional
+  }
+  
 
+const contacts: Contact[] = [
+  { name: 'John Doe', online: true, lastMessage: 'Hi! Sir, How are you. I ask you one thing please expl...', unread: 2, lastActive: '7 hours ago' },
+  { name: 'Kerstin Cable', online: false, lastMessage: 'Hello, I paid your video tutorial but did not play error...', unread: 3, lastActive: '8 hours ago' },
+  { name: 'Jose Portilla', online: false, lastMessage: 'Thanks Sir, Such a nice video.', unread: 1, lastActive: '15 hours ago' },
+  { name: 'Farhat Amin', online: false, lastMessage: 'Hi! Sir, this is a purchase key CFKX12536ERUJSKLL', unread: 7, lastActive: '22 hours ago' },
+  { name: 'Kyle Pew', online: false, lastMessage: 'Pls! Upload .NET Course', unread: 12, lastActive: '2 days ago' },
+];
+
+const messages: Record<string, Message[]> = {
+  'John Doe': [
+    { text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec rutrum congue leo eget malesuada. Vivamus suscipit tortor eget felis porttitor.', timestamp: 'Sat, April 10, 1:08 PM' },
+    { text: 'Cras ultricies ligula.', timestamp: '5 minutes ago' },
+    { text: 'Lorem ipsum dolor sit amet', timestamp: '2 minutes ago' },
+    { text: 'Typing...', timestamp: '', typing: true },
+    // add more messages for John Doe as needed
+  ],
+  'Kerstin Cable': [
+    // add messages for Kerstin Cable
+  ],
+  // add more message arrays for other contacts as needed
+};
+
+const ChatApp: React.FC = () => {
+  const [activeContact, setActiveContact] = useState<string>(contacts[0].name);
+
+  return (
+    <MainLayout>
+      <div className="flex h-screen">
+        {/* Contact List */}
+        <div className="w-1/4 bg-gray-100 p-4 border-r border-gray-300">
+          <div className="text-xl font-bold mb-4">Messages</div>
+          <input
+            type="text"
+            placeholder="Search Messages..."
+            className="w-full p-2 mb-4 border border-gray-300 rounded"
+          />
+          {contacts.map((contact, index) => (
+            <div
+              key={index}
+              className={`p-2 mb-2 rounded-lg cursor-pointer ${activeContact === contact.name ? 'bg-red-200' : 'bg-red-100'}`}
+              onClick={() => setActiveContact(contact.name)}
+            >
+              <div className="flex justify-between items-center">
+                <div className="flex items-center">
+                  <img src={`https://i.pravatar.cc/40?img=${index + 1}`} alt={contact.name} className="w-10 h-10 rounded-full mr-3" />
+                  <div>
+                    <div className="font-semibold">{contact.name}</div>
+                    <div className="text-sm text-gray-600">{contact.lastMessage}</div>
+                  </div>
+                </div>
+                {contact.unread > 0 && (
+                  <div className="text-xs bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center">{contact.unread}</div>
+                )}
+              </div>
+              <div className="text-xs text-gray-500">{contact.lastActive}</div>
+            </div>
+          ))}
+        </div>
+
+        {/* Chat Box */}
+        <div className="w-3/4 flex flex-col p-4">
+          <div className="flex items-center mb-4">
+            <img src={`https://i.pravatar.cc/40?img=${contacts.findIndex(contact => contact.name === activeContact) + 1}`} alt={activeContact} className="w-10 h-10 rounded-full mr-3" />
+            <div>
+              <div className="font-semibold">{activeContact}</div>
+              <div className="text-xs text-green-500">{contacts.find(contact => contact.name === activeContact)?.online ? 'ONLINE' : 'OFFLINE'}</div>
+            </div>
+          </div>
+          <div className="flex-grow overflow-y-auto mb-4">
+            {messages[activeContact]?.map((message, index) => (
+              <div key={index} className="mb-4">
+                <div className="bg-red-100 p-3 rounded-lg">{message.text}</div>
+                <div className="text-xs text-gray-500 mt-1">{message.timestamp}</div>
+              </div>
+            ))}
+          </div>
+          <div className="flex">
+            <input
+              type="text"
+              placeholder="Write a message..."
+              className="flex-grow p-2 border border-gray-300 rounded-l-lg"
+            />
+            <button className="bg-red-500 text-white p-2 rounded-r-lg">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </MainLayout>
+  );
+};
+
+export default ChatApp;
