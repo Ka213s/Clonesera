@@ -27,6 +27,14 @@ const iconComponents = {
   FaPaperPlane: <FaPaperPlane />
 };
 
+const renderIcon = (icon: string) => {
+  if (icon.startsWith("Fa")) {
+    return iconComponents[icon as keyof typeof iconComponents];
+  } else {
+    return <img src={icon} alt="Avatar" className="w-6 h-6 rounded-full" />;
+  }
+};
+
 const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
   const location = useLocation();
   return (
@@ -35,8 +43,8 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
         {sidebarMenuItemsData.menuItems.map((item: MenuItem, index: number) => (
           <li key={index} className={`flex items-center p-4 ${location.pathname === item.url ? 'bg-[#8886e5d5]' : 'hover:bg-[#9997F5]'}`}>
             <a href={item.url} className={`flex items-center space-x-3 text-gray-700 ${location.pathname === item.url ? 'text-white' : ''}`}>
-              {iconComponents[item.icon as keyof typeof iconComponents]}
-               <span className={`${location.pathname === item.url ? 'text-white' : ''}`}>{item.text}</span>
+              {renderIcon(item.icon)}
+              <span className={`${location.pathname === item.url ? 'text-white' : ''}`}>{item.text}</span>
             </a>
           </li>
         ))}

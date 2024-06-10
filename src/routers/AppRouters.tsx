@@ -21,7 +21,7 @@ import Earning from "../page/Instructor/Earning";
 import PayOut from "../page/Instructor/PayOut";
 import Statements from "../page/Student/Statements";
 import Verification from "../page/Instructor/Verification";
-import SettingsPage from "../components/Create_Course/SettingsPage";
+import SettingsPage from "../components/SettingsPage";
 import SendFeedback from '../page/Student/SendFeedback';
 const AppRouters: React.FC = () => {
   return (
@@ -39,7 +39,7 @@ const AppRouters: React.FC = () => {
         <Route path="/student_reviews" element={<ProtectedRoute allowedRoles={[2]}><Reviews /></ProtectedRoute>} />
         <Route path="/student_messages" element={<ProtectedRoute allowedRoles={[2]}><Messages /></ProtectedRoute>} />
         <Route path="/student_statements" element={<ProtectedRoute allowedRoles={[2]}><Statements /></ProtectedRoute>} />
-        <Route path="/feedback" element={<ProtectedRoute allowedRoles={[2]}><SendFeedback /></ProtectedRoute>} />
+        <Route path="/feedback" element={<ProtectedRoute allowedRoles={[2,3]}><SendFeedback /></ProtectedRoute>} />
         <Route path="/create-course" element={<ProtectedRoute allowedRoles={[3]}><CreateNewCousre /></ProtectedRoute>} />
         <Route path="/instructor_courses" element={<ProtectedRoute allowedRoles={[3]}><ListCourse /></ProtectedRoute>} />
         <Route path="/instructor_dashboard" element={<ProtectedRoute allowedRoles={[3]}><Dashboard /></ProtectedRoute>} />

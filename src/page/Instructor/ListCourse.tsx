@@ -19,7 +19,7 @@ class ListCourse extends Component {
               <FaBook className="h-6 w-6 text-gray-700" />
               <h2 className="text-xl">Jump Into Course Creation</h2>
             </div>
-            <button className="bg-red-500 text-white px-4 py-2 rounded">
+            <button className="bg-[#9997F5] text-white px-4 py-2 rounded">
               Create Your Course
             </button>
           </div>
