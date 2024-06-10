@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FaBookOpen as BookOpenIcon } from "react-icons/fa";
+import { FaBook } from "react-icons/fa";
 import NavigationTabs from "../../components/Instructor/NavigationTabs";
 
 class ListCourse extends Component {
@@ -8,12 +8,13 @@ class ListCourse extends Component {
       <div className="bg-white p-6 shadow">
         <div className="flex justify-between items-center mb-4">
           <div className="flex items-center space-x-2">
-            <BookOpenIcon className="h-6 w-6 text-gray-700" />
+            <FaBook className="h-6 w-6 text-gray-700" />
             <h1 className="text-2xl font-bold">Courses</h1>
           </div>
         </div>
         <div className="bg-white p-4 shadow mb-4 flex justify-between items-center">
           <div className="flex items-center space-x-2">
+            <FaBook className="h-6 w-6 text-gray-700" />
             <h2 className="text-xl">Jump Into Course Creation</h2>
           </div>
           <button className="bg-red-500 text-white px-4 py-2 rounded">
@@ -76,6 +77,89 @@ class ListCourse extends Component {
                 </button>
               </td>
             </tr>
+
+
+            <tr className="hover:bg-gray-50">
+              <td className="py-2 px-4 border-b border-gray-200">IT-002</td>
+              <td className="py-2 px-4 border-b border-gray-200">
+                Course Title Here
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200">
+                06 April 2020 | 08:31
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200">15</td>
+              <td className="py-2 px-4 border-b border-gray-200">5</td>
+              <td className="py-2 px-4 border-b border-gray-200 text-blue-600">
+                Web Development
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200 text-red-600">
+                Active
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200 flex space-x-2">
+                <button className="p-1 text-blue-600 hover:text-blue-800">
+                  ✏️
+                </button>
+                <button className="p-1 text-red-600 hover:text-red-800">
+                  🗑️
+                </button>
+              </td>
+            </tr>
+
+
+            <tr className="hover:bg-gray-50">
+              <td className="py-2 px-4 border-b border-gray-200">IT-003</td>
+              <td className="py-2 px-4 border-b border-gray-200">
+                Course Title Here
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200">
+                06 April 2020 | 08:31
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200">15</td>
+              <td className="py-2 px-4 border-b border-gray-200">5</td>
+              <td className="py-2 px-4 border-b border-gray-200 text-blue-600">
+                Web Development
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200 text-red-600">
+                Active
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200 flex space-x-2">
+                <button className="p-1 text-blue-600 hover:text-blue-800">
+                  ✏️
+                </button>
+                <button className="p-1 text-red-600 hover:text-red-800">
+                  🗑️
+                </button>
+              </td>
+            </tr>
+
+
+            <tr className="hover:bg-gray-50">
+              <td className="py-2 px-4 border-b border-gray-200">IT-004</td>
+              <td className="py-2 px-4 border-b border-gray-200">
+                Course Title Here
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200">
+                06 April 2020 | 08:31
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200">15</td>
+              <td className="py-2 px-4 border-b border-gray-200">5</td>
+              <td className="py-2 px-4 border-b border-gray-200 text-blue-600">
+                Web Development
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200 text-red-600">
+                Active
+              </td>
+              <td className="py-2 px-4 border-b border-gray-200 flex space-x-2">
+                <button className="p-1 text-blue-600 hover:text-blue-800">
+                  ✏️
+                </button>
+                <button className="p-1 text-red-600 hover:text-red-800">
+                  🗑️
+                </button>
+              </td>
+            </tr>
+
+
           </tbody>
         </table>
       </div>

@@ -13,13 +13,22 @@ interface AddQuizPopupProps {
 
 const AddQuizPopup: React.FC<AddQuizPopupProps> = ({ formData, setFormData, nextStep, prevStep, onClose }) => {
   const [activeTab, setActiveTab] = useState('basic');
+  const [questions, setQuestions] = useState<any[]>([]);
 
   const handleTabChange = (tab: string) => {
     setActiveTab(tab);
   };
 
-  const handleAddQuestion = () => {
-    // Add logic to handle adding a question
+  const handleAddQuestion = (newQuestion: any) => {
+    setQuestions([...questions, newQuestion]);
+  };
+
+  const handleAddQuiz = () => {
+    const quizData = { ...formData, questions };
+    console.log(quizData);
+    // Optionally, you could clear the form and questions here
+    setFormData({});
+    setQuestions([]);
   };
 
   return (
@@ -59,7 +68,7 @@ const AddQuizPopup: React.FC<AddQuizPopupProps> = ({ formData, setFormData, next
         </div>
         <div className="mt-4 flex justify-between">
           <button onClick={onClose} className="px-4 py-2 bg-gray-500 text-white rounded-md">Close</button>
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-md">Add Quiz</button>
+          <button onClick={handleAddQuiz} className="px-4 py-2 bg-blue-500 text-white rounded-md">Add Quiz</button>
         </div>
       </div>
     </div>
