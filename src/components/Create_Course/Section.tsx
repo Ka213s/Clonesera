@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import LecturePopup from '../LecturePopup';
+import LecturePopup from './LecturePopup';
 import AddQuizPopup from './AddQuizPopup';
 
 interface SectionProps {

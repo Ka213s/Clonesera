@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import BasicTab from './BasicTabProps ';
+import React, { useState, useEffect, useRef } from 'react';
+import BasicTab from './BasicTab';
 import QuestionTab from './QuestionTab';
 import SettingTab from './SettingTab';
 
@@ -11,22 +11,35 @@ interface AddQuizPopupProps {
   onClose: () => void;
 }
 
-const AddQuizPopup: React.FC<AddQuizPopupProps> = ({ formData, setFormData, nextStep, prevStep, onClose }) => {
-  const [activeTab, setActiveTab] = useState('basic');
-  const [questions, setQuestions] = useState<any[]>([]);
+const AddQuizPopup: React.FC<AddQuizPopupProps> = ({ formData, setFormData, onClose }) => {
+  const [activeTab, setActiveTab] = useState<string>('basic');
+  let activeTab2 = 'basic';
+  const activeTab3 = useRef(false);
+  useEffect(() => {
+  setActiveTab('basic2');
+  activeTab2 = 'basic3';
+  activeTab3.current = true;
+  },[])
+  console.log('activetab2 : ',activeTab2);
+  console.log('activetab : ' , activeTab);
+  console.log('activetab3 : ' , activeTab3.current);
+  const [questions, setQuestions] = useState<any[]>(formData.questions || []);
 
-  const handleTabChange = (tab: string) => {
-    setActiveTab(tab);
-  };
+  const handleTabChange = (tab: string) => setActiveTab(tab);
 
   const handleAddQuestion = (newQuestion: any) => {
-    setQuestions([...questions, newQuestion]);
+    const updatedQuestions = [...questions, newQuestion];
+    setQuestions(updatedQuestions);
+    setFormData({
+      ...formData,
+      questions: updatedQuestions,
+    });
   };
 
   const handleAddQuiz = () => {
     const quizData = { ...formData, questions };
     console.log(quizData);
-    // Optionally, you could clear the form and questions here
+    // Optionally, clear the form and questions here
     setFormData({});
     setQuestions([]);
   };
@@ -39,32 +52,20 @@ const AddQuizPopup: React.FC<AddQuizPopupProps> = ({ formData, setFormData, next
           <button onClick={onClose} className="text-red-500">Close</button>
         </div>
         <div className="mb-4">
-          <button 
-            onClick={() => handleTabChange('basic')} 
-            className={`px-4 py-2 mr-2 ${activeTab === 'basic' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}>
-            Basic
-          </button>
-          <button 
-            onClick={() => handleTabChange('questions')} 
-            className={`px-4 py-2 mr-2 ${activeTab === 'questions' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}>
-            Questions
-          </button>
-          <button 
-            onClick={() => handleTabChange('setting')} 
-            className={`px-4 py-2 ${activeTab === 'setting' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}>
-            Setting
-          </button>
+          {['basic', 'questions', 'setting'].map((tab) => (
+            <button
+              key={tab}
+              onClick={() => handleTabChange(tab)}
+              className={`px-4 py-2 mr-2 ${activeTab === tab ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
+            >
+              {tab.charAt(0).toUpperCase() + tab.slice(1)}
+            </button>
+          ))}
         </div>
         <div>
-          {activeTab === 'basic' && (
-            <BasicTab formData={formData} setFormData={setFormData} />
-          )}
-          {activeTab === 'questions' && (
-            <QuestionTab formData={formData} setFormData={setFormData} handleAddQuestion={handleAddQuestion} />
-          )}
-          {activeTab === 'setting' && (
-            <SettingTab formData={formData} setFormData={setFormData} />
-          )}
+          {activeTab === 'basic' && <BasicTab formData={formData} setFormData={setFormData} />}
+          {activeTab === 'questions' && <QuestionTab formData={formData} setFormData={setFormData} handleAddQuestion={handleAddQuestion} />}
+          {activeTab === 'setting' && <SettingTab formData={formData} setFormData={setFormData} />}
         </div>
         <div className="mt-4 flex justify-between">
           <button onClick={onClose} className="px-4 py-2 bg-gray-500 text-white rounded-md">Close</button>
