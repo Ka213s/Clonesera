@@ -1,5 +1,5 @@
-import React from "react";
-import { FaBookOpen, FaShoppingCart, FaUpload, FaTags, FaBullhorn } from "react-icons/fa";
+  import React from "react";
+  import { FaBookOpen, FaShoppingCart, FaUpload, FaTags, FaBullhorn } from "react-icons/fa";
 
 const NavigationTabs: React.FC = () => {
   return (
@@ -28,4 +28,4 @@ const NavigationTabs: React.FC = () => {
   );
 };
 
-export default NavigationTabs;
+  export default NavigationTabs;
