@@ -47,11 +47,11 @@ const HomePage: React.FC = () => {
         <div className="col-span-3">
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">Courses</h1>
-            <button className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
+            <button className="text-[#9997F5] hover:text-[#8886E5] font-bold py-2 px-4 rounded">
               See all
             </button>
           </div>
-          <div className="w-full">
+          <div className="w-full ">
             <Slider {...settings}>
               {coursesData.courses.map((course, index) => (
                 <div key={index} className="px-2 h-full">
@@ -69,7 +69,7 @@ const HomePage: React.FC = () => {
           </div>
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">Newest Courses</h1>
-            <button className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
+            <button className="text-[#9997F5] hover:text-[#8886E5] font-bold py-2 px-4 rounded">
               See all
             </button>
           </div>
@@ -92,7 +92,7 @@ const HomePage: React.FC = () => {
           <FeatureButtons />
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">Popular Instructors</h1>
-            <button className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
+            <button className="text-[#9997F5] hover:text-[#8886E5] font-bold py-2 px-4 rounded">
               See all
             </button>
           </div>
@@ -114,7 +114,7 @@ const HomePage: React.FC = () => {
           </div>
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">What Our Students Have to Say</h1>
-            <button className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
+            <button className="text-[#9997F5] hover:text-[#8886E5] font-bold py-2 px-4 rounded">
               See all
             </button>
           </div>
