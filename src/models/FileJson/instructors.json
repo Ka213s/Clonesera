@@ -14,7 +14,7 @@
         "courses": 10
       },
       {
-        "name": "Jane Smit",
+        "name": "Jane Smith",
         "avatar": "path/to/avatar2.jpg",
         "content": "Teaches JavaScript and Web Development",
         "social": {
