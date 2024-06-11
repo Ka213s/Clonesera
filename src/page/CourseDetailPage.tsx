@@ -18,31 +18,27 @@ const CourseDetailPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const [course, setCourse] = useState<Course | undefined>(undefined);
 
-  // Tìm khóa học trong danh sách courses
   const findCourse = (id: string): Course | undefined => {
     return coursesData.courses.find(course => course.id === id);
   };
 
-  // Tìm khóa học trong danh sách newestCourses
   const findNewestCourse = (id: string): Course | undefined => {
     return coursesData.newestCourses.find(course => course.id === id);
   };
 
-  // Kiểm tra khóa học trong cả courses và newestCourses
   const loadCourse = (id: string): Course | undefined => {
     return findCourse(id) || findNewestCourse(id);
   };
 
-  // Load khóa học ban đầu
   useEffect(() => {
-    const loadedCourse = loadCourse(courseId!); // Sử dụng ! để bỏ qua lỗi undefined
+    const loadedCourse = loadCourse(courseId!);
     if (loadedCourse) {
       setCourse(loadedCourse);
     } else {
       setCourse(undefined);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [courseId]); // Xóa `loadCourse` khỏi mảng dependency để loại bỏ cảnh báo
+
+  }, [courseId]);
 
   if (!course) {
     return <div>Không tìm thấy khóa học.</div>;
