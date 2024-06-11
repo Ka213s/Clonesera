@@ -1,0 +1,21 @@
+import React from "react";
+import RedirectToLoginIfNoUserData from "../RedirectToLoginIfNoUserData";
+import ManageAccount from "../../page/Admin/ManageAccount";
+import Sidebar from "../Sidebar/Admin_Sidebar";
+
+const Home = () => {
+  return (
+    <div>
+      <RedirectToLoginIfNoUserData />
+      <div className="grid grid-cols-12">
+        <div className="col-span-2 h-[100vh]">
+          
+        
+          <ManageAccount />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Home;

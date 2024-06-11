@@ -1,0 +1,21 @@
+[
+    {
+      "id": 1,
+      "avatar": "../static/media/Avatar02.715a35cf5d30280dd60a.jpg",
+      "message": "Rock William commented on your video \"How to create sidebar menu.\"",
+      "time": "2 min ago"
+    },
+    {
+      "id": 2,
+      "avatar": "../static/media/Avatar02.715a35cf5d30280dd60a.jpg",
+      "message": "Jessica Smith added a new review in \"Full Stack PHP Developer.\"",
+      "time": "12 min ago"
+    },
+    {
+      "id": 3,
+      "avatar": "../static/media/Avatar02.715a35cf5d30280dd60a.jpg",
+      "message": "Your membership approved for uploading videos.",
+      "time": "20 min ago"
+    }
+  ]
+  

@@ -1,0 +1,31 @@
+[
+    {
+      "name": "Development",
+      "subcategories": [
+        "Web Development",
+        "Data Science",
+        "Programming Languages",
+        "Mobile Apps",
+        "Game Development",
+        "Databases",
+        "Software Testing",
+        "Software Engineering",
+        "Development Tools",
+        "E-Commerce"
+      ]
+    },
+    {
+      "name": "Business",
+      "subcategories": [
+        "Finance",
+        "Entrepreneurship",
+        "Communications",
+        "Management",
+        "Sales",
+        "Strategy",
+        "Operations",
+        "Project Management"
+      ]
+    }
+  ]
+  
