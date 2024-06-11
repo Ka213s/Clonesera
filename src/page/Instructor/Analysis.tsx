@@ -15,7 +15,7 @@ const Analyics = () => {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-4 gap-4 mb-6">
+                <div className="grid grid-cols-3 gap-4 mb-6">
                     <div className="bg-white p-4 rounded shadow">
                         <p className="text-2xl font-bold">839</p>
                         <h2 className="text-gray-700 text-lg font-bold">Subscribers</h2>
@@ -30,15 +30,7 @@ const Analyics = () => {
                     </div>
                 </div>
 
-                <div className="bg-white p-4 rounded shadow mb-6 flex justify-between items-center">
-                    <div className="flex items-center space-x-2">
-                        <FaChartLine className="h-6 w-6 text-gray-700" />
-                        <h2 className="text-xl">Jump Into Course Creation</h2>
-                    </div>
-                    <button className="bg-red-500 text-white px-4 py-2 rounded">
-                        Create Your Course
-                    </button>
-                </div>
+               
 
                 <SalesChart />
                 <UserActivityChart />

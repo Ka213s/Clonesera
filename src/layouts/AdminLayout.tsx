@@ -1,6 +1,6 @@
 import React from "react";
 import RedirectToLoginIfNoUserData from "../components/RedirectToLoginIfNoUserData";
-import ManageAccount from "../components/Admin/ManageAccount";
+import ManageAccount from "../page/Admin/ManageAccount";
 import Sidebar from "../components/Sidebar/Admin_Sidebar";
 
 const Home = () => {

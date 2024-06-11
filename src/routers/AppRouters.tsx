@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import HomePage from '../page/HomePage';
 import Login from '../page/Login';
 import Register from '../page/Register';
-import AdminHome from '../page/Admin/AdminHome';
+// import AdminHome from '../page/Admin/AdminHome';
 import ProtectedRoute from './ProtectedRoute';
 import StudentDashboard from '../page/Student/StudentDashboard';
 import PurchasedCourses from '../page/Student/PurchasedCourse';
@@ -23,15 +23,17 @@ import Statements from "../page/Student/Statements";
 import Verification from "../page/Instructor/Verification";
 import SettingsPage from "../components/SettingsPage";
 import SendFeedback from '../page/Student/SendFeedback';
+import CourseDetailPage from '../page/CourseDetailPage';
+
 const AppRouters: React.FC = () => {
   return (
     <Router>
       <Routes>
-      <Route path="/" element={<Navigate to="/home" />} />
+        <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/adminhome" element={<ProtectedRoute allowedRoles={[1]}><AdminHome /></ProtectedRoute>} />
+        {/* <Route path="/adminhome" element={<ProtectedRoute allowedRoles={[1]}><AdminHome /></ProtectedRoute>} /> */}
         <Route path="/student_dashboard" element={<ProtectedRoute allowedRoles={[2]}><StudentDashboard /></ProtectedRoute>} />
         <Route path="/student_purchased_courses" element={<ProtectedRoute allowedRoles={[2]}><PurchasedCourses /></ProtectedRoute>} />
         <Route path="/student_my_certificates" element={<ProtectedRoute allowedRoles={[2]}><StudentCertificates /></ProtectedRoute>} />
@@ -39,7 +41,7 @@ const AppRouters: React.FC = () => {
         <Route path="/student_reviews" element={<ProtectedRoute allowedRoles={[2]}><Reviews /></ProtectedRoute>} />
         <Route path="/student_messages" element={<ProtectedRoute allowedRoles={[2]}><Messages /></ProtectedRoute>} />
         <Route path="/student_statements" element={<ProtectedRoute allowedRoles={[2]}><Statements /></ProtectedRoute>} />
-        <Route path="/feedback" element={<ProtectedRoute allowedRoles={[2,3]}><SendFeedback /></ProtectedRoute>} />
+        <Route path="/feedback" element={<ProtectedRoute allowedRoles={[2]}><SendFeedback /></ProtectedRoute>} />
         <Route path="/create-course" element={<ProtectedRoute allowedRoles={[3]}><CreateNewCousre /></ProtectedRoute>} />
         <Route path="/instructor_courses" element={<ProtectedRoute allowedRoles={[3]}><ListCourse /></ProtectedRoute>} />
         <Route path="/instructor_dashboard" element={<ProtectedRoute allowedRoles={[3]}><Dashboard /></ProtectedRoute>} />
@@ -53,7 +55,9 @@ const AppRouters: React.FC = () => {
         <Route path="/instructor_payout" element={<ProtectedRoute allowedRoles={[3]}><PayOut /></ProtectedRoute>} />
         <Route path="/instructor_statements" element={<ProtectedRoute allowedRoles={[3]}><Statements /></ProtectedRoute>} />
         <Route path="/instructor_verification" element={<ProtectedRoute allowedRoles={[3]}><Verification /></ProtectedRoute>} />
-        <Route path="/settings" element={<ProtectedRoute allowedRoles={[2,3]}><SettingsPage /></ProtectedRoute>} />
+        <Route path="/settings" element={<ProtectedRoute allowedRoles={[2, 3]}><SettingsPage /></ProtectedRoute>} />
+        <Route path="/course/:courseId" element={<CourseDetailPage />} />
+        <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
     </Router>
   );

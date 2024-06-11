@@ -31,8 +31,8 @@ const Footer: React.FC = () => {
 
   return (
     <footer className="p-4 shadow-md bg-gray-900 bg-opacity-90">
-      <div className="container mx-auto flex justify-between">
-        <div className="flex flex-wrap justify-center w-1/2">
+      <div className="text-center container mx-auto flex justify-start">
+        <div className="flex flex-wrap justify-items-start w-1/2">
           {columns.map((column, colIndex) => (
             <ul key={colIndex} className="w-1/3">
               {column.map((link: FooterLink, index: number) => (

@@ -1,6 +1,7 @@
 {
   "courses": [
     {
+      "id": "python-course",
       "name": "Learn Python",
       "views": 1500,
       "date": "2024-01-01",
@@ -10,6 +11,7 @@
       "vid": "path/to/video1.jpg"
     },
     {
+      "id": "javascript-course",
       "name": "Master JavaScript",
       "views": 2000,
       "date": "2024-01-15",
@@ -19,6 +21,7 @@
       "vid": "path/to/video2.jpg"
     },
     {
+      "id": "react-course",
       "name": "React for Beginners",
       "views": 1800,
       "date": "2024-02-01",
@@ -28,6 +31,7 @@
       "vid": "path/to/video3.jpg"
     },
     {
+      "id": "data-structures-algorithms",
       "name": "Data Structures and Algorithms",
       "views": 2200,
       "date": "2024-03-01",
@@ -37,6 +41,7 @@
       "vid": "path/to/video4.jpg"
     },
     {
+      "id": "full-stack-web-development",
       "name": "Full Stack Web Development",
       "views": 2500,
       "date": "2024-04-01",
@@ -48,6 +53,7 @@
   ],
   "newestCourses": [
     {
+      "id": "advanced-python-course",
       "name": "Advanced Python",
       "views": 500,
       "date": "2024-05-01",
@@ -57,6 +63,7 @@
       "vid": "path/to/video6.jpg"
     },
     {
+      "id": "vuejs-essentials",
       "name": "Vue.js Essentials",
       "views": 800,
       "date": "2024-06-01",
@@ -66,6 +73,7 @@
       "vid": "path/to/video7.jpg"
     },
     {
+      "id": "machine-learning-basics",
       "name": "Machine Learning Basics",
       "views": 1200,
       "date": "2024-07-01",
