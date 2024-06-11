@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaLock, FaLockOpen , FaPen } from 'react-icons/fa';
-import EditAccountModal from "../../components/Admin/EditAccountModal";
+import EditAccountModal from "../../page/Admin/EditAccountModal";
 import ApiService from "../../services/ApiService";
 
 interface Account {

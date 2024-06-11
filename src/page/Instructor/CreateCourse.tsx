@@ -2,10 +2,11 @@ import React, { Component } from "react";
 import { FaPlus, FaChevronLeft as ChevronLeftIcon, FaChevronRight as ChevronRightIcon } from "react-icons/fa";
 import MainLayout from "../../layouts/MainLayout";
 
-class CreateCourse extends Component {
-    render() {
-        return (
-            <MainLayout>
+
+
+const CreateCourse = () => {
+    return (
+        <MainLayout>
                 <div className="bg-gray-100 p-6">
                     <div className="flex justify-between items-center mb-6">
                         <div className="flex items-center space-x-2">
@@ -135,7 +136,6 @@ class CreateCourse extends Component {
             </MainLayout>
         );
     }
-}
 
 export default CreateCourse;
 

@@ -3,6 +3,14 @@ import { FaShoppingCart, FaEnvelope, FaBell, FaUserCircle, FaBars, FaSearch } fr
 import { useNavigate, NavigateFunction, Link } from 'react-router-dom';
 import { handleLogout } from '../../components/Logout';
 import logo from '../../assets/Logo-2.png';
+import notificationsData from '../../models/FileJson/notificationsData.json';
+
+interface Notification {
+  id: number;
+  avatar: string;
+  message: string;
+  time: string;
+}
 
 interface HeaderProps {
   toggleMenu: () => void;
@@ -15,17 +23,24 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const [showEmailNotifications, setShowEmailNotifications] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState<number | null>(null);
-
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  
   const toggleDropdown = () => {
     setShowDropdown(!showDropdown);
   };
+  
   const toggleEmailNotifications = () => {
     setShowEmailNotifications(!showEmailNotifications);
   };
+  
   const toggleBellNotification = () => {
     setShowBellNotification(!showBellNotification);
   };
-
+  
+  useEffect(() => {
+    setNotifications(notificationsData);
+  }, []);
+  
   useEffect(() => {
     const userData = localStorage.getItem('userData');
     if (userData) {
@@ -34,6 +49,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       setIsLoggedIn(true);
     }
   }, []);
+  
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (showDropdown) {
@@ -54,6 +70,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const handleCreateCourse = () => {
     navigate('/create-course');
   };
+  
   const handleCursusDashboard = () => {
     if (userRole === 2) {
       navigate('/student_dashboard');
@@ -78,11 +95,13 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         />
         <FaSearch className="absolute left-3 text-gray-500" />
       </div>
+      
       <div className="flex items-center flex-grow justify-center">
         <Link to="/">
           <img src={logo} alt="Logo" className="h-12 cursor-pointer" /> 
         </Link>
       </div>
+      
       <div className="flex items-center ml-auto space-x-6">
         {userRole === 3 && (
           <button
@@ -92,12 +111,14 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             Create New Course
           </button>
         )}
+        
         <div className="relative">
           <FaShoppingCart className="text-xl cursor-pointer" />
           <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
             2
           </div>
         </div>
+        
         <div className="relative" onClick={toggleEmailNotifications}>
           <FaEnvelope className="text-xl cursor-pointer" onClick={() => setShowEmailNotifications(true)} />
           {showEmailNotifications && (
@@ -113,21 +134,29 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             3
           </div>
         </div>
+        
         <div className="relative" onClick={toggleBellNotification}>
           <FaBell className="text-xl cursor-pointer" onClick={() => setShowBellNotification(true)} />
           {showBellNotification && (
             <div className="absolute top-0 right-0 mt-10 py-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
               <ul>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Notification 1</li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Notification 2</li>
-                <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Notification 3</li>
+                {notifications.map(notification => (
+                  <li key={notification.id} className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center">
+                    <img src={notification.avatar} alt="Avatar" className="w-8 h-8 rounded-full mr-2" />
+                    <div>
+                      <p>{notification.message}</p>
+                      <p className="text-xs text-gray-500">{notification.time}</p>
+                    </div>
+                  </li>
+                ))}
               </ul>
             </div>
           )}
           <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
-            3
+            {notifications.length}
           </div>
         </div>
+        
         {isLoggedIn ? (
           <div className="relative" onClick={toggleDropdown}>
             <FaUserCircle className="text-2xl cursor-pointer" />

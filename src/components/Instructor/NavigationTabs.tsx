@@ -1,10 +1,10 @@
-import React from "react";
-import { FaBookOpen, FaShoppingCart, FaUpload, FaTags, FaBullhorn } from "react-icons/fa";
+  import React from "react";
+  import { FaBookOpen, FaShoppingCart, FaUpload, FaTags, FaBullhorn } from "react-icons/fa";
 
 const NavigationTabs: React.FC = () => {
   return (
     <div className="flex justify-between mb-4">
-      <button className="bg-red-500 text-white px-4 py-2 rounded flex items-center space-x-2">
+      <button className="bg-[#9997F5] text-white px-4 py-2 rounded flex items-center space-x-2">
         <FaBookOpen className="h-5 w-5" />
         <span>My Courses</span>
       </button>
@@ -28,4 +28,4 @@ const NavigationTabs: React.FC = () => {
   );
 };
 
-export default NavigationTabs;
+  export default NavigationTabs;
