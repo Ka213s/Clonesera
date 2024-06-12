@@ -88,8 +88,7 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
             <Link to="/instructor_profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Instructor Profile</Link>
             <a href="#!" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Night mode</a>
             <Link to="/cursus_dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cursus Dashboard</Link>
-            <Link to="/sign_out" className="block px-4 py-2
-            text-sm text-gray-700 hover:bg-gray-100">Sign Out</Link>
+            <Link to="/sign_out" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign Out</Link>
           </div>
         )}
       </div>
