@@ -162,7 +162,7 @@ const HomePage: React.FC = () => {
           {isTestSectionOpen && (
             <div className="pl-8 space-y-2">
               <Link to="/tests/certification-center" className="text-blue-500 hover:text-blue-700">
-                Certification Center
+                Certification Centers
               </Link>
               <Link to="/tests/certification-fill-form" className="text-blue-500 hover:text-blue-700">
                 Certification Fill Form
