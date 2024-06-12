@@ -53,7 +53,7 @@ const HomePage: React.FC = () => {
               See all
             </Link>
           </div>
-          <div className="w-full">
+          <div className="w-full ">
             <Slider {...settings}>
               {coursesData.courses.map((course, index) => (
                 <div key={index} className="px-2 h-full">

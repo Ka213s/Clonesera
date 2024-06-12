@@ -176,8 +176,8 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             )}
           </div>
         ) : (
-          <Link to="/login" className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
-            Login
+          <Link to="/login" className="px-4 py-2 text-white bg-[#9997F5] rounded-md hover:bg-[#8886E5]">
+            Sign in
           </Link>
         )}
       </div>
