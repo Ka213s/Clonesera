@@ -50,7 +50,7 @@ const HomePage: React.FC = () => {
             <h1 className="text-3xl font-extrabold text-gray-800">Courses</h1>
             <Link to="/home" className="text-[#9997F5] hover:text-[#9997F5] font-bold py-2 px-4 rounded">
               See all
-            </button>
+            </Link>
           </div>
           <div className="w-full ">
             <Slider {...settings}>
@@ -74,7 +74,7 @@ const HomePage: React.FC = () => {
             <h1 className="text-3xl font-extrabold text-gray-800">Newest Courses</h1>
             <Link to="/home" className="text-[#9997F5] hover:text-[#9997F5] font-bold py-2 px-4 rounded">
               See all
-            </button>
+            </Link>
           </div>
           <div className="w-full">
             <Slider {...settings}>
@@ -99,7 +99,7 @@ const HomePage: React.FC = () => {
             <h1 className="text-3xl font-extrabold text-gray-800">Popular Instructors</h1>
             <Link to="/home" className="text-[#9997F5] hover:text-[#9997F5] font-bold py-2 px-4 rounded">
               See all
-            </button>
+            </Link>
           </div>
           <div className="w-full">
             <Slider {...settings}>
@@ -121,7 +121,7 @@ const HomePage: React.FC = () => {
             <h1 className="text-3xl font-extrabold text-gray-800">What Our Students Have to Say</h1>
             <Link to="/home" className="text-[#9997F5] hover:text-[#9997F5] font-bold py-2 px-4 rounded">
               See all
-            </button>
+            </Link>
           </div>
           <div className="w-full">
             <Slider {...settings}>
