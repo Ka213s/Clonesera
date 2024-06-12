@@ -27,6 +27,7 @@ import SettingsPage from "../components/SettingsPage";
 import SendFeedback from '../page/Student/SendFeedback';
 import CourseDetailPage from '../page/CourseDetailPage';
 import ViewProfile from '../page/Instructor/ViewProfile';
+import ViewProfile from '../page/Instructor/ViewProfile';
 
 const AppRouters: React.FC = () => {
   return (
