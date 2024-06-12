@@ -41,7 +41,7 @@ class Dashboard extends Component {
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded shadow mb-6 flex justify-between items-center">
+          <div className="bg-white p-6 rounded shadow mb-6 flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <BookOpenIcon className="h-6 w-6 text-gray-700" />
               <h2 className="text-xl">Jump Into Course Creation</h2>
