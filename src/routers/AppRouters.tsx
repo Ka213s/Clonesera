@@ -64,7 +64,7 @@ const AppRouters: React.FC = () => {
         <Route path="/instructor_earning" element={<ProtectedRoute allowedRoles={[3]}><Earning /></ProtectedRoute>} />
         <Route path="/instructor_payout" element={<ProtectedRoute allowedRoles={[3]}><PayOut /></ProtectedRoute>} />
         <Route path="/instructor_statements" element={<ProtectedRoute allowedRoles={[3]}><Statements /></ProtectedRoute>} />
-        <Route path="/view_instructor_profile" element={<ProtectedRoute allowedRoles={[3]}><ViewProfile /></ProtectedRoute>} />
+        <Route path="/view_instructor_profile" element={<ProtectedRoute allowedRoles={[2,3]}><ViewProfile /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute allowedRoles={[2, 3]}><SettingsPage /></ProtectedRoute>} />
         <Route path="/course/:courseId" element={<CourseDetailPage />} />
         <Route path="/tests/certification-center" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationCenter /></ProtectedRoute>} />
