@@ -1,6 +1,8 @@
+
 import React from 'react';
 import Slider from 'react-slick';
 import MainLayout from '../layouts/MainLayout';
+import { Link } from 'react-router-dom';
 import CourseCard from '../components/CourseCard';
 import FeatureButtons from '../components/FeatureButtons';
 import InstructorCard from '../components/InstructorCard';
@@ -47,44 +49,48 @@ const HomePage: React.FC = () => {
         <div className="col-span-3">
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">Courses</h1>
-            <button className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
+            <Link to="/home" className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
               See all
-            </button>
+            </Link>
           </div>
-          <div className="w-full">
+          <div className="w-full ">
             <Slider {...settings}>
               {coursesData.courses.map((course, index) => (
                 <div key={index} className="px-2 h-full">
-                  <CourseCard
-                    name={course.name}
-                    views={course.views}
-                    date={course.date}
-                    description={course.description}
-                    author={course.author}
-                    price={course.price}
-                  />
+                  <Link to={`/course/${course.id}`}>
+                    <CourseCard
+                      name={course.name}
+                      views={course.views}
+                      date={course.date}
+                      description={course.description}
+                      author={course.author}
+                      price={course.price}
+                    />
+                  </Link>
                 </div>
               ))}
             </Slider>
           </div>
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">Newest Courses</h1>
-            <button className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
+            <Link to="/home" className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
               See all
-            </button>
+            </Link>
           </div>
           <div className="w-full">
             <Slider {...settings}>
               {coursesData.newestCourses.map((course, index) => (
                 <div key={index} className="px-2">
-                  <CourseCard
-                    name={course.name}
-                    views={course.views}
-                    date={course.date}
-                    description={course.description}
-                    author={course.author}
-                    price={course.price}
-                  />
+                  <Link to={`/course/${course.id}`}>
+                    <CourseCard
+                      name={course.name}
+                      views={course.views}
+                      date={course.date}
+                      description={course.description}
+                      author={course.author}
+                      price={course.price}
+                    />
+                  </Link>
                 </div>
               ))}
             </Slider>
@@ -92,9 +98,9 @@ const HomePage: React.FC = () => {
           <FeatureButtons />
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">Popular Instructors</h1>
-            <button className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
+            <Link to="/home" className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
               See all
-            </button>
+            </Link>
           </div>
           <div className="w-full">
             <Slider {...settings}>
@@ -114,9 +120,9 @@ const HomePage: React.FC = () => {
           </div>
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">What Our Students Have to Say</h1>
-            <button className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
+            <Link to="/home" className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
               See all
-            </button>
+            </Link>
           </div>
           <div className="w-full">
             <Slider {...settings}>

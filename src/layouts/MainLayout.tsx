@@ -47,17 +47,16 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   return (
-    <div className="flex overflow-hidden" style={{ marginTop: '10px' }}> 
-  <Header toggleMenu={toggleMenu} />
-  {renderSidebar()}
-  <div className={`flex flex-col flex-1 transition-all duration-300 ${showMenu ? 'ml-64' : 'ml-0'}`}>
-    <div className="pt-16 p-4 overflow-auto">
-      {children}
+    <div className="flex overflow-hidden"> 
+      <Header toggleMenu={toggleMenu} />
+      {renderSidebar()}
+      <div className={`flex flex-col flex-1 transition-all duration-300 ${showMenu ? 'ml-64' : 'ml-0'}`}>
+        <div className="pt-16 p-4 overflow-auto">
+          {children}
+        </div>
+        <Footer />
+      </div>
     </div>
-    <Footer />
-  </div>
-</div>
-
   );
 };
 
