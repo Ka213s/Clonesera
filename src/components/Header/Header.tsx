@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaShoppingCart, FaEnvelope, FaBell, FaUserCircle, FaBars, FaSearch } from 'react-icons/fa';
+import { FaShoppingCart, FaEnvelope, FaBell, FaUserCircle, FaBars, FaSearch, FaPlus } from 'react-icons/fa';
 import { useNavigate, Link } from 'react-router-dom';
 import { handleLogout } from '../../components/Logout';
 import logo from '../../assets/Logo-2.png';
@@ -99,14 +99,21 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 
       <div className="flex items-center ml-auto space-x-6">
         {userRole === 3 && (
-          <button
-            onClick={handleCreateCourse}
-            className="px-4 py-2 text-white bg-[#9997F5] rounded-md hover:bg-[#8886E5]"
-          >
-            Create New Course
-          </button>
+          <>
+            <button
+              onClick={handleCreateCourse}
+              className="hidden md:block px-4 py-2 text-white bg-[#9997F5] rounded-md hover:bg-[#8886E5]"
+            >
+              Create New Course
+            </button>
+            <button
+              onClick={handleCreateCourse}
+              className="block md:hidden text-white bg-[#9997F5] rounded-full p-2 hover:bg-[#8886E5]"
+            >
+              <FaPlus />
+            </button>
+          </>
         )}
-
         <div className="relative">
           <FaShoppingCart className="text-xl cursor-pointer" />
           <div className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 inline-flex items-center justify-center w-5 h-5 text-xs font-bold text-white bg-red-500 rounded-full">
