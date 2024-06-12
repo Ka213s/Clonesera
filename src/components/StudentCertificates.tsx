@@ -15,8 +15,8 @@ interface Certificate {
 const StudentCertificates: React.FC = () => {
     return (
         <MainLayout>
-            <div className="bg-gray-100 p-10">
-                <div className="flex justify-between items-center mb-10">
+            <div className="bg-gray-100 p-6">
+                <div className="flex justify-between items-center mb-8">
                     <div className="flex items-center space-x-2">
                         <FaCertificate className="h-6 w-6 text-gray-700" />
                         <h1 className="text-2xl font-bold">My Certificate</h1>

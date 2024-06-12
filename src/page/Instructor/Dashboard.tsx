@@ -6,7 +6,7 @@ class Dashboard extends Component {
   render() {
     return (
       <MainLayout>
-        <div className="bg-gray-100 p-6">
+        <div className="bg-gray-100 p-8">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center space-x-2">
               <BookOpenIcon className="h-6 w-6 text-gray-700" />

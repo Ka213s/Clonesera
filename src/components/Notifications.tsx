@@ -14,7 +14,7 @@ class Notifications extends Component {
                         </div>
                     </div>
 
-                    <div className="bg-white p-4 rounded shadow mb-6 flex justify-between items-center">
+                    <div className="p-4 rounded mb-6">
                         <button className="bg-[#9997F5] text-white px-4 py-2 rounded">
                             Notification Setting
                         </button>

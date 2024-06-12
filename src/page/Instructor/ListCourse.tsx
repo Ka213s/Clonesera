@@ -7,7 +7,7 @@ class ListCourse extends Component {
   render() {
     return (
       <MainLayout>
-        <div className="bg-white p-6 shadow">
+        <div className="bg-white p-8">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center space-x-2">
               <FaBook className="h-6 w-6 text-gray-700" />

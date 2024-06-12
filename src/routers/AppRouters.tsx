@@ -19,6 +19,7 @@ import CreateCourse from "../page/Instructor/CreateCourse";
 import Reviews from "../components/Reviews";
 import Earning from "../page/Instructor/Earning";
 import PayOut from "../page/Instructor/PayOut";
+import StatementsIns from "../page/Instructor/StatementsIns";
 import Statements from "../page/Student/Statements";
 import Verification from "../page/Instructor/Verification";
 import SettingsPage from "../components/SettingsPage";
@@ -54,7 +55,7 @@ const AppRouters: React.FC = () => {
         <Route path="/instructor_reviews" element={<ProtectedRoute allowedRoles={[3]}><Reviews /></ProtectedRoute>} />
         <Route path="/instructor_earning" element={<ProtectedRoute allowedRoles={[3]}><Earning /></ProtectedRoute>} />
         <Route path="/instructor_payout" element={<ProtectedRoute allowedRoles={[3]}><PayOut /></ProtectedRoute>} />
-        <Route path="/instructor_statements" element={<ProtectedRoute allowedRoles={[3]}><Statements /></ProtectedRoute>} />
+        <Route path="/instructor_statements" element={<ProtectedRoute allowedRoles={[3]}><StatementsIns /></ProtectedRoute>} />
         <Route path="/instructor_verification" element={<ProtectedRoute allowedRoles={[3]}><Verification /></ProtectedRoute>} />
         <Route path="/view_instructor_profile" element={<ProtectedRoute allowedRoles={[3]}><ViewProfile /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute allowedRoles={[2, 3]}><SettingsPage /></ProtectedRoute>} />
