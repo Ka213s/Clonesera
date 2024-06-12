@@ -15,13 +15,42 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 
 const HomePage: React.FC = () => {
+  const NextArrow = (props: any) => {
+    const { onClick } = props;
+    return (
+      <div
+        className="absolute top-[50%] right-0 transform -translate-y-1/2 -translate-x-1/2 bg-yellow-500 rounded-full w-5 h-5 flex justify-center items-center cursor-pointer z-10"
+        onClick={onClick}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+        </svg>
+      </div>
+    );
+  };
+
+  const PrevArrow = (props: any) => {
+    const { onClick } = props;
+    return (
+      <div
+        className="absolute top-[50%] left-0 transform -translate-y-1/2 -translate-x-1/2 bg-yellow-500 rounded-full w-5 h-5 flex justify-center items-center cursor-pointer z-10"
+        onClick={onClick}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+        </svg>
+      </div>
+    );
+  };
+
   const settings = {
     dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 1,
-    arrows: false,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
     responsive: [
       {
         breakpoint: 1024,
@@ -40,7 +69,9 @@ const HomePage: React.FC = () => {
         },
       },
     ],
+    appendArrows: document.getElementsByClassName("slick-slider")[0],
   };
+
 
   return (
     <MainLayout>
