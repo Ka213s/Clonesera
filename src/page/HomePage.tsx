@@ -17,7 +17,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 const HomePage: React.FC = () => {
   const settings = {
-    dots: true,
+    dots: false,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
@@ -49,7 +49,7 @@ const HomePage: React.FC = () => {
         <div className="col-span-3">
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">Courses</h1>
-            <Link to="/home" className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
+            <Link to="/home" className="text-[#9997F5] hover:text-[#9997F5] font-bold py-2 px-4 rounded">
               See all
             </Link>
           </div>
@@ -73,7 +73,7 @@ const HomePage: React.FC = () => {
           </div>
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">Newest Courses</h1>
-            <Link to="/home" className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
+            <Link to="/home" className="text-[#9997F5] hover:text-[#9997F5] font-bold py-2 px-4 rounded">
               See all
             </Link>
           </div>
@@ -98,7 +98,7 @@ const HomePage: React.FC = () => {
           <FeatureButtons />
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">Popular Instructors</h1>
-            <Link to="/home" className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
+            <Link to="/home" className="text-[#9997F5] hover:text-[#9997F5] font-bold py-2 px-4 rounded">
               See all
             </Link>
           </div>
@@ -120,7 +120,7 @@ const HomePage: React.FC = () => {
           </div>
           <div className="p-4 relative flex items-center justify-between">
             <h1 className="text-3xl font-extrabold text-gray-800">What Our Students Have to Say</h1>
-            <Link to="/home" className="text-blue-500 hover:text-blue-700 font-bold py-2 px-4 rounded">
+            <Link to="/home" className="text-[#9997F5] hover:text-[#9997F5] font-bold py-2 px-4 rounded">
               See all
             </Link>
           </div>
