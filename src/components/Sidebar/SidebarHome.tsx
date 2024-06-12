@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaHome, FaVideo, FaCompass, FaThList, FaBook, FaSave, FaBell, FaCogs, FaQuestionCircle, FaHistory, FaPaperPlane, FaChevronDown, FaChevronUp, FaUserCircle } from 'react-icons/fa';
 import sidebarMenuItemsData from '../../models/FileJson/sidebarMenuItems.json';
+
 
 interface SidebarProps {
   showMenu: boolean;
@@ -33,6 +34,17 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
   const location = useLocation();
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
   const [expandedUserMenu, setExpandedUserMenu] = useState(false);
+  useEffect(() => {
+    sidebarMenuItemsData.menuItems.forEach((item: MenuItem) => {
+      if (item.subItems) {
+        item.subItems.forEach((subItem) => {
+          if (location.pathname === subItem.url) {
+            setExpandedMenus((prevExpandedMenus) => [...prevExpandedMenus, item.text]);
+          }
+        });
+      }
+    });
+  }, [location.pathname]);
 
   const toggleMenu = (menu: string) => {
     setExpandedMenus(expandedMenus.includes(menu)
@@ -97,3 +109,4 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
 };
 
 export default Sidebar;
+

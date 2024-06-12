@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from '../page/HomePage';
 import Login from '../page/Login';
+import Logout from '../components/Logout';
 import Register from '../page/Register';
 import AdminHome from '../page/Admin/ManageAccount';
 import AdminDashboard from '../page/Admin/Dashboard';
@@ -40,6 +41,7 @@ const AppRouters: React.FC = () => {
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
         <Route path="/adminhome" element={<ProtectedRoute allowedRoles={[1]}><AdminHome /></ProtectedRoute>} />
         <Route path="/admin_dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
@@ -65,7 +67,7 @@ const AppRouters: React.FC = () => {
         <Route path="/instructor_earning" element={<ProtectedRoute allowedRoles={[3]}><Earning /></ProtectedRoute>} />
         <Route path="/instructor_payout" element={<ProtectedRoute allowedRoles={[3]}><PayOut /></ProtectedRoute>} />
         <Route path="/instructor_statements" element={<ProtectedRoute allowedRoles={[3]}><Statements /></ProtectedRoute>} />
-        <Route path="/view_instructor_profile" element={<ProtectedRoute allowedRoles={[3]}><ViewProfile /></ProtectedRoute>} />
+        <Route path="/view_instructor_profile" element={<ProtectedRoute allowedRoles={[2,3]}><ViewProfile /></ProtectedRoute>} />
         <Route path="/settings" element={<ProtectedRoute allowedRoles={[2, 3]}><SettingsPage /></ProtectedRoute>} />
         <Route path="/course/:courseId" element={<CourseDetailPage />} />
         <Route path="/tests/certification-center" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationCenter /></ProtectedRoute>} />
