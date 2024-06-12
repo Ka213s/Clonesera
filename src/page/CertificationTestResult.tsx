@@ -3,14 +3,12 @@ import { Link } from 'react-router-dom';
 import MainLayout from '../layouts/MainLayout';
 
 const CertificationTestResult: React.FC = () => {
-  // Mock result data
   const result = {
     score: 85,
     totalQuestions: 10,
     passed: true,
   };
 
-  // Function to handle download certificate click
   const handleDownloadCertificate = () => {
     // Replace with your download logic here
     console.log('Downloading certificate...');
