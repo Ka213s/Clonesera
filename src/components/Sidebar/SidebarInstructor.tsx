@@ -38,9 +38,11 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
       <ul className="mt-8 max-h-full overflow-y-auto">
         {instructorSidebar.insSidebarItem.map((item: MenuItem, index: number) => (
           <li key={index} className={`flex items-center p-4 ${location.pathname === item.url ? 'bg-[#8886e5d5]' : 'hover:bg-[#9997F5]'}`}>
-            <a href={item.url} className={`flex items-center space-x-3 text-gray-700 ${location.pathname === item.url ? 'text-white' : ''}`}>
-              {iconComponents[item.icon as keyof typeof iconComponents]}
-               <span className={`${location.pathname === item.url ? 'text-white' : ''}`}>{item.text}</span>
+            <a href={item.url} className={`flex items-center space-x-3 text-gray-700 hover:text-white ${location.pathname === item.url ? 'text-white' : ''}`}>
+              <span className={`flex-shrink-0 ${location.pathname === item.url ? 'text-white' : 'hover:text-white'}`}>
+                {iconComponents[item.icon as keyof typeof iconComponents]}
+              </span>
+              <span className={`${location.pathname === item.url ? 'text-white' : 'hover:text-white'}`}>{item.text}</span>
             </a>
           </li>
         ))}
