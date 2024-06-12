@@ -1,7 +1,7 @@
-import React from 'react';
-import { useNavigate, NavigateFunction } from 'react-router-dom'; // Import NavigateFunction type
+import React, { useEffect } from 'react';
+import { useNavigate, NavigateFunction } from 'react-router-dom';
 
-export const handleLogout = (navigate: NavigateFunction) => { // Specify NavigateFunction type for navigate
+export const handleLogout = (navigate: NavigateFunction) => {
     localStorage.removeItem('userData');
     navigate('/login');
 };
@@ -9,11 +9,11 @@ export const handleLogout = (navigate: NavigateFunction) => { // Specify Navigat
 const Logout: React.FC = () => {
     const navigate = useNavigate();
 
-    return (
-        <button onClick={() => handleLogout(navigate)} className="px-4 py-2 text-white bg-red-500 rounded-md hover:bg-red-600">
-            Logout
-        </button>
-    );
+    useEffect(() => {
+        handleLogout(navigate);
+    }, []);
+
+    return null; // Return null to prevent rendering anything in the component
 };
 
 export default Logout;

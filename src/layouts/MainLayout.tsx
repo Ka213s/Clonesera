@@ -37,7 +37,10 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   const renderSidebar = () => {
-    if (location.pathname === '/home' || roleId === null) {
+    // Điều kiện kiểm tra nếu đường dẫn bắt đầu bằng "/home" hoặc "/course"
+    const homeOrCoursePaths = /^\/(home|course|tests)/.test(location.pathname);
+
+    if (homeOrCoursePaths || roleId === null) {
       return <SidebarHome showMenu={showMenu} />;
     }
 
@@ -70,4 +73,3 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 export default MainLayout;
-
