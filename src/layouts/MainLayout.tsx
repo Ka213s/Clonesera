@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom'; 
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
 import SidebarHome from '../components/Sidebar/SidebarHome';
 import SidebarStudent from '../components/Sidebar/SidebarStudent';
 import SidebarInstructor from '../components/Sidebar/SidebarInstructor';
 import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
+
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [showMenu, setShowMenu] = useState(true); 
+  const [showMenu, setShowMenu] = useState(true);
   const [roleId, setRoleId] = useState<number | null>(null);
-  const location = useLocation(); 
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const userData = localStorage.getItem('userData');
@@ -22,9 +24,14 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     if (location.pathname === '/home') {
-      setShowMenu(true);
+      if (roleId === 1) {
+        navigate('/admin_dashboard');
+      } else {
+        setShowMenu(true);
+      }
     }
-  }, [location.pathname]); 
+  }, [location.pathname, roleId, navigate]);
+
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
@@ -47,7 +54,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   return (
-    <div className="flex overflow-hidden"> 
+    <div className="flex overflow-hidden">
       <Header toggleMenu={toggleMenu} />
       {renderSidebar()}
       <div className={`flex flex-col flex-1 transition-all duration-300 ${showMenu ? 'ml-64' : 'ml-0'}`}>

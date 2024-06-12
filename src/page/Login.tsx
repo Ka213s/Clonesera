@@ -13,6 +13,7 @@ const Login: React.FC = () => {
     const [loginData, setLoginData] = useState<LoginData>(new LoginData('', ''));
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,6 +21,12 @@ const Login: React.FC = () => {
         if (userData) {
             navigate('/home');
         }
+
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 500);
+
+        return () => clearTimeout(timer);
     }, [navigate]);
 
     const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -155,6 +162,14 @@ const Login: React.FC = () => {
             console.error('Error logging in with Google:', error);
         }
     };
+
+    if (isLoading) {
+        return (
+            <div className="flex items-center justify-center min-h-screen bg-gray-50">
+                <div className="loader"></div> {/* You can replace this with any spinner component */}
+            </div>
+        );
+    }
 
     return (
         <div className="bg-gray-50 min-h-screen flex items-center justify-center">
