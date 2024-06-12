@@ -32,6 +32,7 @@ import CertificationCenter from '../page/CertificationCenter';
 import CertificationForm from '../page/CertificationForm';
 import CertificationTestView from '../page/CertificationTestView';
 import CertificationTestResult from '../page/CertificationTestResult';
+import HelpPage from '../page/HelpPage';
 
 const AppRouters: React.FC = () => {
   return (
@@ -73,6 +74,7 @@ const AppRouters: React.FC = () => {
         <Route path="/tests/certification-fill-form" element={<CertificationForm />} />
         <Route path="/tests/test-view" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationTestView /></ProtectedRoute>} />
         <Route path="/tests/test-result" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationTestResult /></ProtectedRoute>} />
+        <Route path="/help" element={<HelpPage />} />
         <Route path="*" element={<Navigate to="/home" />} />
       </Routes>
     </Router>
