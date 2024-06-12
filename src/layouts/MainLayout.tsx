@@ -1,48 +1,48 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom'; // Import useLocation from react-router-dom
+import { useLocation } from 'react-router-dom'; 
 import Header from '../components/Header/Header';
 import Footer from '../components/Footer/Footer';
-import Sidebar from '../components/Sidebar/Sidebar';
-import SidebarStudent from '../components/Sidebar/Student_Sidebar';
-import SidebarInstructor from '../components/Sidebar/Instructor_Sidebar';
-
+import SidebarHome from '../components/Sidebar/SidebarHome';
+import SidebarStudent from '../components/Sidebar/SidebarStudent';
+import SidebarInstructor from '../components/Sidebar/SidebarInstructor';
+import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [showMenu, setShowMenu] = useState(true); // Initialize to true to show the sidebar by default
+  const [showMenu, setShowMenu] = useState(true); 
   const [roleId, setRoleId] = useState<number | null>(null);
-  const location = useLocation(); // Get the current location using useLocation
+  const location = useLocation(); 
 
   useEffect(() => {
     const userData = localStorage.getItem('userData');
     if (userData) {
       const parsedData = JSON.parse(userData);
       setRoleId(parsedData.roleId);
+      console.log(parsedData.roleId);
     }
   }, []);
 
   useEffect(() => {
-    // Check if the current path is "/home" and always show the sidebar in that case
     if (location.pathname === '/home') {
       setShowMenu(true);
     }
-  }, [location.pathname]); // Listen for changes in the pathname
-
+  }, [location.pathname]); 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
 
   const renderSidebar = () => {
-    // Check if the current path is "/home" or if roleId is not set, then always show the default Sidebar
     if (location.pathname === '/home' || roleId === null) {
-      return <Sidebar showMenu={showMenu} />;
+      return <SidebarHome showMenu={showMenu} />;
     }
 
     switch (roleId) {
+      case 1:
+        return <SidebarAdmin showMenu={showMenu} />;
       case 2:
         return <SidebarStudent showMenu={showMenu} />;
       case 3:
         return <SidebarInstructor showMenu={showMenu} />;
       default:
-        return <Sidebar showMenu={showMenu} />;
+        return <SidebarHome showMenu={showMenu} />;
     }
   };
 
