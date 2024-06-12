@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "name": "John Doe",
+        "title": "Wordpress & Plugin Tutor",
+        "students": "100K Students",
+        "courses": "15 Courses",
+        "avatar": ""
+    },
+    {
+        "id": 2,
+        "name": "Kerstin Cable",
+        "title": "Language Learning Coach, Writer, Online Tutor",
+        "students": "14K Students",
+        "courses": "11 Courses",
+        "avatar": "path/to/avatar.jpg"
+    },
+    {
+        "id": 3,
+        "name": "Jose Portilla",
+        "title": "Head of Data Science, Pierian Data Inc.",
+        "students": "1M Students",
+        "courses": "25 Courses",
+        "avatar": "path/to/avatar.jpg"
+    },
+    {
+        "id": 4,
+        "name": "Jose Portilla",
+        "title": "Head of Data Science, Pierian Data Inc.",
+        "students": "1M Students",
+        "courses": "25 Courses",
+        "avatar": "path/to/avatar.jpg"
+    }
+]
