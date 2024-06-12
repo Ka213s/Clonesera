@@ -1,7 +1,7 @@
 import React from "react";
 import RedirectToLoginIfNoUserData from "../components/RedirectToLoginIfNoUserData";
 import ManageAccount from "../page/Admin/ManageAccount";
-import Sidebar from "../components/Sidebar/Admin_Sidebar";
+import Sidebar from "../components/Sidebar/SidebarAdmin";
 
 const Home = () => {
   return (

@@ -1,0 +1,12 @@
+{
+    "menuItems": [
+      { "text": "Dashboard", "icon": "FaHome", "url": "/admin_dashboard" },
+      { "text": "Users", "icon": "FaUsers", "url": "/admin_user" },
+      { "text": "Reports", "icon": "FaChartLine", "url": "/admin/reports" },
+      { "text": "Settings", "icon": "FaCogs", "url": "/admin/settings" },
+      { "text": "Notifications", "icon": "FaBell", "url": "/admin/notifications" },
+      { "text": "Logs", "icon": "FaHistory", "url": "/admin/logs" },
+      { "text": "Support", "icon": "FaQuestionCircle", "url": "/admin/support" }
+    ]
+  }
+  
