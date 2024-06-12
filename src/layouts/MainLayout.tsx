@@ -70,3 +70,4 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 export default MainLayout;
+
