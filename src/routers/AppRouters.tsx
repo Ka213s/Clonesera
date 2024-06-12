@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import HomePage from '../page/HomePage';
 import Login from '../page/Login';
+import Logout from '../components/Logout';
 import Register from '../page/Register';
 import AdminHome from '../page/Admin/ManageAccount';
 import AdminDashboard from '../page/Admin/Dashboard';
@@ -39,6 +40,7 @@ const AppRouters: React.FC = () => {
         <Route path="/" element={<Navigate to="/home" />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
         <Route path="/adminhome" element={<ProtectedRoute allowedRoles={[1]}><AdminHome /></ProtectedRoute>} />
         <Route path="/admin_dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
