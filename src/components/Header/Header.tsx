@@ -79,6 +79,10 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     }
   };
 
+  const handleViewInstructorProfile = () => {
+    navigate('/view_instructor_profile'); // Navigate to view_instructor_profile page
+  };
+
   return (
     <header className="flex items-center justify-between p-4 bg-white shadow-md fixed top-0 left-0 w-full z-30">
       <div className="flex items-center bg-[#9997F5] rounded-full p-2">
@@ -97,7 +101,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       </div>
       
       <div className="flex items-center flex-grow justify-center">
-        <Link to="/">
+        <Link to="/home">
           <img src={logo} alt="Logo" className="h-12 cursor-pointer" /> 
         </Link>
       </div>
@@ -163,7 +167,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             {showDropdown && (
               <div className="absolute right-0 mt-2 py-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
                 <ul>
-                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">View Instructor Profile</li>
+                  <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleViewInstructorProfile}>View Instructor Profile</li>
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Litemode</li>
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer" onClick={handleCursusDashboard}>Cursus Dashboard</li>
                   <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Paid Memberships</li>
@@ -186,3 +190,4 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 };
 
 export default Header;
+
