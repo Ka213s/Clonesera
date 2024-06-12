@@ -16,7 +16,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 const HomePage: React.FC = () => {
   const settings = {
-    dots: false,
+    dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 3,
