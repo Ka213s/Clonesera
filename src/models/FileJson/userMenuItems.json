@@ -23,6 +23,10 @@
       {
         "text": "Help",
         "url": "/help"
+      },
+      {
+        "text": "Logout",
+        "url": "/logout"
       }
     ]
   }
