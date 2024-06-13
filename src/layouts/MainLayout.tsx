@@ -6,7 +6,7 @@ import SidebarHome from '../components/Sidebar/SidebarHome';
 import SidebarStudent from '../components/Sidebar/SidebarStudent';
 import SidebarInstructor from '../components/Sidebar/SidebarInstructor';
 import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
-
+import { Layout } from 'antd';
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [showMenu, setShowMenu] = useState(true);
   const [roleId, setRoleId] = useState<number | null>(null);
@@ -57,6 +57,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   return (
+    <Layout className="min-h-screen">
     <div className="flex flex-col min-h-screen">
       <Header toggleMenu={toggleMenu} />
       <div className="flex flex-1">
@@ -69,6 +70,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </div>
       </div>
     </div>
+    </Layout>
   );
 };
 

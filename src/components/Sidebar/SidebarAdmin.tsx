@@ -1,62 +1,63 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import sidebarMenuItemsData from '../../models/FileJson/AdminSidebar.json';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Menu } from 'antd';
+import type { MenuProps } from 'antd';
 import {
-  FaHome,
-  FaUsers,
-  FaChartLine,
-  FaCogs,
-  FaBell,
-  FaHistory,
-  FaQuestionCircle
-} from 'react-icons/fa';
+  UserOutlined,
+  DashboardOutlined,
+  BookOutlined,
+  TeamOutlined,
+  UsergroupAddOutlined
+} from '@ant-design/icons';
+import sidebarMenuItems from '../../models/FileJson/AdminSidebar.json'; // Adjust the path as needed
 
 interface SidebarProps {
   showMenu: boolean;
 }
 
 interface MenuItem {
-  text: string;
-  icon: string;
-  url: string;
+  key: string;
+  icon?: string;
+  label: string;
+  children?: MenuItem[];
 }
 
 const iconComponents = {
-  FaHome: <FaHome />,
-  FaUsers: <FaUsers />,
-  FaChartLine: <FaChartLine />,
-  FaCogs: <FaCogs />,
-  FaBell: <FaBell />,
-  FaHistory: <FaHistory />,
-  FaQuestionCircle: <FaQuestionCircle />
-};
-
-const renderIcon = (icon: string) => {
-  if (icon.startsWith("Fa")) {
-    return iconComponents[icon as keyof typeof iconComponents];
-  } else {
-    return <img src={icon} alt="Avatar" className="w-6 h-6 rounded-full" />;
-  }
+  UserOutlined: <UserOutlined />,
+  DashboardOutlined: <DashboardOutlined />,
+  BookOutlined: <BookOutlined />,
+  TeamOutlined: <TeamOutlined />,
+  UsergroupAddOutlined: <UsergroupAddOutlined />
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
   const location = useLocation();
+  const navigate = useNavigate();
+  const selectedKeys = [location.pathname];
+
+  const renderMenuItems = (items: MenuItem[]): MenuProps['items'] => {
+    return items.map(item => ({
+      key: item.key,
+      icon: item.icon ? iconComponents[item.icon as keyof typeof iconComponents] : undefined,
+      label: item.label,
+      children: item.children ? renderMenuItems(item.children) : undefined
+    }));
+  };
+
+  const handleClick: MenuProps['onClick'] = (e) => {
+    navigate(e.key);
+  };
+
   return (
-    <aside className={`fixed top-10 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-64' : 'w-0 overflow-hidden'}`}>
-      <div className="mt-8 max-h-full overflow-y-auto">
-        <ul>
-          {sidebarMenuItemsData.menuItems.map((item: MenuItem, index: number) => (
-            <li key={index} className={`flex items-center p-4 ${location.pathname === item.url ? 'bg-[#8886e5d5]' : 'hover:bg-[#9997F5]'}`}>
-              <a href={item.url} className={`flex items-center space-x-3 text-gray-700 ${location.pathname === item.url ? 'text-white' : ''} hover:text-white`}>
-                <span className={`flex-shrink-0 ${location.pathname === item.url ? 'text-white' : 'hover:text-white'}`}>
-                  {renderIcon(item.icon)}
-                </span>
-                <span className={`${location.pathname === item.url ? 'text-white' : 'hover:text-white'}`}>{item.text}</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
+    <aside className={`fixed top-16 left-0 h-full bg-white shadow-lg transition-all duration-300 ${showMenu ? 'w-64' : 'w-0 overflow-hidden'}`}>
+      <Menu
+        mode="inline"
+        selectedKeys={selectedKeys}
+        defaultOpenKeys={sidebarMenuItems.menuItems.map(item => item.key)}
+        style={{ height: '100%', borderRight: 0 }}
+        items={renderMenuItems(sidebarMenuItems.menuItems)}
+        onClick={handleClick}
+      />
     </aside>
   );
 };
