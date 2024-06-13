@@ -30,7 +30,7 @@ const iconComponents = {
   UsergroupAddOutlined: <UsergroupAddOutlined />
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
+const SidebarAdmin: React.FC<SidebarProps> = ({ showMenu }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const selectedKeys = [location.pathname];
@@ -45,11 +45,11 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
   };
 
   const handleClick: MenuProps['onClick'] = (e) => {
-    navigate(e.key);
+    navigate(e.key, { replace: true }); // Ensure no reload
   };
 
   return (
-    <aside className={`fixed top-16 left-0 h-full bg-white shadow-lg transition-all duration-300 ${showMenu ? 'w-64' : 'w-0 overflow-hidden'}`}>
+    <aside className={`fixed top-16 left-0 h-full bg-white shadow-lg transition-all duration-300 ${showMenu ? 'w-64 overflow-y-auto' : 'w-0 overflow-hidden'}`}>
       <Menu
         mode="inline"
         selectedKeys={selectedKeys}
@@ -62,4 +62,4 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
   );
 };
 
-export default Sidebar;
+export default SidebarAdmin;

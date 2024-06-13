@@ -62,9 +62,9 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
         {sidebarMenuItemsData.menuItems.map((item: MenuItem, index: number) => (
           <React.Fragment key={index}>
             <li className={`flex items-center p-4 ${location.pathname === item.url ? 'bg-[#8886e5d5]' : 'hover:bg-[#9997F5]'}`}>
-              <Link to={item.url} className={`flex items-center space-x-3 text-gray-700 ${location.pathname === item.url ? 'text-white' : ''}`}>
+              <Link to={item.url} className={`flex items-center space-x-3 text-gray-700 ${location.pathname === item.url ? 'text-white' : 'hover:text-white'}`}>
                 {item.icon && iconComponents[item.icon as keyof typeof iconComponents]}
-                <span className={`${location.pathname === item.url ? 'text-white' : ''}`}>{item.text}</span>
+                <span className={`${location.pathname === item.url ? 'text-white' : 'hover:text-white'}`}>{item.text}</span>
                 {item.subItems && (
                   <button onClick={() => toggleMenu(item.text)} className="ml-auto">
                     {expandedMenus.includes(item.text) ? <FaChevronUp /> : <FaChevronDown />}
@@ -76,7 +76,7 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
               <ul className="ml-8">
                 {item.subItems.map((subItem, subIndex) => (
                   <li key={subIndex} className={`flex items-center p-2 ${location.pathname === subItem.url ? 'bg-[#8886e5d5]' : 'hover:bg-[#9997F5]'}`}>
-                    <Link to={subItem.url} className={`text-gray-700 ${location.pathname === subItem.url ? 'text-white' : ''}`}>
+                    <Link to={subItem.url} className={`text-gray-700 ${location.pathname === subItem.url ? 'text-white' : 'hover:text-white'}`}>
                       {subItem.text}
                     </Link>
                   </li>
