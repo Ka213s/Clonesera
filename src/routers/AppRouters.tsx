@@ -4,9 +4,12 @@ import HomePage from '../page/HomePage';
 import Login from '../page/Login';
 import Logout from '../components/Logout';
 import Register from '../page/Register';
-import AdminHome from '../page/Admin/ManageAccount';
+import Courses from '../page/Admin/Courses';
+import CourseDetail from '../page/Admin/CourseDetail';
 import AdminDashboard from '../page/Admin/Dashboard';
 import AdminUser from '../page/Admin/User';
+import CoursesPending from '../page/Admin/CoursesPending';
+import Review from '../page/Admin/Review';
 import ProtectedRoute from './ProtectedRoute';
 import StudentDashboard from '../page/Student/StudentDashboard';
 import PurchasedCourses from '../page/Student/PurchasedCourse';
@@ -43,9 +46,12 @@ const AppRouters: React.FC = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/logout" element={<Logout />} />
         <Route path="/register" element={<Register />} />
-        <Route path="/adminhome" element={<ProtectedRoute allowedRoles={[1]}><AdminHome /></ProtectedRoute>} />
         <Route path="/admin_dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
-        <Route path="/admin_user" element={<ProtectedRoute allowedRoles={[1]}><AdminUser /></ProtectedRoute>} />
+        <Route path="/admin/user" element={<ProtectedRoute allowedRoles={[1]}><AdminUser /></ProtectedRoute>} />
+        <Route path="/admin/courses" element={<ProtectedRoute allowedRoles={[1]}><Courses /></ProtectedRoute>} />
+        <Route path="/admin/course/:id" element={<ProtectedRoute allowedRoles={[1]}><CourseDetail /></ProtectedRoute>} />
+        <Route path="/admin/pending_courses" element={<ProtectedRoute allowedRoles={[1]}><CoursesPending /></ProtectedRoute>} />
+        <Route path="/admin/reviews" element={<ProtectedRoute allowedRoles={[1]}><Review /></ProtectedRoute>} />
         <Route path="/student_dashboard" element={<ProtectedRoute allowedRoles={[2]}><StudentDashboard /></ProtectedRoute>} />
         <Route path="/student_purchased_courses" element={<ProtectedRoute allowedRoles={[2]}><PurchasedCourses /></ProtectedRoute>} />
         <Route path="/student_my_certificates" element={<ProtectedRoute allowedRoles={[2]}><StudentCertificates /></ProtectedRoute>} />
