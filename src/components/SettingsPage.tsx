@@ -206,7 +206,7 @@ const SettingsPage: React.FC = () => {
               </div>
               <button
                 onClick={handleSaveChanges}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className="bg-[#9997F5] hover:bg-[#8886E5] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 Save Changes
               </button>
@@ -240,7 +240,7 @@ const SettingsPage: React.FC = () => {
               </div>
               <button
                 onClick={handleSaveChanges}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className="bg-[#9997F5] hover:bg-[#8886E5] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 Save Changes
               </button>
@@ -340,7 +340,7 @@ const SettingsPage: React.FC = () => {
               </div>
               <button
                 onClick={handleSaveChanges}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                className="bg-[#9997F5] hover:bg-[#8886E5] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 Save Changes
               </button>
@@ -370,7 +370,7 @@ const SettingsPage: React.FC = () => {
             </div>
             <button
               // onClick={handleCloseAccount}  
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
+              className="bg-[#9997F5] hover:bg-[#8886E5] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
             >
               Close Account
             </button>
@@ -390,7 +390,7 @@ const SettingsPage: React.FC = () => {
           <ul className="flex -mb-px">
             <li className="mr-2">
               <button
-                className={`inline-block p-4 border-b-2 ${activeTab === 'Account' ? 'border-red-500 text-red-500' : 'border-transparent text-gray-500'}`}
+                className={`inline-block p-4 border-b-2 ${activeTab === 'Account' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
                 onClick={() => setActiveTab('Account')}
               >
                 Account
@@ -398,7 +398,7 @@ const SettingsPage: React.FC = () => {
             </li>
             <li className="mr-2">
               <button
-                className={`inline-block p-4 border-b-2 ${activeTab === 'Notification' ? 'border-red-500 text-red-500' : 'border-transparent text-gray-500'}`}
+                className={`inline-block p-4 border-b-2 ${activeTab === 'Notification' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
                 onClick={() => setActiveTab('Notification')}
               >
                 Notification
@@ -406,7 +406,7 @@ const SettingsPage: React.FC = () => {
             </li>
             <li className="mr-2">
               <button
-                className={`inline-block p-4 border-b-2 ${activeTab === 'Privacy' ? 'border-red-500 text-red-500' : 'border-transparent text-gray-500'}`}
+                className={`inline-block p-4 border-b-2 ${activeTab === 'Privacy' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
                 onClick={() => setActiveTab('Privacy')}
               >
                 Privacy
@@ -414,7 +414,7 @@ const SettingsPage: React.FC = () => {
             </li>
             <li className="mr-2">
               <button
-                className={`inline-block p-4 border-b-2 ${activeTab === 'Close Account' ? 'border-red-500 text-red-500' : 'border-transparent text-gray-500'}`}
+                className={`inline-block p-4 border-b-2 ${activeTab === 'Close Account' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
                 onClick={() => setActiveTab('Close Account')}
               >
                 Close Account

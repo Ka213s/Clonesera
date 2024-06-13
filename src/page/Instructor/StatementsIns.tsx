@@ -8,7 +8,7 @@ const StatementsIns: React.FC = () => {
 
     return (
         <MainLayout>
-            <div className="bg-white rounded-lg shadow-lg p-8">
+            <div className="bg-gray-100 rounded-lg shadow-lg p-8">
                 
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center space-x-2">
@@ -19,13 +19,13 @@ const StatementsIns: React.FC = () => {
 
                 <div className="flex justify-between mb-8">
 
-                    <div className="bg-gray-100 p-6 rounded-lg shadow-md w-3/4 mr-4">
+                    <div className="bg-white p-6 shadow-md w-3/4 mr-4">
                         <h5 className="text-lg font-semibold mb-4">Earning</h5>
                         <hr className="mb-4" />
                         <p className="text-gray-600 mb-4">Your sales earnings over the last 30 days</p>
                     </div>
 
-                    <div className="bg-gray-100 p-6 rounded-lg shadow-md w-2/5 ml-4">
+                    <div className="bg-white p-6 shadow-md w-2/5 ml-4">
                         <h5 className="text-lg font-semibold mb-4">View Invoice</h5>
                         <hr className="mb-4" />
                         <div className="flex items-center space-x-4">
@@ -34,7 +34,7 @@ const StatementsIns: React.FC = () => {
                                 <option>April 2020</option>
                                 <option>March 2020</option>
                             </select>
-                            <button className="bg-[#9997F5] text-white px-4 py-2 rounded-md flex items-center hover:bg-blue-600 transition">
+                            <button className="bg-[#9997F5] text-white px-4 py-2 rounded-md flex items-center hover:bg-[#8886E5] transition">
                                 <FaDownload className="mr-2" />
                                 Download
                             </button>
@@ -44,8 +44,8 @@ const StatementsIns: React.FC = () => {
 
                 <div className="flex justify-between items-center mb-8 mt-16">
                     <div className="flex space-x-4 items-center">
-                        <button className="bg-black text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">This Month</button>
-                        <button className="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition">Last Month</button>
+                        <button className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-700 transition">This Month</button>
+                        <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition">Last Month</button>
                         <div className="relative">
                             <input
                                 type="text"
@@ -61,25 +61,25 @@ const StatementsIns: React.FC = () => {
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead>
                             <tr>
-                                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 bg-purple-200 text-left text-gray-700">
                                     Date
                                 </th>
-                                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 bg-purple-200 text-left text-gray-700">
                                     Order ID
                                 </th>
-                                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 bg-purple-200 text-left text-gray-700">
                                     Type
                                 </th>
-                                <th className="px-6 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 bg-purple-200 text-left text-gray-700">
                                     Title
                                 </th>
-                                <th className="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 bg-purple-200 text-right text-gray-700">
                                     Amount
                                 </th>
-                                <th className="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 bg-purple-200 text-right text-gray-700">
                                     Fees
                                 </th>
-                                <th className="px-6 py-3 bg-gray-50 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                <th className="px-6 py-3 bg-purple-200 text-right text-gray-700">
                                     Invoice
                                 </th>
                             </tr>

@@ -15,7 +15,7 @@ class Notifications extends Component {
                     </div>
 
                     <div className="p-4 rounded mb-6">
-                        <button className="bg-[#9997F5] text-white px-4 py-2 rounded">
+                        <button className="bg-[#9997F5] hover:bg-[#8886E5]  text-white px-4 py-2 rounded">
                             Notification Setting
                         </button>
                     </div>

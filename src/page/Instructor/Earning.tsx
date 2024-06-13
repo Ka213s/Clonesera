@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { FaDollarSign, FaChevronLeft as ChevronLeftIcon, FaChevronRight as ChevronRightIcon } from "react-icons/fa";
+import { FaDollarSign } from "react-icons/fa";
 import MainLayout from "../../layouts/MainLayout";
 
 

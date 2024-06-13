@@ -55,7 +55,7 @@ const ChatApp: React.FC = () => {
           {contacts.map((contact, index) => (
             <div
               key={index}
-              className={`p-2 mb-2 rounded-lg cursor-pointer ${activeContact === contact.name ? 'bg-red-200' : 'bg-red-100'}`}
+              className={`p-2 mb-2 rounded-lg cursor-pointer ${activeContact === contact.name ? 'bg-violet-300' : 'bg-purple-200'}`}
               onClick={() => setActiveContact(contact.name)}
             >
               <div className="flex justify-between items-center">
@@ -87,7 +87,7 @@ const ChatApp: React.FC = () => {
           <div className="flex-grow overflow-y-auto mb-4">
             {messages[activeContact]?.map((message, index) => (
               <div key={index} className="mb-4">
-                <div className="bg-red-100 p-3 rounded-lg">{message.text}</div>
+                <div className="bg-violet-300 p-3 rounded-lg">{message.text}</div>
                 <div className="text-xs text-gray-500 mt-1">{message.timestamp}</div>
               </div>
             ))}
@@ -98,7 +98,7 @@ const ChatApp: React.FC = () => {
               placeholder="Write a message..."
               className="flex-grow p-2 border border-gray-300 rounded-l-lg"
             />
-            <button className="bg-red-500 text-white p-2 rounded-r-lg">
+            <button className="bg-[#9997F5] hover:bg-[#8886E5] text-white p-2 rounded-r-lg">
               <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
               </svg>

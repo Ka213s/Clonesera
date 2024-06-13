@@ -29,7 +29,7 @@ const StudentCertificates: React.FC = () => {
                         <FaCertificate className="h-6 w-6 text-gray-700" />
                         <h2 className="text-xl">Jump Into New Certificate</h2>
                     </div>
-                    <button className="bg-[#9997F5] text-white px-4 py-2 rounded">
+                    <button className="bg-[#9997F5] hover:bg-[#8886E5] text-white px-4 py-2 rounded">
                         New Certificate
                     </button>
                 </div>

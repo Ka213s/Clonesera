@@ -109,7 +109,7 @@ const Verification: React.FC = () => {
                                 />
                                 <label
                                     htmlFor="uploadDocument"
-                                    className="cursor-pointer inline-block bg-[#9997F5] text-white py-2 px-4 rounded"
+                                    className="cursor-pointer inline-block bg-[#9997F5] hover:bg-[#8886E5] text-white py-2 px-4 rounded"
                                 >
                                     {file ? file.name : 'Choose File'}
                                 </label>
@@ -117,7 +117,7 @@ const Verification: React.FC = () => {
                             <div className="flex items-center justify-center">
                                 <button
                                     type="submit"
-                                    className="bg-[#9997F5] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                    className="bg-[#9997F5] hover:bg-[#8886E5] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                 >
                                     Submit Now
                                 </button>

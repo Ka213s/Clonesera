@@ -1,0 +1,59 @@
+[
+    {
+      "name": "Leslie Alexander",
+      "email": "example@gmail.com",
+      "type": "Super Admin",
+      "phone": "01887755330",
+      "dob": "1999-10-02",
+      "status": "Online"
+    },
+    {
+      "name": "Esther Howard",
+      "email": "example@gmail.com",
+      "type": "Moderator",
+      "phone": "01887755330",
+      "dob": "1999-10-02",
+      "status": "Online"
+    },
+    {
+      "name": "Brooklyn Simmons",
+      "email": "example@gmail.com",
+      "type": "Moderator",
+      "phone": "01887755330",
+      "dob": "1999-10-02",
+      "status": "Online"
+    },
+    {
+      "name": "Eleanor Pena",
+      "email": "example@gmail.com",
+      "type": "Manager",
+      "phone": "01887755330",
+      "dob": "1999-10-02",
+      "status": "Offline"
+    },
+    {
+      "name": "Albert Flores",
+      "email": "example@gmail.com",
+      "type": "Super Admin",
+      "phone": "01887755330",
+      "dob": "1999-10-02",
+      "status": "Online"
+    },
+    {
+      "name": "Bessie Coope",
+      "email": "example@gmail.com",
+      "type": "Super Admin",
+      "phone": "01887755330",
+      "dob": "1999-10-02",
+      "status": "Online"
+    },
+    {
+      "name": "John Doe",
+      "email": "example@gmail.com",
+      "type": "Super Admin",
+      "phone": "01887755330",
+      "dob": "1999-10-02",
+      "status": "Online"
+    }
+  ]
+  

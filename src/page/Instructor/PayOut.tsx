@@ -61,7 +61,7 @@ class PayOut extends Component {
                                         <p className="text-gray-500">Added: 01 Mar 2020</p>
                                     </div>
                                 </div>
-                                <button className="bg-[#9997F5] text-white px-4 py-2 rounded">
+                                <button className="bg-[#9997F5] hover:bg-[#8886E5] text-white px-4 py-2 rounded">
                                     Set Account
                                 </button>
                             </div>
