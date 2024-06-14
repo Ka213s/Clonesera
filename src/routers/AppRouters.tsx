@@ -50,6 +50,7 @@ import CourseDetailPage from '../page/CourseDetailPage';
 import HelpPage from '../page/HelpPage';
 import ProtectedRoute from './ProtectedRoute';
 import CreateNewCousre from '../components/Create_Course/CreateNewCousre';
+import EnrollCourse from '../page/Student/EnrollCourse';
 
 const AppRouters: React.FC = () => {
   return (
@@ -82,6 +83,7 @@ const AppRouters: React.FC = () => {
         <Route path="/student_messages" element={<ProtectedRoute allowedRoles={[2]}><Messages /></ProtectedRoute>} />
         <Route path="/student_statements" element={<ProtectedRoute allowedRoles={[2]}><Statements /></ProtectedRoute>} />
         <Route path="/feedback" element={<ProtectedRoute allowedRoles={[2]}><SendFeedback /></ProtectedRoute>} />
+        <Route path="/student_enroll_course" element={<ProtectedRoute allowedRoles={[2]}><EnrollCourse /></ProtectedRoute>} />
         
         {/* Instructor Routes */}
         <Route path="/create-course" element={<ProtectedRoute allowedRoles={[3]}><CreateNewCousre /></ProtectedRoute>} />
