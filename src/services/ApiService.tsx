@@ -4,6 +4,24 @@ import 'react-toastify/dist/ReactToastify.css';
 
 const BASE_URL = 'https://665fbf915425580055b0b389.mockapi.io/GR3_Account';
 
+const BASE_URL_COURSE =
+    "https://665fbf915425580055b0b389.mockapi.io/GR3_Crouse";
+
+export interface CourseData {
+    Account_Id: string;
+    title: string;
+    shortDescription: string;
+    description: string;
+    skillCourse: string;
+    price: string;
+    created_at: string;
+    update_at: number;
+    status: boolean;
+    requirements: string;
+    id: string;
+    courseCategory: string;
+}
+
 export interface UserData {
     fullName: string;
     email: string;
@@ -18,6 +36,22 @@ export interface UserData {
     roleId: number;
     isGoogle: boolean; // Add this property
 }
+export interface AccountData {
+    id: string;
+    fullName: string;
+    email: string;
+    avatar: string;
+    createdAt: string;
+    status: boolean;
+    password: string | null;
+    address: string | null;
+    updateAt: string | null;
+    phonenumber: string | null;
+    walletId: string | null;
+    roleId: number;
+    isGoogle: boolean; // Add this property
+}
+
 class ApiService {
     static async saveGoogleUserData(userData: UserData) {
         try {
@@ -96,7 +130,7 @@ class ApiService {
             return null;
         }
     }
-    
+
     static async getAccountsByRole(roleId: number) {
         try {
             const response = await axios.get(`${BASE_URL}/${roleId}`);
@@ -106,18 +140,83 @@ class ApiService {
             return null;
         }
     }
-    
+
     static async updateAccountStatus(id: number, currentStatus: boolean) {
         try {
-          const response = await axios.put(`${BASE_URL}/${id}`,
-            {
-              status: !currentStatus,
-            }
-          );
+            const response = await axios.put(`${BASE_URL}/${id}`,
+                {
+                    status: !currentStatus,
+                }
+            );
+            return response.data;
+        } catch (error) {
+            console.error("Error updating account status:", error);
+            return null;
+        }
+    }
+    static async getAccountByUserId(id: string) {
+        try {
+          const response = await axios.get(`${BASE_URL}/${id}`);
           return response.data;
         } catch (error) {
-          console.error("Error updating account status:", error);
+          console.error("Error fetching account data:", error);
           return null;
+        }
+      }
+    
+      static async getCourses(): Promise<CourseData[]> {
+        try {
+          const response = await axios.get<CourseData[]>(BASE_URL_COURSE);
+          return response.data;
+        } catch (error) {
+          console.error("Error fetching courses:", error);
+          throw error;
+        }
+      }
+    
+      static async updateCourseById(
+        id: string,
+        courseData: Partial<CourseData>
+      ): Promise<CourseData> {
+        try {
+          const response = await axios.put(`${BASE_URL_COURSE}/${id}`, courseData);
+          return response.data;
+        } catch (error) {
+          console.error("Error updating course:", error);
+          throw error;
+        }
+      }
+    
+      static async updateCourseStatusById(
+        id: string,
+        status: boolean
+      ): Promise<CourseData> {
+        try {
+          const response = await axios.put(`${BASE_URL_COURSE}/${id}`, { status });
+          return response.data;
+        } catch (error) {
+          console.error("Error updating course status:", error);
+          throw error;
+        }
+      }
+    
+      static async deleteCourse(id: string): Promise<void> {
+        try {
+          const response = await axios.delete(`${BASE_URL_COURSE}/${id}`);
+          return response.data;
+        } catch (error) {
+          console.error("Error deleting course:", error);
+          throw error;
+        }
+      }
+    
+      static async softDeleteCourse(id: string): Promise<CourseData> {
+        try {
+          const response = await axios.put(`${BASE_URL}/${id}`, { status: false });
+          return response.data;
+        } catch (error) {
+          console.error("Error soft deleting course:", error);
+          throw error;
         }
       }
 
