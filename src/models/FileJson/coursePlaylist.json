@@ -1,0 +1,74 @@
+{
+    "coursePlaylist": [
+        {
+            "id": "1",
+            "title": "The Web Developer Bootcamp",
+            "sections": [
+                {
+                    "title": "Introduction to this Course",
+                    "lectures": [
+                        {
+                            "title": "A Note On Asking For Help",
+                            "duration": "01:00",
+                            "videoUrl": "https://www.example.com/video1"
+                        },
+                        {
+                            "title": "Introducing Our TA",
+                            "videoUrl": "https://www.example.com/video2"
+                        },
+                        {
+                            "title": "Join the Online Community",
+                            "videoUrl": "https://www.example.com/video3"
+                        },
+                        {
+                            "title": "Why This Course?",
+                            "duration": "01:00",
+                            "videoUrl": "https://www.example.com/video4"
+                        },
+                        {
+                            "title": "Syllabus Download",
+                            "videoUrl": "https://www.example.com/video5"
+                        },
+                        {
+                            "title": "Syllabus Walkthrough",
+                            "duration": "01:42",
+                            "videoUrl": "https://www.example.com/video6"
+                        },
+                        {
+                            "title": "Lecture Slides",
+                            "videoUrl": "https://www.example.com/video7"
+                        }
+                    ]
+                },
+                {
+                    "title": "Introduction to Front End Development",
+                    "lectures": [
+                        {
+                            "title": "Unit Objectives",
+                            "duration": "01:40",
+                            "videoUrl": "https://www.example.com/video8"
+                        },
+                        {
+                            "title": "Note about Setting Up Front-End Developer Environment",
+                            "videoUrl": "https://www.example.com/video9"
+                        },
+                        {
+                            "title": "Setting Up Front-End Developer Environment",
+                            "duration": "03:11",
+                            "videoUrl": "https://www.example.com/video10"
+                        },
+                        {
+                            "title": "Note about Introduction to the Web",
+                            "videoUrl": "https://www.example.com/video11"
+                        },
+                        {
+                            "title": "Introduction to the Web",
+                            "duration": "10:08",
+                            "videoUrl": "https://www.example.com/video12"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
