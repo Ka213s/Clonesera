@@ -277,7 +277,7 @@ const ViewProfile = () => {
                             </a>
                         </div>
                         <div className="flex space-x-4">
-                            <button className="bg-red-600 text-white px-4 py-2 rounded-sm">Cursus Studio</button>
+                            <button className="bg-[#9997F5] text-white px-4 py-2 rounded-sm">Cursus Studio</button>
                             <button className="bg-gray-600 text-white px-4 py-2 rounded-sm">Edit</button>
                         </div>
                     </div>
@@ -287,7 +287,7 @@ const ViewProfile = () => {
                         <ul className="flex -mb-px">
                             <li className="mr-2">
                                 <button
-                                    className={`inline-block p-4 border-b-2 ${activeTab === 'About' ? 'border-red-500 text-red-500' : 'border-transparent text-gray-500'}`}
+                                    className={`inline-block p-4 border-b-2 ${activeTab === 'About' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
                                     onClick={() => setActiveTab('About')}
                                 >
                                     About
@@ -295,7 +295,7 @@ const ViewProfile = () => {
                             </li>
                             <li className="mr-2">
                                 <button
-                                    className={`inline-block p-4 border-b-2 ${activeTab === 'Course' ? 'border-red-500 text-red-500' : 'border-transparent text-gray-500'}`}
+                                    className={`inline-block p-4 border-b-2 ${activeTab === 'Course' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
                                     onClick={() => setActiveTab('Course')}
                                 >
                                     Course
@@ -303,7 +303,7 @@ const ViewProfile = () => {
                             </li>
                             <li className="mr-2">
                                 <button
-                                    className={`inline-block p-4 border-b-2 ${activeTab === 'Purchase' ? 'border-red-500 text-red-500' : 'border-transparent text-gray-500'}`}
+                                    className={`inline-block p-4 border-b-2 ${activeTab === 'Purchase' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
                                     onClick={() => setActiveTab('Purchase')}
                                 >
                                     Purchase
@@ -311,7 +311,7 @@ const ViewProfile = () => {
                             </li>
                             <li className="mr-2">
                                 <button
-                                    className={`inline-block p-4 border-b-2 ${activeTab === 'Discussion' ? 'border-red-500 text-red-500' : 'border-transparent text-gray-500'}`}
+                                    className={`inline-block p-4 border-b-2 ${activeTab === 'Discussion' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
                                     onClick={() => setActiveTab('Discussion')}
                                 >
                                     Discussion
@@ -319,7 +319,7 @@ const ViewProfile = () => {
                             </li>
                             <li className="mr-2">
                                 <button
-                                    className={`inline-block p-4 border-b-2 ${activeTab === 'Subscription' ? 'border-red-500 text-red-500' : 'border-transparent text-gray-500'}`}
+                                    className={`inline-block p-4 border-b-2 ${activeTab === 'Subscription' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
                                     onClick={() => setActiveTab('Subscription')}
                                 >
                                     Subscription

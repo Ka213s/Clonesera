@@ -19,7 +19,7 @@ const HomePage: React.FC = () => {
     const { onClick } = props;
     return (
       <div
-        className="absolute top-[50%] right-0 transform -translate-y-1/2 -translate-x-1/6 bg-yellow-500 rounded-full w-5 h-5 flex justify-center items-center cursor-pointer z-10"
+        className="absolute top-[50%] right-0 transform -translate-y-1/2 -translate-x-1/6 bg-gray-500 rounded-full w-5 h-5 flex justify-center items-center cursor-pointer z-10"
         onClick={onClick}
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -33,7 +33,7 @@ const HomePage: React.FC = () => {
     const { onClick } = props;
     return (
       <div
-        className="absolute top-[50%] left-2 transform -translate-y-1/2 -translate-x-1/2 bg-yellow-500 rounded-full w-5 h-5 flex justify-center items-center cursor-pointer z-10"
+        className="absolute top-[50%] left-2 transform -translate-y-1/2 -translate-x-1/2 bg-gray-500 rounded-full w-5 h-5 flex justify-center items-center cursor-pointer z-10"
         onClick={onClick}
       >
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -44,7 +44,7 @@ const HomePage: React.FC = () => {
   };
 
   const settings = {
-    dots: false,
+    dots: true,
     infinite: true,
     speed: 500,
     slidesToShow: 3,

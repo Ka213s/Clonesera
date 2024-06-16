@@ -44,7 +44,6 @@ const BasicInformation: React.FC<BasicInformationProps> = ({ formData, setFormDa
   };
 
   return (
-    <MainLayout>
     <div>
       <h2 className="text-2xl font-bold mb-4">Basic Information</h2>
       <form onSubmit={handleSubmit}>
@@ -126,7 +125,6 @@ const BasicInformation: React.FC<BasicInformationProps> = ({ formData, setFormDa
         </button>
       </form>
     </div>
-    </MainLayout>
   );
 };
 
