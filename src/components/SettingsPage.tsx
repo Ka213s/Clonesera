@@ -149,18 +149,6 @@ const SettingsPage: React.FC = () => {
     }));
   };
 
-  // const handleCloseAccount = async () => {
-  //   try {
-  //     // Call an API service to close the account with the provided password
-  //     await ApiService.closeAccount(userId, password);
-  //     toast.success('Account closed successfully');
-  //     // Redirect or perform other necessary actions after account closure
-  //   } catch (error) {
-  //     console.error('Error closing account:', error);
-  //     toast.error('Error closing account');
-  //   }
-  // };
-
   const renderTabContent = () => {
     switch (activeTab) {
       case 'Account':
@@ -420,7 +408,6 @@ const SettingsPage: React.FC = () => {
               <p className="text-xs text-gray-500 mt-1">Are you sure you want to close your account?</p>
             </div>
             <button
-              // onClick={handleCloseAccount}  
               className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
             >
               Close Account
