@@ -79,7 +79,7 @@ class ApiService {
     static async updateAccount(id: string, data: any) {
         try {
             const response = await axios.put(`${BASE_URL}/${id}`, data);
-            toast.success('Update successful ');
+            toast.success('Profile updated successfully');
             return response.data;
         } catch (error) {
             console.error('Error updating account:', error);

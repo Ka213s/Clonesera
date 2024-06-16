@@ -36,6 +36,13 @@ const SettingsPage: React.FC = () => {
     activityOnComments: false,
     repliesToComments: true,
   });
+  const [errors, setErrors] = useState({
+    fullName: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    description: ''
+  });
   const userData = JSON.parse(localStorage.getItem('userData') || '{}');
   const userId = userData.id || '';
 
@@ -73,7 +80,47 @@ const SettingsPage: React.FC = () => {
     }
   };
 
+  const validateForm = () => {
+    let formValid = true;
+    let errors = { fullName: '', address: '', phoneNumber: '', email: '', description: '' };
+
+    if (!fullName) {
+      formValid = false;
+      errors.fullName = 'Full Name is required';
+    }
+    if (!address) {
+      formValid = false;
+      errors.address = 'Address is required';
+    }
+    if (!phoneNumber) {
+      formValid = false;
+      errors.phoneNumber = 'Phone Number is required';
+    } else if (!/^\d{10}$/.test(phoneNumber)) {
+      formValid = false;
+      errors.phoneNumber = 'Phone Number must be 10 digits';
+    }
+    if (!email) {
+      formValid = false;
+      errors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      formValid = false;
+      errors.email = 'Email address is invalid';
+    }
+    if (!description) {
+      formValid = false;
+      errors.description = 'Description is required';
+    }
+
+    setErrors(errors);
+    return formValid;
+  };
+
   const handleSaveChanges = async () => {
+    if (!validateForm()) {
+      toast.error('Please correct the errors in the form');
+      return;
+    }
+
     const updatedProfile = {
       fullName,
       address,
@@ -87,7 +134,6 @@ const SettingsPage: React.FC = () => {
 
     try {
       await ApiService.updateAccount(userId, updatedProfile);
-      toast.success('Profile updated successfully');
     } catch (error) {
       console.error('Error updating profile:', error);
       toast.error('Error updating profile');
@@ -150,10 +196,11 @@ const SettingsPage: React.FC = () => {
                 <input
                   id="fullName"
                   type="text"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.fullName ? 'border-red-500' : ''}`}
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                 />
+                {errors.fullName && <p className="text-red-500 text-xs italic">{errors.fullName}</p>}
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">
@@ -162,10 +209,11 @@ const SettingsPage: React.FC = () => {
                 <input
                   id="address"
                   type="text"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.address ? 'border-red-500' : ''}`}
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                 />
+                {errors.address && <p className="text-red-500 text-xs italic">{errors.address}</p>}
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phoneNumber">
@@ -174,11 +222,12 @@ const SettingsPage: React.FC = () => {
                 <input
                   id="phoneNumber"
                   type="text"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.phoneNumber ? 'border-red-500' : ''}`}
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   maxLength={10}
                 />
+                {errors.phoneNumber && <p className="text-red-500 text-xs italic">{errors.phoneNumber}</p>}
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
@@ -186,11 +235,12 @@ const SettingsPage: React.FC = () => {
                 </label>
                 <input
                   id="email"
-                  type="text"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="email"
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
+                {errors.email && <p className="text-red-500 text-xs italic">{errors.email}</p>}
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
@@ -198,184 +248,72 @@ const SettingsPage: React.FC = () => {
                 </label>
                 <textarea
                   id="description"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  rows={4}
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.description ? 'border-red-500' : ''}`}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                ></textarea>
+                />
+                {errors.description && <p className="text-red-500 text-xs italic">{errors.description}</p>}
               </div>
               <button
-                onClick={handleSaveChanges}
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              >
-                Save Changes
-              </button>
-            </div>
-          </div>
-        );
-      case 'Privacy':
-        return (
-          <div>
-            <h2 className="text-xl font-bold mb-2">Privacy</h2>
-            <p>Modify your privacy settings here.</p>
-            <h6 className="text-xl font-bold mb-2 mt-4">Profile page settings</h6>
-            <div className="mt-6">
-              <div className="mb-4 flex items-center">
-                <label className="block text-gray-700 text-sm font-bold mr-4" htmlFor="profileVisibility">
-                  Show your profile on search engines
-                </label>
-                <Toggle
-                  checked={profileVisibility}
-                  onChange={() => setProfileVisibility(!profileVisibility)}
-                />
-              </div>
-              <div className="mb-4 flex items-center">
-                <label className="block text-gray-700 text-sm font-bold mr-4" htmlFor="showCourses">
-                  Show courses you're taking on your profile page
-                </label>
-                <Toggle
-                  checked={showCourses}
-                  onChange={() => setShowCourses(!showCourses)}
-                />
-              </div>
-              <button
+                type="button"
                 onClick={handleSaveChanges}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
               >
                 Save Changes
               </button>
             </div>
           </div>
         );
-      case 'Notification':
+      case 'Security':
         return (
           <div>
-            <h2 className="text-xl font-bold mb-2">Notifications - Choose when and how to be notified</h2>
-            <p>Select push and email notifications you'd like to receive</p>
-            <h3 className="text-lg font-bold mt-4">Choose when and how to be notified</h3>
-            <div className="mt-6">
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.subscriptions}
-                  onChange={() => handleToggleChange('subscriptions')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Subscriptions</label>
-                  <p className="text-gray-500 text-sm">Notify me about activity from the profiles I'm subscribed to</p>
-                </div>
-              </div>
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.recommendedCourses}
-                  onChange={() => handleToggleChange('recommendedCourses')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Recommended Courses</label>
-                  <p className="text-gray-500 text-sm">Notify me of courses I might like based on what I watch</p>
-                </div>
-              </div>
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.activityOnComments}
-                  onChange={() => handleToggleChange('activityOnComments')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Activity on my comments</label>
-                  <p className="text-gray-500 text-sm">Notify me about activity on my comments on others’ courses</p>
-                </div>
-              </div>
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.repliesToComments}
-                  onChange={() => handleToggleChange('repliesToComments')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Replies to my comments</label>
-                  <p className="text-gray-500 text-sm">Notify me about replies to my comments</p>
-                </div>
-              </div>
-            </div>
-            <hr />
-            <h3 className="text-lg font-bold mt-4">Email notifications</h3>
-            <div className="mt-6">
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.subscriptions}
-                  onChange={() => handleToggleChange('subscriptions')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Subscriptions</label>
-                  <p className="text-gray-500 text-sm">Notify me about activity from the profiles I'm subscribed to</p>
-                </div>
-              </div>
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.recommendedCourses}
-                  onChange={() => handleToggleChange('recommendedCourses')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Recommended Courses</label>
-                  <p className="text-gray-500 text-sm">Notify me of courses I might like based on what I watch</p>
-                </div>
-              </div>
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.activityOnComments}
-                  onChange={() => handleToggleChange('activityOnComments')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Activity on my comments</label>
-                  <p className="text-gray-500 text-sm">Notify me about activity on my comments on others’ courses</p>
-                </div>
-              </div>
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.repliesToComments}
-                  onChange={() => handleToggleChange('repliesToComments')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Replies to my comments</label>
-                  <p className="text-gray-500 text-sm">Notify me about replies to my comments</p>
-                </div>
-              </div>
-              <button
-                onClick={handleSaveChanges}
-                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              >
-                Save Changes
-              </button>
-            </div>
-          </div>
-        );
-      case 'Close Account':
-        return (
-          <div>
-            <h2 className="text-xl font-bold mb-2">Close Account</h2>
-            <p className="text-gray-700">
-              <span className="font-bold">Warning:</span> If you close your account, you will be unsubscribed from all your 5 courses, and will lose access forever.
-            </p>
-            <div className="mt-6">
+            <h2 className="text-xl font-bold mb-2">Security Settings</h2>
+            <div className="mb-4">
               <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                Enter Password to Confirm
+                Current Password
               </label>
               <input
                 id="password"
                 type="password"
-                className="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Enter Your Password"
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <p className="text-xs text-gray-500 mt-1">Are you sure you want to close your account?</p>
             </div>
             <button
-              // onClick={handleCloseAccount}  
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
+              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              type="button"
+              onClick={() => {
+                if (window.confirm('Are you sure you want to close your account?')) {
+                  // handleCloseAccount();
+                }
+              }}
             >
               Close Account
             </button>
           </div>
-
+        );
+      case 'Notifications':
+        return (
+          <div>
+            <h2 className="text-xl font-bold mb-2">Notification Settings</h2>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">Subscriptions</label>
+              <Toggle checked={notifications.subscriptions} onChange={() => handleToggleChange('subscriptions')} />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">Recommended Courses</label>
+              <Toggle checked={notifications.recommendedCourses} onChange={() => handleToggleChange('recommendedCourses')} />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">Activity on My Comments</label>
+              <Toggle checked={notifications.activityOnComments} onChange={() => handleToggleChange('activityOnComments')} />
+            </div>
+            <div className="mb-4">
+              <label className="block text-gray-700 text-sm font-bold mb-2">Replies to My Comments</label>
+              <Toggle checked={notifications.repliesToComments} onChange={() => handleToggleChange('repliesToComments')} />
+            </div>
+          </div>
         );
       default:
         return null;
@@ -385,48 +323,30 @@ const SettingsPage: React.FC = () => {
   return (
     <MainLayout>
       <div className="container mx-auto p-4">
-        <h1 className="text-2xl font-bold text-gray-700 mb-4">Settings</h1>
-        <div className="border-b border-gray-200">
-          <ul className="flex -mb-px">
-            <li className="mr-2">
-              <button
-                className={`inline-block p-4 border-b-2 ${activeTab === 'Account' ? 'border-red-500 text-red-500' : 'border-transparent text-gray-500'}`}
-                onClick={() => setActiveTab('Account')}
-              >
-                Account
-              </button>
-            </li>
-            <li className="mr-2">
-              <button
-                className={`inline-block p-4 border-b-2 ${activeTab === 'Notification' ? 'border-red-500 text-red-500' : 'border-transparent text-gray-500'}`}
-                onClick={() => setActiveTab('Notification')}
-              >
-                Notification
-              </button>
-            </li>
-            <li className="mr-2">
-              <button
-                className={`inline-block p-4 border-b-2 ${activeTab === 'Privacy' ? 'border-red-500 text-red-500' : 'border-transparent text-gray-500'}`}
-                onClick={() => setActiveTab('Privacy')}
-              >
-                Privacy
-              </button>
-            </li>
-            <li className="mr-2">
-              <button
-                className={`inline-block p-4 border-b-2 ${activeTab === 'Close Account' ? 'border-red-500 text-red-500' : 'border-transparent text-gray-500'}`}
-                onClick={() => setActiveTab('Close Account')}
-              >
-                Close Account
-              </button>
-            </li>
-          </ul>
+        <ToastContainer />
+        <h1 className="text-2xl font-bold mb-4">Settings</h1>
+        <div className="flex mb-4">
+          <button
+            className={`mr-4 ${activeTab === 'Account' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'}`}
+            onClick={() => setActiveTab('Account')}
+          >
+            Account
+          </button>
+          <button
+            className={`mr-4 ${activeTab === 'Security' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'}`}
+            onClick={() => setActiveTab('Security')}
+          >
+            Security
+          </button>
+          <button
+            className={`mr-4 ${activeTab === 'Notifications' ? 'text-blue-500 border-b-2 border-blue-500' : 'text-gray-500'}`}
+            onClick={() => setActiveTab('Notifications')}
+          >
+            Notifications
+          </button>
         </div>
-        <div className="mt-4">
-          {renderTabContent()}
-        </div>
+        <div>{renderTabContent()}</div>
       </div>
-      <ToastContainer />
     </MainLayout>
   );
 };
