@@ -233,7 +233,7 @@ class ApiService {
     // Category Management Methods
     static async getCategories(searchQuery = '') {
         try {
-            const response = await axios.get(`${CATEGORY_URL}?q=${searchQuery}`);
+            const response = await axios.get(`${BASE_URL}?q=${searchQuery}`);
             return response.data;
         } catch (error) {
             console.error('Error fetching categories:', error);
@@ -243,36 +243,30 @@ class ApiService {
 
     static async addCategory(category: Category) {
         try {
-            const response = await axios.post(CATEGORY_URL, category);
-            toast.success('Category added successfully');
+            const response = await axios.post(BASE_URL, category);
             return response.data;
         } catch (error) {
             console.error('Error adding category:', error);
-            toast.error('Error adding category');
             return null;
         }
     }
 
     static async updateCategory(id: number, category: Category) {
         try {
-            const response = await axios.put(`${CATEGORY_URL}/${id}`, category);
-            toast.success('Category updated successfully');
+            const response = await axios.put(`${BASE_URL}/${id}`, category);
             return response.data;
         } catch (error) {
             console.error('Error updating category:', error);
-            toast.error('Error updating category');
             return null;
         }
     }
 
     static async deleteCategory(id: number) {
         try {
-            const response = await axios.delete(`${CATEGORY_URL}/${id}`);
-            toast.success('Category deleted successfully');
+            const response = await axios.delete(`${BASE_URL}/${id}`);
             return response.data;
         } catch (error) {
             console.error('Error deleting category:', error);
-            toast.error('Error deleting category');
             return null;
         }
     }
