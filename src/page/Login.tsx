@@ -7,7 +7,7 @@ import { FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 import { auth } from '../firebaseConfig';
 import Artwork from '../assets/Artwork.jpg';
-import { LoginData } from '../models/LoginData'; // Import the LoginData class
+import { LoginData } from '../models/LoginData';
 
 const Login: React.FC = () => {
     const [loginData, setLoginData] = useState<LoginData>(new LoginData('', ''));
@@ -52,19 +52,7 @@ const Login: React.FC = () => {
             if (account) {
                 toast.success('Login successful');
                 localStorage.setItem('userData', JSON.stringify(account));
-                switch (account.roleId) {
-                    case 1:
-                        navigate('/home');
-                        break;
-                    case 2:
-                        navigate('/home');
-                        break;
-                    case 3:
-                        navigate('/home');
-                        break;
-                    default:
-                        break;
-                }
+                navigate('/home'); // Redirect all users to /home
             } else {
                 toast.error('Invalid email or password, or account is inactive');
             }
@@ -103,19 +91,7 @@ const Login: React.FC = () => {
                     }
                     toast.success('Login successful');
                     localStorage.setItem('userData', JSON.stringify(existingUser[0]));
-                    switch (existingUser[0].roleId) {
-                        case 1:
-                            navigate('/admin_dashboard');
-                            break;
-                        case 2:
-                            navigate('/profile-student');
-                            break;
-                        case 3:
-                            navigate('/profile-instructor');
-                            break;
-                        default:
-                            break;
-                    }
+                    navigate('/home'); // Redirect all users to /home
                     return;
                 }
 
@@ -138,20 +114,7 @@ const Login: React.FC = () => {
                     await ApiService.saveGoogleUserData(userData);
                     toast.success("User logged in successfully!");
                     localStorage.setItem('userData', JSON.stringify(userData));
-
-                    switch (userData.roleId) {
-                        case 1:
-                            navigate('/adminhome');
-                            break;
-                        case 2:
-                            navigate('/profile-student');
-                            break;
-                        case 3:
-                            navigate('/profile-instructor');
-                            break;
-                        default:
-                            break;
-                    }
+                    navigate('/home'); // Redirect all users to /home
                 } catch (error) {
                     toast.error('Error saving user data to API');
                     console.error('Error saving user data to API:', error);
