@@ -156,42 +156,42 @@ class ListCourse extends Component<{}, ListCourseState> {
           <NavigationTabs />
           <table className="min-w-full bg-white">
             <thead>
-              <tr className="text-left">
-                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+              <tr className="bg-purple-200 text-center">
+                <th className="py-2 px-4 border-b border-gray-200">
                   Item No.
                 </th>
-                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                <th className="py-2 px-4 border-b border-gray-200">
                   Title
                 </th>
-                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                <th className="py-2 px-4 border-b border-gray-200">
                   Short Description
                 </th>
-                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                <th className="py-2 px-4 border-b border-gray-200">
                   Description
                 </th>
-                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                <th className="py-2 px-4 border-b border-gray-200">
                   Skill Course
                 </th>
-                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                <th className="py-2 px-4 border-b border-gray-200">
                   Price
                 </th>
-                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                <th className="py-2 px-4 border-b border-gray-200">
                   Requirements
                 </th>
-                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                <th className="py-2 px-4 border-b border-gray-200">
                   Account
                 </th>
-                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                <th className="py-2 px-4 border-b border-gray-200">
                   Status
                 </th>
-                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                <th className="py-2 px-4 border-b border-gray-200">
                   Action
                 </th>
               </tr>
             </thead>
             <tbody>
               {courses.map((course) => (
-                <tr className="hover:bg-gray-50" key={course.id}>
+                <tr className="hover:bg-purple-100" key={course.id}>
                   <td className="py-2 px-4 border-b border-gray-200">
                     {course.id}
                   </td>
