@@ -1,5 +1,5 @@
 import React from 'react';
-import purchasedCourseData from '../../models/FileJson/purchasedCourse.json'; 
+import purchasedCourseData from '../../models/FileJson/purchasedCourse.json';
 import { FaTrash, FaPrint, FaDownload } from 'react-icons/fa';
 import MainLayout from '../../layouts/MainLayout';
 
@@ -36,7 +36,14 @@ const PurchasedCourses: React.FC = () => {
               {purchasedCourseData.courses.map((course: Course, index: number) => (
                 <tr key={index} className="odd:bg-gray-50 even:bg-white border-b">
                   <td className="px-4 py-2 text-left">{course.itemNo}</td>
-                  <td className="px-4 py-2 text-left">{course.title}</td>
+                  <td className="px-4 py-2 text-left">
+                    <a
+                      href={`/student_enroll_course`}
+                      className="text-blue-500 hover:text-blue-700"
+                    >
+                      {course.title}
+                    </a>
+                  </td>
                   <td className="px-4 py-2 text-left">{course.vendor}</td>
                   <td className="px-4 py-2 text-left text-blue-500">{course.category}</td>
                   <td className="px-4 py-2 text-left text-red-500">{course.deliveryType}</td>

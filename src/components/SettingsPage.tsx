@@ -36,6 +36,13 @@ const SettingsPage: React.FC = () => {
     activityOnComments: false,
     repliesToComments: true,
   });
+  const [errors, setErrors] = useState({
+    fullName: '',
+    address: '',
+    phoneNumber: '',
+    email: '',
+    description: ''
+  });
   const userData = JSON.parse(localStorage.getItem('userData') || '{}');
   const userId = userData.id || '';
 
@@ -73,7 +80,47 @@ const SettingsPage: React.FC = () => {
     }
   };
 
+  const validateForm = () => {
+    let formValid = true;
+    let errors = { fullName: '', address: '', phoneNumber: '', email: '', description: '' };
+
+    if (!fullName) {
+      formValid = false;
+      errors.fullName = 'Full Name is required';
+    }
+    if (!address) {
+      formValid = false;
+      errors.address = 'Address is required';
+    }
+    if (!phoneNumber) {
+      formValid = false;
+      errors.phoneNumber = 'Phone Number is required';
+    } else if (!/^\d{10}$/.test(phoneNumber)) {
+      formValid = false;
+      errors.phoneNumber = 'Phone Number must be 10 digits';
+    }
+    if (!email) {
+      formValid = false;
+      errors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      formValid = false;
+      errors.email = 'Email address is invalid';
+    }
+    if (!description) {
+      formValid = false;
+      errors.description = 'Description is required';
+    }
+
+    setErrors(errors);
+    return formValid;
+  };
+
   const handleSaveChanges = async () => {
+    if (!validateForm()) {
+      toast.error('Please correct the errors in the form');
+      return;
+    }
+
     const updatedProfile = {
       fullName,
       address,
@@ -87,7 +134,6 @@ const SettingsPage: React.FC = () => {
 
     try {
       await ApiService.updateAccount(userId, updatedProfile);
-      toast.success('Profile updated successfully');
     } catch (error) {
       console.error('Error updating profile:', error);
       toast.error('Error updating profile');
@@ -102,18 +148,6 @@ const SettingsPage: React.FC = () => {
       [name]: !prevState[name],
     }));
   };
-
-  // const handleCloseAccount = async () => {
-  //   try {
-  //     // Call an API service to close the account with the provided password
-  //     await ApiService.closeAccount(userId, password);
-  //     toast.success('Account closed successfully');
-  //     // Redirect or perform other necessary actions after account closure
-  //   } catch (error) {
-  //     console.error('Error closing account:', error);
-  //     toast.error('Error closing account');
-  //   }
-  // };
 
   const renderTabContent = () => {
     switch (activeTab) {
@@ -150,10 +184,11 @@ const SettingsPage: React.FC = () => {
                 <input
                   id="fullName"
                   type="text"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.fullName ? 'border-red-500' : ''}`}
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                 />
+                {errors.fullName && <p className="text-red-500 text-xs italic">{errors.fullName}</p>}
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">
@@ -162,10 +197,11 @@ const SettingsPage: React.FC = () => {
                 <input
                   id="address"
                   type="text"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.address ? 'border-red-500' : ''}`}
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                 />
+                {errors.address && <p className="text-red-500 text-xs italic">{errors.address}</p>}
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phoneNumber">
@@ -174,11 +210,12 @@ const SettingsPage: React.FC = () => {
                 <input
                   id="phoneNumber"
                   type="text"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.phoneNumber ? 'border-red-500' : ''}`}
                   value={phoneNumber}
                   onChange={(e) => setPhoneNumber(e.target.value)}
                   maxLength={10}
                 />
+                {errors.phoneNumber && <p className="text-red-500 text-xs italic">{errors.phoneNumber}</p>}
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
@@ -186,11 +223,12 @@ const SettingsPage: React.FC = () => {
                 </label>
                 <input
                   id="email"
-                  type="text"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  type="email"
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
+                {errors.email && <p className="text-red-500 text-xs italic">{errors.email}</p>}
               </div>
               <div className="mb-4">
                 <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
@@ -198,11 +236,11 @@ const SettingsPage: React.FC = () => {
                 </label>
                 <textarea
                   id="description"
-                  className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                  rows={4}
+                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.description ? 'border-red-500' : ''}`}
                   value={description}
                   onChange={(e) => setDescription(e.target.value)}
-                ></textarea>
+                />
+                {errors.description && <p className="text-red-500 text-xs italic">{errors.description}</p>}
               </div>
               <button
                 onClick={handleSaveChanges}
