@@ -7,6 +7,7 @@ import SidebarStudent from '../components/Sidebar/SidebarStudent';
 import SidebarInstructor from '../components/Sidebar/SidebarInstructor';
 import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
 import { Layout } from 'antd';
+
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [showMenu, setShowMenu] = useState(true);
   const [roleId, setRoleId] = useState<number | null>(null);
@@ -37,7 +38,6 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   const renderSidebar = () => {
-    // Điều kiện kiểm tra nếu đường dẫn bắt đầu bằng "/home" hoặc "/course"
     const homeOrCoursePaths = /^\/(home|course|tests)/.test(location.pathname);
 
     if (homeOrCoursePaths || roleId === null) {
@@ -57,20 +57,20 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   return (
-   
-    <div className="flex flex-col min-h-screen">
-      <Header toggleMenu={toggleMenu} />
-      <div className="flex flex-1">
-        {renderSidebar()}
-        <div className={`flex flex-col flex-1 transition-all duration-300 ${showMenu ? 'ml-64' : 'ml-0'}`}>
-          <div className="flex-1 pt-16 p-4 overflow-auto">
-            {children}
+    <Layout className="min-h-screen">
+      <div className="flex flex-col min-h-screen">
+        <Header toggleMenu={toggleMenu} />
+        <div className="flex flex-1">
+          {renderSidebar()}
+          <div className={`flex flex-col flex-1 transition-all duration-300 ${showMenu ? 'ml-64' : 'ml-0'}`}>
+            <div className="flex-1 pt-16 p-4 overflow-auto">
+              {children}
+            </div>
+            <Footer />
           </div>
-          <Footer />
         </div>
       </div>
-    </div>
-  
+    </Layout>
   );
 };
 

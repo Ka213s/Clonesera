@@ -72,7 +72,6 @@ const HomePage: React.FC = () => {
     appendArrows: document.getElementsByClassName("slick-slider")[0],
   };
 
-
   return (
     <MainLayout>
       <div className="p-4 grid grid-cols-4 gap-4 bg-[#F7F7F7]">
