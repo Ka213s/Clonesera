@@ -5,9 +5,6 @@ import MainLayout from '../layouts/MainLayout';
 import { FaEye, FaThumbsUp, FaThumbsDown, FaShare } from 'react-icons/fa';
 import {
   PlayCircleOutlined,
-  HeartOutlined,
-  ExclamationCircleOutlined,
-  StarOutlined,
   CommentOutlined
 } from '@ant-design/icons';
 

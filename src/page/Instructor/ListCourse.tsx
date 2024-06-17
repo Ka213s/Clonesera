@@ -146,12 +146,7 @@ class ListCourse extends Component<{}, ListCourseState> {
               <FaBook className="h-6 w-6 text-gray-700" />
               <h2 className="text-xl">Jump Into Course Creation</h2>
             </div>
-            <button
-              className="bg-[#9997F5] hover:bg-[#8886E5] text-white px-4 py-2 rounded"
-              onClick={() => this.showModal()}
-            >
-              Create Your Course
-            </button>
+        
           </div>
           <NavigationTabs />
           <table className="min-w-full bg-white">
