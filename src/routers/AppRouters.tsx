@@ -14,6 +14,7 @@ import AdminDashboard from '../page/Admin/Dashboard';
 import AdminUser from '../page/Admin/User';
 import CoursesPending from '../page/Admin/CoursesPending';
 import Review from '../page/Admin/Review';
+import CategoryManagement from '../page/Admin/CategoryManagement';
 
 // Student Pages and Components
 import StudentDashboard from '../page/Student/StudentDashboard';
@@ -21,7 +22,7 @@ import PurchasedCourses from '../page/Student/PurchasedCourse';
 import StudentCertificates from '../components/StudentCertificates';
 import SendFeedback from '../page/Student/SendFeedback';
 import Statements from '../page/Student/Statements';
-import MyCertificate from "../components/StudentCertificates";
+import MyCertificate from '../components/StudentCertificates';
 
 // Instructor Pages and Components
 import ListCourse from '../page/Instructor/ListCourse';
@@ -73,6 +74,7 @@ const AppRouters: React.FC = () => {
         <Route path="/admin/course/:id" element={<ProtectedRoute allowedRoles={[1]}><CourseDetail /></ProtectedRoute>} />
         <Route path="/admin/pending_courses" element={<ProtectedRoute allowedRoles={[1]}><CoursesPending /></ProtectedRoute>} />
         <Route path="/admin/reviews" element={<ProtectedRoute allowedRoles={[1]}><Review /></ProtectedRoute>} />
+        <Route path="/admin/category-management" element={<ProtectedRoute allowedRoles={[1]}><CategoryManagement /></ProtectedRoute>} />
 
         {/* Student Routes */}
         <Route path="/student_dashboard" element={<ProtectedRoute allowedRoles={[2]}><StudentDashboard /></ProtectedRoute>} />
