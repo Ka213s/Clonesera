@@ -47,7 +47,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ name, views, date, description,
           </div>
           <span className="flex items-center mt-1">
             {renderStars(rating)}
-            <span className="text-xs ml-2 mt-0.5 text-gray-500">{views}<strong> reviews</strong></span>
+            <span className="text-xs ml-2 text-grap-500 mt-0.5">{views}<strong> reviews</strong></span>
           </span>
           <span className="text-sm text-gray-600 mt-2 truncate">{date}</span>
           <div className="flex items-center mt-2">
