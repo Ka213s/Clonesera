@@ -7,7 +7,6 @@ import PopularCourses from './PopularCourses';
 import StudentsOverview from './StudentsOverview';
 import TopInstructors from './TopInstructors';
 import DashboardStatistics from './DashboardStatistics';
-
 const data = [
   { name: 'Jan', uv: 4000, pv: 2400, amt: 2400 },
   { name: 'Feb', uv: 3000, pv: 1398, amt: 2210 },

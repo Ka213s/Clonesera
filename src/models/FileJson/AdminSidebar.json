@@ -27,7 +27,6 @@
       "children": [
         { "key": "/admin/courses", "label": "Courses" },
         { "key": "/admin/pending_courses", "label": "Pending Courses" },
-     
         { "key": "/admin/reviews", "label": "Reviews" }
       ]
     },
