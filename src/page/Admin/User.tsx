@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Input, Select, Form, Space, Tag, Layout } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { Table, Button, Input, Select, Form, Space, Tag, Layout, Modal } from 'antd';
+import { EditOutlined, StopOutlined } from '@ant-design/icons';  // Updated import
 import { AiOutlinePlus } from 'react-icons/ai';
 import usersData from '../../models/FileJson/Adminusers.json';
 import MainLayout from '../../layouts/MainLayout';
@@ -19,10 +19,36 @@ type UserType = {
 
 const User: React.FC = () => {
   const [users, setUsers] = useState<UserType[]>([]);
+  const [editingUser, setEditingUser] = useState<UserType | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [form] = Form.useForm();
 
   useEffect(() => {
     setUsers(usersData);
   }, []);
+
+  const handleEdit = (user: UserType) => {
+    setEditingUser(user);
+    form.setFieldsValue(user);
+    setIsModalVisible(true);
+  };
+
+  const handleDelete = (email: string) => {
+    setUsers(users.filter(user => user.email !== email));
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    form.resetFields();
+  };
+
+  const handleSave = () => {
+    form.validateFields().then(values => {
+      setUsers(users.map(user => (user.email === values.email ? values : user)));
+      setIsModalVisible(false);
+      form.resetFields();
+    });
+  };
 
   const columns = [
     {
@@ -65,7 +91,7 @@ const User: React.FC = () => {
       dataIndex: 'status',
       key: 'status',
       render: (status: string) => (
-        <Tag color={status === 'Online' ? 'green' : 'red'}>
+        <Tag color={status === 'Active' ? 'green' : 'red'}>
           {status}
         </Tag>
       ),
@@ -75,8 +101,8 @@ const User: React.FC = () => {
       key: 'action',
       render: (_: any, record: UserType) => (
         <Space size="middle">
-          <Button type="primary" icon={<EditOutlined />} />
-          <Button type="primary" danger icon={<DeleteOutlined />} />
+          <Button type="primary" icon={<EditOutlined />} onClick={() => handleEdit(record)} />
+          <Button type="primary" danger icon={<StopOutlined />} onClick={() => handleDelete(record.email)} /> {/* Updated icon */}
         </Space>
       ),
     },
@@ -115,6 +141,40 @@ const User: React.FC = () => {
         >
           Add User
         </Button>
+
+        <Modal
+          title="Edit User"
+          visible={isModalVisible}
+          onCancel={handleCancel}
+          onOk={handleSave}
+        >
+          <Form form={form} layout="vertical">
+            <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Please input the email!' }]}>
+              <Input disabled />
+            </Form.Item>
+            <Form.Item name="type" label="Type" rules={[{ required: true, message: 'Please select the type!' }]}>
+              <Select>
+                <Option value="Admin">Admin</Option>
+                <Option value="User">User</Option>
+              </Select>
+            </Form.Item>
+            <Form.Item name="phone" label="Phone" rules={[{ required: true, message: 'Please input the phone number!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="dob" label="DOB" rules={[{ required: true, message: 'Please input the date of birth!' }]}>
+              <Input />
+            </Form.Item>
+            <Form.Item name="status" label="Status" rules={[{ required: true, message: 'Please select the status!' }]}>
+              <Select>
+                <Option value="Active">Active</Option>
+                <Option value="Offline">Offline</Option>
+              </Select>
+            </Form.Item>
+          </Form>
+        </Modal>
       </Content>
     </MainLayout>
   );
