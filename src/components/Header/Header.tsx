@@ -190,12 +190,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
                       {item.text}
                     </li>
                   ))}
-                  <li
-                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </li>
                 </ul>
               </div>
             )}
