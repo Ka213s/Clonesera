@@ -4,6 +4,7 @@ import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant
 import CategoryForm from './CategoryForm';
 import ApiService from '../../services/ApiService';
 import { Category } from '../../Category';
+import MainLayout from '../../layouts/MainLayout';
 
 const { Search } = Input;
 
@@ -52,6 +53,7 @@ const CategoryManagement: React.FC = () => {
   };
 
   return (
+    <MainLayout>
     <div>
       <Space style={{ marginBottom: 16 }}>
         <Search
@@ -93,6 +95,7 @@ const CategoryManagement: React.FC = () => {
         />
       </Modal>
     </div>
+    </MainLayout>
   );
 };
 
