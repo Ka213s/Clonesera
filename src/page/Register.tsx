@@ -9,6 +9,8 @@ import ApiService from '../services/ApiService';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Artwork from '../assets/Artwork.jpg';
 import { FormData } from '../models/FormData';
+import { Form, Input, Button, Radio } from 'antd';
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 
 const Register: React.FC = () => {
     const [formData, setFormData] = useState<FormData>(new FormData('', '', '', 'student'));
@@ -27,6 +29,13 @@ const Register: React.FC = () => {
 
     const handleLoginClick = (): void => {
         navigate('/login');
+    };
+
+    const handleRoleChange = (e: any): void => {
+        setFormData({
+            ...formData,
+            role: e.target.value,
+        });
     };
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
@@ -84,101 +93,73 @@ const Register: React.FC = () => {
                 <div className='md:block hidden w-1/2'>
                     <img className='rounded-2xl' src={Artwork} alt="" />
                 </div>
-                <div className='md:w-1/2 px-16'>
-                    <h2 className="font-bold text-2xl text-[#6C6EDD]">Register</h2>
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-                        <input
-                            type="email"
-                            id="email"
-                            name="email"
-                            value={formData.email}
-                            onChange={handleChange}
-                            required
-                            placeholder='Email'
-                            className="p-2 mt-5 rounded-xl border"
-                        />
-                        <div className='relative'>
-                            <input
-                                type={showPassword ? "text" : "password"}
+                <div className='md:w-1/2 px-8 py-4'>
+                    <h2 className="font-bold text-3xl text-[#6C6EDD] mb-4">Register</h2>
+                    <Form onFinish={handleSubmit} className="flex flex-col gap-4">
+                        <Form.Item>
+                            <Input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleChange}
+                                required
+                                placeholder='Email'
+                                className="p-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            />
+                        </Form.Item>
+                        <Form.Item>
+                            <Input.Password
                                 id="password"
                                 name="password"
                                 value={formData.password}
                                 onChange={handleChange}
                                 required
                                 placeholder='Password'
-                                className="p-2 mt-5 rounded-xl border w-full"
+                                className="p-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
                             />
-                            <button
-                                type="button"
-                                onClick={togglePasswordVisibility}
-                                className="absolute top-1/2 right-3 transform -translate-y-1/5"
-                            >
-                                {showPassword ? <FaEyeSlash /> : <FaEye />}
-                            </button>
-                        </div>
-
-                        <div className='relative'>
-                            <input
-                                type={showConfirmPassword ? "text" : "password"}
+                        </Form.Item>
+                        <Form.Item>
+                            <Input.Password
                                 id="confirmPassword"
                                 name="confirmPassword"
                                 value={formData.confirmPassword}
                                 onChange={handleChange}
                                 required
                                 placeholder='Confirm Password'
-                                className="p-2 mt-5 rounded-xl border w-full"
+                                className="p-3 rounded-xl border focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
                             />
-                            <button
-                                type="button"
-                                onClick={toggleConfirmPasswordVisibility}
-                                className="absolute top-1/2 right-3 transform -translate-y-1/5"
+                        </Form.Item>
+                        <Form.Item>
+                            <Radio.Group onChange={handleRoleChange} value={formData.role}>
+                                <Radio value="student">Student</Radio>
+                                <Radio value="instructor">Instructor</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                        <Form.Item>
+                            <Button
+                                type="default"
+                                htmlType="submit"
+                                disabled={isButtonDisabled}
+                                style={{
+                                    backgroundColor: '#9997F5',
+                                    borderColor: '#9997F5',
+                                    color: '#fff',
+                                }}
+                                className="p-3 rounded-2xl w-full hover:bg-[#8886E5] hover:scale-105 duration-300 font-bold"
                             >
-                                {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                            </button>
-                        </div>
-
-                        <div className="flex items-center">
-                            
-                            <label className="inline-flex items-center">
-                                <input
-                                    type="radio"
-                                    id="student"
-                                    name="role"
-                                    value="student"
-                                    checked={formData.role === 'student'}
-                                    onChange={handleChange}
-                                    className="form-radio h-5 w-5 text-blue-600"
-                                />
-                                <span className="ml-2">Student</span>
-                            </label>
-                            <label className="inline-flex items-center ml-6">
-                                <input
-                                    type="radio"
-                                    id="instructor"
-                                    name="role"
-                                    value="instructor"
-                                    checked={formData.role === 'instructor'}
-                                    onChange={handleChange}
-                                    className="form-radio h-5 w-5 text-blue-600"
-                                />
-                                <span className="ml-2">Instructor</span>
-                            </label>
-                        </div>
-
-                        <button
-                            type="submit"
-                            disabled={isButtonDisabled}
-                            className='px-5 py-2 bg-[#9997F5]
-                                rounded-2xl text-white w-full
-                                hover:scale-105 duration-300'>
-                            {isButtonDisabled ? 'Please wait...' : 'Register'}
-                        </button>
-                    </form>
-                    <div className='mt-3 text-base flex justify-between items-center'>
+                                {isButtonDisabled ? 'Please wait...' : 'Register'}
+                            </Button>
+                        </Form.Item>
+                    </Form>
+                    <div className='text-base flex justify-between items-center'>
                         <p>Already have an account?</p>
-                        <button onClick={handleLoginClick}
-                            className="py-2 px-5 bg-white border rounded-xl
-                                hover:scale-110 duration-300">Sign In</button>
+                        <Button
+                            onClick={handleLoginClick}
+                            className="py-2 px-5 bg-white border rounded-xl hover:scale-110 duration-300">Sign In
+                        </Button>
                     </div>
                     <ToastContainer />
                 </div>
