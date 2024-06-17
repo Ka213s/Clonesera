@@ -6,7 +6,7 @@ class Dashboard extends Component {
   render() {
     return (
       <MainLayout>
-        <div className="bg-gray-100 p-6">
+        <div className="bg-gray-100 p-8">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center space-x-2">
               <BookOpenIcon className="h-6 w-6 text-gray-700" />
@@ -46,7 +46,7 @@ class Dashboard extends Component {
               <BookOpenIcon className="h-6 w-6 text-gray-700" />
               <h2 className="text-xl">Jump Into Course Creation</h2>
             </div>
-            <button className="bg-[#9997F5] text-white px-4 py-2 rounded">
+            <button className="bg-[#9997F5] hover:bg-[#8886E5] text-white px-4 py-2 rounded">
               Create Your Course
             </button>
           </div>

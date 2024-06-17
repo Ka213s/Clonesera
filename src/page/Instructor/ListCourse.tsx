@@ -1,13 +1,140 @@
 import React, { Component } from "react";
-import { FaBook } from "react-icons/fa";
-import NavigationTabs from "../../components/Instructor/NavigationTabs";
+import { FaBook, FaEdit, FaTrashAlt } from "react-icons/fa";
+import {
+  Button,
+  Modal,
+  Form,
+  Input,
+  Select,
+  message,
+  Popconfirm,
+  Tag,
+} from "antd";
 import MainLayout from "../../layouts/MainLayout";
+import NavigationTabs from "../../components/Instructor/NavigationTabs";
+import { useNavigate } from 'react-router-dom';
+import ApiService, { CourseData, AccountData } from "../../services/ApiService";
 
-class ListCourse extends Component {
+
+const { Option } = Select;
+
+interface ListCourseState {
+  isModalVisible: boolean;
+  editingCourse: CourseData | null;
+  courses: CourseData[];
+  accounts: AccountData[];
+}
+
+class ListCourse extends Component<{}, ListCourseState> {
+  formRef = React.createRef<any>();
+
+  state: ListCourseState = {
+    isModalVisible: false,
+    editingCourse: null,
+    courses: [],
+    accounts: [],
+  };
+
+  componentDidMount() {
+    this.fetchCourses();
+    this.fetchAccounts();
+  }
+
+  fetchCourses = async () => {
+    try {
+      const courses = await ApiService.getCourses();
+      this.setState({ courses });
+    } catch (error) {
+      message.error("Failed to fetch courses.");
+    }
+  };
+
+  fetchAccounts = async () => {
+    try {
+      const accounts = await ApiService.getAccounts("2");
+      this.setState({ accounts });
+    } catch (error) {
+      message.error("Failed to fetch accounts.");
+    }
+  };
+
+  showModal = (course?: CourseData) => {
+    if (course) {
+      this.setState({
+        isModalVisible: true,
+        editingCourse: course,
+      });
+      this.formRef.current?.setFieldsValue(course);
+    } else {
+      this.setState({
+        isModalVisible: true,
+        editingCourse: null,
+      });
+      this.formRef.current?.resetFields();
+    }
+  };
+
+  handleOk = async () => {
+    try {
+      const values = await this.formRef.current.validateFields();
+      const updatedValues = {
+        ...values,
+        update_at: new Date().toISOString(),
+      };
+      if (this.state.editingCourse) {
+        await ApiService.updateCourseById(
+          this.state.editingCourse.id,
+          updatedValues
+        );
+        message.success("Course updated successfully.");
+      } else {
+        const newCourse = {
+          ...updatedValues,
+          id: (this.state.courses.length + 1).toString(),
+        };
+        this.setState((prevState) => ({
+          courses: [...prevState.courses, newCourse],
+        }));
+        message.success("Course added successfully.");
+      }
+      this.fetchCourses();
+      this.setState({ isModalVisible: false, editingCourse: null });
+    } catch (error) {
+      message.error("Failed to save course.");
+    }
+  };
+
+  handleCancel = () => {
+    this.setState({
+      isModalVisible: false,
+      editingCourse: null,
+    });
+  };
+
+  softDeleteCourse = async (id: string) => {
+    try {
+      await ApiService.softDeleteCourse(id);
+      message.success("Course deleted successfully.");
+      this.fetchCourses();
+    } catch (error) {
+      message.error("Failed to delete course.");
+    }
+  };
+  
+
   render() {
+    const { isModalVisible, editingCourse, courses, accounts } = this.state;
+    const courseCategories = [
+      "Communications",
+      "Software Engineering",
+      "Finance",
+      "Web Development",
+      "Data Science",
+    ];
+
     return (
       <MainLayout>
-        <div className="bg-white p-6 shadow">
+        <div className="bg-white p-8">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center space-x-2">
               <FaBook className="h-6 w-6 text-gray-700" />
@@ -19,9 +146,7 @@ class ListCourse extends Component {
               <FaBook className="h-6 w-6 text-gray-700" />
               <h2 className="text-xl">Jump Into Course Creation</h2>
             </div>
-            <button className="bg-[#9997F5] text-white px-4 py-2 rounded">
-              Create Your Course
-            </button>
+        
           </div>
           <NavigationTabs />
           <table className="min-w-full bg-white">
@@ -34,16 +159,22 @@ class ListCourse extends Component {
                   Title
                 </th>
                 <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
-                  Publish Date
+                  Short Description
                 </th>
                 <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
-                  Sales
+                  Description
                 </th>
                 <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
-                  Parts
+                  Skill Course
                 </th>
                 <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
-                  Category
+                  Price
+                </th>
+                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                  Requirements
+                </th>
+                <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
+                  Account
                 </th>
                 <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">
                   Status
@@ -54,116 +185,165 @@ class ListCourse extends Component {
               </tr>
             </thead>
             <tbody>
-              <tr className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b border-gray-200">IT-001</td>
-                <td className="py-2 px-4 border-b border-gray-200">
-                  Course Title Here
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200">
-                  06 April 2020 | 08:31
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200">15</td>
-                <td className="py-2 px-4 border-b border-gray-200">5</td>
-                <td className="py-2 px-4 border-b border-gray-200 text-blue-600">
-                  Web Development
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200 text-red-600">
-                  Active
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200 flex space-x-2">
-                  <button className="p-1 text-blue-600 hover:text-blue-800">
-                    ✏️
-                  </button>
-                  <button className="p-1 text-red-600 hover:text-red-800">
-                    🗑️
-                  </button>
-                </td>
-              </tr>
-
-
-              <tr className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b border-gray-200">IT-002</td>
-                <td className="py-2 px-4 border-b border-gray-200">
-                  Course Title Here
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200">
-                  06 April 2020 | 08:31
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200">15</td>
-                <td className="py-2 px-4 border-b border-gray-200">5</td>
-                <td className="py-2 px-4 border-b border-gray-200 text-blue-600">
-                  Web Development
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200 text-red-600">
-                  Active
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200 flex space-x-2">
-                  <button className="p-1 text-blue-600 hover:text-blue-800">
-                    ✏️
-                  </button>
-                  <button className="p-1 text-red-600 hover:text-red-800">
-                    🗑️
-                  </button>
-                </td>
-              </tr>
-
-
-              <tr className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b border-gray-200">IT-003</td>
-                <td className="py-2 px-4 border-b border-gray-200">
-                  Course Title Here
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200">
-                  06 April 2020 | 08:31
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200">15</td>
-                <td className="py-2 px-4 border-b border-gray-200">5</td>
-                <td className="py-2 px-4 border-b border-gray-200 text-blue-600">
-                  Web Development
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200 text-red-600">
-                  Active
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200 flex space-x-2">
-                  <button className="p-1 text-blue-600 hover:text-blue-800">
-                    ✏️
-                  </button>
-                  <button className="p-1 text-red-600 hover:text-red-800">
-                    🗑️
-                  </button>
-                </td>
-              </tr>
-
-
-              <tr className="hover:bg-gray-50">
-                <td className="py-2 px-4 border-b border-gray-200">IT-004</td>
-                <td className="py-2 px-4 border-b border-gray-200">
-                  Course Title Here
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200">
-                  06 April 2020 | 08:31
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200">15</td>
-                <td className="py-2 px-4 border-b border-gray-200">5</td>
-                <td className="py-2 px-4 border-b border-gray-200 text-blue-600">
-                  Web Development
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200 text-red-600">
-                  Active
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200 flex space-x-2">
-                  <button className="p-1 text-blue-600 hover:text-blue-800">
-                    ✏️
-                  </button>
-                  <button className="p-1 text-red-600 hover:text-red-800">
-                    🗑️
-                  </button>
-                </td>
-              </tr>
-
-
+              {courses.map((course) => (
+                <tr className="hover:bg-gray-50" key={course.id}>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    {course.id}
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    {course.title}
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    {course.shortDescription}
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    {course.description}
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    {course.skillCourse}
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    {course.price}
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    {course.requirements}
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    {accounts.find(
+                      (account) => account.id === course.Account_Id
+                    )?.fullName || "N/A"}
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200">
+                    <Tag color={course.status ? "green" : "red"}>
+                      {course.status ? "Active" : "Inactive"}
+                    </Tag>
+                  </td>
+                  <td className="py-2 px-4 border-b border-gray-200 flex space-x-2">
+                    <Button
+                      type="link"
+                      icon={<FaEdit />}
+                      onClick={() => this.showModal(course)}
+                    >
+                      Edit
+                    </Button>
+                    <Popconfirm
+                      title="Are you sure to delete this course?"
+                      onConfirm={() => this.softDeleteCourse(course.id)}
+                      okText="Yes"
+                      cancelText="No"
+                    >
+                      <Button type="link" danger icon={<FaTrashAlt />}>
+                        Delete
+                      </Button>
+                    </Popconfirm>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
+          <Modal
+            title={editingCourse ? "Edit Course" : "Add Course"}
+            visible={isModalVisible}
+            onOk={this.handleOk}
+            onCancel={this.handleCancel}
+            okText="Save"
+            cancelText="Cancel"
+          >
+            <Form
+              ref={this.formRef}
+              layout="vertical"
+              initialValues={editingCourse || {}}
+            >
+              <Form.Item
+                label="Title"
+                name="title"
+                rules={[
+                  { required: true, message: "Please input the course title!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Short Description"
+                name="shortDescription"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please input the short description!",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Description"
+                name="description"
+                rules={[
+                  { required: true, message: "Please input the description!" },
+                ]}
+              >
+                <Input.TextArea rows={4} />
+              </Form.Item>
+              <Form.Item
+                label="Skill Course"
+                name="skillCourse"
+                rules={[
+                  { required: true, message: "Please input the skill course!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Price"
+                name="price"
+                rules={[{ required: true, message: "Please input the price!" }]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Requirements"
+                name="requirements"
+                rules={[
+                  { required: true, message: "Please input the requirements!" },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+              <Form.Item
+                label="Course Category"
+                name="courseCategory"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select the course category!",
+                  },
+                ]}
+              >
+                <Select mode="multiple" placeholder="Select categories">
+                  {courseCategories.map((category) => (
+                    <Option key={category} value={category}>
+                      {category}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="Account"
+                name="Account_Id"
+                rules={[
+                  { required: true, message: "Please select the account!" },
+                ]}
+              >
+                <Select placeholder="Select account">
+                  {accounts.map((account) => (
+                    <Option key={account.id} value={account.id}>
+                      {account.fullName}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Form>
+          </Modal>
         </div>
       </MainLayout>
     );

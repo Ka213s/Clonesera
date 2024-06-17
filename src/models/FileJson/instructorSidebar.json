@@ -1,19 +1,17 @@
 {
-    "insSidebarItem": [
-      { "text": "Dashboard", "icon": "FaHome", "url": "/instructor_dashboard" },
-      { "text": "Courses", "icon": "FaBook", "url": "/instructor_courses" },
-      { "text": "Analysis", "icon": "FaChartLine", "url": "/instructor_analysis" },
-      { "text": "Create Course", "icon": "FaPlus", "url": "/instructor_create_course" },
-      { "text": "Messages", "icon": "FaComments", "url": "/instructor_messages" },
-      { "text": "Notifications", "icon": "FaBell", "url": "/instructor_notifications" },
-      { "text": "My Certificates", "icon": "FaCertificate", "url": "/instructor_my_certificates" },
-      { "text": "Reviews", "icon": "FaStar", "url": "/instructor_reviews" },
-      { "text": "Earning", "icon": "FaDollarSign", "url": "/instructor_earning" },
-      { "text": "Payout", "icon": "FaWallet", "url": "/instructor_payout" },
-      { "text": "Statements", "icon": "FaFile", "url": "/instructor_statements" },
-      { "text": "Verification", "icon": "FaCheck", "url": "/instructor_verification" },
-      { "text": "Setting", "icon": "FaCogs", "url": "/settings" },
-      { "text": "Send Feedback", "icon": "FaPaperPlane", "url": "/feedback" }
-    ]
-  }
-  
+  "insSidebarItem": [
+    { "text": "Dashboard", "icon": "FaHome", "url": "/instructor_dashboard" },
+    { "text": "Courses", "icon": "FaBook", "url": "/instructor_courses" },
+    { "text": "Analysis", "icon": "FaChartLine", "url": "/instructor_analysis" },
+    { "text": "Messages", "icon": "FaComments", "url": "/instructor_messages" },
+    { "text": "Notifications", "icon": "FaBell", "url": "/instructor_notifications" },
+    { "text": "My Certificates", "icon": "FaCertificate", "url": "/instructor_my_certificates" },
+    { "text": "Reviews", "icon": "FaStar", "url": "/instructor_reviews" },
+    { "text": "Earning", "icon": "FaDollarSign", "url": "/instructor_earning" },
+    { "text": "Payout", "icon": "FaWallet", "url": "/instructor_payout" },
+    { "text": "Statements", "icon": "FaFile", "url": "/instructor_statements" },
+    { "text": "Verification", "icon": "FaCheck", "url": "/instructor_verification" },
+    { "text": "Setting", "icon": "FaCogs", "url": "/settings" },
+    { "text": "Send Feedback", "icon": "FaPaperPlane", "url": "/feedback" }
+  ]
+}

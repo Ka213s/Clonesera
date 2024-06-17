@@ -15,7 +15,7 @@
       "icon": "DashboardOutlined",
       "label": "Dashboard",
       "children": [
-        { "key": "/admin_dashboard", "label": "Dashboard" },
+        { "key": "/admin/dashboard", "label": "Dashboard" },
         { "key": "/admin/activity", "label": "Activity" },
         { "key": "/admin/profile", "label": "Profile" }
       ]
@@ -36,7 +36,6 @@
       "children": [
         { "key": "/admin/courses", "label": "Courses" },
         { "key": "/admin/pending_courses", "label": "Pending Courses" },
-     
         { "key": "/admin/reviews", "label": "Reviews" }
       ]
     },

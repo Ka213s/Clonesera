@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { FaShoppingCart, FaEnvelope, FaBell, FaUserCircle, FaBars, FaSearch, FaPlus } from 'react-icons/fa';
 import { useNavigate, Link } from 'react-router-dom';
-import { handleLogout } from '../../components/Logout';
 import logo from '../../assets/Logo-2.png';
 import notificationsData from '../../models/FileJson/notificationsData.json';
 import userMenuItemsData from '../../models/FileJson/userMenuItems.json';
@@ -11,6 +10,11 @@ interface Notification {
   avatar: string;
   message: string;
   time: string;
+}
+
+interface UserData {
+  roleId: number;
+  name: string;
 }
 
 interface HeaderProps {
@@ -27,17 +31,17 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [userName, setUserName] = useState<string>('');
 
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
-  };
+  const toggleDropdown = useCallback(() => {
+    setShowDropdown((prev) => !prev);
+  }, []);
 
-  const toggleEmailNotifications = () => {
-    setShowEmailNotifications(!showEmailNotifications);
-  };
+  const toggleEmailNotifications = useCallback(() => {
+    setShowEmailNotifications((prev) => !prev);
+  }, []);
 
-  const toggleBellNotification = () => {
-    setShowBellNotification(!showBellNotification);
-  };
+  const toggleBellNotification = useCallback(() => {
+    setShowBellNotification((prev) => !prev);
+  }, []);
 
   useEffect(() => {
     setNotifications(notificationsData);
@@ -46,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   useEffect(() => {
     const userData = localStorage.getItem('userData');
     if (userData) {
-      const parsedUserData = JSON.parse(userData);
+      const parsedUserData: UserData = JSON.parse(userData);
       setUserRole(parsedUserData.roleId);
       setIsLoggedIn(true);
       setUserName(parsedUserData.name);
@@ -70,9 +74,21 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     };
   }, [showDropdown]);
 
-  const handleCreateCourse = () => {
+  const handleCreateCourse = useCallback(() => {
     navigate('/create-course');
-  };
+  }, [navigate]);
+
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem('userData');
+    setIsLoggedIn(false);
+    setUserRole(null);
+    navigate('/login');
+  }, [navigate]);
+
+  const handleMenuClick = useCallback((url: string) => {
+    navigate(url);
+    setShowDropdown(false);
+  }, [navigate]);
 
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
@@ -142,7 +158,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
           {showBellNotification && (
             <div className="absolute top-0 right-0 mt-10 py-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
               <ul>
-                {notifications.map(notification => (
+                {notifications.map((notification) => (
                   <li key={notification.id} className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center">
                     <img src={notification.avatar} alt="Avatar" className="w-8 h-8 rounded-full mr-2" />
                     <div>
@@ -169,8 +185,9 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
                     <li
                       key={index}
                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => handleMenuClick(item.url)}
                     >
-                      <Link to={item.url}>{item.text}</Link>
+                      {item.text}
                     </li>
                   ))}
                 </ul>

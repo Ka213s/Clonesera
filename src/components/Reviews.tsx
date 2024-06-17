@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import MainLayout from '../layouts/MainLayout';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaStar } from 'react-icons/fa';
 
 const StarIcon: React.FC<{ className: string }> = ({ className }) => (
     <svg
@@ -43,7 +43,10 @@ const Reviews: React.FC = () => {
     return (
         <MainLayout>
             <div className="bg-white p-6 rounded-md shadow-md">
-            <h1 className="text-2xl font-bold text-gray-700 mb-4">All Reviews</h1>
+                <div className="flex items-center space-x-2 mb-4">
+                    <FaStar className="h-6 w-6 text-gray-700" />
+                    <h1 className="text-2xl font-bold">All Review</h1>
+                </div>
                 <div className="mb-6 p-4 border border-gray-200 rounded-lg shadow-sm bg-white relative">
                     <h3 className="text-lg font-semibold mb-4 text-gray-800">My All Feedback</h3>
                     <div className="flex items-center mb-4">

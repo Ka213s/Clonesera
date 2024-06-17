@@ -40,7 +40,7 @@ const Curriculum: React.FC<CurriculumProps> = ({ formData, setFormData, nextStep
 
   return (
     <MainLayout>
-      <div>
+      <div className="text-2x1 mb-4">
         <h2 className="text-2xl font-bold mb-4">Curriculum</h2>
         <button 
           type="button" 
@@ -64,7 +64,7 @@ const Curriculum: React.FC<CurriculumProps> = ({ formData, setFormData, nextStep
           <button type="button" onClick={prevStep} className="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 mr-2">
             Previous
           </button>
-          <button type="button" onClick={nextStep} className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600">
+          <button type="button" onClick={nextStep} className="px-4 py-2 text-white bg-[#9997F5] hover:bg-[#8886E5] rounded-md">
             Next
           </button>
         </div>
