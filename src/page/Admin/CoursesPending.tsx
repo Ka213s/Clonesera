@@ -65,8 +65,12 @@ const CoursesPending: React.FC = () => {
                 </div>
               </div>
               <div className="flex flex-col space-y-2">
-                <button className="bg-purple-500 text-white px-4 py-2 rounded-full shadow-md">Approve</button>
-                <button className="bg-red-500 text-white px-4 py-2 rounded-full shadow-md">Cancel</button>
+                <button className="bg-purple-500 text-white px-4 py-2 rounded-full shadow-md transform transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
+                  Approve
+                </button>
+                <button className="bg-red-500 text-white px-4 py-2 rounded-full shadow-md transform transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+                  Cancel
+                </button>
               </div>
             </div>
           ))}

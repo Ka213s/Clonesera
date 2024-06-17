@@ -7,7 +7,7 @@ import { FaChartLine } from 'react-icons/fa';
 const Analyics = () => {
     return (
         <MainLayout>
-            <div className="bg-gray-100 p-6">
+            <div className="bg-gray-100 p-8">
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center space-x-2">
                         <FaChartLine className="h-6 w-6 text-gray-700" />

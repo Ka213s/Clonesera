@@ -27,25 +27,25 @@ const CourseCard: React.FC<CourseCardProps> = ({ name, views, date, description,
     }
     return stars;
   };
+
   return (
-    <body className='bg-gray-100 flex items-center justify-center gap-10'>
-      <div className='card'>
+    <div className="bg-gray-100 flex items-center justify-center gap-10">
+      <div className="card">
         <img src={require('../assets/Course.png')} alt="Your Image" className="w-full h-full object-cover rounded-t-lg mb-4" />
         <div className="p-5 flex flex-col gap-3">
-          {/* <div className='w-full p-2 bg-white rounded-xl transform transition-all hover:-translate-y-2 duration-300 shadow-lg hover:shadow-2xl mt-4 mb-4 lg:mt-0'> */}
-          <h2 className="product-tille">{name}</h2>
+          <h2 className="product-tille" title={name}>{name}</h2>
           <div>
             <p className="text-xl font-bold"><strong>Price:</strong> ${price.toFixed(2)}</p>
-            <div className='flex items-center gap-2 mt-1'>
-              <span className='text-sm line-through opacity-50'>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="text-sm line-through opacity-50">
                 59.99$
               </span>
-              <span className='discount-percent'>
+              <span className="discount-percent">
                 Save 20%
               </span>
             </div>
           </div>
-          <span className='flex items-center mt-1'>
+          <span className="flex items-center mt-1">
             {renderStars(rating)}
             <span className="text-xs ml-2 text-grap-500 mt-0.5">{views}<strong> reviews</strong></span>
           </span>
@@ -56,7 +56,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ name, views, date, description,
           </div>
         </div>
       </div>
-    </body>
+    </div>
   );
 };
 

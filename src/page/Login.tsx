@@ -12,24 +12,24 @@ import { LoginData } from '../models/LoginData';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 const Login: React.FC = () => {
-    const [loginData, setLoginData] = useState<LoginData>(new LoginData('', ''));
-    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const navigate = useNavigate();
+  const [loginData, setLoginData] = useState<LoginData>(new LoginData("", ""));
+  const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        const userData = localStorage.getItem('userData');
-        if (userData) {
-            navigate('/home');
-        }
+  useEffect(() => {
+    const userData = localStorage.getItem("userData");
+    if (userData) {
+      navigate("/home");
+    }
 
         const timer = setTimeout(() => {
             setIsLoading(false);
         }, 0);
 
-        return () => clearTimeout(timer);
-    }, [navigate]);
+    return () => clearTimeout(timer);
+  }, [navigate]);
 
     const onFinish = async (values: { email: string, password: string }) => {
         setIsButtonDisabled(true);
@@ -83,20 +83,20 @@ const Login: React.FC = () => {
                     return;
                 }
 
-                const userData: UserData = {
-                    fullName,
-                    email,
-                    avatar: photoURL,
-                    createdAt: new Date().toISOString(),
-                    status: true,
-                    password: null,
-                    address: null,
-                    updateAt: null,
-                    phonenumber: null,
-                    walletId: null,
-                    roleId: 2,
-                    isGoogle: true
-                };
+        const userData: UserData = {
+          fullName,
+          email,
+          avatar: photoURL,
+          createdAt: new Date().toISOString(),
+          status: true,
+          password: null,
+          address: null,
+          updateAt: null,
+          phonenumber: null,
+          walletId: null,
+          roleId: 2,
+          isGoogle: true,
+        };
 
                 try {
                     await ApiService.saveGoogleUserData(userData);
@@ -114,13 +114,14 @@ const Login: React.FC = () => {
         }
     };
 
-    if (isLoading) {
-        return (
-            <div className="flex items-center justify-center min-h-screen bg-gray-50">
-                <div className="loader"></div> {/* You can replace this with any spinner component */}
-            </div>
-        );
-    }
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-50">
+        <div className="loader"></div>{" "}
+        {/* You can replace this with any spinner component */}
+      </div>
+    );
+  }
 
     return (
         <div className="bg-gray-50 min-h-screen flex items-center justify-center">
@@ -208,13 +209,13 @@ const Login: React.FC = () => {
                     </div>
                 </div>
 
-                <div className='md:block hidden w-1/2'>
-                    <img className='rounded-2xl' src={Artwork} alt="" />
-                </div>
-                <ToastContainer />
-            </div>
+        <div className="md:block hidden w-1/2">
+          <img className="rounded-2xl" src={Artwork} alt="" />
         </div>
-    );
+        <ToastContainer />
+      </div>
+    </div>
+  );
 };
 
 export default Login;

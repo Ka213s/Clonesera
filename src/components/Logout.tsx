@@ -1,17 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useNavigate, NavigateFunction } from 'react-router-dom';
 
-export const handleLogout = (navigate: NavigateFunction) => {
+const handleLogout = (navigate: NavigateFunction): void => {
     localStorage.removeItem('userData');
     navigate('/login');
 };
 
 const Logout: React.FC = () => {
     const navigate = useNavigate();
+    const memoizedHandleLogout = useCallback(() => handleLogout(navigate), [navigate]);
 
     useEffect(() => {
-        handleLogout(navigate);
-    }, []);
+        memoizedHandleLogout();
+    }, [memoizedHandleLogout]);
 
     return null; // Return null to prevent rendering anything in the component
 };

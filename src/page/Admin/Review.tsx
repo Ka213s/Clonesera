@@ -38,7 +38,9 @@ const Review: React.FC = () => {
                 <span>Date: {review.reviewDate}</span>
               </div>
               <p className="text-gray-700 mb-4">{review.reviewText}</p>
-              <button className="bg-[#9997F5] text-white px-4 py-2 rounded-full shadow-md">Reply Review</button>
+              <button className="bg-[#9997F5] text-white px-4 py-2 rounded-full shadow-md transform transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-[#9997F5] focus:ring-opacity-50">
+                Reply Review
+              </button>
             </div>
           ))}
         </div>
