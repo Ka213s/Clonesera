@@ -5,7 +5,7 @@ import { FaBookOpen as BookOpenIcon, FaChevronLeft as ChevronLeftIcon, FaChevron
 class Dashboard extends Component {
   render() {
     return (
-      <MainLayout>
+     
         <div className="bg-gray-100 p-8">
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center space-x-2">
@@ -150,7 +150,7 @@ class Dashboard extends Component {
             </ul>
           </div>
         </div>
-      </MainLayout>
+     
     );
   }
 }

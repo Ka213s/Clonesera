@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import MainLayout from '../layouts/MainLayout';
+
 
 interface FormData {
   fullName: string;
@@ -47,7 +47,7 @@ const CertificationForm: React.FC = () => {
   };
 
   return (
-    <MainLayout>
+   
     <div className="min-h-screen bg-gray-950 py-8">
       <div className="container mx-auto px-4">
         <div className="flex justify-between mb-4">
@@ -160,7 +160,7 @@ const CertificationForm: React.FC = () => {
         </div>
       </div>
     </div>
-    </MainLayout>
+  
   );
 };
 

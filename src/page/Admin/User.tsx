@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Button, Input, Select, Form, Space, Tag, Layout, Modal } from 'antd';
-import { EditOutlined, StopOutlined } from '@ant-design/icons';  // Updated import
+import { Table, Button, Input, Select, Form, Space, Layout, Modal, Switch } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import { AiOutlinePlus } from 'react-icons/ai';
 import usersData from '../../models/FileJson/Adminusers.json';
 import MainLayout from '../../layouts/MainLayout';
@@ -9,6 +9,7 @@ const { Content } = Layout;
 const { Option } = Select;
 
 type UserType = {
+  id: string;
   name: string;
   email: string;
   type: string;
@@ -33,8 +34,12 @@ const User: React.FC = () => {
     setIsModalVisible(true);
   };
 
-  const handleDelete = (email: string) => {
-    setUsers(users.filter(user => user.email !== email));
+  const handleToggleStatus = (id: string) => {
+    setUsers(prevUsers =>
+      prevUsers.map(user =>
+        user.id === id ? { ...user, status: user.status === 'Active' ? 'Offline' : 'Active' } : user
+      )
+    );
   };
 
   const handleCancel = () => {
@@ -44,7 +49,9 @@ const User: React.FC = () => {
 
   const handleSave = () => {
     form.validateFields().then(values => {
-      setUsers(users.map(user => (user.email === values.email ? values : user)));
+      setUsers(prevUsers =>
+        prevUsers.map(user => (user.id === values.id ? { ...user, ...values } : user))
+      );
       setIsModalVisible(false);
       form.resetFields();
     });
@@ -90,10 +97,13 @@ const User: React.FC = () => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (status: string) => (
-        <Tag color={status === 'Active' ? 'green' : 'red'}>
-          {status}
-        </Tag>
+      render: (status: string, record: UserType) => (
+        <Switch
+          checked={status === 'Active'}
+          onChange={() => handleToggleStatus(record.id)}
+          checkedChildren="Active"
+          unCheckedChildren="Offline"
+        />
       ),
     },
     {
@@ -102,7 +112,6 @@ const User: React.FC = () => {
       render: (_: any, record: UserType) => (
         <Space size="middle">
           <Button type="primary" icon={<EditOutlined />} onClick={() => handleEdit(record)} />
-          <Button type="primary" danger icon={<StopOutlined />} onClick={() => handleDelete(record.email)} /> {/* Updated icon */}
         </Space>
       ),
     },
@@ -133,7 +142,7 @@ const User: React.FC = () => {
             </Form.Item>
           </Form>
         </div>
-        <Table columns={columns} dataSource={users} rowKey="email" />
+        <Table columns={columns} dataSource={users} rowKey="id" />
         <Button
           type="primary"
           icon={<AiOutlinePlus />}
@@ -149,6 +158,9 @@ const User: React.FC = () => {
           onOk={handleSave}
         >
           <Form form={form} layout="vertical">
+            <Form.Item name="id" label="ID" style={{ display: 'none' }}>
+              <Input type="hidden" />
+            </Form.Item>
             <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}>
               <Input />
             </Form.Item>
@@ -166,12 +178,6 @@ const User: React.FC = () => {
             </Form.Item>
             <Form.Item name="dob" label="DOB" rules={[{ required: true, message: 'Please input the date of birth!' }]}>
               <Input />
-            </Form.Item>
-            <Form.Item name="status" label="Status" rules={[{ required: true, message: 'Please select the status!' }]}>
-              <Select>
-                <Option value="Active">Active</Option>
-                <Option value="Offline">Offline</Option>
-              </Select>
             </Form.Item>
           </Form>
         </Modal>

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import MainLayout from '../layouts/MainLayout';
 
 interface Contact {
   name: string;
@@ -42,7 +41,7 @@ const ChatApp: React.FC = () => {
   const [activeContact, setActiveContact] = useState<string>(contacts[0].name);
 
   return (
-    <MainLayout>
+  
       <div className="flex h-screen">
         {/* Contact List */}
         <div className="w-1/4 bg-gray-100 p-4 border-r border-gray-300">
@@ -106,7 +105,7 @@ const ChatApp: React.FC = () => {
           </div>
         </div>
       </div>
-    </MainLayout>
+   
   );
 };
 

@@ -1,13 +1,13 @@
 import React from 'react';
 import { FaDownload, FaSearch, FaFile } from 'react-icons/fa';
 import instructorStatements from '../../models/FileJson/instructorStatements.json';
-import MainLayout from '../../layouts/MainLayout';
+
 
 const StatementsIns: React.FC = () => {
     const statements = instructorStatements.instructorStatements;
 
     return (
-        <MainLayout>
+      
             <div className="bg-gray-100 rounded-lg shadow-lg p-8">
                 
                 <div className="flex justify-between items-center mb-6">
@@ -100,7 +100,7 @@ const StatementsIns: React.FC = () => {
                     </table>
                 </div>
             </div>
-        </MainLayout>
+      
     );
 };
 

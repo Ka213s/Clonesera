@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import MainLayout from '../../layouts/MainLayout';
+
 import { Pagination } from 'antd';
 
 const coursesData = [
@@ -53,12 +53,12 @@ const Courses: React.FC = () => {
   const startIndex = (current - 1) * pageSize;
   const currentPageData = coursesData.slice(startIndex, startIndex + pageSize);
 
-  const handleCardClick = (id: number) => {
+  const handleRowClick = (id: number) => {
     navigate(`/admin/course/${id}`);
   };
 
   return (
-    <MainLayout>
+   
       <div className="pt-10 px-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold">Courses</h1>
@@ -66,32 +66,47 @@ const Courses: React.FC = () => {
             + Add New Course
           </button>
         </div>
-        <div className="grid grid-cols-3 gap-6">
-          {currentPageData.map((course) => (
-            <div
-              key={course.id}
-              className="bg-white shadow-md rounded-lg overflow-hidden cursor-pointer"
-              onClick={() => handleCardClick(course.id)}
-            >
-              <img src={course.image} alt={course.title} className="w-full h-48 object-cover" />
-              <div className="p-4">
-                <h2 className="text-lg font-semibold">{course.title}</h2>
-                <p className="text-sm text-gray-600">by {course.instructor}</p>
-                <div className="flex items-center mt-2 mb-4">
-                  <span className="text-yellow-500">⭐ {course.rating}</span>
-                  <span className="ml-4 text-gray-500">Enroll {course.students}</span>
-                  <span className="ml-4 text-gray-500">12 Lesson</span>
-                  <span className="ml-4 text-gray-500">Start {course.startDate}</span>
-                </div>
-                <div className="flex justify-between items-center">
-                  <button className="bg-purple-500 text-white px-4 py-2 rounded-full shadow-md">
-                    View all
-                  </button>
-                  <span className="text-lg font-semibold text-purple-500">{course.price}</span>
-                </div>
-              </div>
-            </div>
-          ))}
+        <div className="overflow-x-auto">
+          <table className="min-w-full bg-white">
+            <thead>
+              <tr>
+                <th className="px-4 py-2">Image</th>
+                <th className="px-4 py-2">Title</th>
+                <th className="px-4 py-2">Instructor</th>
+                <th className="px-4 py-2">Rating</th>
+                <th className="px-4 py-2">Students</th>
+                <th className="px-4 py-2">Lessons</th>
+                <th className="px-4 py-2">Start Date</th>
+                <th className="px-4 py-2">Price</th>
+                <th className="px-4 py-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {currentPageData.map((course) => (
+                <tr
+                  key={course.id}
+                  className="hover:bg-gray-100 cursor-pointer"
+                  onClick={() => handleRowClick(course.id)}
+                >
+                  <td className="border px-4 py-2">
+                    <img src={course.image} alt={course.title} className="w-16 h-16 object-cover" />
+                  </td>
+                  <td className="border px-4 py-2">{course.title}</td>
+                  <td className="border px-4 py-2">{course.instructor}</td>
+                  <td className="border px-4 py-2">{course.rating}</td>
+                  <td className="border px-4 py-2">{course.students}</td>
+                  <td className="border px-4 py-2">{course.lessons}</td>
+                  <td className="border px-4 py-2">{course.startDate}</td>
+                  <td className="border px-4 py-2">{course.price}</td>
+                  <td className="border px-4 py-2">
+                    <button className="bg-purple-500 text-white px-4 py-2 rounded-full shadow-md">
+                      View all
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
         <div className="mt-6 flex justify-center">
           <Pagination
@@ -102,7 +117,7 @@ const Courses: React.FC = () => {
           />
         </div>
       </div>
-    </MainLayout>
+   
   );
 };
 

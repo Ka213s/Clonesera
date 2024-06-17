@@ -1,5 +1,4 @@
 import React from 'react';
-import MainLayout from '../../layouts/MainLayout';
 interface MediaProps {
   formData: any;
   setFormData: React.Dispatch<React.SetStateAction<any>>;
@@ -18,7 +17,7 @@ const Media: React.FC<MediaProps> = ({ formData, setFormData, nextStep, prevStep
   };
 
   return (
-    <MainLayout>
+   
     <div>
       <h2 className="text-2xl font-bold mb-4">Media</h2>
       <form>
@@ -71,7 +70,7 @@ const Media: React.FC<MediaProps> = ({ formData, setFormData, nextStep, prevStep
       </form>
 
     </div>
-    </MainLayout>
+   
   );
 };
 

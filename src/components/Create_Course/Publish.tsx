@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import MainLayout from '../../layouts/MainLayout';
 
 interface PublishProps {
   formData: any;
@@ -83,7 +82,7 @@ const Publish: React.FC<PublishProps> = ({ formData, prevStep }) => {
   };
 
   return (
-    <MainLayout>
+   
       <div>
         <h2 className="text-2xl font-bold mb-4">Publish</h2>
         <form onSubmit={handleSubmit}>
@@ -109,7 +108,7 @@ const Publish: React.FC<PublishProps> = ({ formData, prevStep }) => {
           <pre>{JSON.stringify(categoryListData, null, 2)}</pre>
         </div>
       </div>
-    </MainLayout>
+   
   );
 };
 

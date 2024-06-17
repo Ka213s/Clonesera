@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FaCheck, FaUserCheck, FaClock } from "react-icons/fa";
-import MainLayout from "../../layouts/MainLayout";
+
 
 const Verification: React.FC = () => {
     const [courseTitle, setCourseTitle] = useState('');
@@ -21,7 +21,7 @@ const Verification: React.FC = () => {
 
 
     return (
-        <MainLayout>
+      
             <div className="bg-gray-100 p-6 min-h-screen">
                 <div className="bg-gray-100 p-8">
                     <div className="flex justify-between items-center mb-6">
@@ -126,7 +126,7 @@ const Verification: React.FC = () => {
                     </div>
                 </div>
             </div>
-        </MainLayout >
+       
     );
 }
 

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import MainLayout from '../layouts/MainLayout';
 import categoriesData from '../models/FileJson/categoriesCreateCouse.json';
 interface BasicInformationProps {
   formData: any;

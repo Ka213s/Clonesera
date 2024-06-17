@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, Input, Modal, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons';
 import CategoryForm from './CategoryForm';
-import MainLayout from '../../layouts/MainLayout';
 
 const { Search } = Input;
 
@@ -68,7 +67,7 @@ const CategoryManagement: React.FC = () => {
   };
 
   return (
-    <MainLayout>
+  
       <div className="pt-10 px-6">
         <Space style={{ marginBottom: 16 }}>
           <Search
@@ -109,7 +108,7 @@ const CategoryManagement: React.FC = () => {
           />
         </Modal>
       </div>
-    </MainLayout>
+    
   );
 };
 

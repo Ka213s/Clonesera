@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Section from './Section';
-import MainLayout from '../../layouts/MainLayout';
+
 import SectionNamePopup from './SectionNamePopup';
 
 interface SectionData {
@@ -39,7 +39,7 @@ const Curriculum: React.FC<CurriculumProps> = ({ formData, setFormData, nextStep
   };
 
   return (
-    <MainLayout>
+    <div>
       <div className="text-2x1 mb-4">
         <h2 className="text-2xl font-bold mb-4">Curriculum</h2>
         <button 
@@ -76,7 +76,7 @@ const Curriculum: React.FC<CurriculumProps> = ({ formData, setFormData, nextStep
           onSave={saveSectionName}
         />
       )}
-    </MainLayout>
+  </div>
   );
 };
 

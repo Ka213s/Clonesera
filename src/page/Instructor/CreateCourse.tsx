@@ -3,11 +3,11 @@ import MainLayout from "../../layouts/MainLayout"
 
 const CreateCourse = () => {
   return (
-    <MainLayout>
+ 
     <div>
       <CreateNewCourse />
     </div>
-    </MainLayout>
+  
   );
 };
 

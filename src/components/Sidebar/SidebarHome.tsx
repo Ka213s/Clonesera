@@ -1,8 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { FaHome, FaVideo, FaCompass, FaThList, FaBook, FaSave, FaBell, FaCogs, FaQuestionCircle, FaHistory, FaPaperPlane, FaChevronDown, FaChevronUp, FaUserCircle } from 'react-icons/fa';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import {
+  HomeOutlined,
+  VideoCameraOutlined,
+  CompassOutlined,
+  UnorderedListOutlined,
+  BookOutlined,
+  SaveOutlined,
+  BellOutlined,
+  SettingOutlined,
+  QuestionCircleOutlined,
+  HistoryOutlined,
+  SendOutlined,
+  DownOutlined,
+  UpOutlined,
+} from '@ant-design/icons';
 import sidebarMenuItemsData from '../../models/FileJson/sidebarMenuItems.json';
-
 
 interface SidebarProps {
   showMenu: boolean;
@@ -15,25 +28,27 @@ interface MenuItem {
   subItems?: MenuItem[];
 }
 
-const iconComponents = {
-  FaHome: <FaHome />,
-  FaVideo: <FaVideo />,
-  FaCompass: <FaCompass />,
-  FaThList: <FaThList />,
-  FaBook: <FaBook />,
-  FaSave: <FaSave />,
-  FaBell: <FaBell />,
-  FaCogs: <FaCogs />,
-  FaQuestionCircle: <FaQuestionCircle />,
-  FaHistory: <FaHistory />,
-  FaPaperPlane: <FaPaperPlane />,
-  FaUserCircle: <FaUserCircle />,
+const iconComponents: { [key: string]: JSX.Element } = {
+  HomeOutlined: <HomeOutlined />,
+  VideoCameraOutlined: <VideoCameraOutlined />,
+  CompassOutlined: <CompassOutlined />,
+  UnorderedListOutlined: <UnorderedListOutlined />,
+  BookOutlined: <BookOutlined />,
+  SaveOutlined: <SaveOutlined />,
+  BellOutlined: <BellOutlined />,
+  SettingOutlined: <SettingOutlined />,
+  QuestionCircleOutlined: <QuestionCircleOutlined />,
+  HistoryOutlined: <HistoryOutlined />,
+  SendOutlined: <SendOutlined />,
+  DownOutlined: <DownOutlined />,
+  UpOutlined: <UpOutlined />,
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
-  const [expandedUserMenu, setExpandedUserMenu] = useState(false);
+
   useEffect(() => {
     sidebarMenuItemsData.menuItems.forEach((item: MenuItem) => {
       if (item.subItems) {
@@ -52,8 +67,8 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
       : [...expandedMenus, menu]);
   };
 
-  const toggleUserMenu = () => {
-    setExpandedUserMenu(!expandedUserMenu);
+  const handleNavigation = (url: string) => {
+    navigate(url);
   };
 
   return (
@@ -61,24 +76,31 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
       <ul className="mt-8 max-h-full overflow-y-auto">
         {sidebarMenuItemsData.menuItems.map((item: MenuItem, index: number) => (
           <React.Fragment key={index}>
-            <li className={`flex items-center p-4 ${location.pathname === item.url ? 'bg-[#8886e5d5]' : 'hover:bg-[#9997F5]'}`}>
-              <Link to={item.url} className={`flex items-center space-x-3 text-gray-700 ${location.pathname === item.url ? 'text-white' : 'hover:text-white'}`}>
-                {item.icon && iconComponents[item.icon as keyof typeof iconComponents]}
-                <span className={`${location.pathname === item.url ? 'text-white' : 'hover:text-white'}`}>{item.text}</span>
+            <li
+              className={`group flex items-center p-4 cursor-pointer ${location.pathname === item.url ? 'bg-[#8886e5d5]' : 'hover:bg-[#9997F5] hover:text-white'}`}
+              onClick={() => handleNavigation(item.url)}
+            >
+              <span className="flex items-center space-x-3 text-gray-700 group-hover:text-white">
+                {item.icon && <span className="group-hover:text-white">{iconComponents[item.icon]}</span>}
+                <span className="group-hover:text-white">{item.text}</span>
                 {item.subItems && (
-                  <button onClick={() => toggleMenu(item.text)} className="ml-auto">
-                    {expandedMenus.includes(item.text) ? <FaChevronUp /> : <FaChevronDown />}
+                  <button onClick={(e) => { e.stopPropagation(); toggleMenu(item.text); }} className="ml-auto">
+                    {expandedMenus.includes(item.text) ? <UpOutlined className="group-hover:text-white" /> : <DownOutlined className="group-hover:text-white" />}
                   </button>
                 )}
-              </Link>
+              </span>
             </li>
             {item.subItems && expandedMenus.includes(item.text) && (
               <ul className="ml-8">
                 {item.subItems.map((subItem, subIndex) => (
-                  <li key={subIndex} className={`flex items-center p-2 ${location.pathname === subItem.url ? 'bg-[#8886e5d5]' : 'hover:bg-[#9997F5]'}`}>
-                    <Link to={subItem.url} className={`text-gray-700 ${location.pathname === subItem.url ? 'text-white' : 'hover:text-white'}`}>
-                      {subItem.text}
-                    </Link>
+                  <li
+                    key={subIndex}
+                    className={`group flex items-center p-2 cursor-pointer ${location.pathname === subItem.url ? 'bg-[#8886e5d5]' : 'hover:bg-[#9997F5] hover:text-white'}`}
+                    onClick={() => handleNavigation(subItem.url)}
+                  >
+                    <span className="flex items-center space-x-3 text-gray-700 group-hover:text-white">
+                      <span className="group-hover:text-white">{subItem.text}</span>
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -91,4 +113,3 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
 };
 
 export default Sidebar;
-

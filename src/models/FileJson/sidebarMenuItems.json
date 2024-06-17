@@ -1,11 +1,11 @@
 {
   "menuItems": [
-    { "text": "Home", "icon": "FaHome", "url": "/home" },
-    { "text": "LiveStream", "icon": "FaVideo", "url": "/livestream" },
-    { "text": "Explore", "icon": "FaCompass", "url": "/explore" },
+    { "text": "Home", "icon": "HomeOutlined", "url": "/home" },
+    { "text": "LiveStream", "icon": "VideoCameraOutlined", "url": "/livestream" },
+    { "text": "Explore", "icon": "CompassOutlined", "url": "/explore" },
     {
       "text": "Categories",
-      "icon": "FaThList",
+      "icon": "UnorderedListOutlined",
       "url": "#",
       "subItems": [
         { "text": "Development", "url": "/categories/development" },
@@ -25,7 +25,7 @@
     },
     {
       "text": "Tests",
-      "icon": "FaBook",
+      "icon": "BookOutlined",
       "url": "#",
       "subItems": [
         { "text": "Certification Center", "url": "/tests/certification-center" },
@@ -35,12 +35,11 @@
         { "text": "My Certification", "url": "/tests/my-certification" }
       ]
     },
-    
-    { "text": "Saved Course", "icon": "FaSave", "url": "/saved" },
-    { "text": "Page Subscription", "icon": "FaBell", "url": "/subscription" },
-    { "text": "Setting", "icon": "FaCogs", "url": "/settings" },
-    { "text": "Help", "icon": "FaQuestionCircle", "url": "/help" },
-    { "text": "Report History", "icon": "FaHistory", "url": "/report-history" },
-    { "text": "Send Feedback", "icon": "FaPaperPlane", "url": "/feedback" }
+    { "text": "Saved Course", "icon": "SaveOutlined", "url": "/saved" },
+    { "text": "Page Subscription", "icon": "BellOutlined", "url": "/subscription" },
+    { "text": "Setting", "icon": "SettingOutlined", "url": "/settings" },
+    { "text": "Help", "icon": "QuestionCircleOutlined", "url": "/help" },
+    { "text": "Report History", "icon": "HistoryOutlined", "url": "/report-history" },
+    { "text": "Send Feedback", "icon": "SendOutlined", "url": "/feedback" }
   ]
 }

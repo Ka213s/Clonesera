@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import { FaBell } from "react-icons/fa";
-import MainLayout from "../layouts/MainLayout";
 import logoavatar from "../assets/Avatar01.jpg";
 class Notifications extends Component {
     render() {
         return (
-            <MainLayout>
+          
                 <div className="bg-gray-100 p-6">
                     <div className="flex justify-between items-center mb-6">
                         <div className="flex items-center space-x-2">
@@ -54,7 +53,7 @@ class Notifications extends Component {
                         </div>
                     </div>
                 </div>
-            </MainLayout>
+           
         );
     }
 }

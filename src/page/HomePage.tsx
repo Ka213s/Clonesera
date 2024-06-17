@@ -1,6 +1,5 @@
 import React from 'react';
 import Slider from 'react-slick';
-import MainLayout from '../layouts/MainLayout';
 import { Link } from 'react-router-dom';
 import CourseCard from '../components/CourseCard';
 import FeatureButtons from '../components/FeatureButtons';
@@ -73,7 +72,7 @@ const HomePage: React.FC = () => {
   };
 
   return (
-    <MainLayout>
+  
       <div className="p-4 grid grid-cols-4 gap-4 bg-[#F7F7F7]">
         <div className="col-span-3">
           <div className="p-4 relative flex items-center justify-between">
@@ -172,7 +171,7 @@ const HomePage: React.FC = () => {
           <BecomeInstructor />
         </div>
       </div>
-    </MainLayout>
+   
   );
 };
 

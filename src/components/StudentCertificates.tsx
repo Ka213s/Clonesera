@@ -1,7 +1,7 @@
 import React from 'react';
 import { FaTrash, FaCertificate } from 'react-icons/fa';
 import studentCertificatesData from '../models/FileJson/studentCertificates.json';
-import MainLayout from '../layouts/MainLayout';
+
 
 interface Certificate {
     itemNo: number;
@@ -14,7 +14,7 @@ interface Certificate {
 
 const StudentCertificates: React.FC = () => {
     return (
-        <MainLayout>
+
             <div className="bg-gray-100 p-6">
                 <div className="flex justify-between items-center mb-8">
                     <div className="flex items-center space-x-2">
@@ -70,7 +70,7 @@ const StudentCertificates: React.FC = () => {
                     </table>
                 </div>
             </div>
-        </MainLayout>
+
     );
 };
 
