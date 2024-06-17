@@ -1,74 +1,99 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Table, Button, Modal, Form, Input } from 'antd';
 import MainLayout from '../../layouts/MainLayout';
-import { Pagination } from 'antd';
+import { AiOutlinePlus } from 'react-icons/ai';
+import categoriesData from './../../models/FileJson/categories.json';
 
-const categoriesData = [
-  {
-    id: 1,
-    name: 'Development',
-    description: 'Courses related to software development and programming',
-  },
-  {
-    id: 2,
-    name: 'Business',
-    description: 'Courses related to business management and entrepreneurship',
-  },
-  {
-    id: 3,
-    name: 'Design',
-    description: 'Courses related to graphic design and UI/UX',
-  },
-];
-
-const pageSize = 3;
+interface Category {
+  key: number;
+  name: string;
+}
 
 const Category: React.FC = () => {
-  const [current, setCurrent] = useState(1);
-  const navigate = useNavigate();
+  const [categories, setCategories] = useState<Category[]>(categoriesData.categories.map((name, index) => ({ key: index, name })));
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
 
-  const handleChange = (page: number) => {
-    setCurrent(page);
+  const showAddCategoryModal = () => {
+    setEditingCategory(null);
+    setIsModalVisible(true);
   };
 
-  const startIndex = (current - 1) * pageSize;
-  const currentPageData = categoriesData.slice(startIndex, startIndex + pageSize);
-
-  const handleCardClick = (id: number) => {
-    navigate(`/admin/category-management/${id}`);
+  const showEditCategoryModal = (category: Category) => {
+    setEditingCategory(category);
+    setIsModalVisible(true);
   };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleSaveCategory = (values: { name: string }) => {
+    if (editingCategory) {
+      // Update existing category
+      const updatedCategories = categories.map(cat =>
+        cat.key === editingCategory.key ? { ...cat, name: values.name } : cat
+      );
+      setCategories(updatedCategories);
+    } else {
+      // Add new category
+      const newCategory: Category = { key: categories.length, name: values.name };
+      setCategories([...categories, newCategory]);
+    }
+    setIsModalVisible(false);
+  };
+
+  const columns = [
+    {
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
+    },
+    {
+      title: 'Action',
+      key: 'action',
+      render: (_: any, record: Category) => (
+        <Button type="link" onClick={() => showEditCategoryModal(record)}>
+          Edit
+        </Button>
+      ),
+    },
+  ];
 
   return (
     <MainLayout>
       <div className="pt-10 px-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold">Categories</h1>
-          <button className="bg-purple-500 text-white px-4 py-2 rounded-full shadow-md">
+          <h1 className="text-2xl font-semibold">Category Management</h1>
+          <Button type="primary" icon={<AiOutlinePlus />} onClick={showAddCategoryModal}>
             + Add New Category
-          </button>
+          </Button>
         </div>
-        <div className="grid grid-cols-3 gap-6">
-          {currentPageData.map((category) => (
-            <div
-              key={category.id}
-              className="bg-white shadow-md rounded-lg overflow-hidden cursor-pointer"
-              onClick={() => handleCardClick(category.id)}
+        <Table columns={columns} dataSource={categories} rowKey="key" />
+        <Modal
+          title={editingCategory ? 'Edit Category' : 'Add New Category'}
+          visible={isModalVisible}
+          onCancel={handleCancel}
+          footer={null}
+        >
+          <Form
+            initialValues={{ name: editingCategory?.name || '' }}
+            onFinish={handleSaveCategory}
+          >
+            <Form.Item
+              label="Name"
+              name="name"
+              rules={[{ required: true, message: 'Please input the category name!' }]}
             >
-              <div className="p-4">
-                <h2 className="text-lg font-semibold">{category.name}</h2>
-                <p className="text-sm text-gray-600">{category.description}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="mt-6 flex justify-center">
-          <Pagination
-            current={current}
-            pageSize={pageSize}
-            total={categoriesData.length}
-            onChange={handleChange}
-          />
-        </div>
+              <Input />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Save
+              </Button>
+            </Form.Item>
+          </Form>
+        </Modal>
       </div>
     </MainLayout>
   );
