@@ -144,7 +144,7 @@ class ListCourse extends Component<{}, ListCourseState> {
               <h2 className="text-xl">Jump Into Course Creation</h2>
             </div>
             <button
-              className="bg-[#9997F5] text-white px-4 py-2 rounded"
+              className="bg-[#9997F5] hover:bg-[#8886E5] text-white px-4 py-2 rounded"
               onClick={() => this.showModal()}
             >
               Create Your Course
