@@ -108,7 +108,7 @@ const Login: React.FC = () => {
           localStorage.setItem("userData", JSON.stringify(existingUser[0]));
           switch (existingUser[0].roleId) {
             case 1:
-              navigate("/admin_dashboard");
+              navigate("/admin/dashboard");
               break;
             case 2:
               navigate("/profile-student");

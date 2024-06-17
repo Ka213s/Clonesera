@@ -26,7 +26,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   useEffect(() => {
     if (location.pathname === '/home') {
       if (roleId === 1) {
-        navigate('/admin_dashboard');
+        navigate('/admin/dashboard');
       } else {
         setShowMenu(true);
       }
