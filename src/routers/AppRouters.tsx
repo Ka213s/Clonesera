@@ -32,6 +32,7 @@ import Verification from '../page/Instructor/Verification';
 import ViewProfile from '../page/Instructor/ViewProfile';
 import Earning from '../page/Instructor/Earning';
 import PayOut from '../page/Instructor/PayOut';
+import StatementsIns from "../page/Instructor/StatementsIns";
 
 // Shared Components
 import Messages from '../components/Messages';
@@ -98,7 +99,7 @@ const AppRouters: React.FC = () => {
         <Route path="/instructor_reviews" element={<ProtectedRoute allowedRoles={[3]}><Reviews /></ProtectedRoute>} />
         <Route path="/instructor_earning" element={<ProtectedRoute allowedRoles={[3]}><Earning /></ProtectedRoute>} />
         <Route path="/instructor_payout" element={<ProtectedRoute allowedRoles={[3]}><PayOut /></ProtectedRoute>} />
-        <Route path="/instructor_statements" element={<ProtectedRoute allowedRoles={[3]}><Statements /></ProtectedRoute>} />
+        <Route path="/instructor_statements" element={<ProtectedRoute allowedRoles={[3]}><StatementsIns /></ProtectedRoute>} />
         
         {/* Shared Routes */}
         <Route path="/view_instructor_profile" element={<ProtectedRoute allowedRoles={[2,3]}><ViewProfile /></ProtectedRoute>} />

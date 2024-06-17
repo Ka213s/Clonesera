@@ -45,8 +45,8 @@ const Footer: React.FC = () => {
             </ul>
           ))}
         </div>
-        <div className="w-1/4 flex flex-col items-end">
-          <button className="px-4 py-2 mb-4 bg-[#9997F5] text-white rounded-md hover:bg-[#8886E5] font-medium">
+        <div className="w-1/4 flex flex-col items-baseline">
+          <button className="px-4 py-2 mb-4 bg-[#9997F5] text-white rounded-md hover:bg-[#8886E5]">
             Teach on Cursus
           </button>
         </div>
