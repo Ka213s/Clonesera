@@ -37,7 +37,7 @@ const StudentCertificates: React.FC = () => {
 
                 <div className="bg-white p-6 rounded-md shadow-md overflow-auto">
                     <table className="min-w-full table-auto divide-y divide-gray-200">
-                        <thead className="bg-gray-100 text-gray-700">
+                        <thead className="bg-purple-200 text-gray-700">
                             <tr>
                                 <th className="px-4 py-2 border-b text-center">Item No.</th>
                                 <th className="px-4 py-2 border-b text-center">Title</th>

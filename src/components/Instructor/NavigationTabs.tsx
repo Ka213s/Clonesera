@@ -30,9 +30,9 @@
 
 //   export default NavigationTabs;
 
-  import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { Tabs } from 'antd';
-import { BookOutlined, ShoppingCartOutlined, NotificationOutlined, TagOutlined } from '@ant-design/icons';
+import { BookOutlined, ShoppingCartOutlined, NotificationOutlined, TagOutlined, UploadOutlined } from '@ant-design/icons';
 
 const { TabPane } = Tabs;
 
@@ -57,9 +57,9 @@ const NavigationTabs: React.FC = () => {
   const tabs = [
     { key: '1', icon: <BookOutlined />, label: 'My Courses' },
     { key: '2', icon: <ShoppingCartOutlined />, label: 'My Purchases' },
-    { key: '3', icon: <NotificationOutlined />, label: 'Upcoming Courses' },
+    { key: '3', icon: <UploadOutlined />, label: 'Upcoming Courses' },
     { key: '4', icon: <TagOutlined />, label: 'Discounts' },
-    { key: '5', icon: <TagOutlined />, label: 'Promotions' },
+    { key: '5', icon: <NotificationOutlined />, label: 'Promotions' },
   ];
 
   return (
