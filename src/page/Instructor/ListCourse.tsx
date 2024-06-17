@@ -12,7 +12,9 @@ import {
 } from "antd";
 import MainLayout from "../../layouts/MainLayout";
 import NavigationTabs from "../../components/Instructor/NavigationTabs";
+import { useNavigate } from 'react-router-dom';
 import ApiService, { CourseData, AccountData } from "../../services/ApiService";
+
 
 const { Option } = Select;
 
@@ -118,6 +120,7 @@ class ListCourse extends Component<{}, ListCourseState> {
       message.error("Failed to delete course.");
     }
   };
+  
 
   render() {
     const { isModalVisible, editingCourse, courses, accounts } = this.state;
