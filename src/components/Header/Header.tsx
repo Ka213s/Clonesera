@@ -78,6 +78,18 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     navigate('/create-course');
   }, [navigate]);
 
+  const handleLogout = useCallback(() => {
+    localStorage.removeItem('userData');
+    setIsLoggedIn(false);
+    setUserRole(null);
+    navigate('/login');
+  }, [navigate]);
+
+  const handleMenuClick = useCallback((url: string) => {
+    navigate(url);
+    setShowDropdown(false);
+  }, [navigate]);
+
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
       <div className="flex items-center bg-[#9997F5] rounded-full p-2">
@@ -173,10 +185,17 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
                     <li
                       key={index}
                       className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                      onClick={() => handleMenuClick(item.url)}
                     >
-                      <Link to={item.url}>{item.text}</Link>
+                      {item.text}
                     </li>
                   ))}
+                  <li
+                    className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </li>
                 </ul>
               </div>
             )}
