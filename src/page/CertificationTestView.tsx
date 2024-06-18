@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import MainLayout from '../layouts/MainLayout';
+
 
 interface Question {
   id: number;
@@ -46,7 +46,7 @@ const CertificationTestView: React.FC = () => {
   };
 
   return (
-    <MainLayout>
+ 
     <div className="min-h-screen bg-gray-900 py-8">
       <div className="container mx-auto px-4">
         <div className="flex justify-between mb-4">
@@ -134,7 +134,7 @@ const CertificationTestView: React.FC = () => {
         </div>
       </div>
     </div>
-    </MainLayout>
+   
   );
 };
 

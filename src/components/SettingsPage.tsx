@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import MainLayout from '../layouts/MainLayout';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -421,7 +420,7 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-    <MainLayout>
+  <div>
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold text-gray-700 mb-4">Settings</h1>
         <div className="border-b border-gray-200">
@@ -465,7 +464,7 @@ const SettingsPage: React.FC = () => {
         </div>
       </div>
       <ToastContainer />
-    </MainLayout>
+      </div>
   );
 };
 

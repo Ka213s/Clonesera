@@ -49,7 +49,7 @@ const SidebarAdmin: React.FC<SidebarProps> = ({ showMenu }) => {
   };
 
   return (
-    <aside className={`fixed top-16 left-0 h-full bg-white shadow-lg transition-all duration-300 ${showMenu ? 'w-64 overflow-y-auto' : 'w-0 overflow-hidden'}`}>
+    <aside className={`fixed top-16 left-0 h-full bg-white shadow-lg transition-all duration-300 ${showMenu ? 'w-56 overflow-y-auto' : 'w-0 overflow-hidden'}`}>
       <Menu
         mode="inline"
         selectedKeys={selectedKeys}

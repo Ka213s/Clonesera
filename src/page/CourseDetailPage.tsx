@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import coursesData from '../models/FileJson/courses.json';
-import MainLayout from '../layouts/MainLayout';
 import { FaEye, FaThumbsUp, FaThumbsDown, FaShare } from 'react-icons/fa';
 import {
   PlayCircleOutlined,
@@ -32,9 +31,7 @@ const CourseDetailPage: React.FC = () => {
   const showModal = () => {
     setIsModalVisible(true);
   };
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
+ 
 
   // Find course in both courses and newestCourses
   const loadCourse = (id: string): Course | undefined => {
@@ -57,7 +54,7 @@ const CourseDetailPage: React.FC = () => {
   const defaultAvatar = "../static/media/Avatar02.715a35cf5d30280dd60a.jpg";
 
   return (
-    <MainLayout>
+  <div>
       <div className="bg-gray-800 text-white rounded-lg">
         <div className="container mx-auto p-6">
           <div className="flex flex-col lg:flex-row lg:space-x-8">
@@ -194,7 +191,7 @@ const CourseDetailPage: React.FC = () => {
           <source src="your-video-url.mp4" type="video/mp4" />
         </video>
       </Modal> */}
-    </MainLayout>
+   </div>
   );
 };
 

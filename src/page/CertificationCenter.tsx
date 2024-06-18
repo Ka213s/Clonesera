@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserGraduate, faChalkboardTeacher } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
-import MainLayout from '../layouts/MainLayout';
+
 interface Category {
   name: string;
   items: string[];
@@ -32,7 +32,7 @@ const CertificationCenter: React.FC = () => {
   };
 
   return (
-    <MainLayout>
+  
     <div className="bg-gray-950 py-20 relative">
       <div className="container mx-auto px-4">
         <Link
@@ -162,7 +162,7 @@ const CertificationCenter: React.FC = () => {
         </div>
       </div>
     </div>
-    </MainLayout>
+   
   );
 };
 

@@ -1,5 +1,4 @@
 import React from 'react';
-import MainLayout from '../../layouts/MainLayout';
 interface PriceProps {
   formData: any;
   setFormData: React.Dispatch<React.SetStateAction<any>>;
@@ -18,7 +17,7 @@ const Price: React.FC<PriceProps> = ({ formData, setFormData, nextStep, prevStep
   };
 
   return (
-    <MainLayout>
+  
     <div>
       <h2 className="text-2xl font-bold mb-4">Price</h2>
       <form>
@@ -114,7 +113,7 @@ const Price: React.FC<PriceProps> = ({ formData, setFormData, nextStep, prevStep
         </button>
       </form>
     </div>
-    </MainLayout>
+   
   );
 };
 

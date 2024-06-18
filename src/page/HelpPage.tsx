@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import MainLayout from '../layouts/MainLayout';
+
 import { AiOutlineDollarCircle, AiOutlineNotification, AiOutlineCheckCircle, AiOutlineLayout, AiOutlineUser, AiOutlineSafetyCertificate } from 'react-icons/ai';
 
 const HelpPage: React.FC = () => {
@@ -111,7 +111,7 @@ const HelpPage: React.FC = () => {
     }, []);
 
     return (
-        <MainLayout>
+      
             <div className="bg-gray-100 min-h-screen">
                 <header className="bg-gray-900 text-white py-6">
                     <div className="container mx-auto px-4">
@@ -189,7 +189,7 @@ const HelpPage: React.FC = () => {
                     )}
                 </div>
             </div>
-        </MainLayout>
+       
     );
 };
 

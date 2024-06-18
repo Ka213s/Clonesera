@@ -72,8 +72,7 @@ const Register: React.FC = () => {
                     <Form
                         form={form}
                         onFinish={handleSubmit}
-                        layout="vertical"
-                        className="flex flex-col gap-4"
+                        layout="vertical" className="flex flex-col gap-4"
                     >
                         <Form.Item
                             name="email"
@@ -127,8 +126,7 @@ const Register: React.FC = () => {
                             />
                         </Form.Item>
                         <Form.Item
-                            name="role"
-                            rules={[{ required: true, message: 'Please select a role!' }]}
+                            name="role" rules={[{ required: true, message: 'Please select a role!' }]}
                         >
                             <Radio.Group>
                                 <Radio value="student">Student</Radio>
@@ -140,6 +138,11 @@ const Register: React.FC = () => {
                                 type="primary"
                                 htmlType="submit"
                                 disabled={isButtonDisabled}
+                                style={{
+                                    backgroundColor: '#9997F5',
+                                    borderColor: '#9997F5',
+                                    color: '#fff',
+                                }}
                                 className='p-3 rounded-2xl w-full bg-[#9997F5] text-white hover:bg-[#8886E5] hover:scale-105 duration-300 font-bold'
                             >
                                 {isButtonDisabled ? 'Please wait...' : 'Register'}

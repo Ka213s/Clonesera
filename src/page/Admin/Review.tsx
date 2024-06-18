@@ -1,6 +1,4 @@
 import React from 'react';
-import MainLayout from '../../layouts/MainLayout';
-
 const reviewsData = [
   {
     id: 1,
@@ -23,7 +21,7 @@ const reviewsData = [
 
 const Review: React.FC = () => {
   return (
-    <MainLayout>
+  
       <div className="pt-10 px-6">
         <h1 className="text-2xl font-semibold mb-6">Review</h1>
         <div className="space-y-6">
@@ -45,7 +43,7 @@ const Review: React.FC = () => {
           ))}
         </div>
       </div>
-    </MainLayout>
+  
   );
 };
 

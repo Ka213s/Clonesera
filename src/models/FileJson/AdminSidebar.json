@@ -21,6 +21,14 @@
       ]
     },
     {
+      "key": "Categories",
+      "icon": "CategorydOutlined",
+      "label": "Categories",
+      "children": [
+        { "key": "/admin/category-management", "label": "Categories" }
+      ]
+    },
+    {
       "key": "courses",
       "icon": "BookOutlined",
       "label": "Courses",

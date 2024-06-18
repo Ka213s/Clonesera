@@ -1,12 +1,10 @@
 import React, { Component } from "react";
 import { FaDollarSign } from "react-icons/fa";
-import MainLayout from "../../layouts/MainLayout";
-
 
 class Earning extends Component {
     render() {
         return (
-            <MainLayout>
+            <div>
                 <div className="bg-gray-100 p-8">
 
                     <div className="flex justify-between items-center mb-6">
@@ -30,7 +28,7 @@ class Earning extends Component {
                         <p className="text-white text-2x font-bold">Your balance:</p>
                         <h2 className="leading-10 text-white text-2xl font-bold">$1146.77</h2>
                     </div>
-                    
+
                     {/* Total value of your sales, before taxes */}
                     <div className="bg-gray-800 p-10 text-center">
                         <p className="text-white text-2x font-bold">Total value of your sales, before taxes:</p>
@@ -72,7 +70,7 @@ class Earning extends Component {
                                 <div className="bg-white p-4 rounded shadow ">
 
                                     <div className="flex items-center mb-4">
-                                        
+
                                         <select className="border border-gray-300 rounded px-3 py-2 mr-4">
                                             <option>Item Sales</option>
                                             <option>Total Sales</option>
@@ -135,11 +133,7 @@ class Earning extends Component {
                         </div>
                     </div>
                 </div>
-
-
-
-
-            </MainLayout>
+            </div>
         );
     }
 }

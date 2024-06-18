@@ -10,9 +10,7 @@ import {
   Popconfirm,
   Tag,
 } from "antd";
-import MainLayout from "../../layouts/MainLayout";
 import NavigationTabs from "../../components/Instructor/NavigationTabs";
-import { useNavigate } from 'react-router-dom';
 import ApiService, { CourseData, AccountData } from "../../services/ApiService";
 
 
@@ -133,7 +131,7 @@ class ListCourse extends Component<{}, ListCourseState> {
     ];
 
     return (
-      <MainLayout>
+     
         <div className="bg-white p-8">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center space-x-2">
@@ -345,7 +343,6 @@ class ListCourse extends Component<{}, ListCourseState> {
             </Form>
           </Modal>
         </div>
-      </MainLayout>
     );
   }
 }

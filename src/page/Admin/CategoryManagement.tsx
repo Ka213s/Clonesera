@@ -2,30 +2,41 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Space, Input, Modal, message } from 'antd';
 import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons';
 import CategoryForm from './CategoryForm';
-import ApiService from '../../services/ApiService';
-import { Category } from '../../Category';
 
 const { Search } = Input;
+
+interface Category {
+  id: number;
+  name: string;
+}
 
 const CategoryManagement: React.FC = () => {
   const [data, setData] = useState<Category[]>([]);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [originalData, setOriginalData] = useState<Category[]>([]);
 
   useEffect(() => {
     fetchCategories();
   }, []);
 
   const fetchCategories = async () => {
-    const categories = await ApiService.getCategories();
-    setData(categories);
+    try {
+      const response = await fetch('/src/data/categories.json'); // Đường dẫn đến file categories.json
+      const result = await response.json();
+      const categoriesWithId = result.categories.map((name: string, index: number) => ({ id: index + 1, name }));
+      setData(categoriesWithId);
+      setOriginalData(categoriesWithId);
+    } catch (error) {
+      console.error('Failed to fetch categories:', error);
+    }
   };
 
-  const handleDelete = async (id: number) => {
-    await ApiService.deleteCategory(id);
+  const handleDelete = (id: number) => {
+    const newData = data.filter(category => category.id !== id);
+    setData(newData);
+    setOriginalData(newData);
     message.success('Category deleted successfully');
-    fetchCategories();
   };
 
   const handleEdit = (category: Category) => {
@@ -33,66 +44,71 @@ const CategoryManagement: React.FC = () => {
     setIsModalVisible(true);
   };
 
-  const handleFormSubmit = async (values: Category) => {
+  const handleFormSubmit = (values: { name: string }) => {
     if (editingCategory) {
-      await ApiService.updateCategory(editingCategory.id, values);
+      const newData = data.map(cat => (cat.id === editingCategory.id ? { ...cat, ...values } : cat));
+      setData(newData);
+      setOriginalData(newData);
       message.success('Category updated successfully');
     } else {
-      await ApiService.addCategory(values);
+      const newCategory = { id: data.length ? Math.max(...data.map(cat => cat.id)) + 1 : 1, name: values.name };
+      const newData = [...data, newCategory];
+      setData(newData);
+      setOriginalData(newData);
       message.success('Category added successfully');
     }
     setIsModalVisible(false);
     setEditingCategory(null);
-    fetchCategories();
   };
 
-  const handleSearch = async (value: string) => {
-    const categories = await ApiService.getCategories(value);
-    setData(categories);
+  const handleSearch = (value: string) => {
+    const filteredData = originalData.filter(category => category.name.toLowerCase().includes(value.toLowerCase()));
+    setData(filteredData);
   };
 
   return (
-    <div>
-      <Space style={{ marginBottom: 16 }}>
-        <Search
-          placeholder="Search categories"
-          enterButton={<SearchOutlined />}
-          onSearch={handleSearch}
-        />
-        <Button
-          type="primary"
-          icon={<PlusOutlined />}
-          onClick={() => setIsModalVisible(true)}
+  
+      <div className="pt-10 px-6">
+        <Space style={{ marginBottom: 16 }}>
+          <Search
+            placeholder="Search categories"
+            enterButton={<SearchOutlined />}
+            onSearch={handleSearch}
+          />
+          <Button
+            type="primary"
+            icon={<PlusOutlined />}
+            onClick={() => setIsModalVisible(true)}
+          >
+            Add New Category
+          </Button>
+        </Space>
+        <Table dataSource={data} rowKey="id">
+          <Table.Column title="Name" dataIndex="name" key="name" />
+          <Table.Column
+            title="Action"
+            key="action"
+            render={(_, record: Category) => (
+              <Space size="middle">
+                <Button icon={<EditOutlined />} onClick={() => handleEdit(record)}>Edit</Button>
+                <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(record.id)}>Delete</Button>
+              </Space>
+            )}
+          />
+        </Table>
+        <Modal
+          title={editingCategory ? "Edit Category" : "Add New Category"}
+          visible={isModalVisible}
+          onCancel={() => setIsModalVisible(false)}
+          footer={null}
         >
-          Add New Category
-        </Button>
-      </Space>
-      <Table dataSource={data} rowKey="id">
-        <Table.Column title="Name" dataIndex="name" key="name" />
-        <Table.Column title="Description" dataIndex="description" key="description" />
-        <Table.Column
-          title="Action"
-          key="action"
-          render={(_, record: Category) => (
-            <Space size="middle">
-              <Button icon={<EditOutlined />} onClick={() => handleEdit(record)}>Edit</Button>
-              <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(record.id)}>Delete</Button>
-            </Space>
-          )}
-        />
-      </Table>
-      <Modal
-        title={editingCategory ? "Edit Category" : "Add New Category"}
-        visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
-        footer={null}
-      >
-        <CategoryForm
-          initialValues={editingCategory || undefined}
-          onSubmit={handleFormSubmit}
-        />
-      </Modal>
-    </div>
+          <CategoryForm
+            initialValues={editingCategory || undefined}
+            onSubmit={handleFormSubmit}
+          />
+        </Modal>
+      </div>
+    
   );
 };
 

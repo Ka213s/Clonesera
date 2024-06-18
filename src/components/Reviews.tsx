@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import MainLayout from '../layouts/MainLayout';
 import { FaSearch, FaStar } from 'react-icons/fa';
 
 const StarIcon: React.FC<{ className: string }> = ({ className }) => (
@@ -41,7 +40,7 @@ const Reviews: React.FC = () => {
     const [searchTerm, setSearchTerm] = useState("");
 
     return (
-        <MainLayout>
+     
             <div className="bg-white p-6 rounded-md shadow-md">
                 <div className="flex items-center space-x-2 mb-4">
                     <FaStar className="h-6 w-6 text-gray-700" />
@@ -97,7 +96,7 @@ const Reviews: React.FC = () => {
                     ))}
                 </div>
             </div>
-        </MainLayout>
+      
     );
 };
 

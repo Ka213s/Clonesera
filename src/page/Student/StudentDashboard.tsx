@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaArrowCircleLeft, FaArrowCircleRight } from 'react-icons/fa';
 import newsData from '../../models/FileJson/news.json';
-import MainLayout from '../../layouts/MainLayout';
+
 import img from "../../assets/clothes.jpg"
 const StudentDashboard: React.FC = () => {
   const [currentNewsIndex, setCurrentNewsIndex] = useState(0);
@@ -18,7 +18,7 @@ const StudentDashboard: React.FC = () => {
   const getNewsItem = (index: number) => newsData.news[index];
 
   return (
-    <MainLayout>
+  
       <div className="flex-grow flex flex-col p-6 bg-gray-100 h-screen">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-700">Student Dashboard</h1>
@@ -73,7 +73,7 @@ const StudentDashboard: React.FC = () => {
         </div>
 
       </div>
-    </MainLayout>
+   
   );
 };
 
