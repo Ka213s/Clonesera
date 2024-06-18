@@ -69,7 +69,10 @@ const initialLessons: Lesson[] = [
 ];
 
 const TestVideoQuiz: React.FC = () => {
-  const [lessons, setLessons] = useState<Lesson[]>(initialLessons);
+  const [lessons, setLessons] = useState<Lesson[]>(() => {
+    const savedLessons = localStorage.getItem('lessons');
+    return savedLessons ? JSON.parse(savedLessons) : initialLessons;
+  });
   const [currentLessonIndex, setCurrentLessonIndex] = useState<number>(0); // Start with Lesson 1
   const [videoProgress, setVideoProgress] = useState<number>(0);
   const [selectedQuizId, setSelectedQuizId] = useState<number | null>(null);
@@ -104,7 +107,7 @@ const TestVideoQuiz: React.FC = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [currentLessonIndex]);
+  }, [currentLessonIndex, lessons]);
 
   const onPlayerStateChange = (event: any) => {
     if (event.data === window.YT.PlayerState.PLAYING) {
@@ -141,6 +144,7 @@ const TestVideoQuiz: React.FC = () => {
         return lesson;
       });
       setLessons(updatedLessons);
+      localStorage.setItem('lessons', JSON.stringify(updatedLessons));
     }
   }, [videoProgress, currentLessonIndex, lessons]);
 
