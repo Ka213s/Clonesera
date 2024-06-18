@@ -31,7 +31,7 @@ const StudentSidebar: React.FC<{ showMenu: boolean }> = ({ showMenu }) => {
   };
 
   return (
-    <aside className={`fixed top-10 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-64' : 'w-0 overflow-hidden'}`}>
+    <aside className={`fixed top-10 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-56' : 'w-0 overflow-hidden'}`}>
       <ul className="mt-8 max-h-full overflow-y-auto">
         {studentSidebarItemData.studentSidebarItem.map((item: MenuItem, index: number) => (
           <li
