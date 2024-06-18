@@ -38,7 +38,7 @@ import Messages from '../components/Messages';
 import Notifications from '../components/Notifications';
 import Reviews from '../components/Reviews';
 import SettingsPage from '../components/SettingsPage';
-
+import Testvideoquiz from '../page/testvideoquiz';
 // Certification Pages and Components
 import CertificationCenter from '../page/CertificationCenter';
 import CertificationForm from '../page/CertificationForm';
@@ -55,24 +55,36 @@ import EnrollCourse from '../page/Student/EnrollCourse';
 const AppRouters: React.FC = () => {
   return (
     <Router>
-      <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Navigate to="/home" />} />
-        <Route path="/home" element={<HomePage />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/logout" element={<Logout />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/course/:courseId" element={<CourseDetailPage />} />
-        <Route path="/tests/certification-fill-form" element={<CertificationForm />} />
-        <Route path="/help" element={<HelpPage />} />
-        
-        {/* Admin Routes */}
-        <Route path="/admin_dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
-        <Route path="/admin/user" element={<ProtectedRoute allowedRoles={[1]}><AdminUser /></ProtectedRoute>} />
-        <Route path="/admin/courses" element={<ProtectedRoute allowedRoles={[1]}><Courses /></ProtectedRoute>} />
-        <Route path="/admin/course/:id" element={<ProtectedRoute allowedRoles={[1]}><CourseDetail /></ProtectedRoute>} />
-        <Route path="/admin/pending_courses" element={<ProtectedRoute allowedRoles={[1]}><CoursesPending /></ProtectedRoute>} />
-        <Route path="/admin/reviews" element={<ProtectedRoute allowedRoles={[1]}><Review /></ProtectedRoute>} />
+      <RoutesWrapper />
+    </Router>
+  );
+};
+
+const RoutesWrapper: React.FC = () => {
+  const location = useLocation();
+  const noSidebarPaths = ['/login', '/register'];
+
+  const renderRoutes = () => (
+    <Routes>
+      {/* Public Routes */}
+      <Route path="/" element={<Navigate to="/home" />} />
+      <Route path="/home" element={<HomePage />} />
+      <Route path="/login" element={<Login />} />
+      <Route path="/logout" element={<Logout />} />
+      <Route path="/register" element={<Register />} />
+      <Route path="/course/:courseId" element={<CourseDetailPage />} />
+      <Route path="/tests/certification-fill-form" element={<CertificationForm />} />
+      <Route path="/help" element={<HelpPage />} />
+      <Route path="/testvideoquiz" element={<Testvideoquiz />} />
+
+      {/* Admin Routes */}
+      <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/user" element={<ProtectedRoute allowedRoles={[1]}><AdminUser /></ProtectedRoute>} />
+      <Route path="/admin/courses" element={<ProtectedRoute allowedRoles={[1]}><Courses /></ProtectedRoute>} />
+      <Route path="/admin/course/:id" element={<ProtectedRoute allowedRoles={[1]}><CourseDetail /></ProtectedRoute>} />
+      <Route path="/admin/pending_courses" element={<ProtectedRoute allowedRoles={[1]}><CoursesPending /></ProtectedRoute>} />
+      <Route path="/admin/reviews" element={<ProtectedRoute allowedRoles={[1]}><Review /></ProtectedRoute>} />
+      <Route path="/admin/category-management" element={<ProtectedRoute allowedRoles={[1]}><CategoryManagement /></ProtectedRoute>} />
 
         {/* Student Routes */}
         <Route path="/student_dashboard" element={<ProtectedRoute allowedRoles={[2]}><StudentDashboard /></ProtectedRoute>} />

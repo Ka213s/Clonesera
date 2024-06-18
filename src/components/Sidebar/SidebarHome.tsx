@@ -72,7 +72,7 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
   };
 
   return (
-    <aside className={`fixed top-10 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-64' : 'w-0 overflow-hidden'}`}>
+    <aside className={`fixed top-10 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-56' : 'w-0 overflow-hidden'}`}>
       <ul className="mt-8 max-h-full overflow-y-auto">
         {sidebarMenuItemsData.menuItems.map((item: MenuItem, index: number) => (
           <React.Fragment key={index}>
