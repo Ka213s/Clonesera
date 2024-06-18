@@ -41,7 +41,7 @@ import Messages from '../components/Messages';
 import Notifications from '../components/Notifications';
 import Reviews from '../components/Reviews';
 import SettingsPage from '../components/SettingsPage';
-
+import Testvideoquiz from '../page/testvideoquiz';
 // Certification Pages and Components
 import CertificationCenter from '../page/CertificationCenter';
 import CertificationForm from '../page/CertificationForm';
@@ -76,6 +76,7 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/course/:courseId" element={<CourseDetailPage />} />
       <Route path="/tests/certification-fill-form" element={<CertificationForm />} />
       <Route path="/help" element={<HelpPage />} />
+      <Route path="/testvideoquiz" element={<Testvideoquiz />} />
 
       {/* Admin Routes */}
       <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
