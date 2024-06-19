@@ -1,5 +1,5 @@
 import React from 'react';
-import MainLayout from '../../layouts/MainLayout';
+
 import SalesChart from './SalesChart';
 import UserActivityChart from './UserActivityChart';
 import { FaChartLine } from 'react-icons/fa';
