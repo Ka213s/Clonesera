@@ -1,4 +1,7 @@
 import React from 'react';
+import { Typography, Input, Button } from 'antd';
+
+const { Title, Text } = Typography;
 
 const CloseAccount: React.FC<any> = ({
   password,
@@ -15,9 +18,8 @@ const CloseAccount: React.FC<any> = ({
         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
           Enter Password to Confirm
         </label>
-        <input
+        <Input.Password
           id="password"
-          type="password"
           className="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           placeholder="Enter Your Password"
           value={password}
@@ -25,12 +27,13 @@ const CloseAccount: React.FC<any> = ({
         />
         <p className="text-xs text-gray-500 mt-1">Are you sure you want to close your account?</p>
       </div>
-      <button
+      <Button
         // onClick={handleCloseAccount}  
+        type="primary"
         className="bg-[#9997F5] hover:bg-[#8886E5] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
       >
         Close Account
-      </button>
+      </Button>
     </div>
   );
 };

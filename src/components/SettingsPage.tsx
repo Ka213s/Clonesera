@@ -4,7 +4,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebaseConfig";
 import ApiService from '../services/ApiService';
-import Toggle from './Toggle';
 import AccountSettings from './AccountSettings';
 import PrivacySettings from './PrivacySettings';
 import NotificationSettings from './NotificationSettings';
