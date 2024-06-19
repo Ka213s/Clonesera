@@ -6,7 +6,7 @@ import HomePage from '../page/HomePage';
 import Login from '../page/Login';
 import Logout from '../components/Logout';
 import Register from '../page/Register';
-
+import PageError from '../page/PageError';
 // Admin Pages and Components
 import Courses from '../page/Admin/Courses';
 import CourseDetail from '../page/Admin/CourseDetail';
@@ -77,6 +77,7 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/tests/certification-fill-form" element={<CertificationForm />} />
       <Route path="/help" element={<HelpPage />} />
       <Route path="/testvideoquiz" element={<Testvideoquiz />} />
+      <Route path="/404" element={<PageError />} />
 
       {/* Admin Routes */}
       <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
