@@ -1,7 +1,7 @@
 import React from 'react';
 import purchasedCourseData from '../../models/FileJson/purchasedCourse.json';
 import { FaTrash, FaPrint, FaDownload } from 'react-icons/fa';
-import MainLayout from '../../layouts/MainLayout';
+
 
 interface Course {
   itemNo: string;
@@ -15,7 +15,7 @@ interface Course {
 
 const PurchasedCourses: React.FC = () => {
   return (
-    <MainLayout>
+   
       <div className="flex-grow flex flex-col p-6 bg-gray-100 h-screen">
         <h1 className="text-2xl font-bold text-gray-700 mb-4">Purchased Courses</h1>
         <div className="bg-white p-6 rounded-lg shadow-md overflow-auto">
@@ -60,7 +60,7 @@ const PurchasedCourses: React.FC = () => {
           </table>
         </div>
       </div>
-    </MainLayout>
+   
   );
 };
 

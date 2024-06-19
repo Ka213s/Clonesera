@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import MainLayout from "../../layouts/MainLayout";
+
 import { FaBookOpen as BookOpenIcon, FaChevronLeft as ChevronLeftIcon, FaChevronRight as ChevronRightIcon } from "react-icons/fa";
 
 class Dashboard extends Component {

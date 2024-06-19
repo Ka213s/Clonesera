@@ -3,7 +3,7 @@ import { Table, Button, Input, Select, Form, Space, Layout, Modal, Switch } from
 import { EditOutlined } from '@ant-design/icons';
 import { AiOutlinePlus } from 'react-icons/ai';
 import usersData from '../../models/FileJson/Adminusers.json';
-import MainLayout from '../../layouts/MainLayout';
+
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -118,7 +118,7 @@ const User: React.FC = () => {
   ];
 
   return (
-    <MainLayout>
+ 
       <Content style={{ margin: '16px' }}>
         <div className="mb-4 flex space-x-4">
           <Form layout="inline">
@@ -182,7 +182,7 @@ const User: React.FC = () => {
           </Form>
         </Modal>
       </Content>
-    </MainLayout>
+  
   );
 };
 
