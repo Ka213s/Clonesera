@@ -68,7 +68,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     <Menu>
       <Menu.Item key="welcome" disabled>
         <div className="font-bold">
-          Welcome, <span className="text-blue-500">{userName}</span>
+          Welcome, <span className="text-purple-500">{userName}</span>
         </div>
         <div className="text-gray-500">{userEmail}</div>
       </Menu.Item>
@@ -78,10 +78,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
           {item.text}
         </Menu.Item>
       ))}
-      <Menu.Divider />
-      <Menu.Item onClick={handleLogout} className="font-bold text-red-500">
-        Logout
-      </Menu.Item>
     </Menu>
   );
 
@@ -103,12 +99,12 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 
   return (
     <AntHeader className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
-      <Button icon={<MenuOutlined />} onClick={toggleMenu} shape="circle" />
+      <Button icon={<MenuOutlined />} onClick={toggleMenu} shape="circle" className="bg-[#8886E5] text-[#ffffff]" />
 
       <Search
         placeholder="Search..."
         onSearch={(value) => console.log(value)}
-        style={{ width: 200 }}
+        style={{ width: 220 }}
         className="mx-4"
       />
 
