@@ -4,19 +4,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebaseConfig";
 import ApiService from '../services/ApiService';
-
-const Toggle: React.FC<{ checked: boolean; onChange: () => void }> = ({ checked, onChange }) => {
-  return (
-    <div
-      onClick={onChange}
-      className={`w-14 h-8 flex items-center bg-gray-300 rounded-full p-1 cursor-pointer ${checked ? 'bg-green-400' : 'bg-gray-300'}`}
-    >
-      <div
-        className={`bg-white w-6 h-6 rounded-full shadow-md transform duration-300 ease-in-out ${checked ? 'translate-x-6' : ''}`}
-      />
-    </div>
-  );
-};
+import Toggle from './Toggle';
+import AccountSettings from './AccountSettings';
+import PrivacySettings from './PrivacySettings';
+import NotificationSettings from './NotificationSettings';
+import CloseAccount from './CloseAccount';
+import ChangePassword from './ChangePassword';
 
 const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Account');
@@ -139,9 +132,7 @@ const SettingsPage: React.FC = () => {
     }
   };
 
-  type NotificationKeys = keyof typeof notifications;
-
-  const handleToggleChange = (name: NotificationKeys) => {
+  const handleToggleChange = (name: keyof typeof notifications) => {
     setNotifications(prevState => ({
       ...prevState,
       [name]: !prevState[name],
@@ -152,267 +143,54 @@ const SettingsPage: React.FC = () => {
     switch (activeTab) {
       case 'Account':
         return (
-          <div>
-            <h2 className="text-xl font-bold mb-2">Your Cursus Account</h2>
-            <p>This is your public presence on Cursus. You need an account to upload your paid courses, comment on courses, purchased by students, or earning...</p>
-            <h2 className="text-xl font-bold mb-2 mt-10">Basic Profile</h2>
-            <p>Add information about yourself</p>
-            <div className="flex items-center mb-4">
-              <div className="relative mt-4">
-                <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200">
-                  {avatar ? (
-                    <img src={avatar as string} alt="Profile" className="w-full h-full object-cover cursor-pointer" onClick={() => document.getElementById('avatarUpload')?.click()} />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center text-4xl text-gray-400 cursor-pointer" onClick={() => document.getElementById('avatarUpload')?.click()}></div>
-                  )}
-                </div>
-                <input
-                  id="avatarUpload"
-                  type="file"
-                  className="hidden"
-                  accept="image/*"
-                  onChange={handleAvatarChange}
-                />
-              </div>
-            </div>
-            <div className="mt-6">
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="fullName">
-                  Full Name
-                </label>
-                <input
-                  id="fullName"
-                  type="text"
-                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.fullName ? 'border-red-500' : ''}`}
-                  value={fullName}
-                  onChange={(e) => setFullName(e.target.value)}
-                />
-                {errors.fullName && <p className="text-red-500 text-xs italic">{errors.fullName}</p>}
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="address">
-                  Address
-                </label>
-                <input
-                  id="address"
-                  type="text"
-                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.address ? 'border-red-500' : ''}`}
-                  value={address}
-                  onChange={(e) => setAddress(e.target.value)}
-                />
-                {errors.address && <p className="text-red-500 text-xs italic">{errors.address}</p>}
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phoneNumber">
-                  Phone Number
-                </label>
-                <input
-                  id="phoneNumber"
-                  type="text"
-                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.phoneNumber ? 'border-red-500' : ''}`}
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
-                  maxLength={10}
-                />
-                {errors.phoneNumber && <p className="text-red-500 text-xs italic">{errors.phoneNumber}</p>}
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.email ? 'border-red-500' : ''}`}
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                />
-                {errors.email && <p className="text-red-500 text-xs italic">{errors.email}</p>}
-              </div>
-              <div className="mb-4">
-                <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="description">
-                  Description
-                </label>
-                <textarea
-                  id="description"
-                  className={`shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline ${errors.description ? 'border-red-500' : ''}`}
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                />
-                {errors.description && <p className="text-red-500 text-xs italic">{errors.description}</p>}
-              </div>
-              <button
-                onClick={handleSaveChanges}
-                className="bg-[#9997F5] hover:bg-[#8886E5] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              >
-                Save Changes
-              </button>
-            </div>
-          </div>
+          <AccountSettings 
+            avatar={avatar}
+            handleAvatarChange={handleAvatarChange}
+            fullName={fullName}
+            setFullName={setFullName}
+            address={address}
+            setAddress={setAddress}
+            phoneNumber={phoneNumber}
+            setPhoneNumber={setPhoneNumber}
+            email={email}
+            setEmail={setEmail}
+            description={description}
+            setDescription={setDescription}
+            errors={errors}
+            handleSaveChanges={handleSaveChanges}
+          />
         );
       case 'Privacy':
         return (
-          <div>
-            <h2 className="text-xl font-bold mb-2">Privacy</h2>
-            <p>Modify your privacy settings here.</p>
-            <h6 className="text-xl font-bold mb-2 mt-4">Profile page settings</h6>
-            <div className="mt-6">
-              <div className="mb-4 flex items-center">
-                <label className="block text-gray-700 text-sm font-bold mr-4" htmlFor="profileVisibility">
-                  Show your profile on search engines
-                </label>
-                <Toggle
-                  checked={profileVisibility}
-                  onChange={() => setProfileVisibility(!profileVisibility)}
-                />
-              </div>
-              <div className="mb-4 flex items-center">
-                <label className="block text-gray-700 text-sm font-bold mr-4" htmlFor="showCourses">
-                  Show courses you're taking on your profile page
-                </label>
-                <Toggle
-                  checked={showCourses}
-                  onChange={() => setShowCourses(!showCourses)}
-                />
-              </div>
-              <button
-                onClick={handleSaveChanges}
-                className="bg-[#9997F5] hover:bg-[#8886E5] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              >
-                Save Changes
-              </button>
-            </div>
-          </div>
+          <PrivacySettings 
+            profileVisibility={profileVisibility}
+            setProfileVisibility={setProfileVisibility}
+            showCourses={showCourses}
+            setShowCourses={setShowCourses}
+            handleSaveChanges={handleSaveChanges}
+          />
         );
       case 'Notification':
         return (
-          <div>
-            <h2 className="text-xl font-bold mb-2">Notifications - Choose when and how to be notified</h2>
-            <p>Select push and email notifications you'd like to receive</p>
-            <h3 className="text-lg font-bold mt-4">Choose when and how to be notified</h3>
-            <div className="mt-6">
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.subscriptions}
-                  onChange={() => handleToggleChange('subscriptions')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Subscriptions</label>
-                  <p className="text-gray-500 text-sm">Notify me about activity from the profiles I'm subscribed to</p>
-                </div>
-              </div>
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.recommendedCourses}
-                  onChange={() => handleToggleChange('recommendedCourses')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Recommended Courses</label>
-                  <p className="text-gray-500 text-sm">Notify me of courses I might like based on what I watch</p>
-                </div>
-              </div>
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.activityOnComments}
-                  onChange={() => handleToggleChange('activityOnComments')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Activity on my comments</label>
-                  <p className="text-gray-500 text-sm">Notify me about activity on my comments on others’ courses</p>
-                </div>
-              </div>
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.repliesToComments}
-                  onChange={() => handleToggleChange('repliesToComments')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Replies to my comments</label>
-                  <p className="text-gray-500 text-sm">Notify me about replies to my comments</p>
-                </div>
-              </div>
-            </div>
-            <hr />
-            <h3 className="text-lg font-bold mt-4">Email notifications</h3>
-            <div className="mt-6">
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.subscriptions}
-                  onChange={() => handleToggleChange('subscriptions')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Subscriptions</label>
-                  <p className="text-gray-500 text-sm">Notify me about activity from the profiles I'm subscribed to</p>
-                </div>
-              </div>
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.recommendedCourses}
-                  onChange={() => handleToggleChange('recommendedCourses')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Recommended Courses</label>
-                  <p className="text-gray-500 text-sm">Notify me of courses I might like based on what I watch</p>
-                </div>
-              </div>
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.activityOnComments}
-                  onChange={() => handleToggleChange('activityOnComments')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Activity on my comments</label>
-                  <p className="text-gray-500 text-sm">Notify me about activity on my comments on others’ courses</p>
-                </div>
-              </div>
-              <div className="mb-4 flex items-center">
-                <Toggle
-                  checked={notifications.repliesToComments}
-                  onChange={() => handleToggleChange('repliesToComments')}
-                />
-                <div className="ml-4">
-                  <label className="text-gray-700 text-sm font-bold">Replies to my comments</label>
-                  <p className="text-gray-500 text-sm">Notify me about replies to my comments</p>
-                </div>
-              </div>
-              <button
-                onClick={handleSaveChanges}
-                className="bg-[#9997F5] hover:bg-[#8886E5] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-              >
-                Save Changes
-              </button>
-            </div>
-          </div>
+          <NotificationSettings 
+            notifications={notifications}
+            handleToggleChange={handleToggleChange}
+            handleSaveChanges={handleSaveChanges}
+          />
+        );
+      case 'Change Password':
+        return (
+          <ChangePassword 
+            userId={userId}
+          />
         );
       case 'Close Account':
         return (
-          <div>
-            <h2 className="text-xl font-bold mb-2">Close Account</h2>
-            <p className="text-gray-700">
-              <span className="font-bold">Warning:</span> If you close your account, you will be unsubscribed from all your 5 courses, and will lose access forever.
-            </p>
-            <div className="mt-6">
-              <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="password">
-                Enter Password to Confirm
-              </label>
-              <input
-                id="password"
-                type="password"
-                className="shadow appearance-none border rounded w-1/2 py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                placeholder="Enter Your Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-              />
-              <p className="text-xs text-gray-500 mt-1">Are you sure you want to close your account?</p>
-            </div>
-            <button
-              // onClick={handleCloseAccount}  
-              className="bg-[#9997F5] hover:bg-[#8886E5] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mt-4"
-            >
-              Close Account
-            </button>
-          </div>
-
+          <CloseAccount 
+            password={password}
+            setPassword={setPassword}
+            // handleCloseAccount={handleCloseAccount}
+          />
         );
       default:
         return null;
@@ -420,7 +198,7 @@ const SettingsPage: React.FC = () => {
   };
 
   return (
-  <div>
+    <div>
       <div className="container mx-auto p-4">
         <h1 className="text-2xl font-bold text-gray-700 mb-4">Settings</h1>
         <div className="border-b border-gray-200">
@@ -451,6 +229,14 @@ const SettingsPage: React.FC = () => {
             </li>
             <li className="mr-2">
               <button
+                className={`inline-block p-4 border-b-2 ${activeTab === 'Change Password' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
+                onClick={() => setActiveTab('Change Password')}
+              >
+                Change Password
+              </button>
+            </li>
+            <li className="mr-2">
+              <button
                 className={`inline-block p-4 border-b-2 ${activeTab === 'Close Account' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
                 onClick={() => setActiveTab('Close Account')}
               >
@@ -464,7 +250,7 @@ const SettingsPage: React.FC = () => {
         </div>
       </div>
       <ToastContainer />
-      </div>
+    </div>
   );
 };
 

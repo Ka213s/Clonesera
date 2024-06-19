@@ -137,15 +137,16 @@ class ApiService {
         }
     }
     
-    static async changePassword(id: string, currentPassword: string, newPassword: string) {
+    static async changePassword(id: string, email: string, currentPassword: string, newPassword: string) {
         try {
-            const response = await axios.put(`${BASE_URL}/${id}/changePassword`, { currentPassword, newPassword });
-            return response.data;
+          const response = await axios.put(`${BASE_URL}/${id}/changePassword`, { email, currentPassword, newPassword });
+          return response.data;
         } catch (error) {
-            console.error('Error changing password:', error);
-            return null;
+          console.error('Error changing password:', error);
+          return null;
         }
-    }
+      }
+    
 
     static async getAccountsByRole(roleId: number) {
         try {
