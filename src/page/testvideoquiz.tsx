@@ -43,7 +43,7 @@ const initialLessons: Lesson[] = [
           answer: 'Option 1',
         },
       ],
-      unlocked: false, // Initially locked
+      unlocked: false,
     },
     unlocked: true, // Lesson 1 is unlocked by default
   },
@@ -63,13 +63,16 @@ const initialLessons: Lesson[] = [
       ],
       unlocked: false,
     },
-    unlocked: false, // Initially locked
+    unlocked: false,
   },
   // Add other lessons similarly
 ];
 
 const TestVideoQuiz: React.FC = () => {
-  const [lessons, setLessons] = useState<Lesson[]>(initialLessons);
+  const [lessons, setLessons] = useState<Lesson[]>(() => {
+    const storedLessons = localStorage.getItem('lessons');
+    return storedLessons ? JSON.parse(storedLessons) : initialLessons;
+  });
   const [currentLessonIndex, setCurrentLessonIndex] = useState<number>(0); // Start with Lesson 1
   const [videoProgress, setVideoProgress] = useState<number>(0);
   const [selectedQuizId, setSelectedQuizId] = useState<number | null>(null);
@@ -141,6 +144,7 @@ const TestVideoQuiz: React.FC = () => {
         return lesson;
       });
       setLessons(updatedLessons);
+      localStorage.setItem('lessons', JSON.stringify(updatedLessons));
     }
   }, [videoProgress, currentLessonIndex, lessons]);
 
