@@ -7,6 +7,7 @@ import Login from '../page/Login';
 import Logout from '../components/Logout';
 import Register from '../page/Register';
 import PageError from '../page/PageError';
+import BecomeInstructor from '../page/BecomeInstructor';
 // Admin Pages and Components
 import Courses from '../page/Admin/Courses';
 import CourseDetail from '../page/Admin/CourseDetail';
@@ -76,8 +77,8 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/course/:courseId" element={<CourseDetailPage />} />
       <Route path="/tests/certification-fill-form" element={<CertificationForm />} />
       <Route path="/help" element={<HelpPage />} />
-      
       <Route path="/404" element={<PageError />} />
+      <Route path="/become-instructor" element={<BecomeInstructor />} />
 
       {/* Admin Routes */}
       <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
