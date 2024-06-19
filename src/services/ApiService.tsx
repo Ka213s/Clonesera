@@ -67,7 +67,15 @@ class ApiService {
             return null;
         }
     }
-    
+    static async verifyGoogleToken(token: string) {
+        try {
+            const response = await axios.post('https://your-backend-endpoint.com/api/verifyGoogleToken', { token });
+            return response.data;
+        } catch (error) {
+            console.error('Error verifying Google token:', error);
+            throw error;
+        }
+    }
     static async getUserByEmail(email: string) {
         try {
             const response = await axios.get(`${BASE_URL}?email=${email}`);
