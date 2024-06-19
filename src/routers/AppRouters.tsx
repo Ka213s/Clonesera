@@ -4,6 +4,7 @@ import MainLayout from '../layouts/MainLayout';
 // Page Components
 import HomePage from '../page/HomePage';
 import Login from '../page/Login';
+import ForgotPassword from '../page/ForgotPassword';
 import Logout from '../components/Logout';
 import Register from '../page/Register';
 import PageError from '../page/PageError';
@@ -65,7 +66,7 @@ const AppRouters: React.FC = () => {
 
 const RoutesWrapper: React.FC = () => {
   const location = useLocation();
-  const noSidebarPaths = ['/login', '/register'];
+  const noSidebarPaths = ['/login', '/register', '/forgot-password'];
 
   const renderRoutes = () => (
     <Routes>
@@ -73,6 +74,7 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/" element={<Navigate to="/home" />} />
       <Route path="/home" element={<HomePage />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/register" element={<Register />} />
       <Route path="/course/:courseId" element={<CourseDetailPage />} />
