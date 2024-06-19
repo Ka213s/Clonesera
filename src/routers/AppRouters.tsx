@@ -36,6 +36,7 @@ import ViewProfile from '../page/Instructor/ViewProfile';
 import Earning from '../page/Instructor/Earning';
 import PayOut from '../page/Instructor/PayOut';
 import StatementsIns from '../page/Instructor/StatementsIns';
+import MyLesson from '../page/Instructor/MyLesson';
 
 // Shared Components
 import Messages from '../components/Messages';
@@ -114,6 +115,7 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/instructor_earning" element={<ProtectedRoute allowedRoles={[3]}><Earning /></ProtectedRoute>} />
       <Route path="/instructor_payout" element={<ProtectedRoute allowedRoles={[3]}><PayOut /></ProtectedRoute>} />
       <Route path="/instructor_statements" element={<ProtectedRoute allowedRoles={[3]}><StatementsIns /></ProtectedRoute>} />
+      <Route path="/instructor_my_lesson" element={<ProtectedRoute allowedRoles={[3]}><MyLesson /></ProtectedRoute>} />
 
       {/* Shared Routes */}
       <Route path="/view_instructor_profile" element={<ProtectedRoute allowedRoles={[2, 3]}><ViewProfile /></ProtectedRoute>} />

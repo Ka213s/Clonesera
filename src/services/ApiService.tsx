@@ -7,20 +7,18 @@ const BASE_URL = 'https://665fbf915425580055b0b389.mockapi.io/GR3_Account';
 const BASE_URL_COURSE =
     "https://665fbf915425580055b0b389.mockapi.io/GR3_Crouse";
 
-export interface CourseData {
-    Account_Id: string;
-    title: string;
-    shortDescription: string;
-    description: string;
-    skillCourse: string;
-    price: string;
-    created_at: string;
-    update_at: number;
-    status: boolean;
-    requirements: string;
-    id: string;
-    courseCategory: string;
-}
+    export interface CourseData {
+        id: string;
+        title: string;
+        shortDescription: string;
+        description: string;
+        skillCourse: string;
+        price: string;
+        requirements: string;
+        Account_Id: string;
+        status: boolean;
+        certificateUrl?: string; // Add this optional property
+      }
 
 export interface UserData {
     fullName: string;

@@ -2,6 +2,7 @@
   "insSidebarItem": [
     { "text": "Dashboard", "icon": "HomeOutlined", "url": "/instructor_dashboard" },
     { "text": "Courses", "icon": "BookOutlined", "url": "/instructor_courses" },
+    { "text": "My Lesson", "icon": "BookOutlined", "url": "/instructor_my_lesson" },
     { "text": "Analysis", "icon": "LineChartOutlined", "url": "/instructor_analysis" },
     { "text": "Messages", "icon": "MessageOutlined", "url": "/instructor_messages" },
     { "text": "Notifications", "icon": "BellOutlined", "url": "/instructor_notifications" },
