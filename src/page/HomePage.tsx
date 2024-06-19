@@ -46,6 +46,7 @@ const HomePage: React.FC = () => {
     ],
   };
 
+
   return (
     <div className="p-4 grid grid-cols-10 gap-4 bg-[#F7F7F7]">
       <div className="col-span-8">
