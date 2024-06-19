@@ -41,22 +41,31 @@ const CreateCourse: React.FC = () => {
         return null;
     }
   };
-  
-
-  // Calculate progress based on step
-  const progress = ((step - 1) / 4) * 100;
 
   return (
     <div className="container mx-auto p-6">
       <div className="mb-4">
-        {/* Progress bar */}
-        <div className="bg-gray-200 h-2 w-full rounded-md">
-          <div className="bg-blue-500 h-2 rounded-md" style={{ width: `${progress}%` }}></div>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold">Create New Course</h2>
         </div>
-        {/* Display step information */}
-        <div className="flex justify-between mt-2">
-          <span>Step {step} of 5</span>
-          {/* You can add additional icons or information here */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex w-full items-center relative ml-20"> {/* Added left margin here */}
+            {['BASIC', 'CURRICULUM', 'MEDIA', 'PRICE', 'PUBLISH'].map((label, index) => (
+              <div key={index} className="flex items-center w-full">
+                <div className="flex flex-col items-center">
+                  <div className={`flex items-center justify-center w-12 h-12 rounded-full ${index < step ? 'bg-[#9997F5]' : 'bg-gray-300'}`}>
+                    <span className="text-white font-semibold">{index + 1}</span>
+                  </div>
+                  <span className={`mt-2 text-sm font-medium ${index === step - 1 ? 'text-[#9997F5]' : ''}`}>{label}</span>
+                </div>
+                {index < 4 && (
+                  <div className="flex-grow h-10 flex items-center relative mb-5 mx-4">
+                    <div className={`h-1 w-full ${index < step - 1 ? 'bg-[#9997F5]' : 'bg-gray-300'}`}></div>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         </div>
       </div>
       {renderStep()}

@@ -1,4 +1,5 @@
 import React from 'react';
+
 interface MediaProps {
   formData: any;
   setFormData: React.Dispatch<React.SetStateAction<any>>;
@@ -16,29 +17,30 @@ const Media: React.FC<MediaProps> = ({ formData, setFormData, nextStep, prevStep
     });
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, files } = e.target;
+    setFormData({
+      ...formData,
+      [name]: files && files[0],
+    });
+  };
+
   return (
-   
-    <div>
+    <div className="max-w-6xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-4">Media</h2>
       <form>
-        <div className="mb-4">
-          <label htmlFor="providerType" className="block mb-2">Course overview provider type*</label>
-          <select
-            id="providerType"
-            name="providerType"
-            value={formData.providerType || ''}
-            onChange={handleInputChange}
-            className="w-full p-2 border rounded-md"
-          >
-            <option value="HTML5(mp4)">HTML5(mp4)</option>
-            <option value="External URL">External URL</option>
-            <option value="YouTube">YouTube</option>
-            <option value="Vimeo">Vimeo</option>
-            <option value="embedded">embedded</option>
-          </select>
+        <div className="mb-6">
+          <label htmlFor="providerType" className="block mb-2">Intro Course overview provider type*</label>
+          <div className="flex space-x-2">
+            <button type="button" className={`py-2 px-4 rounded-md border ${formData.providerType === 'HTML5(mp4)' ? 'bg-[#9997F5] text-white' : 'bg-white border-gray-300'}`} onClick={() => setFormData({ ...formData, providerType: 'HTML5(mp4)' })}>HTML5(mp4)</button>
+            <button type="button" className={`py-2 px-4 rounded-md border ${formData.providerType === 'External URL' ? 'bg-[#9997F5] text-white' : 'bg-white border-gray-300'}`} onClick={() => setFormData({ ...formData, providerType: 'External URL' })}>External URL</button>
+            <button type="button" className={`py-2 px-4 rounded-md border ${formData.providerType === 'YouTube' ? 'bg-[#9997F5]text-white' : 'bg-white border-gray-300'}`} onClick={() => setFormData({ ...formData, providerType: 'YouTube' })}>YouTube</button>
+            <button type="button" className={`py-2 px-4 rounded-md border ${formData.providerType === 'Vimeo' ? 'bg-[#9997F5]text-white' : 'bg-white border-gray-300'}`} onClick={() => setFormData({ ...formData, providerType: 'Vimeo' })}>Vimeo</button>
+            <button type="button" className={`py-2 px-4 rounded-md border ${formData.providerType === 'embedded' ? 'bg-[#9997F5] text-white' : 'bg-white border-gray-300'}`} onClick={() => setFormData({ ...formData, providerType: 'embedded' })}>embedded</button>
+          </div>
         </div>
-        {(formData.providerType === 'embedded') && (
-          <div className="mb-4">
+        {formData.providerType === 'embedded' && (
+          <div className="mb-6">
             <label htmlFor="embeddedCode" className="block mb-2">Embedded Code*</label>
             <textarea
               id="embeddedCode"
@@ -50,27 +52,40 @@ const Media: React.FC<MediaProps> = ({ formData, setFormData, nextStep, prevStep
             ></textarea>
           </div>
         )}
-        <div className="mb-4">
-          <label htmlFor="courseThumbnail" className="block mb-2">Course thumbnail*</label>
+        {formData.providerType === 'HTML5(mp4)' && (
+          <div className="mb-6">
+            <label htmlFor="uploadVideo" className="block mb-2">Upload Video (File Format: .mp4)</label>
+            <input
+              type="file"
+              accept=".mp4"
+              id="uploadVideo"
+              name="uploadVideo"
+              onChange={handleFileChange}
+              className="w-full p-2 border rounded-md"
+            />
+          </div>
+        )}
+        <div className="mb-6">
+          <label htmlFor="courseThumbnail" className="block mb-2">Course thumbnail* (Size: 590x300 pixels, Supports: .jpg, .jpeg, or .png)</label>
           <input
             type="file"
             accept=".jpg,.jpeg,.png"
             id="courseThumbnail"
             name="courseThumbnail"
-            onChange={handleInputChange}
+            onChange={handleFileChange}
             className="w-full p-2 border rounded-md"
           />
         </div>
-        <button type="button" onClick={prevStep} className="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600">
-          Previous
-        </button>
-        <button type="button" onClick={nextStep} className="px-4 py-2 text-white bg-[#9997F5] hover:bg-[#8886E5] rounded-md">
-          Next
-        </button>
+        <div className="flex justify-between">
+          <button type="button" onClick={prevStep} className="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600">
+            Previous
+          </button>
+          <button type="button" onClick={nextStep} className="px-4 py-2 text-white bg-[#9997F5] hover:bg-[#8886E5] rounded-md">
+            Next
+          </button>
+        </div>
       </form>
-
     </div>
-   
   );
 };
 
