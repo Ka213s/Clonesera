@@ -86,24 +86,6 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
           </React.Fragment>
         ))}
       </ul>
-
-      {/* User info and menu */}
-      <div className="absolute bottom-8 left-0 right-0 px-4 flex items-center">
-        <button onClick={toggleUserMenu} className="flex items-center space-x-2 focus:outline-none">
-          <FaUserCircle size={24} className="text-gray-500" />
-          <span className="text-gray-700">Joginder Singh</span>
-          {expandedUserMenu ? <FaChevronUp size={20} className="text-gray-500" /> : <FaChevronDown size={20} className="text-gray-500" />}
-        </button>
-
-        {expandedUserMenu && (
-          <div className="absolute top-full mt-2 bg-white shadow-lg rounded-md border border-gray-200 w-48 py-2 z-10">
-            <Link to="/instructor_profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">View Instructor Profile</Link>
-            <a href="#!" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Night mode</a>
-            <Link to="/cursus_dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Cursus Dashboard</Link>
-            <Link to="/sign_out" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Sign Out</Link>
-          </div>
-        )}
-      </div>
     </aside>
   );
 };

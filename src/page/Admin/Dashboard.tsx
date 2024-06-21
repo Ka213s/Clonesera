@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Col, Row, Table, Tag, Button } from 'antd';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { Link } from 'react-router-dom'; // Import Link từ react-router-dom
 import MainLayout from '../../layouts/MainLayout';
 import PopularCourses from './PopularCourses';
 import StudentsOverview from './StudentsOverview';
@@ -90,24 +91,15 @@ const coursesData = [
   },
   {
     key: '2',
-    name: 'Introduction of UI/UX',
-    instructors: 'Esther Howard',
-    category: 'Design',
-    duration: '3 Month',
-    amount: '$450',
+    name: 'Introduction of Web Development',
+    instructors: 'John Doe',
+    category: 'Development',
+    duration: '2 Month',
+    amount: '$350',
     type: 'Online',
-    status: 'Active',
+    status: 'Inactive',
   },
-  {
-    key: '3',
-    name: 'Introduction of UI/UX',
-    instructors: 'Esther Howard',
-    category: 'Design',
-    duration: '3 Month',
-    amount: '$450',
-    type: 'Online',
-    status: 'Active',
-  },
+  // Add more courses as needed
 ];
 
 const Dashboard: React.FC = () => {
@@ -128,6 +120,10 @@ const Dashboard: React.FC = () => {
             className="bg-[#9997F5] border-[#9997F5]"
           >
             Add User
+          </Button>
+          {/* Button điều hướng đến Category */}
+          <Button type="primary" className="bg-[#9997F5] border-[#9997F5] ml-4">
+            <Link to="/dashboard/category">Category</Link>
           </Button>
         </div>
         <DashboardStatistics />
@@ -187,7 +183,6 @@ const Dashboard: React.FC = () => {
             </Card>
           </Col>
         </Row>
-
       </div>
     </MainLayout>
   );

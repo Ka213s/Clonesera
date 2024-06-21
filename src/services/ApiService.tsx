@@ -34,7 +34,13 @@ export interface UserData {
     phonenumber: string | null;
     walletId: string | null;
     roleId: number;
-    isGoogle: boolean; // Add this property
+    isGoogle: boolean;
+}
+
+export interface Category {
+    id: number;
+    name: string;
+    description: string;
 }
 export interface AccountData {
     id: string;
@@ -61,6 +67,7 @@ class ApiService {
             return null;
         }
     }
+    
     static async getUserByEmail(email: string) {
         try {
             const response = await axios.get(`${BASE_URL}?email=${email}`);
@@ -70,6 +77,7 @@ class ApiService {
             return null;
         }
     }
+    
     static async getAccounts(role: string) {
         try {
             const response = await axios.get(`${BASE_URL}?roleId=${role}`);
@@ -79,7 +87,7 @@ class ApiService {
             return null;
         }
     }
-
+    
     static async registerAccount(data: any) {
         try {
             const response = await axios.post(BASE_URL, data);
@@ -89,7 +97,7 @@ class ApiService {
             return null;
         }
     }
-
+    
     static async login(data: { email: string; password: string }) {
         try {
             const response = await axios.get(`${BASE_URL}?email=${data.email}&password=${data.password}`);
@@ -99,7 +107,7 @@ class ApiService {
             return null;
         }
     }
-
+    
     static async getAccountById(roleId: string) {
         try {
             const response = await axios.get(`${BASE_URL}/${roleId}`);
@@ -109,7 +117,7 @@ class ApiService {
             return null;
         }
     }
-
+    
     static async updateAccount(id: string, data: any) {
         try {
             const response = await axios.put(`${BASE_URL}/${id}`, data);
@@ -120,7 +128,7 @@ class ApiService {
             return null;
         }
     }
-
+    
     static async changePassword(id: string, currentPassword: string, newPassword: string) {
         try {
             const response = await axios.put(`${BASE_URL}/${id}/changePassword`, { currentPassword, newPassword });
@@ -150,6 +158,8 @@ class ApiService {
             );
             return response.data;
         } catch (error) {
+            console.error("Error updating account status:", error);
+            return null;
             console.error("Error updating account status:", error);
             return null;
         }
@@ -220,6 +230,46 @@ class ApiService {
         }
       }
 
+    // Category Management Methods
+    static async getCategories(searchQuery = '') {
+        try {
+            const response = await axios.get(`${BASE_URL}?q=${searchQuery}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching categories:', error);
+            return [];
+        }
+    }
+
+    static async addCategory(category: Category) {
+        try {
+            const response = await axios.post(BASE_URL, category);
+            return response.data;
+        } catch (error) {
+            console.error('Error adding category:', error);
+            return null;
+        }
+    }
+
+    static async updateCategory(id: number, category: Category) {
+        try {
+            const response = await axios.put(`${BASE_URL}/${id}`, category);
+            return response.data;
+        } catch (error) {
+            console.error('Error updating category:', error);
+            return null;
+        }
+    }
+
+    static async deleteCategory(id: number) {
+        try {
+            const response = await axios.delete(`${BASE_URL}/${id}`);
+            return response.data;
+        } catch (error) {
+            console.error('Error deleting category:', error);
+            return null;
+        }
+    }
 }
 
 export default ApiService;
