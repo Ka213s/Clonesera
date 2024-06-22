@@ -60,11 +60,18 @@ const Login: React.FC = () => {
   const handleRegisterClick = (): void => {
     navigate('/register');
   };
-
+  const handleForgotPasswordClick = (): void => {
+    navigate('/forgot-password');
+  };
   const handleGoogleLoginSuccess = async (response: any) => {
     const token = response.credential;
+    console.log('idToken:', token); // Log the response
     try {
       console.log('Google login successful, response:', response); // Log the response
+
+      // Save the IdToken to local storage
+      localStorage.setItem('idToken', token);
+
       // Replace the following API call with the actual one that verifies the token and fetches the user data.
       const userProfile = await ApiService.verifyGoogleToken(token);
 
@@ -194,6 +201,7 @@ const Login: React.FC = () => {
             />
             <div className='w-full mt-5 border-b border-gray-400'>
               <Button
+                onClick={handleForgotPasswordClick}
                 type="link"
                 className='text-base py-2 text-[#6C6EDD] text-left pl-0 font-bold hover:text-[#6C6EDD]'
               >Forgot your password?</Button>

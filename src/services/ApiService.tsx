@@ -65,6 +65,18 @@ class ApiService {
             return null;
         }
     }
+    static async forgotPassword(email: string) {
+        try {
+            // Simulating an API call to send a password reset email
+            console.log(`Sending password reset email to ${email}`);
+            // Simulate network delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return { success: true };
+        } catch (error) {
+            console.error('Error sending password reset email', error);
+            return { success: false };
+        }
+    }
     static async verifyGoogleToken(token: string) {
         try {
             const response = await axios.post('https://your-backend-endpoint.com/api/verifyGoogleToken', { token });
