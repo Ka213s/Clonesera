@@ -31,7 +31,7 @@ const Section: React.FC<SectionProps> = ({ sectionId, sectionName, formData, set
         <button 
           type="button" 
           onClick={toggleQuizPopup} 
-          className="px-4 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600 mr-2">
+          className="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600 mr-2">
           Quiz
         </button>
       </div>
