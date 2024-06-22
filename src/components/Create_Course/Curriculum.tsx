@@ -64,7 +64,7 @@ const Curriculum: React.FC<CurriculumProps> = ({ formData, setFormData, nextStep
       ))}
       
       <div className="flex justify-between mt-4">
-        <Button type="default" onClick={prevStep} className="bg-gray-500 text-white border-none hover:bg-gray-800">
+        <Button type="default" onClick={prevStep} className="bg-gray-500 text-white border-none hover:bg-gray-500">
           Previous
         </Button>
         <Button type="primary" onClick={nextStep} className="bg-[#9997F5] hover:bg-[#8886E5] border-none">

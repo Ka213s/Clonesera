@@ -24,7 +24,7 @@ const SectionNamePopup: React.FC<SectionNamePopupProps> = ({ onClose, onSave }) 
           className="border border-gray-300 rounded-md px-3 py-2 mb-4"
         />
         <div className="flex justify-end">
-          <button onClick={handleSave} className="px-4 py-2 bg-blue-500 text-white rounded-md mr-2">
+          <button onClick={handleSave} className="px-4 py-2 bg-[#9997F5] text-white rounded-md mr-2">
             Save
           </button>
           <button onClick={onClose} className="px-4 py-2 bg-gray-500 text-white rounded-md">
