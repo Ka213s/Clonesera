@@ -60,7 +60,7 @@ const AddQuizPopup: React.FC<AddQuizPopupProps> = ({ formData, setFormData, onCl
         </div>
         <div className="mt-6 flex justify-between space-x-4">
           <button onClick={onClose} className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition">Close</button>
-          <button onClick={handleAddQuiz} className="px-4 py-2 bg-[#9997F5] text-white rounded-md hover:bg-[#8886E5] transition">Add Quiz</button>
+          <button onClick={handleAddQuiz} className="px-4 py-2 text-white rounded-md bg-[#9997F5] hover:bg-[#8886E5] transition">Add Quiz</button>
         </div>
       </div>
     </div>
