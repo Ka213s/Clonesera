@@ -3,7 +3,7 @@ import { Card, Col, Row, Table, Tag, Button } from 'antd';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { Link } from 'react-router-dom'; // Import Link từ react-router-dom
-import MainLayout from '../../layouts/MainLayout';
+
 import PopularCourses from './PopularCourses';
 import StudentsOverview from './StudentsOverview';
 import TopInstructors from './TopInstructors';
@@ -104,7 +104,7 @@ const coursesData = [
 
 const Dashboard: React.FC = () => {
   return (
-    <MainLayout>
+   
       <div className="site-statistic-demo-card pt-10">
         <div className="flex justify-end mb-4">
           <Button
@@ -184,7 +184,7 @@ const Dashboard: React.FC = () => {
           </Col>
         </Row>
       </div>
-    </MainLayout>
+ 
   );
 };
 

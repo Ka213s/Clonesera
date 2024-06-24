@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import MainLayout from '../layouts/MainLayout';
+
 
 const CertificationTestResult: React.FC = () => {
   const result = {
@@ -16,7 +16,7 @@ const CertificationTestResult: React.FC = () => {
   };
 
   return (
-    <MainLayout> 
+  
       <div className="bg-gray-900 text-white min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div className="max-w-md w-full space-y-8">
           <div>
@@ -58,7 +58,7 @@ const CertificationTestResult: React.FC = () => {
           </div>
         </div>
       </div>
-    </MainLayout>
+  
   );
 };
 

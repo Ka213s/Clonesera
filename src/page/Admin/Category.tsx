@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Table, Button, Modal, Form, Input } from 'antd';
-import MainLayout from '../../layouts/MainLayout';
 import { AiOutlinePlus } from 'react-icons/ai';
 import categoriesData from './../../models/FileJson/categories.json';
 
@@ -61,7 +60,7 @@ const Category: React.FC = () => {
   ];
 
   return (
-    <MainLayout>
+    
       <div className="pt-10 px-6">
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-semibold">Category Management</h1>
@@ -95,7 +94,7 @@ const Category: React.FC = () => {
           </Form>
         </Modal>
       </div>
-    </MainLayout>
+
   );
 };
 

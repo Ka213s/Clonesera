@@ -1,62 +1,77 @@
 import React, { Component } from "react";
-import { FaBell } from "react-icons/fa";
-import MainLayout from "../layouts/MainLayout";
+import { BellOutlined } from "@ant-design/icons";
+import { Avatar, Button, Card, List, Typography } from "antd";
 import logoavatar from "../assets/Avatar01.jpg";
+
+const { Title, Text } = Typography;
+
 class Notifications extends Component {
-    render() {
-        return (
-            <MainLayout>
-                <div className="bg-gray-100 p-6">
-                    <div className="flex justify-between items-center mb-6">
-                        <div className="flex items-center space-x-2">
-                            <FaBell className="h-6 w-6 text-gray-700" />
-                            <h1 className="text-2xl font-bold">Notifications</h1>
-                        </div>
-                    </div>
+  render() {
+    const notifications = [
+      {
+        avatar: logoavatar,
+        title: "Rock William",
+        description: "Like Your Comment On Video How to create sidebar menu.",
+        time: "2 min ago"
+      },
+      {
+        avatar: logoavatar,
+        title: "Jassica Smith",
+        description: "Added New Review In Video Full Stack PHP Developer.",
+        time: "12 min ago"
+      },
+      {
+        avatar: logoavatar,
+        title: "Your Membership Activated",
+        time: "20 min ago"
+      },
+      {
+        avatar: logoavatar,
+        title: "Your Course Approved Now. How to create sidebar menu.",
+        time: "20 min ago"
+      }
+    ];
 
-                    <div className="p-4 rounded mb-6">
-                        <button className="bg-[#9997F5] hover:bg-[#8886E5]  text-white px-4 py-2 rounded">
-                            Notification Setting
-                        </button>
-                    </div>
+    return (
+      <div className="bg-gray-100 p-6">
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center space-x-2">
+            <BellOutlined className="text-2xl text-gray-700" />
+            <Title level={2}>Notifications</Title>
+          </div>
+        </div>
 
-                    {/* List of notifications */}
-                    <div className="bg-white p-4 rounded shadow">
-                        <div className="mb-4 flex items-center space-x-4">
-                            <img src={logoavatar} alt="Notification 1" className="h-12 w-12 rounded-full" />
-                            <div>
-                                <h2 className="text-lg font-bold">Rock William</h2>
-                                <p className="text-gray-700">Like Your Comment On Video How to create sidebar menu.</p>
-                                <p className="text-gray-500">2 min ago</p>
-                            </div>
-                        </div>
-                        <div className="mb-4 flex items-center space-x-4">
-                            <img src={logoavatar} alt="Notification 2" className="h-12 w-12 rounded-full" />
-                            <div>
-                                <h2 className="text-lg font-bold">Jassica Smith</h2>
-                                <p className="text-gray-700">Added New Review In Video Full Stack PHP Developer.</p>
-                                <p className="text-gray-500">12 min ago</p>
-                            </div>
-                        </div>
-                        <div className="mb-4 flex items-center space-x-4">
-                            <img src={logoavatar} alt="Notification 3" className="h-12 w-12 rounded-full" />
-                            <div>
-                                <h2 className="text-lg font-bold">Your Membership Activated</h2>
-                                <p className="text-gray-500">20 min ago</p>
-                            </div>
-                        </div>
-                        <div className="mb-4 flex items-center space-x-4">
-                            <img src={logoavatar}   alt="Notification 4" className="h-12 w-12 rounded-full" />
-                            <div>
-                                <h2 className="text-lg font-bold">Your Course Approved Now. How to create sidebar menu.</h2>
-                                <p className="text-gray-500">20 min ago</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </MainLayout>
-        );
-    }
+        <div className="p-4 rounded mb-6">
+          <Button type="primary" className="bg-[#9997F5] hover:bg-[#8886E5]">
+            Notification Setting
+          </Button>
+        </div>
+
+   
+        <Card>
+          <List
+            itemLayout="horizontal"
+            dataSource={notifications}
+            renderItem={(item) => (
+              <List.Item>
+                <List.Item.Meta
+                  avatar={<Avatar src={item.avatar} />}
+                  title={<Title level={4}>{item.title}</Title>}
+                  description={
+                    <>
+                      <Text>{item.description}</Text>
+                      <br />
+                      <Text type="secondary">{item.time}</Text>
+                    </>
+                  }
+                />
+              </List.Item>
+            )}
+          />
+        </Card>
+      </div>
+    );
+  }
 }
 
 export default Notifications;

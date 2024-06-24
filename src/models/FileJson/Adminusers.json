@@ -1,59 +1,56 @@
 [
-    {
-      "name": "Leslie Alexander",
-      "email": "example@gmail.com",
-      "type": "Super Admin",
-      "phone": "01887755330",
-      "dob": "1999-10-02",
-      "status": "Active"
-    },
-    {
-      "name": "Esther Howard",
-      "email": "example@gmail.com",
-      "type": "Moderator",
-      "phone": "01887755330",
-      "dob": "1999-10-02",
-      "status": "Active"
-    },
-    {
-      "name": "Brooklyn Simmons",
-      "email": "example@gmail.com",
-      "type": "Moderator",
-      "phone": "01887755330",
-      "dob": "1999-10-02",
-      "status": "Active"
-    },
-    {
-      "name": "Eleanor Pena",
-      "email": "example@gmail.com",
-      "type": "Manager",
-      "phone": "01887755330",
-      "dob": "1999-10-02",
-      "status": "Offline"
-    },
-    {
-      "name": "Albert Flores",
-      "email": "example@gmail.com",
-      "type": "Super Admin",
-      "phone": "01887755330",
-      "dob": "1999-10-02",
-      "status": "Active"
-    },
-    {
-      "name": "Bessie Coope",
-      "email": "example@gmail.com",
-      "type": "Super Admin",
-      "phone": "01887755330",
-      "dob": "1999-10-02",
-      "status": "Active"
-    },
-    {
-      "name": "John Doe",
-      "email": "example@gmail.com",
-      "type": "Super Admin",
-      "phone": "01887755330",
-      "dob": "1999-10-02",
-      "status": "Active"
-    }
-  ]
-  
+  {
+    "id": "1",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "type": "Admin",
+    "phone": "1234567890",
+    "dob": "1990-01-01",
+    "status": "Active"
+  },
+  {
+    "id": "2",
+    "name": "Jane Smith",
+    "email": "jane@example.com",
+    "type": "User",
+    "phone": "0987654321",
+    "dob": "1992-02-02",
+    "status": "Offline"
+  },
+  {
+    "id": "3",
+    "name": "Alice Johnson",
+    "email": "alice@example.com",
+    "type": "User",
+    "phone": "1112223333",
+    "dob": "1985-05-15",
+    "status": "Active"
+  },
+  {
+    "id": "4",
+    "name": "Bob Brown",
+    "email": "bob@example.com",
+    "type": "Admin",
+    "phone": "4445556666",
+    "dob": "1980-03-10",
+    "status": "Inactive"
+  },
+  {
+    "id": "5",
+    "name": "Charlie Davis",
+    "email": "charlie@example.com",
+    "type": "User",
+    "phone": "7778889999",
+    "dob": "1995-07-07",
+    "status": "Active"
+  },
+  {
+    "id": "6",
+    "name": "Dana Lee",
+    "email": "dana@example.com",
+    "type": "Admin",
+    "phone": "0001112222",
+    "dob": "1993-04-04",
+    "status": "Offline"
+  }
+]

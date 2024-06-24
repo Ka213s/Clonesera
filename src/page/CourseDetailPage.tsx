@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import coursesData from '../models/FileJson/courses.json';
-import MainLayout from '../layouts/MainLayout';
 import { FaEye, FaThumbsUp, FaThumbsDown, FaShare } from 'react-icons/fa';
 import {
   PlayCircleOutlined,
@@ -32,9 +31,7 @@ const CourseDetailPage: React.FC = () => {
   const showModal = () => {
     setIsModalVisible(true);
   };
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
+
 
   // Find course in both courses and newestCourses
   const loadCourse = (id: string): Course | undefined => {
@@ -57,7 +54,7 @@ const CourseDetailPage: React.FC = () => {
   const defaultAvatar = "../static/media/Avatar02.715a35cf5d30280dd60a.jpg";
 
   return (
-    <MainLayout>
+    <div>
       <div className="bg-gray-800 text-white rounded-lg">
         <div className="container mx-auto p-6">
           <div className="flex flex-col lg:flex-row lg:space-x-8">
@@ -135,32 +132,34 @@ const CourseDetailPage: React.FC = () => {
         </div>
 
         <div className="mt-8">
-          <ul className="flex border-b">
-            <li className="mr-1 flex-grow">
-              <button
-                className={`block py-2 px-4 font-semibold focus:outline-none ${activeTab === 'about' ? 'bg-[#9997F5] text-white' : ''}`}
-                onClick={() => handleTabClick('about')}
-              >
-                About
-              </button>
-            </li>
-            <li className="mr-1 flex-grow">
-              <button
-                className={`block py-2 px-4 font-semibold focus:outline-none ${activeTab === 'content' ? 'bg-[#9997F5] text-white' : ''}`}
-                onClick={() => handleTabClick('content')}
-              >
-                Course Content
-              </button>
-            </li>
-            <li className="flex-grow">
-              <button
-                className={`block py-2 px-4 font-semibold focus:outline-none ${activeTab === 'review' ? 'bg-[#9997F5] text-white' : ''}`}
-                onClick={() => handleTabClick('review')}
-              >
-                Review
-              </button>
-            </li>
-          </ul>
+          <div className="border-b border-gray-200">
+            <ul className="flex -mb-px">
+              <li className="mr-2">
+                <button
+                  className={`inline-block p-4 border-b-2 ${activeTab === 'about' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
+                  onClick={() => handleTabClick('about')}
+                >
+                  About
+                </button>
+              </li>
+              <li className="mr-2">
+                <button
+                  className={`inline-block p-4 border-b-2 ${activeTab === 'content' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
+                  onClick={() => handleTabClick('content')}
+                >
+                  Course Content
+                </button>
+              </li>
+              <li className="mr-2">
+                <button
+                  className={`inline-block p-4 border-b-2 ${activeTab === 'review' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
+                  onClick={() => handleTabClick('review')}
+                >
+                  Review
+                </button>
+              </li>
+            </ul>
+          </div>
 
           <div className="mt-4 p-4 bg-white shadow-lg rounded-lg">
             {activeTab === 'about' && (
@@ -194,7 +193,7 @@ const CourseDetailPage: React.FC = () => {
           <source src="your-video-url.mp4" type="video/mp4" />
         </video>
       </Modal> */}
-    </MainLayout>
+    </div>
   );
 };
 

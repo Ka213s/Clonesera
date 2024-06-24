@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import { Button, Typography } from 'antd';
 import Section from './Section';
-import MainLayout from '../../layouts/MainLayout';
 import SectionNamePopup from './SectionNamePopup';
 
 interface SectionData {
@@ -23,6 +23,8 @@ interface CurriculumProps {
   prevStep: () => void;
 }
 
+const { Title } = Typography;
+
 const Curriculum: React.FC<CurriculumProps> = ({ formData, setFormData, nextStep, prevStep }) => {
   const [sections, setSections] = useState<SectionData[]>([]);
   const [sectionCounter, setSectionCounter] = useState(0);
@@ -39,35 +41,35 @@ const Curriculum: React.FC<CurriculumProps> = ({ formData, setFormData, nextStep
   };
 
   return (
-    <MainLayout>
-      <div className="text-2x1 mb-4">
-        <h2 className="text-2xl font-bold mb-4">Curriculum</h2>
-        <button 
-          type="button" 
-          onClick={addSection} 
-          className="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600">
-          New Section
-        </button>
-        
-        {sections.map((sectionData) => (
-          <Section
-            key={sectionData.id}
-            sectionId={sectionData.id}
-            sectionName={sectionData.name}
-            formData={formData}
-            setFormData={setFormData}
-            nextStep={nextStep}
-            prevStep={prevStep}
-          />
-        ))}
-        <div className="mt-4">
-          <button type="button" onClick={prevStep} className="px-4 py-2 text-white bg-gray-500 rounded-md hover:bg-gray-600 mr-2">
-            Previous
-          </button>
-          <button type="button" onClick={nextStep} className="px-4 py-2 text-white bg-[#9997F5] hover:bg-[#8886E5] rounded-md">
-            Next
-          </button>
-        </div>
+    <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-md">
+      <Title level={2} className="text-gray-800 mb-6">Curriculum</Title>
+      <Button 
+        type="primary" 
+        onClick={addSection} 
+        className="mb-4 bg-[#9997F5] hover:bg-[#8886E5] border-none"
+      >
+        New Section
+      </Button>
+      
+      {sections.map((sectionData) => (
+        <Section
+          key={sectionData.id}
+          sectionId={sectionData.id}
+          sectionName={sectionData.name}
+          formData={formData}
+          setFormData={setFormData}
+          nextStep={nextStep}
+          prevStep={prevStep}
+        />
+      ))}
+      
+      <div className="flex justify-between mt-4">
+        <Button type="default" onClick={prevStep} className="bg-gray-500 text-white border-none hover:bg-gray-800">
+          Previous
+        </Button>
+        <Button type="primary" onClick={nextStep} className="bg-[#9997F5] hover:bg-[#8886E5] border-none">
+          Next
+        </Button>
       </div>
       
       {showSectionNamePopup && (
@@ -76,7 +78,7 @@ const Curriculum: React.FC<CurriculumProps> = ({ formData, setFormData, nextStep
           onSave={saveSectionName}
         />
       )}
-    </MainLayout>
+    </div>
   );
 };
 

@@ -1,10 +1,10 @@
 // src/components/SendFeedback.tsx
 import React from 'react';
-import MainLayout from '../../layouts/MainLayout';
+
 
 const SendFeedback: React.FC = () => {
     return (
-        <MainLayout>
+      
             <div className="p-4">
             <h1 className="text-2xl font-bold text-gray-700 mb-8">Send Feedback</h1>
                 <div className="mb-8">
@@ -32,7 +32,7 @@ const SendFeedback: React.FC = () => {
                     Send Feedback
                 </button>
             </div>
-        </MainLayout>
+      
     );
 };
 

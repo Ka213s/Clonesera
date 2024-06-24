@@ -1,12 +1,12 @@
 import React from 'react';
-import MainLayout from '../../layouts/MainLayout';
+
 import SalesChart from './SalesChart';
 import UserActivityChart from './UserActivityChart';
 import { FaChartLine } from 'react-icons/fa';
 
 const Analyics = () => {
     return (
-        <MainLayout>
+      
             <div className="bg-gray-100 p-8">
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center space-x-2">
@@ -35,7 +35,7 @@ const Analyics = () => {
                 <SalesChart />
                 <UserActivityChart />
             </div>
-        </MainLayout>
+       
     );
 };
 

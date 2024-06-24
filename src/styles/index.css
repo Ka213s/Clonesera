@@ -11,3 +11,24 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+/* PrivacySettings.module.css */
+.toggle-label {
+  color: #4b5563; /* Màu văn bản cho label */
+}
+
+.toggle-switch {
+  --bg-opacity: 1; /* Độ trong suốt của nền */
+  background-color: rgba(153, 151, 245, var(--bg-opacity)); /* Màu nền */
+  border-color: transparent; /* Màu viền */
+}
+
+.toggle-switch:checked {
+  --ring-color: rgba(34, 193, 195, 0.5); /* Màu vòng viền khi được chọn */
+  --bg-opacity: 1; /* Độ trong suốt của nền khi được chọn */
+  background-color: rgba(52, 211, 153, var(--bg-opacity)); /* Màu nền khi được chọn */
+  border-color: transparent; /* Màu viền khi được chọn */
+}
+
+.toggle-switch:focus {
+  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* Hiệu ứng focus */
+}

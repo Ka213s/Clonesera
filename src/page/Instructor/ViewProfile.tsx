@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import MainLayout from '../../layouts/MainLayout';
 import { FaTwitterSquare, FaLinkedin, FaYoutubeSquare, FaFacebookSquare, FaCog } from 'react-icons/fa';
 import CourseCard from '../../components/CourseCard';
 import { FaBell } from 'react-icons/fa';
@@ -224,7 +223,7 @@ const ViewProfile = () => {
     };
 
     return (
-        <MainLayout>
+       
             <div className="p-4">
                 <div className="bg-gray-800 text-white p-6 flex flex-col md:flex-row justify-between items-start">
                     <div className="flex flex-col space-y-4">
@@ -330,7 +329,7 @@ const ViewProfile = () => {
                     {renderTabContent()}
                 </div>
             </div>
-        </MainLayout>
+     
     );
 };
 

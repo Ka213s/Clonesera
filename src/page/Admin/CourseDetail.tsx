@@ -1,6 +1,5 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import MainLayout from '../../layouts/MainLayout';
 
 const coursesData = [
   {
@@ -113,7 +112,7 @@ const CourseDetail: React.FC = () => {
   }
 
   return (
-    <MainLayout>
+   
       <div className="pt-10 px-6">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
@@ -198,7 +197,7 @@ const CourseDetail: React.FC = () => {
           </div>
         </div>
       </div>
-    </MainLayout>
+   
   );
 };
 

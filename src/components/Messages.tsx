@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import MainLayout from '../layouts/MainLayout';
+import { Avatar, Badge, Button, Input, List, Typography } from 'antd';
+import { SendOutlined } from '@ant-design/icons';
+
+const { Title, Text } = Typography;
+const { Search } = Input;
 
 interface Contact {
   name: string;
@@ -10,11 +14,10 @@ interface Contact {
 }
 
 interface Message {
-    text: string;
-    timestamp: string;
-    typing?: boolean; // Thuộc tính optional
-  }
-  
+  text: string;
+  timestamp: string;
+  typing?: boolean; // Thuộc tính optional
+}
 
 const contacts: Contact[] = [
   { name: 'John Doe', online: true, lastMessage: 'Hi! Sir, How are you. I ask you one thing please expl...', unread: 2, lastActive: '7 hours ago' },
@@ -42,71 +45,55 @@ const ChatApp: React.FC = () => {
   const [activeContact, setActiveContact] = useState<string>(contacts[0].name);
 
   return (
-    <MainLayout>
-      <div className="flex h-screen">
-        {/* Contact List */}
-        <div className="w-1/4 bg-gray-100 p-4 border-r border-gray-300">
-          <div className="text-xl font-bold mb-4">Messages</div>
-          <input
-            type="text"
-            placeholder="Search Messages..."
-            className="w-full p-2 mb-4 border border-gray-300 rounded"
-          />
-          {contacts.map((contact, index) => (
-            <div
-              key={index}
-              className={`p-2 mb-2 rounded-lg cursor-pointer ${activeContact === contact.name ? 'bg-violet-300' : 'bg-purple-200'}`}
-              onClick={() => setActiveContact(contact.name)}
-            >
-              <div className="flex justify-between items-center">
-                <div className="flex items-center">
-                  <img src={`https://i.pravatar.cc/40?img=${index + 1}`} alt={contact.name} className="w-10 h-10 rounded-full mr-3" />
-                  <div>
-                    <div className="font-semibold">{contact.name}</div>
-                    <div className="text-sm text-gray-600">{contact.lastMessage}</div>
-                  </div>
-                </div>
+    <div style={{ display: 'flex', height: '100vh' }}>
+      {/* Contact List */}
+      <div style={{ width: '25%', backgroundColor: '#f0f2f5', padding: '16px', borderRight: '1px solid #d9d9d9' }}>
+        <Title level={4}>Messages</Title>
+        <Search placeholder="Search Messages..." style={{ marginBottom: '16px' }} />
+        <List
+          itemLayout="horizontal"
+          dataSource={contacts}
+          renderItem={contact => (
+            <List.Item onClick={() => setActiveContact(contact.name)} style={{ backgroundColor: activeContact === contact.name ? '#e6f7ff' : '#fff', padding: '8px', borderRadius: '4px', marginBottom: '8px', cursor: 'pointer' }}>
+              <List.Item.Meta
+                avatar={<Avatar src={`https://i.pravatar.cc/40?img=${contacts.findIndex(c => c.name === contact.name) + 1}`} />}
+                title={<Text strong>{contact.name}</Text>}
+                description={<Text ellipsis>{contact.lastMessage}</Text>}
+              />
+              <div>
                 {contact.unread > 0 && (
-                  <div className="text-xs bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center">{contact.unread}</div>
+                  <Badge count={contact.unread} style={{ backgroundColor: '#f5222d' }} />
                 )}
+                <div style={{ fontSize: '12px', color: '#8c8c8c' }}>{contact.lastActive}</div>
               </div>
-              <div className="text-xs text-gray-500">{contact.lastActive}</div>
+            </List.Item>
+          )}
+        />
+      </div>
+
+      {/* Chat Box */}
+      <div style={{ width: '75%', display: 'flex', flexDirection: 'column', padding: '16px' }}>
+        <div style={{ display: 'flex', alignItems: 'center', marginBottom: '16px' }}>
+          <Avatar src={`https://i.pravatar.cc/40?img=${contacts.findIndex(contact => contact.name === activeContact) + 1}`} size="large" />
+          <div style={{ marginLeft: '16px' }}>
+            <Title level={4}>{activeContact}</Title>
+            <Text type="secondary">{contacts.find(contact => contact.name === activeContact)?.online ? 'ONLINE' : 'OFFLINE'}</Text>
+          </div>
+        </div>
+        <div style={{ flex: 1, overflowY: 'auto', marginBottom: '16px' }}>
+          {messages[activeContact]?.map((message, index) => (
+            <div key={index} style={{ marginBottom: '16px' }}>
+              <div style={{ backgroundColor: '#f5f5f5', padding: '8px', borderRadius: '4px' }}>{message.text}</div>
+              <div style={{ fontSize: '12px', color: '#8c8c8c', marginTop: '4px' }}>{message.timestamp}</div>
             </div>
           ))}
         </div>
-
-        {/* Chat Box */}
-        <div className="w-3/4 flex flex-col p-4">
-          <div className="flex items-center mb-4">
-            <img src={`https://i.pravatar.cc/40?img=${contacts.findIndex(contact => contact.name === activeContact) + 1}`} alt={activeContact} className="w-10 h-10 rounded-full mr-3" />
-            <div>
-              <div className="font-semibold">{activeContact}</div>
-              <div className="text-xs text-green-500">{contacts.find(contact => contact.name === activeContact)?.online ? 'ONLINE' : 'OFFLINE'}</div>
-            </div>
-          </div>
-          <div className="flex-grow overflow-y-auto mb-4">
-            {messages[activeContact]?.map((message, index) => (
-              <div key={index} className="mb-4">
-                <div className="bg-violet-300 p-3 rounded-lg">{message.text}</div>
-                <div className="text-xs text-gray-500 mt-1">{message.timestamp}</div>
-              </div>
-            ))}
-          </div>
-          <div className="flex">
-            <input
-              type="text"
-              placeholder="Write a message..."
-              className="flex-grow p-2 border border-gray-300 rounded-l-lg"
-            />
-            <button className="bg-[#9997F5] hover:bg-[#8886E5] text-white p-2 rounded-r-lg">
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-              </svg>
-            </button>
-          </div>
+        <div style={{ display: 'flex' }}>
+          <Input placeholder="Write a message..." style={{ flexGrow: 1, marginRight: '8px' }} />
+          <Button type="primary" icon={<SendOutlined />} />
         </div>
       </div>
-    </MainLayout>
+    </div>
   );
 };
 
