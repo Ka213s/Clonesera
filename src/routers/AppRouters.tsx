@@ -55,6 +55,7 @@ import CertificationTestResult from '../page/CertificationTestResult';
 import CourseDetailPage from '../page/CourseDetailPage';
 import HelpPage from '../page/HelpPage';
 import ProtectedRoute from './ProtectedRoute';
+import PurchasedCourseDetail from '../page/Student/PurchasedCourseDetail';
 
 const AppRouters: React.FC = () => {
   return (
@@ -101,6 +102,7 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/student/messages" element={<ProtectedRoute allowedRoles={[2]}><Messages /></ProtectedRoute>} />
       <Route path="/student/statements" element={<ProtectedRoute allowedRoles={[2]}><Statements /></ProtectedRoute>} />
       <Route path="/feedback" element={<ProtectedRoute allowedRoles={[2]}><SendFeedback /></ProtectedRoute>} />
+      <Route path="/student/purchasedCourse/:courseId" element={<ProtectedRoute allowedRoles={[2]}><PurchasedCourseDetail /></ProtectedRoute>} />
       <Route path="/student/enrollCourse" element={<ProtectedRoute allowedRoles={[2]}><EnrollCourse /></ProtectedRoute>} />
 
       {/* Instructor Routes */}
