@@ -1,29 +1,19 @@
 {
-    "certificates": [
-      {
-        "itemNo": 1,
-        "title": "WordPress Certificate",
-        "marks": 15,
-        "outOf": 20,
-        "uploadDate": "6 April 2019",
-        "certificate": "path_to_certificate.pdf"
-      },
-      {
-        "itemNo": 2,
-        "title": "WordPress Pro Certificate",
-        "marks": 14,
-        "outOf": 20,
-        "uploadDate": "4 April 2019",
-        "certificate": "path_to_certificate.pdf"
-      },
-      {
-        "itemNo": 3,
-        "title": "HTML CSS Certificate",
-        "marks": 18,
-        "outOf": 20,
-        "uploadDate": "3 April 2019",
-        "certificate": "path_to_certificate.pdf"
-      }
-    ]
-  }
-  
+  "certificates": [
+    {
+      "itemNo": 1,
+      "title": "Promote the Ethical Use of Data-Driven Technologies",
+      "certificate": "https://www.coursera.org/account/accomplishments/certificate/DWKB2TRHZ596"
+    },
+    {
+      "itemNo": 2,
+      "title": "Software Development Processes and Methodologies",
+      "certificate": "https://www.coursera.org/account/accomplishments/certificate/TRSARAUEUAT6"
+    },
+    {
+      "itemNo": 3,
+      "title": "Engineering Practices for Building Quality Software",
+      "certificate": "https://www.coursera.org/account/accomplishments/certificate/GL3Y676TZ626"
+    }
+  ]
+}
