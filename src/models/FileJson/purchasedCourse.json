@@ -1,22 +1,22 @@
 {
-    "courses": [
-      {
-        "itemNo": "001",
-        "title": "Course Title Here",
-        "vendor": "Zoena Singh",
-        "category": "Web Development",
-        "deliveryType": "Download",
-        "price": "$15",
-        "purchaseDate": "25 March 2020"
-      },
-      {
-        "itemNo": "002",
-        "title": "Course Title Here",
-        "vendor": "Rock William",
-        "category": "C++",
-        "deliveryType": "Download",
-        "price": "$20",
-        "purchaseDate": "20 March 2020"
-      }
+  "courses": [
+    {
+      "id": "python-course",
+      "title": "Learn Python",
+      "vendor": "John Doe",
+      "category": "Programming",
+      "price": "$29.99",
+      "purchaseDate": "2024-01-01",
+      "imageUrl": "https://images.pexels.com/photos/11035474/pexels-photo-11035474.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    },
+    {
+      "id": "javascript-course",
+      "title": "Master JavaScript",
+      "vendor": "Jane Smith",
+      "category": "Web Development",
+      "price": "$39.99",
+      "purchaseDate": "2024-01-15",
+      "imageUrl": "https://images.pexels.com/photos/11035481/pexels-photo-11035481.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+    }
     ]
 }

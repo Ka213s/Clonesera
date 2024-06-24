@@ -1,66 +1,56 @@
 import React from 'react';
-import purchasedCourseData from '../../models/FileJson/purchasedCourse.json';
-import { FaTrash, FaPrint, FaDownload } from 'react-icons/fa';
-
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import coursesData from '../../models/FileJson/courses.json'; // Import courses data
 
 interface Course {
-  itemNo: string;
-  title: string;
-  vendor: string;
-  category: string;
-  deliveryType: string;
-  price: string;
-  purchaseDate: string;
+  id: string;
+  name: string;
+  author: string;
+  price: number;
+  date: string;
+  vid: string;
 }
 
 const PurchasedCourses: React.FC = () => {
   return (
-   
-      <div className="flex-grow flex flex-col p-6 bg-gray-100 h-screen">
-        <h1 className="text-2xl font-bold text-gray-700 mb-4">Purchased Courses</h1>
-        <div className="bg-white p-6 rounded-lg shadow-md overflow-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-100 text-gray-700">
-              <tr>
-                <th className="px-4 py-2 border-b-2 border-gray-200 text-left">Item No.</th>
-                <th className="px-4 py-2 border-b-2 border-gray-200 text-left">Title</th>
-                <th className="px-4 py-2 border-b-2 border-gray-200 text-left">Vendor</th>
-                <th className="px-4 py-2 border-b-2 border-gray-200 text-left">Category</th>
-                <th className="px-4 py-2 border-b-2 border-gray-200 text-left">Delivery Type</th>
-                <th className="px-4 py-2 border-b-2 border-gray-200 text-left">Price</th>
-                <th className="px-4 py-2 border-b-2 border-gray-200 text-left">Purchase Date</th>
-                <th className="px-4 py-2 border-b-2 border-gray-200 text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="text-gray-600">
-              {purchasedCourseData.courses.map((course: Course, index: number) => (
-                <tr key={index} className="odd:bg-gray-50 even:bg-white border-b">
-                  <td className="px-4 py-2 text-left">{course.itemNo}</td>
-                  <td className="px-4 py-2 text-left">
-                    <a
-                      href={`/student/enrollCourse`}
-                      className="text-blue-500 hover:text-blue-700"
-                    >
-                      {course.title}
-                    </a>
-                  </td>
-                  <td className="px-4 py-2 text-left">{course.vendor}</td>
-                  <td className="px-4 py-2 text-left text-blue-500">{course.category}</td>
-                  <td className="px-4 py-2 text-left text-red-500">{course.deliveryType}</td>
-                  <td className="px-4 py-2 text-left">{course.price}</td>
-                  <td className="px-4 py-2 text-left">{course.purchaseDate}</td>
-                  <td className="px-4 py-2 text-center flex justify-around">
-                    <FaDownload className="text-xl text-blue-500 cursor-pointer hover:text-blue-700" />
-                    <FaTrash className="text-xl text-red-500 cursor-pointer hover:text-red-700" />
-                    <FaPrint className="text-xl text-gray-500 cursor-pointer hover:text-gray-700" />
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+    <div className="flex-grow flex flex-col p-6 bg-gray-100 h-screen">
+      <h1 className="text-2xl font-bold text-gray-700 mb-4">Purchased Courses</h1>
+      <div className="space-y-4">
+        {coursesData.courses.map((course: Course, index: number) => (
+          <div
+            key={index}
+            className="bg-white p-6 rounded-lg shadow-md flex flex-col sm:flex-row w-full"
+          >
+            <Link
+              to={`/student/purchasedCourse/${course.id}`} 
+              className="w-full sm:w-48 h-40 object-cover rounded-md mb-4 sm:mb-0 sm:mr-4"
+            >
+              <img
+                src={course.vid} // Assuming vid contains the path to the image
+                alt={course.name}
+                className="w-full h-full object-cover rounded-md"
+              />
+            </Link>
+            <div className="flex flex-col justify-between flex-grow">
+              <div className="text-left">
+                <h2 className="text-lg font-bold text-blue-500">
+                  <Link
+                    to={`/student/purchasedCourse/${course.id}`} 
+                    className="hover:text-blue-700"
+                  >
+                    {course.name}
+                  </Link>
+                </h2>
+                <p className="text-gray-600">Author: {course.author}</p>
+                {/* Additional course details */}
+                <p className="text-gray-600">Purchased Date: {course.date}</p>
+              </div>
+              <p className="text-gray-600 mt-4">Price: ${course.price.toFixed(2)}</p>
+            </div>
+          </div>
+        ))}
       </div>
-   
+    </div>
   );
 };
 
