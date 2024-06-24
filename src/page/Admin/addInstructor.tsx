@@ -8,7 +8,7 @@ const { Option } = Select;
 const AddInstructor: React.FC = () => {
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <h2 className="text-3xl font-bold mb-8 text-center">Add Professor</h2>
+      <h2 className="text-3xl font-bold mb-8 text-center">Add Instructor</h2>
       <Form layout="vertical" className="bg-white p-10 rounded-lg shadow-lg">
         <div className="grid grid-cols-2 gap-6">
           <Form.Item label="First Name" className="col-span-1">

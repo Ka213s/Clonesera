@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, DatePicker, Select, Upload } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import data from '../../models/FileJson/allInstructor.json';
 import 'tailwindcss/tailwind.css';
+import moment from 'moment';
 
 const { Option } = Select;
 
 const EditInstructor: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [instructor, setInstructor] = useState<any>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const instructorData = data.find((item) => item.id === id);
-    if (instructorData) {
-      // Convert date strings to Date objects
- 
-    }
     setInstructor(instructorData);
   }, [id]);
 
@@ -29,13 +27,25 @@ const EditInstructor: React.FC = () => {
     // Process the form values here
   };
 
+  const handleBack = () => {
+    navigate(-1); // Navigate back to the previous page
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 p-8">
-      <h2 className="text-3xl font-bold mb-8 text-center">Edit Professor</h2>
+      <div className="flex justify-between items-center mb-8">
+        <h2 className="text-3xl font-bold text-center">Edit Professor</h2>
+        <Button type="default" onClick={handleBack} className="bg-gray-500 text-white border-none text-lg px-6 py-2">
+          Back
+        </Button>
+      </div>
       <Form
         layout="vertical"
         className="bg-white p-10 rounded-lg shadow-lg"
-        initialValues={instructor}
+        initialValues={{
+          ...instructor,
+          joiningDate: instructor.joiningDate ? moment(instructor.joiningDate) : null,
+        }}
         onFinish={handleFinish}
       >
         <div className="grid grid-cols-2 gap-6">

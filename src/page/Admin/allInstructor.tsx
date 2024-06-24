@@ -14,7 +14,7 @@ interface Instructor {
   gender: string;
   mobile: string;
   email: string;
-  joiningDate: string;
+  joiningDate: string; // Use string to match the data type in JSON
 }
 
 const AllInstructor: React.FC = () => {
