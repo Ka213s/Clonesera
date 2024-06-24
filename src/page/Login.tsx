@@ -7,21 +7,14 @@ import ApiService, { UserData } from '../services/ApiService';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import Artwork from '../assets/Artwork.jpg';
 import { LoginData } from '../models/LoginData';
-import Lottie from 'react-lottie';
-import animationData from '../assets/Animation - 1719199926629.json';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
-
-if (!process.env.REACT_APP_GOOGLE_CLIENT_ID) {
-  throw new Error('REACT_APP_GOOGLE_CLIENT_ID is not defined');
-}
-
-const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID as string;
+// Ensure the clientId is never undefined
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 
 const Login: React.FC = () => {
   const [loginData, setLoginData] = useState<LoginData>(new LoginData("", ""));
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -51,14 +44,15 @@ const Login: React.FC = () => {
         !account.isGoogle
       );
 
-      if (!account) {
-        return;
+      if (account) {
+        localStorage.setItem('userData', JSON.stringify(account));
+        navigate('/home');
+      } else {
+        toast.error('Invalid email or password');
       }
-
-      localStorage.setItem('userData', JSON.stringify(account));
-      navigate('/home');
     } catch (error) {
       console.error('Error logging in:', error);
+      toast.error('Error logging in');
     } finally {
       setIsButtonDisabled(false);
     }
@@ -67,9 +61,11 @@ const Login: React.FC = () => {
   const handleRegisterClick = (): void => {
     navigate('/register');
   };
+
   const handleForgotPasswordClick = (): void => {
     navigate('/forgot-password');
   };
+
   const handleGoogleLoginSuccess = async (response: any) => {
     const token = response.credential;
     console.log('idToken:', token); // Log the response
@@ -132,20 +128,11 @@ const Login: React.FC = () => {
     toast.error('Error logging in with Google');
     console.error('Error logging in with Google');
   };
-  const lottieOptions = {
-    loop: true,
-    autoplay: true,
-    animationData: animationData,
-    rendererSettings: {
-      preserveAspectRatio: 'xMidYMid slice'
-    }
-  };
 
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="loader"></div>{" "}
-        {/* You can replace this with any spinner component */}
+        <div className="loader"></div> {/* Replace with any spinner component */}
       </div>
     );
   }
@@ -155,19 +142,9 @@ const Login: React.FC = () => {
       <div className="bg-gray-50 min-h-screen flex items-center justify-center">
         <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-5xl p-5 items-center">
           <div className='md:w-1/2 px-16'>
-            <div className="flex items-center">
-              <div>
-                <h2 className="font-bold text-3xl text-[#6C6EDD]">Logins</h2>
-                <p className='text-base mt-2 text-[#4A4DC3]'>If you already a member, easily log in</p>
-              </div>
-              <div className="md:block hidden ml-6">
-                <Lottie
-                  options={lottieOptions}
-                  height={150}
-                  width={150}
-                />
-              </div>
-            </div>
+            <h2 className="font-bold text-3xl text-[#6C6EDD]">Login</h2>
+            <p className='text-base mt-2 text-[#4A4DC3]'>If you already a member, easily log in</p>
+
             <Form
               name="login"
               initialValues={{ email: loginData.email, password: loginData.password }}
@@ -176,7 +153,10 @@ const Login: React.FC = () => {
             >
               <Form.Item
                 name="email"
-                rules={[{ required: true, message: 'Please input your email!' }, { type: "email", message: 'Format invalid email!' }]}
+                rules={[
+                  { required: true, message: 'Please input your email!' },
+                  { type: "email", message: 'Format invalid email!' }
+                ]}
               >
                 <Input
                   type="text"
@@ -191,7 +171,6 @@ const Login: React.FC = () => {
                 rules={[{ required: true, message: 'Please input your password!' }]}
               >
                 <Input.Password
-                  type={showPassword ? "text" : "password"}
                   placeholder='Password'
                   value={loginData.password}
                   onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
@@ -243,10 +222,11 @@ const Login: React.FC = () => {
             </div>
           </div>
           <div className="md:block hidden w-1/2">
-            <img className="rounded-2xl" src={Artwork} alt="" />
+            <img className="rounded-2xl" src={Artwork} alt="Artwork" />
           </div>
           <ToastContainer />
-        </div></div>
+        </div>
+      </div>
     </GoogleOAuthProvider>
   );
 };
