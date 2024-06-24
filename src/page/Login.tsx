@@ -11,7 +11,7 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 // Ensure the clientId is never undefined
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
-console.log('clientId:', clientId);
+
 const Login: React.FC = () => {
   const [loginData, setLoginData] = useState<LoginData>(new LoginData("", ""));
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -68,19 +68,10 @@ const Login: React.FC = () => {
 
   const handleGoogleLoginSuccess = async (response: any) => {
     const token = response.credential;
-    console.log('idToken:', token); // Log the response
     try {
-      console.log('Google login successful, response:', response); // Log the response
-
-      // Save the IdToken to local storage
-      localStorage.setItem('idToken', token);
-
-      // Replace the following API call with the actual one that verifies the token and fetches the user data.
       const userProfile = await ApiService.verifyGoogleToken(token);
-
       if (userProfile) {
         const { email, name, picture } = userProfile;
-
         const existingUser = await ApiService.getUserByEmail(email);
         if (existingUser && existingUser.length > 0) {
           if (!existingUser[0].isGoogle) {
@@ -89,7 +80,7 @@ const Login: React.FC = () => {
           }
           toast.success('Login successful');
           localStorage.setItem('userData', JSON.stringify(existingUser[0]));
-          navigate('/home'); // Redirect all users to /home
+          navigate('/home');
           return;
         }
 
@@ -108,18 +99,11 @@ const Login: React.FC = () => {
           isGoogle: true,
         };
 
-        try {
-          await ApiService.saveGoogleUserData(userData);
-          toast.success("User logged in successfully!");
-          localStorage.setItem('userData', JSON.stringify(userData));
-          navigate('/home'); // Redirect all users to /home
-        } catch (error) {
-          toast.error('Error saving user data to API');
-          console.error('Error saving user data to API:', error);
-        }
+        await ApiService.saveGoogleUserData(userData);
+        localStorage.setItem('userData', JSON.stringify(userData));
+        navigate('/home');
       }
     } catch (error) {
-      toast.error('Error logging in with Google');
       console.error('Error logging in with Google:', error);
     }
   };
