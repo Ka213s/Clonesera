@@ -11,7 +11,7 @@ import Lottie from 'react-lottie';
 import animationData from '../assets/Animation - 1719199926629.json';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
-// Ensure the clientId is defined
+
 if (!process.env.REACT_APP_GOOGLE_CLIENT_ID) {
   throw new Error('REACT_APP_GOOGLE_CLIENT_ID is not defined');
 }
@@ -157,7 +157,7 @@ const Login: React.FC = () => {
           <div className='md:w-1/2 px-16'>
             <div className="flex items-center">
               <div>
-                <h2 className="font-bold text-3xl text-[#6C6EDD]">Login</h2>
+                <h2 className="font-bold text-3xl text-[#6C6EDD]">Logins</h2>
                 <p className='text-base mt-2 text-[#4A4DC3]'>If you already a member, easily log in</p>
               </div>
               <div className="md:block hidden ml-6">
