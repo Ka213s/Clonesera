@@ -104,7 +104,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       <Search
         placeholder="Search..."
         onSearch={(value) => console.log(value)}
-        style={{ width: 220 }}
+        style={{ width: 350 }}
         className="mx-4"
       />
 
