@@ -35,27 +35,28 @@ const Login: React.FC = () => {
     setIsButtonDisabled(true);
 
     try {
-      const response = await ApiService.login(values);
-      const account = response.find((account: UserData) =>
-        account.email === values.email &&
-        account.password === values.password &&
-        account.status === true &&
-        !account.isGoogle
-      );
-      if (account) {
-        toast.success('Login successful');
+        const response = await ApiService.login(values);
+
+        const account = response.find((account: UserData) =>
+            account.email === values.email &&
+            account.password === values.password &&
+            account.status === true &&
+            !account.isGoogle
+        );
+
+        if (!account) {
+            return; 
+        }
+
         localStorage.setItem('userData', JSON.stringify(account));
-        navigate('/home'); // Redirect all users to /home
-      } else {
-        toast.error('Invalid email or password, or account is inactive');
-      }
+        navigate('/home');
     } catch (error) {
-      toast.error('Error logging in');
-      console.error('Error logging in:', error);
+        console.error('Error logging in:', error);
     } finally {
-      setIsButtonDisabled(false);
+        setIsButtonDisabled(false);
     }
-  };
+};
+
 
   const handleRegisterClick = (): void => {
     navigate('/register');

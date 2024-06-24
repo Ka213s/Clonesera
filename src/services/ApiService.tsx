@@ -3,22 +3,20 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const BASE_URL = 'https://665fbf915425580055b0b389.mockapi.io/GR3_Account';
+const BASE_URL_COURSE = 'https://665fbf915425580055b0b389.mockapi.io/GR3_Crouse';
 
-const BASE_URL_COURSE =
-    "https://665fbf915425580055b0b389.mockapi.io/GR3_Crouse";
-
-    export interface CourseData {
-        id: string;
-        title: string;
-        shortDescription: string;
-        description: string;
-        skillCourse: string;
-        price: string;
-        requirements: string;
-        Account_Id: string;
-        status: boolean;
-        certificateUrl?: string; // Add this optional property
-      }
+export interface CourseData {
+    id: string;
+    title: string;
+    shortDescription: string;
+    description: string;
+    skillCourse: string;
+    price: string;
+    requirements: string;
+    Account_Id: string;
+    status: boolean;
+    certificateUrl?: string; // Add this optional property
+}
 
 export interface UserData {
     fullName: string;
@@ -40,6 +38,7 @@ export interface Category {
     name: string;
     description: string;
 }
+
 export interface AccountData {
     id: string;
     fullName: string;
@@ -60,109 +59,129 @@ class ApiService {
     static async saveGoogleUserData(userData: UserData) {
         try {
             await axios.post(BASE_URL, userData);
+            toast.success('User data saved successfully');
         } catch (error) {
+            toast.error('Error saving user data');
             console.error('Error saving user data to API', error);
             return null;
         }
     }
+
     static async forgotPassword(email: string) {
         try {
             // Simulating an API call to send a password reset email
             console.log(`Sending password reset email to ${email}`);
             // Simulate network delay
             await new Promise(resolve => setTimeout(resolve, 1000));
+            toast.success('Password reset email sent successfully');
             return { success: true };
         } catch (error) {
+            toast.error('Error sending password reset email');
             console.error('Error sending password reset email', error);
             return { success: false };
         }
     }
+
     static async verifyGoogleToken(token: string) {
         try {
             const response = await axios.post('https://your-backend-endpoint.com/api/verifyGoogleToken', { token });
+            toast.success('Google token verified successfully');
             return response.data;
         } catch (error) {
+            toast.error('Error verifying Google token');
             console.error('Error verifying Google token:', error);
             throw error;
         }
     }
+
     static async getUserByEmail(email: string) {
         try {
             const response = await axios.get(`${BASE_URL}?email=${email}`);
             return response.data;
         } catch (error) {
+            toast.error('Error fetching user by email');
             console.error('Error fetching user by email:', error);
             return null;
         }
     }
-    
+
     static async getAccounts(role: string) {
         try {
             const response = await axios.get(`${BASE_URL}?roleId=${role}`);
             return response.data;
         } catch (error) {
+            toast.error('Error fetching account data');
             console.error('Error fetching account data:', error);
             return null;
         }
     }
-    
+
     static async registerAccount(data: any) {
         try {
             const response = await axios.post(BASE_URL, data);
+            toast.success('Account registered successfully');
             return response.data;
         } catch (error) {
+            toast.error('Error registering account');
             console.error('Error registering account:', error);
             return null;
         }
     }
-    
+
     static async login(data: { email: string; password: string }) {
         try {
             const response = await axios.get(`${BASE_URL}?email=${data.email}&password=${data.password}`);
+            toast.success('Login successful');
             return response.data;
         } catch (error) {
+            toast.error('Invalid email or password, or account is inactive');
             console.error('Error logging in:', error);
             return null;
         }
     }
     
+
     static async getAccountById(roleId: string) {
         try {
             const response = await axios.get(`${BASE_URL}/${roleId}`);
             return response.data;
         } catch (error) {
+            toast.error('Error fetching account data');
             console.error('Error fetching account data:', error);
             return null;
         }
     }
-    
+
     static async updateAccount(id: string, data: any) {
         try {
             const response = await axios.put(`${BASE_URL}/${id}`, data);
             toast.success('Profile updated successfully');
             return response.data;
         } catch (error) {
+            toast.error('Error updating account');
             console.error('Error updating account:', error);
             return null;
         }
     }
-    
+
     static async changePassword(id: string, email: string, currentPassword: string, newPassword: string) {
         try {
-          const response = await axios.put(`${BASE_URL}/${id}/changePassword`, { email, currentPassword, newPassword });
-          return response.data;
+            const response = await axios.put(`${BASE_URL}/${id}/changePassword`, { email, currentPassword, newPassword });
+            toast.success('Password changed successfully');
+            return response.data;
         } catch (error) {
-          console.error('Error changing password:', error);
-          return null;
+            toast.error('Error changing password');
+            console.error('Error changing password:', error);
+            return null;
         }
-      }
-    
+    }
 
     static async getAccountsByRole(roleId: number) {
         try {
             const response = await axios.get(`${BASE_URL}/${roleId}`);
             return response.data;
         } catch (error) {
+            toast.error('Error fetching account data');
             console.error("Error fetching account data:", error);
             return null;
         }
@@ -170,84 +189,93 @@ class ApiService {
 
     static async updateAccountStatus(id: number, currentStatus: boolean) {
         try {
-            const response = await axios.put(`${BASE_URL}/${id}`,
-                {
-                    status: !currentStatus,
-                }
-            );
+            const response = await axios.put(`${BASE_URL}/${id}`, {
+                status: !currentStatus,
+            });
+            toast.success('Account status updated successfully');
             return response.data;
         } catch (error) {
-            console.error("Error updating account status:", error);
-            return null;
+            toast.error('Error updating account status');
             console.error("Error updating account status:", error);
             return null;
         }
     }
+
     static async getAccountByUserId(id: string) {
         try {
-          const response = await axios.get(`${BASE_URL}/${id}`);
-          return response.data;
+            const response = await axios.get(`${BASE_URL}/${id}`);
+            return response.data;
         } catch (error) {
-          console.error("Error fetching account data:", error);
-          return null;
+            toast.error('Error fetching account data');
+            console.error("Error fetching account data:", error);
+            return null;
         }
-      }
-    
-      static async getCourses(): Promise<CourseData[]> {
+    }
+
+    static async getCourses(): Promise<CourseData[]> {
         try {
-          const response = await axios.get<CourseData[]>(BASE_URL_COURSE);
-          return response.data;
+            const response = await axios.get<CourseData[]>(BASE_URL_COURSE);
+            return response.data;
         } catch (error) {
-          console.error("Error fetching courses:", error);
-          throw error;
+            toast.error('Error fetching courses');
+            console.error("Error fetching courses:", error);
+            throw error;
         }
-      }
-    
-      static async updateCourseById(
+    }
+
+    static async updateCourseById(
         id: string,
         courseData: Partial<CourseData>
-      ): Promise<CourseData> {
+    ): Promise<CourseData> {
         try {
-          const response = await axios.put(`${BASE_URL_COURSE}/${id}`, courseData);
-          return response.data;
+            const response = await axios.put(`${BASE_URL_COURSE}/${id}`, courseData);
+            toast.success('Course updated successfully');
+            return response.data;
         } catch (error) {
-          console.error("Error updating course:", error);
-          throw error;
+            toast.error('Error updating course');
+            console.error("Error updating course:", error);
+            throw error;
         }
-      }
-    
-      static async updateCourseStatusById(
+    }
+
+    static async updateCourseStatusById(
         id: string,
         status: boolean
-      ): Promise<CourseData> {
+    ): Promise<CourseData> {
         try {
-          const response = await axios.put(`${BASE_URL_COURSE}/${id}`, { status });
-          return response.data;
+            const response = await axios.put(`${BASE_URL_COURSE}/${id}`, { status });
+            toast.success('Course status updated successfully');
+            return response.data;
         } catch (error) {
-          console.error("Error updating course status:", error);
-          throw error;
+            toast.error('Error updating course status');
+            console.error("Error updating course status:", error);
+            throw error;
         }
-      }
-    
-      static async deleteCourse(id: string): Promise<void> {
+    }
+
+    static async deleteCourse(id: string): Promise<void> {
         try {
-          const response = await axios.delete(`${BASE_URL_COURSE}/${id}`);
-          return response.data;
+            const response = await axios.delete(`${BASE_URL_COURSE}/${id}`);
+            toast.success('Course deleted successfully');
+            return response.data;
         } catch (error) {
-          console.error("Error deleting course:", error);
-          throw error;
+            toast.error('Error deleting course');
+            console.error("Error deleting course:", error);
+            throw error;
         }
-      }
-    
-      static async softDeleteCourse(id: string): Promise<CourseData> {
+    }
+
+    static async softDeleteCourse(id: string): Promise<CourseData> {
         try {
-          const response = await axios.put(`${BASE_URL}/${id}`, { status: false });
-          return response.data;
+            const response = await axios.put(`${BASE_URL}/${id}`, { status: false });
+            toast.success('Course soft deleted successfully');
+            return response.data;
         } catch (error) {
-          console.error("Error soft deleting course:", error);
-          throw error;
+            toast.error('Error soft deleting course');
+            console.error("Error soft deleting course:", error);
+            throw error;
         }
-      }
+    }
 
     // Category Management Methods
     static async getCategories(searchQuery = '') {
@@ -255,6 +283,7 @@ class ApiService {
             const response = await axios.get(`${BASE_URL}?q=${searchQuery}`);
             return response.data;
         } catch (error) {
+            toast.error('Error fetching categories');
             console.error('Error fetching categories:', error);
             return [];
         }
@@ -263,8 +292,10 @@ class ApiService {
     static async addCategory(category: Category) {
         try {
             const response = await axios.post(BASE_URL, category);
+            toast.success('Category added successfully');
             return response.data;
         } catch (error) {
+            toast.error('Error adding category');
             console.error('Error adding category:', error);
             return null;
         }
@@ -273,8 +304,10 @@ class ApiService {
     static async updateCategory(id: number, category: Category) {
         try {
             const response = await axios.put(`${BASE_URL}/${id}`, category);
+            toast.success('Category updated successfully');
             return response.data;
         } catch (error) {
+            toast.error('Error updating category');
             console.error('Error updating category:', error);
             return null;
         }
@@ -283,8 +316,10 @@ class ApiService {
     static async deleteCategory(id: number) {
         try {
             const response = await axios.delete(`${BASE_URL}/${id}`);
+            toast.success('Category deleted successfully');
             return response.data;
         } catch (error) {
+            toast.error('Error deleting category');
             console.error('Error deleting category:', error);
             return null;
         }
