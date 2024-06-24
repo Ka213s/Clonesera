@@ -1,16 +1,17 @@
 {
   "insSidebarItem": [
-    { "text": "Dashboard", "icon": "HomeOutlined", "url": "/instructor_dashboard" },
-    { "text": "Courses", "icon": "BookOutlined", "url": "/instructor_courses" },
-    { "text": "Analysis", "icon": "LineChartOutlined", "url": "/instructor_analysis" },
-    { "text": "Messages", "icon": "MessageOutlined", "url": "/instructor_messages" },
-    { "text": "Notifications", "icon": "BellOutlined", "url": "/instructor_notifications" },
-    { "text": "My Certificates", "icon": "SafetyCertificateOutlined", "url": "/instructor_my_certificates" },
-    { "text": "Reviews", "icon": "StarOutlined", "url": "/instructor_reviews" },
-    { "text": "Earning", "icon": "DollarOutlined", "url": "/instructor_earning" },
-    { "text": "Payout", "icon": "WalletOutlined", "url": "/instructor_payout" },
-    { "text": "Statements", "icon": "FileTextOutlined", "url": "/instructor_statements" },
-    { "text": "Verification", "icon": "CheckOutlined", "url": "/instructor_verification" },
+    { "text": "Dashboard", "icon": "HomeOutlined", "url": "/instructor/dashboard" },
+    { "text": "Courses", "icon": "BookOutlined", "url": "/instructor/courses" },
+    { "text": "My Lesson", "icon": "BookOutlined", "url": "/instructor/myLesson" },
+    { "text": "Analysis", "icon": "LineChartOutlined", "url": "/instructor/analysis" },
+    { "text": "Messages", "icon": "MessageOutlined", "url": "/instructor/messages" },
+    { "text": "Notifications", "icon": "BellOutlined", "url": "/instructor/notifications" },
+    { "text": "My Certificates", "icon": "SafetyCertificateOutlined", "url": "/instructor/myCertificates" },
+    { "text": "Reviews", "icon": "StarOutlined", "url": "/instructor/reviews" },
+    { "text": "Earning", "icon": "DollarOutlined", "url": "/instructor/earning" },
+    { "text": "Payout", "icon": "WalletOutlined", "url": "/instructor/payout" },
+    { "text": "Statements", "icon": "FileTextOutlined", "url": "/instructor/statements" },
+    { "text": "Verification", "icon": "CheckOutlined", "url": "/instructor/verification" },
     { "text": "Setting", "icon": "SettingOutlined", "url": "/settings" },
     { "text": "Send Feedback", "icon": "SendOutlined", "url": "/feedback" }
   ]

@@ -25,13 +25,13 @@ const Section: React.FC<SectionProps> = ({ sectionId, sectionName, formData, set
         <button 
           type="button" 
           onClick={toggleLecturePopup} 
-          className="px-4 py-2 text-white bg-blue-500 rounded-md hover:bg-blue-600 mr-2">
+          className="px-4 py-2 text-white bg-[#9997F5] rounded-md  hover:bg-[#8886E5] mr-2">
           Lecture
         </button>
         <button 
           type="button" 
           onClick={toggleQuizPopup} 
-          className="px-4 py-2 text-white bg-yellow-500 rounded-md hover:bg-yellow-600 mr-2">
+          className="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600 mr-2">
           Quiz
         </button>
       </div>

@@ -1,65 +1,100 @@
 {
-  "menuItems": [
+  "sidebarMenuItems": [
     {
       "key": "user",
       "icon": "UserOutlined",
       "label": "User",
-      "children": [
-        { "key": "/admin/user", "label": "User" },
-        { "key": "/admin/group", "label": "Group" },
-        { "key": "/admin/permission", "label": "Permission" }
-      ]
+      "url": "/admin/user"
+    },
+    {
+      "key": "group",
+      "icon": "TeamOutlined",
+      "label": "Group",
+      "url": "/admin/group"
+    },
+    {
+      "key": "permission",
+      "icon": "SettingOutlined",
+      "label": "Permission",
+      "url": "/admin/permission"
     },
     {
       "key": "dashboard",
       "icon": "DashboardOutlined",
       "label": "Dashboard",
-      "children": [
-        { "key": "/admin/dashboard", "label": "Dashboard" },
-        { "key": "/admin/activity", "label": "Activity" },
-        { "key": "/admin/profile", "label": "Profile" }
-      ]
+      "url": "/admin/dashboard"
     },
     {
-      "key": "Categories",
-      "icon": "CategorydOutlined",
+      "key": "activity",
+      "icon": "FileTextOutlined",
+      "label": "Activity",
+      "url": "/admin/activity"
+    },
+    {
+      "key": "profile",
+      "icon": "ProfileOutlined",
+      "label": "Profile",
+      "url": "/admin/profile"
+    },
+    {
+      "key": "categories",
+      "icon": "CarOutlined",
       "label": "Categories",
-      "children": [
-        { "key": "/admin/category-management", "label": "Categories" }
-      ]
+      "url": "/admin/category-management"
     },
     {
       "key": "courses",
       "icon": "BookOutlined",
       "label": "Courses",
-      "children": [
-        { "key": "/admin/courses", "label": "Courses" },
-        { "key": "/admin/pending_courses", "label": "Pending Courses" },
-        { "key": "/admin/reviews", "label": "Reviews" }
-      ]
+      "url": "/admin/courses"
     },
     {
-      "key": "instructor",
+      "key": "pending_courses",
+      "icon": "SettingOutlined",
+      "label": "Pending Courses",
+      "url": "/admin/pending_courses"
+    },
+    {
+      "key": "reviews",
+      "icon": "MessageOutlined",
+      "label": "Reviews",
+      "url": "/admin/reviews"
+    },
+    {
+      "key": "instructor_dashboard",
       "icon": "TeamOutlined",
-      "label": "Instructor",
-      "children": [
-        { "key": "/admin/instructor/dashboard", "label": "Dashboard" },
-        { "key": "/admin/instructor/my_courses", "label": "My Courses" },
-        { "key": "/admin/instructor/add_new_courses", "label": "Add New Courses" },
-        { "key": "/admin/instructor/course_status", "label": "Course Status" },
-        { "key": "/admin/instructor/students", "label": "Students" },
-        { "key": "/admin/instructor/review", "label": "Review" },
-        { "key": "/admin/instructor/my_account", "label": "My Account" }
-      ]
+      "label": "Instructor Dashboard",
+      "url": "/admin/instructor/dashboard"
+    },
+    {
+      "key": "my_courses",
+      "icon": "BookOutlined",
+      "label": "My Courses",
+      "url": "/admin/instructor/my_courses"
+    },
+    {
+      "key": "add_new_courses",
+      "icon": "FileTextOutlined",
+      "label": "Add New Courses",
+      "url": "/admin/instructor/add_new_courses"
+    },
+    {
+      "key": "course_status",
+      "icon": "FileTextOutlined",
+      "label": "Course Status",
+      "url": "/admin/instructor/course_status"
     },
     {
       "key": "students",
       "icon": "UsergroupAddOutlined",
       "label": "Students",
-      "children": [
-        { "key": "/admin/students/list", "label": "Student List" },
-        { "key": "/admin/students/profile", "label": "Student Profile" }
-      ]
+      "url": "/admin/students/list"
+    },
+    {
+      "key": "student_profile",
+      "icon": "ProfileOutlined",
+      "label": "Student Profile",
+      "url": "/admin/students/profile"
     }
   ]
 }

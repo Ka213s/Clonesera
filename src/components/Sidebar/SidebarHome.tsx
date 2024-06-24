@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   HomeOutlined,
   VideoCameraOutlined,
@@ -77,10 +77,10 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
         {sidebarMenuItemsData.menuItems.map((item: MenuItem, index: number) => (
           <React.Fragment key={index}>
             <li
-              className={`group flex items-center p-4 cursor-pointer ${location.pathname === item.url ? 'bg-[#8886e5d5]' : 'hover:bg-[#9997F5] hover:text-white'}`}
+              className={`group flex items-center p-4 cursor-pointer ${location.pathname === item.url ? 'bg-[#9997F5] text-white' : 'hover:bg-[#9997F5] hover:text-white'}`}
               onClick={() => handleNavigation(item.url)}
             >
-              <span className="flex items-center space-x-3 text-gray-700 group-hover:text-white">
+              <span className="flex items-center space-x-3 ${location.pathname === item.url ? 'text-white' : 'text-gray-700'} group-hover:text-white">
                 {item.icon && <span className="group-hover:text-white">{iconComponents[item.icon]}</span>}
                 <span className="group-hover:text-white">{item.text}</span>
                 {item.subItems && (
@@ -95,10 +95,10 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
                 {item.subItems.map((subItem, subIndex) => (
                   <li
                     key={subIndex}
-                    className={`group flex items-center p-2 cursor-pointer ${location.pathname === subItem.url ? 'bg-[#8886e5d5]' : 'hover:bg-[#9997F5] hover:text-white'}`}
+                    className={`group flex items-center p-2 cursor-pointer ${location.pathname === subItem.url ? 'bg-[#8886e5] text-white' : 'hover:bg-[#9997F5] hover:text-white'}`}
                     onClick={() => handleNavigation(subItem.url)}
                   >
-                    <span className="flex items-center space-x-3 text-gray-700 group-hover:text-white">
+                    <span className="flex items-center space-x-3 ${location.pathname === subItem.url ? 'text-white' : 'text-gray-700'} group-hover:text-white">
                       <span className="group-hover:text-white">{subItem.text}</span>
                     </span>
                   </li>
