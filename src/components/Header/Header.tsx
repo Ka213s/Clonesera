@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { MenuOutlined, SearchOutlined, PlusOutlined, ShoppingCartOutlined, MailOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate, Link } from 'react-router-dom';
 import { Layout, Input, Badge, Avatar, Menu, Dropdown, Button } from 'antd';
-import logo from '../../assets/Logo-2.png';
+import logo from '../../assets/Logo-5.png';
 import notificationsData from '../../models/FileJson/notificationsData.json';
 import userMenuItemsData from '../../models/FileJson/userMenuItems.json';
 
