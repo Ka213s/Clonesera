@@ -6,6 +6,7 @@
 
 ## Link firebase : `https://console.firebase.google.com/project/clonesera`
 
+## Link vercel :  `https://clonesera.vercel.app/`
 
 **(Đăng nhập bằng tài khoản google cho mockApi và firebase !)**
 
