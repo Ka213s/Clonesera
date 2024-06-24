@@ -38,14 +38,6 @@ const Login: React.FC = () => {
 
     try {
       const response = await ApiService.login(values);
-      const response = await ApiService.login(values);
-
-      const account = response.find((account: UserData) =>
-        account.email === values.email &&
-        account.password === values.password &&
-        account.status === true &&
-        !account.isGoogle
-      );
       const account = response.find((account: UserData) =>
         account.email === values.email &&
         account.password === values.password &&
