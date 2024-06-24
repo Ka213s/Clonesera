@@ -128,14 +128,12 @@ const EnrollCourse: React.FC = () => {
     setSelectedOptions(prev => {
       const currentSelections = prev[questionId] || [];
       if (isMultiple) {
-        // Toggle option selection for multiple choice questions
         if (currentSelections.includes(optionIndex)) {
           return { ...prev, [questionId]: currentSelections.filter(index => index !== optionIndex) };
         } else {
           return { ...prev, [questionId]: [...currentSelections, optionIndex] };
         }
       } else {
-        // Single choice questions
         return { ...prev, [questionId]: [optionIndex] };
       }
     });
@@ -176,17 +174,13 @@ const EnrollCourse: React.FC = () => {
       const currentSection = sections[selectedSectionIndex];
       const nextLectureIndex = selectedLectureIndex + 1;
 
-      // Check if we are at the last lecture of the current section
       if (nextLectureIndex < currentSection.lectures.length) {
-        // Move to the next lecture within the same section
         const nextLecture = currentSection.lectures[nextLectureIndex];
         setSelectedLecture(nextLecture);
         setSelectedLectureIndex(nextLectureIndex);
       } else {
-        // Check if there's another section to move to
         const nextSectionIndex = selectedSectionIndex + 1;
         if (nextSectionIndex < sections.length) {
-          // Move to the first lecture of the next section
           const nextSection = sections[nextSectionIndex];
           const nextLecture = nextSection.lectures[0];
           setSelectedLecture(nextLecture);
@@ -203,12 +197,10 @@ const EnrollCourse: React.FC = () => {
     const prevLectureIndex = selectedLectureIndex - 1;
 
     if (prevLectureIndex >= 0) {
-      // Move to the previous lecture within the same section
       const prevLecture = sections[selectedSectionIndex].lectures[prevLectureIndex];
       setSelectedLecture(prevLecture);
       setSelectedLectureIndex(prevLectureIndex);
     } else {
-      // Check if there's a previous section to move to
       const prevSectionIndex = selectedSectionIndex - 1;
       if (prevSectionIndex >= 0) {
         const prevSection = sections[prevSectionIndex];
