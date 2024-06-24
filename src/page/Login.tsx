@@ -7,6 +7,8 @@ import ApiService, { UserData } from '../services/ApiService';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import Artwork from '../assets/Artwork.jpg';
 import { LoginData } from '../models/LoginData';
+import Lottie from 'react-lottie';
+import animationData from '../assets/Animation - 1719199926629.json';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 // Ensure the clientId is never undefined
@@ -36,7 +38,6 @@ const Login: React.FC = () => {
 
     try {
       const response = await ApiService.login(values);
-
       const account = response.find((account: UserData) =>
         account.email === values.email &&
         account.password === values.password &&
@@ -44,19 +45,20 @@ const Login: React.FC = () => {
         !account.isGoogle
       );
 
-      if (account) {
-        localStorage.setItem('userData', JSON.stringify(account));
-        navigate('/home');
-      } else {
-        toast.error('Invalid email or password');
+      if (!account) {
+        return;
       }
+
+      localStorage.setItem('userData', JSON.stringify(account));
+      navigate('/home');
     } catch (error) {
       console.error('Error logging in:', error);
-      toast.error('Error logging in');
     } finally {
+      setIsButtonDisabled(false);
       setIsButtonDisabled(false);
     }
   };
+
 
   const handleRegisterClick = (): void => {
     navigate('/register');
@@ -128,6 +130,14 @@ const Login: React.FC = () => {
     toast.error('Error logging in with Google');
     console.error('Error logging in with Google');
   };
+  const lottieOptions = {
+    loop: true,
+    autoplay: true,
+    animationData: animationData,
+    rendererSettings: {
+      preserveAspectRatio: 'xMidYMid slice'
+    }
+  };
 
   if (isLoading) {
     return (
@@ -142,9 +152,19 @@ const Login: React.FC = () => {
       <div className="bg-gray-50 min-h-screen flex items-center justify-center">
         <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-5xl p-5 items-center">
           <div className='md:w-1/2 px-16'>
-            <h2 className="font-bold text-3xl text-[#6C6EDD]">Login</h2>
-            <p className='text-base mt-2 text-[#4A4DC3]'>If you already a member, easily log in</p>
-
+            <div className="flex items-center">
+              <div>
+                <h2 className="font-bold text-3xl text-[#6C6EDD]">Login</h2>
+                <p className='text-base mt-2 text-[#4A4DC3]'>If you already a member, easily log in</p>
+              </div>
+              <div className="md:block hidden ml-6">
+                <Lottie
+                  options={lottieOptions}
+                  height={150}
+                  width={150}
+                />
+              </div>
+            </div>
             <Form
               name="login"
               initialValues={{ email: loginData.email, password: loginData.password }}
