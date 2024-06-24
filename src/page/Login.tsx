@@ -69,10 +69,8 @@ const Login: React.FC = () => {
     const token = response.credential;
     try {
       const userProfile = await ApiService.verifyGoogleToken(token);
-
       if (userProfile) {
         const { email, name, picture } = userProfile;
-
         const existingUser = await ApiService.getUserByEmail(email);
         if (existingUser && existingUser.length > 0) {
           if (!existingUser[0].isGoogle) {
