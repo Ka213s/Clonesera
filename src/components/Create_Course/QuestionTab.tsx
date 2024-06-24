@@ -142,7 +142,7 @@ const QuestionTab: React.FC<QuestionTabProps> = ({ formData, setFormData, handle
             </button>
           </>
         )}
-        <button onClick={saveQuestion} className="px-4 py-2 bg-blue-500 text-white rounded-md">
+        <button onClick={saveQuestion} className="px-4 py-2 bg-[#9997F5] hover:bg-[#8886E5] text-white rounded-md">
           Save Question
         </button>
       </div>

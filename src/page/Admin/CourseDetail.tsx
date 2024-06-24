@@ -126,9 +126,7 @@ const CourseDetail: React.FC = () => {
             <p className="text-sm text-gray-600">by {course.instructor}</p>
           </div>
           <div>
-            <button className="bg-purple-500 text-white px-4 py-2 rounded-full shadow-md w-full">
-              + Add New Course
-            </button>
+        
             <div className="mt-4">
               <h2 className="text-lg font-semibold mb-2">Course Playlists</h2>
               {course.playlists.map((playlist) => (

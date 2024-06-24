@@ -1,23 +1,26 @@
 {
   "menuItems": [
     {
-      "key": "user",
-      "icon": "UserOutlined",
-      "label": "User",
-      "children": [
-        { "key": "/admin/user", "label": "User" },
-        { "key": "/admin/group", "label": "Group" },
-        { "key": "/admin/permission", "label": "Permission" }
-      ]
+      "key": "/admin/dashboard",
+      "icon": "DashboardOutlined",
+      "label": "Dashboard"
     },
     {
-      "key": "dashboard",
-      "icon": "DashboardOutlined",
-      "label": "Dashboard",
+      "key": "instructor",
+      "icon": "TeamOutlined",
+      "label": "Instructor",
       "children": [
-        { "key": "/admin/dashboard", "label": "Dashboard" },
-        { "key": "/admin/activity", "label": "Activity" },
-        { "key": "/admin/profile", "label": "Profile" }
+        { "key": "/admin/allInstructor", "label": "All Instructor" },
+        { "key": "/admin/addInstructor", "label": "Add Instructor" }
+      ]
+    },   
+    {
+      "key": "students",
+      "icon": "UsergroupAddOutlined",
+      "label": "Students",
+      "children": [
+        { "key": "/admin/students/list", "label": "Student List" },
+        { "key": "/admin/students/profile", "label": "Student Profile" }
       ]
     },
     {
@@ -36,29 +39,6 @@
         { "key": "/admin/courses", "label": "Courses" },
         { "key": "/admin/pending_courses", "label": "Pending Courses" },
         { "key": "/admin/reviews", "label": "Reviews" }
-      ]
-    },
-    {
-      "key": "instructor",
-      "icon": "TeamOutlined",
-      "label": "Instructor",
-      "children": [
-        { "key": "/admin/instructor/dashboard", "label": "Dashboard" },
-        { "key": "/admin/instructor/my_courses", "label": "My Courses" },
-        { "key": "/admin/instructor/add_new_courses", "label": "Add New Courses" },
-        { "key": "/admin/instructor/course_status", "label": "Course Status" },
-        { "key": "/admin/instructor/students", "label": "Students" },
-        { "key": "/admin/instructor/review", "label": "Review" },
-        { "key": "/admin/instructor/my_account", "label": "My Account" }
-      ]
-    },
-    {
-      "key": "students",
-      "icon": "UsergroupAddOutlined",
-      "label": "Students",
-      "children": [
-        { "key": "/admin/students/list", "label": "Student List" },
-        { "key": "/admin/students/profile", "label": "Student Profile" }
       ]
     }
   ]

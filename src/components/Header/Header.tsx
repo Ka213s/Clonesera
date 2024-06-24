@@ -50,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   }, []);
 
   const handleCreateCourse = useCallback(() => {
-    navigate('/create-course');
+    navigate('/createCourse');
   }, [navigate]);
 
   const handleLogout = useCallback(() => {
@@ -114,7 +114,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         </Link>
       </div>
 
-      <div className="flex items-center ml-auto space-x-4 pr-4">
+      <div className="flex items-center ml-auto space-x-8 pr-4">
         {userRole === 3 && (
           <>
             <Button

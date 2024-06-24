@@ -3,7 +3,7 @@ import { Table, Button, Input, Select, Form, Space, Layout, Modal, Switch } from
 import { EditOutlined } from '@ant-design/icons';
 import { AiOutlinePlus } from 'react-icons/ai';
 import usersData from '../../models/FileJson/Adminusers.json';
-
+import img from '../../assets/Avatar03.jpg'
 
 const { Content } = Layout;
 const { Option } = Select;
@@ -65,7 +65,7 @@ const User: React.FC = () => {
       render: (text: string) => (
         <Space>
           <img
-            src={`/path/to/profile/picture`}
+            src={img}
             alt="profile"
             className="w-8 h-8 rounded-full mr-2"
           />
@@ -120,18 +120,30 @@ const User: React.FC = () => {
   return (
  
       <Content style={{ margin: '16px' }}>
-        <div className="mb-4 flex space-x-4">
+        <div className="mb-4 flex">
           <Form layout="inline">
+            <Form.Item>
+              <Input placeholder="Name" />
+            </Form.Item>
             <Form.Item>
               <Input placeholder="Email" />
             </Form.Item>
             <Form.Item>
-              <Input placeholder="Mobile" />
+              <Select placeholder="Type" style={{ width: 120 }}>
+                <Option value="Admin">Admin</Option>
+                <Option value="User">User</Option>
+              </Select>
             </Form.Item>
             <Form.Item>
-              <Select placeholder="Select Group" style={{ width: 120 }}>
-                <Option value="group1">Group 1</Option>
-                <Option value="group2">Group 2</Option>
+              <Input placeholder="Phone" />
+            </Form.Item>
+            <Form.Item>
+              <Input placeholder="DOB" />
+            </Form.Item>
+            <Form.Item>
+              <Select placeholder="Status" style={{ width: 120 }}>
+                <Option value="Active">Active</Option>
+                <Option value="Offline">Offline</Option>
               </Select>
             </Form.Item>
             <Form.Item>
@@ -163,9 +175,9 @@ const User: React.FC = () => {
             </Form.Item>
             <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}>
               <Input />
-            </Form.Item>
+              </Form.Item>
             <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Please input the email!' }]}>
-              <Input disabled />
+              <Input />
             </Form.Item>
             <Form.Item name="type" label="Type" rules={[{ required: true, message: 'Please select the type!' }]}>
               <Select>
@@ -179,11 +191,17 @@ const User: React.FC = () => {
             <Form.Item name="dob" label="DOB" rules={[{ required: true, message: 'Please input the date of birth!' }]}>
               <Input />
             </Form.Item>
+            <Form.Item name="status" label="Status" rules={[{ required: true, message: 'Please select the status!' }]}>
+              <Select>
+                <Option value="Active">Active</Option>
+                <Option value="Offline">Offline</Option>
+              </Select>
+            </Form.Item>
           </Form>
         </Modal>
       </Content>
-  
   );
 };
 
 export default User;
+

@@ -15,7 +15,7 @@ const Statements: React.FC = () => {
             <h5 className="text-lg font-semibold mb-4">Earning</h5>
             <hr className="mb-4"/>
             <p className="text-gray-600 mb-4">If you are not an instructor, you can't use this section.</p>
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">Become an instructor</button>
+            <button className="bg-[#9997F5] text-white px-4 py-2 rounded-md hover:bg-[#8886E5] transition">Become an instructor</button>
           </div>
           <div className="bg-gray-100 p-6 rounded-lg shadow-md w-2/5 ml-4">
             <h5 className="text-lg font-semibold mb-4">View Invoice</h5>
@@ -26,7 +26,7 @@ const Statements: React.FC = () => {
                 <option>April 2020</option>
                 <option>March 2020</option>
               </select>
-              <button className="bg-blue-500 text-white px-4 py-2 rounded-md flex items-center hover:bg-blue-600 transition">
+              <button className="bg-[#9997F5] text-white px-4 py-2 rounded-md flex items-center hover:bg-[#8886E5] transition">
                 <FaDownload className="mr-2"/>
                 Download
               </button>
@@ -36,7 +36,7 @@ const Statements: React.FC = () => {
 
         <div className="flex justify-between items-center mb-8 mt-16">
           <div className="flex space-x-4 items-center">
-            <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition">This Month</button>
+            <button className="bg-[#9997F5] text-white px-4 py-2 rounded-md hover:bg-[#8886E5] transition">This Month</button>
             <button className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-400 transition">Last Month</button>
             <div className="relative">
               <input

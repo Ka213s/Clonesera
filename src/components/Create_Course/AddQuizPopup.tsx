@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import BasicTab from './BasicTab';
 import QuestionTab from './QuestionTab';
 import SettingTab from './SettingTab';
@@ -13,16 +13,6 @@ interface AddQuizPopupProps {
 
 const AddQuizPopup: React.FC<AddQuizPopupProps> = ({ formData, setFormData, onClose }) => {
   const [activeTab, setActiveTab] = useState<string>('basic');
-  let activeTab2 = 'basic';
-  const activeTab3 = useRef(false);
-  useEffect(() => {
-  setActiveTab('basic2');
-  activeTab2 = 'basic3';
-  activeTab3.current = true;
-  },[])
-  console.log('activetab2 : ',activeTab2);
-  console.log('activetab : ' , activeTab);
-  console.log('activetab3 : ' , activeTab3.current);
   const [questions, setQuestions] = useState<any[]>(formData.questions || []);
 
   const handleTabChange = (tab: string) => setActiveTab(tab);
@@ -45,31 +35,32 @@ const AddQuizPopup: React.FC<AddQuizPopupProps> = ({ formData, setFormData, onCl
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-md p-6 w-2/3">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Add Quiz</h2>
-          <button onClick={onClose} className="text-red-500">Close</button>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-4xl mx-4">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold">Add Quiz</h2>
         </div>
-        <div className="mb-4">
-          {['basic', 'questions', 'setting'].map((tab) => (
-            <button
-              key={tab}
-              onClick={() => handleTabChange(tab)}
-              className={`px-4 py-2 mr-2 ${activeTab === tab ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}
-            >
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-            </button>
-          ))}
+        <div className="mb-6 border-b border-gray-200">
+          <nav className="-mb-px flex space-x-4">
+            {['basic', 'questions', 'setting'].map((tab) => (
+              <button
+                key={tab}
+                onClick={() => handleTabChange(tab)}
+                className={`py-2 px-4 border-b-2 font-medium text-sm ${activeTab === tab ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}
+              >
+                {tab.charAt(0).toUpperCase() + tab.slice(1)}
+              </button>
+            ))}
+          </nav>
         </div>
         <div>
           {activeTab === 'basic' && <BasicTab formData={formData} setFormData={setFormData} />}
           {activeTab === 'questions' && <QuestionTab formData={formData} setFormData={setFormData} handleAddQuestion={handleAddQuestion} />}
           {activeTab === 'setting' && <SettingTab formData={formData} setFormData={setFormData} />}
         </div>
-        <div className="mt-4 flex justify-between">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-500 text-white rounded-md">Close</button>
-          <button onClick={handleAddQuiz} className="px-4 py-2 bg-blue-500 text-white rounded-md">Add Quiz</button>
+        <div className="mt-6 flex justify-between space-x-4">
+          <button onClick={onClose} className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition">Close</button>
+          <button onClick={handleAddQuiz} className="px-4 py-2 text-white rounded-md bg-[#9997F5] hover:bg-[#8886E5] transition">Add Quiz</button>
         </div>
       </div>
     </div>

@@ -27,28 +27,29 @@ const LecturePopup: React.FC<LecturePopupProps> = ({ formData, setFormData, next
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white rounded-md p-6 w-2/3">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">Add Lecture</h2>
-          <button onClick={onClose} className="text-red-500">Close</button>
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-4xl mx-4">
+        <div className="flex justify-between items-center mb-6">
+          <h2 className="text-2xl font-semibold">Add Lecture</h2>
         </div>
-        <div className="mb-4">
-          <button
-            onClick={() => handleTabChange('basic')}
-            className={`px-4 py-2 mr-2 ${activeTab === 'basic' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}>
-            Basic
-          </button>
-          <button
-            onClick={() => handleTabChange('video')}
-            className={`px-4 py-2 mr-2 ${activeTab === 'video' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-800'}`}>
-            Video
-          </button>
-          <button
-            onClick={() => handleTabChange('attachments')}
-            className={`px-4 py-2 ${activeTab === 'attachments' ? 'bg-blue-500 text white' : 'bg-gray-200 text-gray-800'}`}>
-            Attachments
-          </button>
+        <div className="mb-6 border-b border-gray-200">
+          <nav className="-mb-px flex space-x-4">
+            <button
+              onClick={() => handleTabChange('basic')}
+              className={`py-2 px-4 border-b-2 font-medium text-sm ${activeTab === 'basic' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+              Basic
+            </button>
+            <button
+              onClick={() => handleTabChange('video')}
+              className={`py-2 px-4 border-b-2 font-medium text-sm ${activeTab === 'video' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+              Video
+            </button>
+            <button
+              onClick={() => handleTabChange('attachments')}
+              className={`py-2 px-4 border-b-2 font-medium text-sm ${activeTab === 'attachments' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'}`}>
+              Attachments
+            </button>
+          </nav>
         </div>
         <div>
           {activeTab === 'basic' && (
@@ -61,9 +62,9 @@ const LecturePopup: React.FC<LecturePopupProps> = ({ formData, setFormData, next
             <AttachmentsLecture formData={formData} />
           )}
         </div>
-        <div className="mt-4 flex justify-between">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-500 text-white rounded-md">Close</button>
-          <button className="px-4 py-2 bg-blue-500 text-white rounded-md">Add Lecture</button>
+        <div className="mt-6 flex justify-between space-x-4">
+          <button onClick={onClose} className="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700 transition">Close</button>
+          <button onClick={nextStep} className="px-4 py-2 bg-[#9997F5] hover:bg-[#8886E5] text-white rounded-md transition">Add Lecture</button>
         </div>
       </div>
     </div>
