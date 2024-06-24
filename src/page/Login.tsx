@@ -11,12 +11,12 @@ import Lottie from 'react-lottie';
 import animationData from '../assets/Animation - 1719199926629.json';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
-const clientId = '405029644705-pgg82nbc7r3uq9igpnj3vkk1ku524b0o.apps.googleusercontent.com';
-
+// Ensure the clientId is never undefined
+const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
+console.log('clientId:', clientId);
 const Login: React.FC = () => {
   const [loginData, setLoginData] = useState<LoginData>(new LoginData("", ""));
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
 
@@ -38,7 +38,14 @@ const Login: React.FC = () => {
 
     try {
       const response = await ApiService.login(values);
+      const response = await ApiService.login(values);
 
+      const account = response.find((account: UserData) =>
+        account.email === values.email &&
+        account.password === values.password &&
+        account.status === true &&
+        !account.isGoogle
+      );
       const account = response.find((account: UserData) =>
         account.email === values.email &&
         account.password === values.password &&
@@ -56,6 +63,7 @@ const Login: React.FC = () => {
       console.error('Error logging in:', error);
     } finally {
       setIsButtonDisabled(false);
+      setIsButtonDisabled(false);
     }
   };
 
@@ -63,9 +71,11 @@ const Login: React.FC = () => {
   const handleRegisterClick = (): void => {
     navigate('/register');
   };
+
   const handleForgotPasswordClick = (): void => {
     navigate('/forgot-password');
   };
+
   const handleGoogleLoginSuccess = async (response: any) => {
     const token = response.credential;
     console.log('idToken:', token); // Log the response
@@ -140,8 +150,7 @@ const Login: React.FC = () => {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="loader"></div>{" "}
-        {/* You can replace this with any spinner component */}
+        <div className="loader"></div> {/* Replace with any spinner component */}
       </div>
     );
   }
@@ -172,7 +181,10 @@ const Login: React.FC = () => {
             >
               <Form.Item
                 name="email"
-                rules={[{ required: true, message: 'Please input your email!' }, { type: "email", message: 'Format invalid email!' }]}
+                rules={[
+                  { required: true, message: 'Please input your email!' },
+                  { type: "email", message: 'Format invalid email!' }
+                ]}
               >
                 <Input
                   type="text"
@@ -187,7 +199,6 @@ const Login: React.FC = () => {
                 rules={[{ required: true, message: 'Please input your password!' }]}
               >
                 <Input.Password
-                  type={showPassword ? "text" : "password"}
                   placeholder='Password'
                   value={loginData.password}
                   onChange={(e) => setLoginData({ ...loginData, password: e.target.value })}
@@ -239,7 +250,7 @@ const Login: React.FC = () => {
             </div>
           </div>
           <div className="md:block hidden w-1/2">
-            <img className="rounded-2xl" src={Artwork} alt="" />
+            <img className="rounded-2xl" src={Artwork} alt="Artwork" />
           </div>
           <ToastContainer />
         </div>

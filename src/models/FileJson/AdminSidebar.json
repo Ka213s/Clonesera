@@ -1,100 +1,45 @@
 {
-  "sidebarMenuItems": [
+  "menuItems": [
     {
-      "key": "user",
-      "icon": "UserOutlined",
-      "label": "User",
-      "url": "/admin/user"
-    },
-    {
-      "key": "group",
-      "icon": "TeamOutlined",
-      "label": "Group",
-      "url": "/admin/group"
-    },
-    {
-      "key": "permission",
-      "icon": "SettingOutlined",
-      "label": "Permission",
-      "url": "/admin/permission"
-    },
-    {
-      "key": "dashboard",
+      "key": "/admin/dashboard",
       "icon": "DashboardOutlined",
-      "label": "Dashboard",
-      "url": "/admin/dashboard"
+      "label": "Dashboard"
     },
     {
-      "key": "activity",
-      "icon": "FileTextOutlined",
-      "label": "Activity",
-      "url": "/admin/activity"
+      "key": "instructor",
+      "icon": "TeamOutlined",
+      "label": "Instructor",
+      "children": [
+        { "key": "/admin/allInstructor", "label": "All Instructor" },
+        { "key": "/admin/addInstructor", "label": "Add Instructor" }
+      ]
+    },   
+    {
+      "key": "students",
+      "icon": "UsergroupAddOutlined",
+      "label": "Students",
+      "children": [
+        { "key": "/admin/students/list", "label": "Student List" },
+        { "key": "/admin/students/profile", "label": "Student Profile" }
+      ]
     },
     {
-      "key": "profile",
-      "icon": "ProfileOutlined",
-      "label": "Profile",
-      "url": "/admin/profile"
-    },
-    {
-      "key": "categories",
-      "icon": "CarOutlined",
+      "key": "Categories",
+      "icon": "CategorydOutlined",
       "label": "Categories",
-      "url": "/admin/category-management"
+      "children": [
+        { "key": "/admin/category-management", "label": "Categories" }
+      ]
     },
     {
       "key": "courses",
       "icon": "BookOutlined",
       "label": "Courses",
-      "url": "/admin/courses"
-    },
-    {
-      "key": "pending_courses",
-      "icon": "SettingOutlined",
-      "label": "Pending Courses",
-      "url": "/admin/pending_courses"
-    },
-    {
-      "key": "reviews",
-      "icon": "MessageOutlined",
-      "label": "Reviews",
-      "url": "/admin/reviews"
-    },
-    {
-      "key": "instructor_dashboard",
-      "icon": "TeamOutlined",
-      "label": "Instructor Dashboard",
-      "url": "/admin/instructor/dashboard"
-    },
-    {
-      "key": "my_courses",
-      "icon": "BookOutlined",
-      "label": "My Courses",
-      "url": "/admin/instructor/my_courses"
-    },
-    {
-      "key": "add_new_courses",
-      "icon": "FileTextOutlined",
-      "label": "Add New Courses",
-      "url": "/admin/instructor/add_new_courses"
-    },
-    {
-      "key": "course_status",
-      "icon": "FileTextOutlined",
-      "label": "Course Status",
-      "url": "/admin/instructor/course_status"
-    },
-    {
-      "key": "students",
-      "icon": "UsergroupAddOutlined",
-      "label": "Students",
-      "url": "/admin/students/list"
-    },
-    {
-      "key": "student_profile",
-      "icon": "ProfileOutlined",
-      "label": "Student Profile",
-      "url": "/admin/students/profile"
+      "children": [
+        { "key": "/admin/courses", "label": "Courses" },
+        { "key": "/admin/pending_courses", "label": "Pending Courses" },
+        { "key": "/admin/reviews", "label": "Reviews" }
+      ]
     }
   ]
 }
