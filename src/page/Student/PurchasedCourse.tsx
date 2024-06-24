@@ -38,7 +38,7 @@ const PurchasedCourses: React.FC = () => {
                   <td className="px-4 py-2 text-left">{course.itemNo}</td>
                   <td className="px-4 py-2 text-left">
                     <a
-                      href={`/student_enroll_course`}
+                      href={`/student/enrollCourse`}
                       className="text-blue-500 hover:text-blue-700"
                     >
                       {course.title}

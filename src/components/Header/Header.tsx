@@ -50,7 +50,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   }, []);
 
   const handleCreateCourse = useCallback(() => {
-    navigate('/create-course');
+    navigate('/createCourse');
   }, [navigate]);
 
   const handleLogout = useCallback(() => {
