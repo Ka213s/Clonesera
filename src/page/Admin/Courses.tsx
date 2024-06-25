@@ -62,23 +62,23 @@ const Courses: React.FC = () => {
   };
 
   return (
-    <div className="pt-10 px-6">
+    <div className="pt-10 px-4 md:px-8 lg:px-12">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-semibold">Courses</h1>
+        <h1 className="text-3xl font-bold">Courses</h1>
       </div>
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white">
           <thead>
-            <tr>
-              <th className="px-4 py-2">Image</th>
-              <th className="px-4 py-2">Title</th>
-              <th className="px-4 py-2">Instructor</th>
-              <th className="px-4 py-2">Rating</th>
-              <th className="px-4 py-2">Students</th>
-              <th className="px-4 py-2">Lessons</th>
-              <th className="px-4 py-2">Start Date</th>
-              <th className="px-4 py-2">Price</th>
-              <th className="px-4 py-2">Actions</th>
+            <tr className="bg-gray-200">
+              <th className="px-4 py-3">Image</th>
+              <th className="px-4 py-3">Title</th>
+              <th className="px-4 py-3">Instructor</th>
+              <th className="px-4 py-3">Rating</th>
+              <th className="px-4 py-3">Students</th>
+              <th className="px-4 py-3">Lessons</th>
+              <th className="px-4 py-3 whitespace-nowrap">Start Date</th>
+              <th className="px-4 py-3">Price</th>
+              <th className="px-4 py-3">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -98,21 +98,23 @@ const Courses: React.FC = () => {
                 <td className="border px-4 py-2">{course.rating}</td>
                 <td className="border px-4 py-2">{course.students}</td>
                 <td className="border px-4 py-2">{course.lessons}</td>
-                <td className="border px-4 py-2">{course.startDate}</td>
+                <td className="border px-4 py-2 whitespace-nowrap">{course.startDate}</td>
                 <td className="border px-4 py-2">{course.price}</td>
-                <td className="border px-4 py-2 flex space-x-2">
-                  <button className="bg-purple-500 text-white px-4 py-2 rounded-full shadow-md">
-                    View all
-                  </button>
-                  <button 
-                    className="bg-blue-500 text-white px-4 py-2 rounded-full shadow-md"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      showEditPage(course.id);
-                    }}
-                  >
-                    Edit
-                  </button>
+                <td className="border px-4 py-2">
+                  <div className="flex justify-center space-x-2">
+                    <button className="bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-300 transition duration-200">
+                      View all
+                    </button>
+                    <button 
+                      className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        showEditPage(course.id);
+                      }}
+                    >
+                      Edit
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
