@@ -13,13 +13,12 @@ import BecomeInstructor from '../page/BecomeInstructor';
 import Courses from '../page/Admin/Courses';
 import CourseDetail from '../page/Admin/CourseDetail';
 import AdminDashboard from '../page/Admin/Dashboard';
-import AdminUser from '../page/Admin/User';
 import CoursesPending from '../page/Admin/CoursesPending';
 import Review from '../page/Admin/Review';
 import CategoryManagement from '../page/Admin/CategoryManagement';
 import AllInstructor from '../page/Admin/allInstructor';
 import AddInstructor from '../page/Admin/addInstructor';
-import EditInstructor from '../page/Admin/editInstructor';
+import EditCourse from '../page/Admin/EditCourse';
 // Student Pages and Components
 import StudentDashboard from '../page/Student/StudentDashboard';
 import PurchasedCourses from '../page/Student/PurchasedCourse';
@@ -88,7 +87,6 @@ const RoutesWrapper: React.FC = () => {
 
       {/* Admin Routes */}
       <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
-      <Route path="/admin/user" element={<ProtectedRoute allowedRoles={[1]}><AdminUser /></ProtectedRoute>} />
       <Route path="/admin/courses" element={<ProtectedRoute allowedRoles={[1]}><Courses /></ProtectedRoute>} />
       <Route path="/admin/course/:id" element={<ProtectedRoute allowedRoles={[1]}><CourseDetail /></ProtectedRoute>} />
       <Route path="/admin/pending_courses" element={<ProtectedRoute allowedRoles={[1]}><CoursesPending /></ProtectedRoute>} />
@@ -96,7 +94,8 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/admin/category-management" element={<ProtectedRoute allowedRoles={[1]}><CategoryManagement /></ProtectedRoute>} />
       <Route path="/admin/allInstructor" element={<ProtectedRoute allowedRoles={[1]}><AllInstructor /></ProtectedRoute>} />
       <Route path="/admin/addInstructor" element={<ProtectedRoute allowedRoles={[1]}><AddInstructor /></ProtectedRoute>} />
-      <Route path="/admin/edit-instructor/:id" element={<ProtectedRoute allowedRoles={[1]}><EditInstructor /></ProtectedRoute>} />
+      <Route path="/admin/editCourse/:id" element={<ProtectedRoute allowedRoles={[1]}><EditCourse /></ProtectedRoute>} />
+
 
       {/* Student Routes */}
       <Route path="/student/dashboard" element={<ProtectedRoute allowedRoles={[2]}><StudentDashboard /></ProtectedRoute>} />

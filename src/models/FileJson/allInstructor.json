@@ -3,44 +3,40 @@
     "id": "1",
     "profile": "path/to/profile1.jpg",
     "name": "Tiger Nixon",
-    "department": "Architect",
     "gender": "Male",
-    "education": "M.COM., P.H.D.",
     "mobile": "123 456 7890",
     "email": "info@example.com",
-    "joiningDate": "2011/04/25"
+    "joiningDate": "2011/04/25",
+    "password": "password1"
   },
   {
     "id": "2",
     "profile": "path/to/profile2.jpg",
     "name": "Garrett Winters",
-    "department": "Accountant",
     "gender": "Female",
-    "education": "M.COM., P.H.D.",
     "mobile": "987 654 3210",
     "email": "info@example.com",
-    "joiningDate": "2011/07/25"
+    "joiningDate": "2011/07/25",
+    "password": "password2"
   },
   {
     "id": "3",
     "profile": "path/to/profile3.jpg",
     "name": "Ashton Cox",
-    "department": "Junior Technical",
     "gender": "Male",
-    "education": "B.COM., M.COM.",
     "mobile": "(123) 4567 890",
     "email": "info@example.com",
-    "joiningDate": "2009/01/12"
+    "joiningDate": "2009/01/12",
+    "password": "password3"
   },
   {
     "id": "4",
     "profile": "path/to/profile1.jpg",
     "name": "Tiger Nixon",
-    "department": "Architect",
     "gender": "Male",
-    "education": "M.COM., P.H.D.",
     "mobile": "123 456 7890",
     "email": "info@example.com",
-    "joiningDate": "2011/04/25"
+    "joiningDate": "2011/04/25",
+    "password": "password4"
   }
 ]

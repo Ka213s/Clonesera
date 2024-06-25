@@ -11,9 +11,8 @@ import Lottie from 'react-lottie';
 import animationData from '../assets/Animation - 1719199926629.json';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
-// Ensure the clientId is never undefined
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
-console.log('clientId:', clientId);
+
 const Login: React.FC = () => {
   const [loginData, setLoginData] = useState<LoginData>(new LoginData("", ""));
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -72,14 +71,9 @@ const Login: React.FC = () => {
     const token = response.credential;
     console.log('idToken:', token); // Log the response
     try {
-      console.log('Google login successful, response:', response); // Log the response
-
-      // Save the IdToken to local storage
+      console.log('Google login successful, response:', response); 
       localStorage.setItem('idToken', token);
-
-      // Replace the following API call with the actual one that verifies the token and fetches the user data.
       const userProfile = await ApiService.verifyGoogleToken(token);
-
       if (userProfile) {
         const { email, name, picture } = userProfile;
 
@@ -219,10 +213,12 @@ const Login: React.FC = () => {
               <p className='text-center'>OR</p>
               <hr className='border-gray-400' />
             </div>
-            <GoogleLogin
-              onSuccess={handleGoogleLoginSuccess}
-              onError={handleGoogleLoginError}
-            />
+            <div className="flex justify-center mt-4">
+              <GoogleLogin
+                onSuccess={handleGoogleLoginSuccess}
+                onError={handleGoogleLoginError}
+              />
+            </div>
             <div className='w-full mt-5 border-b border-gray-400'>
               <Button
                 onClick={handleForgotPasswordClick}
@@ -249,6 +245,7 @@ const Login: React.FC = () => {
       </div>
     </GoogleOAuthProvider>
   );
+  
 };
 
 export default Login;

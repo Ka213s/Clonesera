@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
 import { Pagination } from 'antd';
+import imgCourse from '../../assets/Course.png';
 
 const coursesData = [
   {
@@ -57,65 +57,77 @@ const Courses: React.FC = () => {
     navigate(`/admin/course/${id}`);
   };
 
+  const showEditPage = (courseId: number) => {
+    navigate(`/admin/editCourse/${courseId}`);
+  };
+
   return (
-   
-      <div className="pt-10 px-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold">Courses</h1>
-       
-        </div>
-        <div className="overflow-x-auto">
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr>
-                <th className="px-4 py-2">Image</th>
-                <th className="px-4 py-2">Title</th>
-                <th className="px-4 py-2">Instructor</th>
-                <th className="px-4 py-2">Rating</th>
-                <th className="px-4 py-2">Students</th>
-                <th className="px-4 py-2">Lessons</th>
-                <th className="px-4 py-2">Start Date</th>
-                <th className="px-4 py-2">Price</th>
-                <th className="px-4 py-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {currentPageData.map((course) => (
-                <tr
-                  key={course.id}
-                  className="hover:bg-gray-100 cursor-pointer"
-                  onClick={() => handleRowClick(course.id)}
-                >
-                  <td className="border px-4 py-2">
-                    <img src={course.image} alt={course.title} className="w-16 h-16 object-cover" />
-                  </td>
-                  <td className="border px-4 py-2">{course.title}</td>
-                  <td className="border px-4 py-2">{course.instructor}</td>
-                  <td className="border px-4 py-2">{course.rating}</td>
-                  <td className="border px-4 py-2">{course.students}</td>
-                  <td className="border px-4 py-2">{course.lessons}</td>
-                  <td className="border px-4 py-2">{course.startDate}</td>
-                  <td className="border px-4 py-2">{course.price}</td>
-                  <td className="border px-4 py-2">
-                    <button className="bg-purple-500 text-white px-4 py-2 rounded-full shadow-md">
-                      View all
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <div className="mt-6 flex justify-center">
-          <Pagination
-            current={current}
-            pageSize={pageSize}
-            total={coursesData.length}
-            onChange={handleChange}
-          />
-        </div>
+    <div className="pt-10 px-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-semibold">Courses</h1>
       </div>
-   
+      <div className="overflow-x-auto">
+        <table className="min-w-full bg-white">
+          <thead>
+            <tr>
+              <th className="px-4 py-2">Image</th>
+              <th className="px-4 py-2">Title</th>
+              <th className="px-4 py-2">Instructor</th>
+              <th className="px-4 py-2">Rating</th>
+              <th className="px-4 py-2">Students</th>
+              <th className="px-4 py-2">Lessons</th>
+              <th className="px-4 py-2">Start Date</th>
+              <th className="px-4 py-2">Price</th>
+              <th className="px-4 py-2">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {currentPageData.map((course) => (
+              <tr
+                key={course.id}
+                className="hover:bg-gray-100 cursor-pointer"
+                onClick={() => handleRowClick(course.id)}
+              >
+                <td className="border px-4 py-2">
+                  <div className="flex items-center justify-center w-full h-32">
+                    <img src={imgCourse} alt={course.title} className="object-cover h-full w-full" />
+                  </div>
+                </td>
+                <td className="border px-4 py-2">{course.title}</td>
+                <td className="border px-4 py-2">{course.instructor}</td>
+                <td className="border px-4 py-2">{course.rating}</td>
+                <td className="border px-4 py-2">{course.students}</td>
+                <td className="border px-4 py-2">{course.lessons}</td>
+                <td className="border px-4 py-2">{course.startDate}</td>
+                <td className="border px-4 py-2">{course.price}</td>
+                <td className="border px-4 py-2 flex space-x-2">
+                  <button className="bg-purple-500 text-white px-4 py-2 rounded-full shadow-md">
+                    View all
+                  </button>
+                  <button 
+                    className="bg-blue-500 text-white px-4 py-2 rounded-full shadow-md"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      showEditPage(course.id);
+                    }}
+                  >
+                    Edit
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div className="mt-6 flex justify-center">
+        <Pagination
+          current={current}
+          pageSize={pageSize}
+          total={coursesData.length}
+          onChange={handleChange}
+        />
+      </div>
+    </div>
   );
 };
 

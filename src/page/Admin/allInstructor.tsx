@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Table, Button, Input, Select, Row, Col } from 'antd';
+import { Table, Button, Input, Select, Row, Col, Modal, Form } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import data from '../../models/FileJson/allInstructor.json';
 import img from '../../assets/Avatar03.jpg';
@@ -14,7 +13,8 @@ interface Instructor {
   gender: string;
   mobile: string;
   email: string;
-  joiningDate: string; // Use string to match the data type in JSON
+  joiningDate: string;
+  password: string; 
 }
 
 const AllInstructor: React.FC = () => {
@@ -24,10 +24,12 @@ const AllInstructor: React.FC = () => {
     gender: '',
     mobile: '',
     email: '',
-    joiningDate: ''
+    joiningDate: '',
+    password: ''
   });
 
-  const navigate = useNavigate();
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [editingInstructor, setEditingInstructor] = useState<Instructor | null>(null);
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters({
@@ -62,13 +64,32 @@ const AllInstructor: React.FC = () => {
       gender: '',
       mobile: '',
       email: '',
-      joiningDate: ''
+      joiningDate: '',
+      password: ''
     });
     setFilteredData(data);
   };
 
-  const handleEdit = (id: string) => {
-    navigate(`/admin/edit-instructor/${id}`);
+  const showEditModal = (instructor: Instructor) => {
+    setEditingInstructor(instructor);
+    setIsModalVisible(true);
+  };
+
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleEditChange = (key: string, value: string) => {
+    if (editingInstructor) {
+      setEditingInstructor({
+        ...editingInstructor,
+        [key]: value
+      });
+    }
   };
 
   const columns = [
@@ -104,6 +125,11 @@ const AllInstructor: React.FC = () => {
       key: 'joiningDate'
     },
     {
+      title: 'Password',
+      dataIndex: 'password',
+      key: 'password'
+    },
+    {
       title: 'Action',
       key: 'action',
       render: (_: any, record: Instructor) => (
@@ -112,7 +138,7 @@ const AllInstructor: React.FC = () => {
             type="primary"
             style={{ backgroundColor: '#6A0DAD', borderColor: '#6A0DAD' }}
             icon={<EditOutlined />}
-            onClick={() => handleEdit(record.id)}
+            onClick={() => showEditModal(record)}
           />
           <Button
             type="primary"
@@ -151,6 +177,7 @@ const AllInstructor: React.FC = () => {
         <Col span={4}>
           <Input placeholder="Joining Date" value={filters.joiningDate} onChange={(e) => handleFilterChange('joiningDate', e.target.value)} />
         </Col>
+      
         <Col span={1}>
           <Button type="primary" style={{ backgroundColor: '#6A0DAD', borderColor: '#6A0DAD' }} onClick={applyFilters}>Filter</Button>
         </Col>
@@ -166,6 +193,31 @@ const AllInstructor: React.FC = () => {
         rowClassName="bg-gray-100"
         rowKey="id"
       />
+      <Modal title="Edit Instructor" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+        <Form layout="vertical">
+          <Form.Item label="Name">
+            <Input value={editingInstructor?.name} onChange={(e) => handleEditChange('name', e.target.value)} />
+          </Form.Item>
+          <Form.Item label="Gender">
+            <Select value={editingInstructor?.gender} onChange={(value) => handleEditChange('gender', value)} style={{ width: '100%' }}>
+              <Option value="Male">Male</Option>
+              <Option value="Female">Female</Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="Mobile">
+            <Input value={editingInstructor?.mobile} onChange={(e) => handleEditChange('mobile', e.target.value)} />
+          </Form.Item>
+          <Form.Item label="Email">
+            <Input value={editingInstructor?.email} onChange={(e) => handleEditChange('email', e.target.value)} />
+          </Form.Item>
+          <Form.Item label="Joining Date">
+            <Input value={editingInstructor?.joiningDate} onChange={(e) => handleEditChange('joiningDate', e.target.value)} />
+          </Form.Item>
+          <Form.Item label="Password">
+            <Input value={editingInstructor?.password} onChange={(e) => handleEditChange('password', e.target.value)} />
+          </Form.Item>
+        </Form>
+      </Modal>
     </div>
   );
 };
