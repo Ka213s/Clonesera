@@ -113,81 +113,81 @@ const CourseDetail: React.FC = () => {
 
   return (
     <div className="pt-10 px-6">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
           <div className="relative pb-9/16">
-            <video src={course.videoUrl} width="100%" height="100%" controls>
+            <video src={course.videoUrl} width="100%" height="100%" controls className="rounded-lg shadow-lg">
               Your browser does not support the video tag.
             </video>
           </div>
-          <h1 className="mt-4 text-2xl font-semibold">{course.title}</h1>
-          <p className="text-sm text-gray-600">by {course.instructor}</p>
+          <h1 className="mt-4 text-3xl font-bold">{course.title}</h1>
+          <p className="text-lg text-gray-700 mt-2">by {course.instructor}</p>
         </div>
         <div>
           <div className="mt-4">
-            <h2 className="text-lg font-semibold mb-2">Course Playlists</h2>
+            <h2 className="text-xl font-semibold mb-4">Course Playlists</h2>
             {course.playlists.map((playlist) => (
-              <div key={playlist.id} className="flex items-center mb-2">
-                <img src={playlist.imageUrl} alt={playlist.title} className="w-16 h-16 object-cover rounded mr-2" />
+              <div key={playlist.id} className="flex items-center mb-4">
+                <img src={playlist.imageUrl} alt={playlist.title} className="w-16 h-16 object-cover rounded-lg mr-4" />
                 <div>
-                  <h3 className="text-sm font-semibold">{playlist.title}</h3>
-                  <p className="text-xs text-gray-600">{playlist.duration}</p>
+                  <h3 className="text-md font-semibold">{playlist.title}</h3>
+                  <p className="text-sm text-gray-600">{playlist.duration}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
       </div>
-      <div className="mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-8">
         <div className="lg:col-span-2">
-          <h2 className="text-xl font-semibold mb-4">Course Details</h2>
-          <p>{course.details}</p>
-          <h2 className="text-xl font-semibold mt-6 mb-4">Certification</h2>
-          <p>{course.certification}</p>
-          <h2 className="text-xl font-semibold mt-6 mb-4">What you'll learn</h2>
-          <ul className="list-disc list-inside">
+          <h2 className="text-2xl font-bold mb-6">Course Details</h2>
+          <p className="text-lg text-gray-700 leading-relaxed">{course.details}</p>
+          <h2 className="text-2xl font-bold mt-10 mb-6">Certification</h2>
+          <p className="text-lg text-gray-700 leading-relaxed">{course.certification}</p>
+          <h2 className="text-2xl font-bold mt-10 mb-6">What You'll Learn</h2>
+          <ul className="list-disc list-inside space-y-2">
             {course.learningOutcomes.map((outcome, index) => (
-              <li key={index}>{outcome}</li>
+              <li key={index} className="text-lg text-gray-700">{outcome}</li>
             ))}
           </ul>
         </div>
         <div>
-          <div className="bg-white p-4 rounded-lg shadow-md">
-            <div className="flex justify-between items-center">
+          <div className="bg-white p-6 rounded-lg shadow-lg">
+            <div className="flex justify-between items-center mb-4">
               <span className="text-gray-600">Price</span>
               <span className="text-xl font-semibold text-red-500">{course.price}</span>
             </div>
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex justify-between items-center mb-4">
               <span className="text-gray-600">Ratings</span>
               <span className="text-lg font-semibold">{course.rating} (145)</span>
             </div>
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex justify-between items-center mb-4">
               <span className="text-gray-600">Durations</span>
               <span className="text-lg font-semibold">15 Days</span>
             </div>
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex justify-between items-center mb-4">
               <span className="text-gray-600">Lessons</span>
               <span className="text-lg font-semibold">45</span>
             </div>
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex justify-between items-center mb-4">
               <span className="text-gray-600">Certificate</span>
               <span className="text-lg font-semibold">Yes</span>
             </div>
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex justify-between items-center mb-4">
               <span className="text-gray-600">Language</span>
               <span className="text-lg font-semibold">English</span>
             </div>
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex justify-between items-center mb-4">
               <span className="text-gray-600">Access</span>
               <span className="text-lg font-semibold">Lifetime</span>
             </div>
-            <div className="flex justify-between items-center mt-4">
+            <div className="flex justify-between items-center mb-4">
               <span className="text-gray-600">Instructor</span>
               <span className="text-lg font-semibold">{course.instructor}</span>
             </div>
             <button
               onClick={handleEdit}
-              className="mt-4 bg-purple-500 text-white px-4 py-2 rounded-full shadow-md w-full"
+              className="mt-6 bg-purple-600 text-white px-4 py-2 rounded-full shadow-md w-full transition duration-300 ease-in-out hover:bg-purple-700"
             >
               Edit Course Details
             </button>
