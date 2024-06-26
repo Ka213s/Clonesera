@@ -11,6 +11,7 @@ import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 
 // Ensure the clientId is never undefined
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
+
 console.log('clientId:', clientId);
 const Login: React.FC = () => {
   const [loginData, setLoginData] = useState<LoginData>(new LoginData("", ""));
