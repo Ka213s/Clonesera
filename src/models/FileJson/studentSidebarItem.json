@@ -1,7 +1,7 @@
 {
     "studentSidebarItem": [
       { "text": "Dashboard", "icon": "FaHome", "url": "/student/dashboard" },
-      { "text": "Purchased Courses", "icon": "FaBook", "url": "/purchasedCourses" },
+      { "text": "Purchased Courses", "icon": "FaBook", "url": "/student/purchasedCourses" },
       { "text": "Messages", "icon": "FaComments", "url": "/student/messages" },
       { "text": "Notifications", "icon": "FaBell", "url": "/student/notifications" },
       { "text": "My Certificates", "icon": "FaCertificate", "url": "/student/myCertificates" },

@@ -92,8 +92,8 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/admin/pending_courses" element={<ProtectedRoute allowedRoles={[1]}><CoursesPending /></ProtectedRoute>} />
       <Route path="/admin/reviews" element={<ProtectedRoute allowedRoles={[1]}><Review /></ProtectedRoute>} />
       <Route path="/admin/category-management" element={<ProtectedRoute allowedRoles={[1]}><CategoryManagement /></ProtectedRoute>} />
-      <Route path="/admin/allInstructor" element={<ProtectedRoute allowedRoles={[1]}><AllInstructor /></ProtectedRoute>} />
-      <Route path="/admin/addInstructor" element={<ProtectedRoute allowedRoles={[1]}><AddInstructor /></ProtectedRoute>} />
+      <Route path="/admin/allIUser" element={<ProtectedRoute allowedRoles={[1]}><AllInstructor /></ProtectedRoute>} />
+      <Route path="/admin/addUser" element={<ProtectedRoute allowedRoles={[1]}><AddInstructor /></ProtectedRoute>} />
       <Route path="/admin/editCourse/:id" element={<ProtectedRoute allowedRoles={[1]}><EditCourse /></ProtectedRoute>} />
 
 

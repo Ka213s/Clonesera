@@ -7,7 +7,8 @@
     "mobile": "123 456 7890",
     "email": "info@example.com",
     "joiningDate": "2011/04/25",
-    "password": "password1"
+    "password": "password1",
+    "role": "Instructor"
   },
   {
     "id": "2",
@@ -17,7 +18,8 @@
     "mobile": "987 654 3210",
     "email": "info@example.com",
     "joiningDate": "2011/07/25",
-    "password": "password2"
+    "password": "password2",
+    "role": "Student" 
   },
   {
     "id": "3",
@@ -27,7 +29,8 @@
     "mobile": "(123) 4567 890",
     "email": "info@example.com",
     "joiningDate": "2009/01/12",
-    "password": "password3"
+    "password": "password3",
+    "role": "Instructor"
   },
   {
     "id": "4",
@@ -37,6 +40,7 @@
     "mobile": "123 456 7890",
     "email": "info@example.com",
     "joiningDate": "2011/04/25",
-    "password": "password4"
+    "password": "password4",
+    "role": "Student"
   }
 ]
