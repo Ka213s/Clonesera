@@ -107,13 +107,7 @@ const Dashboard: React.FC = () => {
    
       <div className="site-statistic-demo-card pt-10">
         <div className="flex justify-end mb-4">
-          <Button
-            type="primary"
-            icon={<AiOutlinePlus />}
-            className="bg-[#9997F5] border-[#9997F5] mr-4"
-          >
-            Add Order
-          </Button>
+         
           <Button
             type="primary"
             icon={<AiOutlinePlus />}
@@ -123,7 +117,7 @@ const Dashboard: React.FC = () => {
           </Button>
           {/* Button điều hướng đến Category */}
           <Button type="primary" className="bg-[#9997F5] border-[#9997F5] ml-4">
-            <Link to="/dashboard/category">Category</Link>
+            <Link to="/admin/category-management">Category</Link>
           </Button>
         </div>
         <DashboardStatistics />

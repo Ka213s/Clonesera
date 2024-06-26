@@ -1,5 +1,6 @@
 import React from 'react';
-
+import img from '../../assets/Course.png';
+import imgInstructor from '../../assets/Avatar03.jpg';
 const pendingCoursesData = [
   {
     id: 1,
@@ -46,7 +47,7 @@ const CoursesPending: React.FC = () => {
               className="flex items-center justify-between bg-white shadow-md rounded-lg p-4"
             >
               <div className="flex items-center">
-                <img src={course.image} alt={course.title} className="w-24 h-24 object-cover rounded-lg mr-4" />
+                <img src={img} alt={course.title} className="w-24 h-24 object-cover rounded-lg mr-4" />
                 <div>
                   <h2 className="text-lg font-semibold">{course.title}</h2>
                   <div className="flex items-center text-sm text-gray-600 mt-2">
@@ -57,7 +58,7 @@ const CoursesPending: React.FC = () => {
                     <span className="bg-yellow-200 text-yellow-800 px-2 py-1 rounded">{course.status}</span>
                   </div>
                   <div className="flex items-center text-sm text-gray-600 mt-2">
-                    <img src="/path/to/instructor-image.png" alt={course.instructor} className="w-6 h-6 rounded-full mr-2" />
+                    <img src={imgInstructor} alt={course.instructor} className="w-6 h-6 rounded-full mr-2" />
                     <span>{course.instructor}</span>
                   </div>
                   <div className="text-lg font-semibold text-purple-500 mt-2">{course.price}</div>
