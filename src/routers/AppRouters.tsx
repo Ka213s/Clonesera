@@ -57,6 +57,7 @@ import CourseDetailPage from '../page/CourseDetailPage';
 import HelpPage from '../page/HelpPage';
 import ProtectedRoute from './ProtectedRoute';
 import PurchasedCourseDetail from '../page/Student/PurchasedCourseDetail';
+import PaymentPage from '../components/PaymentPage';
 
 const AppRouters: React.FC = () => {
   return (
@@ -84,6 +85,7 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/help" element={<HelpPage />} />
       <Route path="/404" element={<PageError />} />
       <Route path="/become-instructor" element={<BecomeInstructor />} />
+      <Route path="/payment" element={<PaymentPage />} />
 
       {/* Admin Routes */}
       <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
