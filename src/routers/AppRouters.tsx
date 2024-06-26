@@ -108,8 +108,6 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/student/messages" element={<ProtectedRoute allowedRoles={[2]}><Messages /></ProtectedRoute>} />
       <Route path="/student/statements" element={<ProtectedRoute allowedRoles={[2]}><Statements /></ProtectedRoute>} />
       <Route path="/feedback" element={<ProtectedRoute allowedRoles={[2]}><SendFeedback /></ProtectedRoute>} />
-      <Route path="/student/purchasedCourse/:courseId" element={<ProtectedRoute allowedRoles={[2]}><PurchasedCourseDetail /></ProtectedRoute>} />
-      <Route path="/student/enrollCourse" element={<ProtectedRoute allowedRoles={[2]}><EnrollCourse /></ProtectedRoute>} />
 
       {/* Instructor Routes */}
       <Route path="/createCourse" element={<ProtectedRoute allowedRoles={[3]}><CreateCourse /></ProtectedRoute>} />
@@ -132,7 +130,8 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/tests/certification-center" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationCenter /></ProtectedRoute>} />
       <Route path="/tests/test-view" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationTestView /></ProtectedRoute>} />
       <Route path="/tests/test-result" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationTestResult /></ProtectedRoute>} />
-
+      <Route path="/purchasedCourse/:courseId" element={<ProtectedRoute allowedRoles={[2,3]}><PurchasedCourseDetail /></ProtectedRoute>} />
+      <Route path="/enrollCourse" element={<ProtectedRoute allowedRoles={[2,3]}><EnrollCourse /></ProtectedRoute>} />
       {/* Catch-all route */}
       <Route path="*" element={<Navigate to="/home" />} />
     </Routes>

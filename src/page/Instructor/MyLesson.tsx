@@ -1,102 +1,57 @@
-import React, { Component } from 'react';
-import { FaBook } from 'react-icons/fa';
-import { Button, message, Tag } from 'antd';
-import { Link } from 'react-router-dom';
-import ApiService, { CourseData, AccountData } from '../../services/ApiService';
+import React from 'react';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
+import coursesData from '../../models/FileJson/courses.json'; // Import courses data
 
-interface MyLessonState {
-  courses: CourseData[];
-  accounts: AccountData[];
+interface Course {
+  id: string;
+  name: string;
+  author: string;
+  price: number;
+  date: string;
+  vid: string;
 }
 
-class MyLesson extends Component<{}, MyLessonState> {
-  state: MyLessonState = {
-    courses: [],
-    accounts: [],
-  };
-
-  componentDidMount() {
-    this.fetchCourses();
-    this.fetchAccounts();
-  }
-
-  fetchCourses = async () => {
-    try {
-      const courses = await ApiService.getCourses();
-      this.setState({ courses });
-    } catch (error) {
-      message.error('Failed to fetch courses.');
-    }
-  };
-
-  fetchAccounts = async () => {
-    try {
-      const accounts = await ApiService.getAccounts('2');
-      this.setState({ accounts });
-    } catch (error) {
-      message.error('Failed to fetch accounts.');
-    }
-  };
-
-  render() {
-    const { courses, accounts } = this.state;
-
-    return (
-      <div className="bg-white p-8">
-        <div className="flex justify-between items-center mb-4">
-          <div className="flex items-center space-x-2">
-            <FaBook className="h-6 w-6 text-gray-700" />
-            <h1 className="text-2xl font-bold">My Lessons</h1>
-          </div>
-        </div>
-        <table className="min-w-full bg-white">
-          <thead>
-            <tr className="text-left">
-              <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">Item No.</th>
-              <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">Title</th>
-              <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">Short Description</th>
-              <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">Description</th>
-              <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">Skill Course</th>
-              <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">Price</th>
-              <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">Requirements</th>
-              <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">Account</th>
-              <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">Status</th>
-              <th className="py-2 px-4 border-b border-gray-200 bg-gray-50">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {courses.map((course) => (
-              <tr className="hover:bg-gray-50" key={course.id}>
-                <td className="py-2 px-4 border-b border-gray-200">{course.id}</td>
-                <td className="py-2 px-4 border-b border-gray-200">{course.title}</td>
-                <td className="py-2 px-4 border-b border-gray-200">{course.shortDescription}</td>
-                <td className="py-2 px-4 border-b border-gray-200">{course.description}</td>
-                <td className="py-2 px-4 border-b border-gray-200">{course.skillCourse}</td>
-                <td className="py-2 px-4 border-b border-gray-200">{course.price}</td>
-                <td className="py-2 px-4 border-b border-gray-200">{course.requirements}</td>
-                <td className="py-2 px-4 border-b border-gray-200">
-                  {accounts.find((account) => account.id === course.Account_Id)?.fullName || 'N/A'}
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200">
-                  <Tag color={course.status ? 'green' : 'red'}>
-                    {course.status ? 'Active' : 'Inactive'}
-                  </Tag>
-                </td>
-                <td className="py-2 px-4 border-b border-gray-200 flex space-x-2">
-                  <Link to={`/course-details/${course.id}`}>
-                    <Button type="link">View Details</Button>
+const PurchasedCourses: React.FC = () => {
+  return (
+    <div className="flex-grow flex flex-col p-6 bg-gray-100 h-screen">
+      <h1 className="text-2xl font-bold text-gray-700 mb-4">Purchased Courses</h1>
+      <div className="space-y-4">
+        {coursesData.courses.map((course: Course, index: number) => (
+          <div
+            key={index}
+            className="bg-white p-6 rounded-lg shadow-md flex flex-col sm:flex-row w-full"
+          >
+            <Link
+              to={`/purchasedCourse/${course.id}`} 
+              className="w-full sm:w-48 h-40 object-cover rounded-md mb-4 sm:mb-0 sm:mr-4"
+            >
+              <img
+                src={course.vid} // Assuming vid contains the path to the image
+                alt={course.name}
+                className="w-full h-full object-cover rounded-md"
+              />
+            </Link>
+            <div className="flex flex-col justify-between flex-grow">
+              <div className="text-left">
+                <h2 className="text-lg font-bold text-blue-500">
+                  <Link
+                    to={`/purchasedCourse/${course.id}`} 
+                    className="hover:text-blue-700"
+                  >
+                    {course.name}
                   </Link>
-                  <Button type="link" onClick={() => window.open(course.certificateUrl, '_blank')}>
-                    View Certificate
-                  </Button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                </h2>
+                <p className="text-gray-600">Author: {course.author}</p>
+                {/* Additional course details */}
+                <p className="text-gray-600">Purchased Date: {course.date}</p>
+              </div>
+              <p className="text-gray-600 mt-4">Price: ${course.price.toFixed(2)}</p>
+            </div>
+          </div>
+        ))}
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
 
-export default MyLesson;
+export default PurchasedCourses;
