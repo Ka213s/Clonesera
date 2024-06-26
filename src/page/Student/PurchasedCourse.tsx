@@ -22,7 +22,7 @@ const PurchasedCourses: React.FC = () => {
             className="bg-white p-6 rounded-lg shadow-md flex flex-col sm:flex-row w-full"
           >
             <Link
-              to={`/student/purchasedCourse/${course.id}`} 
+              to={`/purchasedCourse/${course.id}`} 
               className="w-full sm:w-48 h-40 object-cover rounded-md mb-4 sm:mb-0 sm:mr-4"
             >
               <img
@@ -35,7 +35,7 @@ const PurchasedCourses: React.FC = () => {
               <div className="text-left">
                 <h2 className="text-lg font-bold text-blue-500">
                   <Link
-                    to={`/student/purchasedCourse/${course.id}`} 
+                    to={`/purchasedCourse/${course.id}`} 
                     className="hover:text-blue-700"
                   >
                     {course.name}

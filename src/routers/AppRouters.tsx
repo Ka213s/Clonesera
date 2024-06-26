@@ -13,13 +13,13 @@ import BecomeInstructor from '../page/BecomeInstructor';
 import Courses from '../page/Admin/Courses';
 import CourseDetail from '../page/Admin/CourseDetail';
 import AdminDashboard from '../page/Admin/Dashboard';
-import AdminUser from '../page/Admin/User';
 import CoursesPending from '../page/Admin/CoursesPending';
 import Review from '../page/Admin/Review';
 import CategoryManagement from '../page/Admin/CategoryManagement';
 import AllInstructor from '../page/Admin/allInstructor';
 import AddInstructor from '../page/Admin/addInstructor';
-import EditInstructor from '../page/Admin/editInstructor';
+import EditCourse from '../page/Admin/EditCourse';
+import RequestManagement from '../page/Admin/RequestManagement';
 // Student Pages and Components
 import StudentDashboard from '../page/Student/StudentDashboard';
 import PurchasedCourses from '../page/Student/PurchasedCourse';
@@ -58,6 +58,7 @@ import CourseDetailPage from '../page/CourseDetailPage';
 import HelpPage from '../page/HelpPage';
 import ProtectedRoute from './ProtectedRoute';
 import PurchasedCourseDetail from '../page/Student/PurchasedCourseDetail';
+import PaymentPage from '../components/PaymentPage';
 
 const AppRouters: React.FC = () => {
   return (
@@ -85,18 +86,21 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/help" element={<HelpPage />} />
       <Route path="/404" element={<PageError />} />
       <Route path="/become-instructor" element={<BecomeInstructor />} />
+      <Route path="/payment" element={<PaymentPage />} />
+
 
       {/* Admin Routes */}
       <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
-      <Route path="/admin/user" element={<ProtectedRoute allowedRoles={[1]}><AdminUser /></ProtectedRoute>} />
       <Route path="/admin/courses" element={<ProtectedRoute allowedRoles={[1]}><Courses /></ProtectedRoute>} />
       <Route path="/admin/course/:id" element={<ProtectedRoute allowedRoles={[1]}><CourseDetail /></ProtectedRoute>} />
       <Route path="/admin/pending_courses" element={<ProtectedRoute allowedRoles={[1]}><CoursesPending /></ProtectedRoute>} />
       <Route path="/admin/reviews" element={<ProtectedRoute allowedRoles={[1]}><Review /></ProtectedRoute>} />
       <Route path="/admin/category-management" element={<ProtectedRoute allowedRoles={[1]}><CategoryManagement /></ProtectedRoute>} />
-      <Route path="/admin/allInstructor" element={<ProtectedRoute allowedRoles={[1]}><AllInstructor /></ProtectedRoute>} />
-      <Route path="/admin/addInstructor" element={<ProtectedRoute allowedRoles={[1]}><AddInstructor /></ProtectedRoute>} />
-      <Route path="/admin/edit-instructor/:id" element={<ProtectedRoute allowedRoles={[1]}><EditInstructor /></ProtectedRoute>} />
+      <Route path="/admin/allIUser" element={<ProtectedRoute allowedRoles={[1]}><AllInstructor /></ProtectedRoute>} />
+      <Route path="/admin/addUser" element={<ProtectedRoute allowedRoles={[1]}><AddInstructor /></ProtectedRoute>} />
+      <Route path="/admin/editCourse/:id" element={<ProtectedRoute allowedRoles={[1]}><EditCourse /></ProtectedRoute>} />
+      <Route path="/admin/requestManagement" element={<ProtectedRoute allowedRoles={[1]}><RequestManagement /></ProtectedRoute>} />
+
 
       {/* Student Routes */}
       <Route path="/student/dashboard" element={<ProtectedRoute allowedRoles={[2]}><StudentDashboard /></ProtectedRoute>} />
@@ -107,8 +111,6 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/student/messages" element={<ProtectedRoute allowedRoles={[2]}><Messages /></ProtectedRoute>} />
       <Route path="/student/statements" element={<ProtectedRoute allowedRoles={[2]}><Statements /></ProtectedRoute>} />
       <Route path="/feedback" element={<ProtectedRoute allowedRoles={[2]}><SendFeedback /></ProtectedRoute>} />
-      <Route path="/student/purchasedCourse/:courseId" element={<ProtectedRoute allowedRoles={[2]}><PurchasedCourseDetail /></ProtectedRoute>} />
-      <Route path="/student/enrollCourse" element={<ProtectedRoute allowedRoles={[2]}><EnrollCourse /></ProtectedRoute>} />
 
       {/* Instructor Routes */}
       <Route path="/createCourse" element={<ProtectedRoute allowedRoles={[3]}><CreateCourse /></ProtectedRoute>} />
@@ -131,7 +133,8 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/tests/certification-center" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationCenter /></ProtectedRoute>} />
       <Route path="/tests/test-view" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationTestView /></ProtectedRoute>} />
       <Route path="/tests/test-result" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationTestResult /></ProtectedRoute>} />
-
+      <Route path="/purchasedCourse/:courseId" element={<ProtectedRoute allowedRoles={[2,3]}><PurchasedCourseDetail /></ProtectedRoute>} />
+      <Route path="/enrollCourse" element={<ProtectedRoute allowedRoles={[2,3]}><EnrollCourse /></ProtectedRoute>} />
       {/* Catch-all route */}
       <Route path="*" element={<Navigate to="/home" />} />
     </Routes>

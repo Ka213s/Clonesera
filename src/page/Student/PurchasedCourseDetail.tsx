@@ -43,7 +43,7 @@ const PurchasedCourseDetail: React.FC = () => {
 
     const defaultAvatar = "../static/media/Avatar02.715a35cf5d30280dd60a.jpg";
     const handleEnrollClick = () => {
-        navigate('/student/enrollCourse'); 
+        navigate('/enrollCourse'); 
       };
 
     return (
