@@ -19,6 +19,7 @@ import CategoryManagement from '../page/Admin/CategoryManagement';
 import AllInstructor from '../page/Admin/allInstructor';
 import AddInstructor from '../page/Admin/addInstructor';
 import EditCourse from '../page/Admin/EditCourse';
+import RequestManagement from '../page/Admin/RequestManagement';
 // Student Pages and Components
 import StudentDashboard from '../page/Student/StudentDashboard';
 import PurchasedCourses from '../page/Student/PurchasedCourse';
@@ -57,6 +58,7 @@ import CourseDetailPage from '../page/CourseDetailPage';
 import HelpPage from '../page/HelpPage';
 import ProtectedRoute from './ProtectedRoute';
 import PurchasedCourseDetail from '../page/Student/PurchasedCourseDetail';
+import PaymentPage from '../components/PaymentPage';
 
 const AppRouters: React.FC = () => {
   return (
@@ -84,6 +86,8 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/help" element={<HelpPage />} />
       <Route path="/404" element={<PageError />} />
       <Route path="/become-instructor" element={<BecomeInstructor />} />
+      <Route path="/payment" element={<PaymentPage />} />
+
 
       {/* Admin Routes */}
       <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
@@ -95,6 +99,7 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/admin/allIUser" element={<ProtectedRoute allowedRoles={[1]}><AllInstructor /></ProtectedRoute>} />
       <Route path="/admin/addUser" element={<ProtectedRoute allowedRoles={[1]}><AddInstructor /></ProtectedRoute>} />
       <Route path="/admin/editCourse/:id" element={<ProtectedRoute allowedRoles={[1]}><EditCourse /></ProtectedRoute>} />
+      <Route path="/admin/requestManagement" element={<ProtectedRoute allowedRoles={[1]}><RequestManagement /></ProtectedRoute>} />
 
 
       {/* Student Routes */}

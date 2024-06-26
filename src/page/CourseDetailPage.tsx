@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import coursesData from '../models/FileJson/courses.json';
 import { FaEye, FaThumbsUp, FaThumbsDown, FaShare } from 'react-icons/fa';
-import {
-  PlayCircleOutlined,
-  CommentOutlined
-} from '@ant-design/icons';
+import { PlayCircleOutlined, CommentOutlined } from '@ant-design/icons';
 
 interface Course {
   id: string;
@@ -20,6 +17,7 @@ interface Course {
 
 const CourseDetailPage: React.FC = () => {
   const { courseId } = useParams<{ courseId: string }>();
+  const navigate = useNavigate();
   const [course, setCourse] = useState<Course | undefined>(undefined);
   const [activeTab, setActiveTab] = useState<string>('about');
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -32,8 +30,6 @@ const CourseDetailPage: React.FC = () => {
     setIsModalVisible(true);
   };
 
-
-  // Find course in both courses and newestCourses
   const loadCourse = (id: string): Course | undefined => {
     return (
       coursesData.courses.find((course) => course.id === id) ||
@@ -41,7 +37,6 @@ const CourseDetailPage: React.FC = () => {
     );
   };
 
-  // Load initial course
   useEffect(() => {
     const loadedCourse = loadCourse(courseId!);
     setCourse(loadedCourse);
@@ -53,12 +48,15 @@ const CourseDetailPage: React.FC = () => {
 
   const defaultAvatar = "../static/media/Avatar02.715a35cf5d30280dd60a.jpg";
 
+  const handleBuyNowClick = () => {
+    navigate('/payment');
+  };
+
   return (
     <div>
       <div className="bg-gray-800 text-white rounded-lg">
         <div className="container mx-auto p-6">
           <div className="flex flex-col lg:flex-row lg:space-x-8">
-            {/* Video */}
             <div className="relative w-full mb-4 lg:w-1/3 lg:mb-0">
               <div className="relative">
                 <a onClick={showModal} className="block">
@@ -77,12 +75,12 @@ const CourseDetailPage: React.FC = () => {
               <p className="mt-3 text-lg">{course.description}</p>
               <p className="mt-3 text-lg">114,521 students enrolled</p>
               <div className="flex items-center mt-4 mb-3 text-lg">
-                <CommentOutlined className="" />
+                <CommentOutlined />
                 <span className="ml-2">English</span>
               </div>
               <p className="mt-2 text-lg">Last updated {course.date}</p>
               <div className="mt-4">
-                <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Buy Now</button>
+                <button onClick={handleBuyNowClick} className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Buy Now</button>
               </div>
               <p className="mt-2 text-lg">30-Day Money-Back Guarantee</p>
             </div>
@@ -92,7 +90,6 @@ const CourseDetailPage: React.FC = () => {
 
       <div className="container mx-auto p-6">
         <div className="flex items-center justify-between">
-          {/* Avatar and Author Name */}
           <div className="flex items-center space-x-4">
             <img src={defaultAvatar} alt={course.author} className="w-12 h-12 rounded-full" />
             <div>
@@ -102,7 +99,6 @@ const CourseDetailPage: React.FC = () => {
               </button>
             </div>
           </div>
-          {/* Additional Icons */}
           <div className="flex items-center space-x-1 text-gray-500">
             <div className="flex items-center space-x-1">
               <div className="border border-gray-200 rounded p-1 flex flex-col items-center justify-center">
@@ -174,13 +170,11 @@ const CourseDetailPage: React.FC = () => {
             {activeTab === 'content' && (
               <div id="content">
                 <h2 className="text-2xl font-bold">Course Content</h2>
-                {/* Add your course content details here */}
               </div>
             )}
             {activeTab === 'review' && (
               <div id="review">
                 <h2 className="text-2xl font-bold">Review</h2>
-                {/* Add your review details here */}
               </div>
             )}
           </div>

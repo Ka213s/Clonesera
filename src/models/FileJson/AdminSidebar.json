@@ -6,6 +6,11 @@
       "label": "Dashboard"
     },
     {
+      "key": "/admin/requestManagement",
+      "icon": "DashboardOutlined",
+      "label": "Request Management"
+    },
+    {
       "key": "instructor",
       "icon": "TeamOutlined",
       "label": "Instructor",
