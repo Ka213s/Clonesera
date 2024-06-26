@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom'; // Import Link from react-router-dom
-import coursesData from '../../models/FileJson/courses.json'; // Import courses data
+import { Link } from 'react-router-dom'; 
+import coursesData from '../../models/FileJson/courses.json'; 
 
 interface Course {
   id: string;
@@ -26,7 +26,7 @@ const PurchasedCourses: React.FC = () => {
               className="w-full sm:w-48 h-40 object-cover rounded-md mb-4 sm:mb-0 sm:mr-4"
             >
               <img
-                src={course.vid} // Assuming vid contains the path to the image
+                src={course.vid} 
                 alt={course.name}
                 className="w-full h-full object-cover rounded-md"
               />
@@ -42,7 +42,6 @@ const PurchasedCourses: React.FC = () => {
                   </Link>
                 </h2>
                 <p className="text-gray-600">Author: {course.author}</p>
-                {/* Additional course details */}
                 <p className="text-gray-600">Purchased Date: {course.date}</p>
               </div>
               <p className="text-gray-600 mt-4">Price: ${course.price.toFixed(2)}</p>
