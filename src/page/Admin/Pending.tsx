@@ -47,10 +47,21 @@ const Pending: React.FC = () => {
       title: 'Action',
       key: 'action',
       render: (text: string, record: any) => (
-        <Space size="middle">
-          <Button type="primary" onClick={() => handleApprove(record.userName)}>Approve</Button>
-          <Button danger onClick={() => handleReject(record.userName)}>Reject</Button>
-        </Space>
+        <div className="space-x-2">
+        <button
+          className="bg-purple-400 text-white font-bold py-2 px-4 rounded"
+          onClick={() => handleApprove(record.userName)}
+        >
+          Approve
+        </button>
+        <button
+          className="bg-red-500 text-white font-bold py-2 px-4 rounded"
+          onClick={() => handleReject(record.userName)}
+        >
+          Reject
+        </button>
+      </div>
+      
       ),
     },
   ];
