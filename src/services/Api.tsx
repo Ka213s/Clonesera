@@ -113,6 +113,20 @@ class Api {
       throw error;
     }
   }
+  async getDataUser(token: string): Promise<any> {
+    try {
+      const response = await this.api.get('/api/auth', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error getting user data: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
 }
 
 export { createApiInstance, Api };
