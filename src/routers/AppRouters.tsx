@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import MainLayout from '../layouts/MainLayout';
 // Page Components
 import HomePage from '../page/HomePage';
@@ -66,6 +68,7 @@ const AppRouters: React.FC = () => {
   return (
     <Router>
       <RoutesWrapper />
+      <ToastContainer />
     </Router>
   );
 };
