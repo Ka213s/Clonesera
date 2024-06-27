@@ -222,21 +222,26 @@ const EnrollCourse: React.FC = () => {
             <div className="absolute top-4 left-4 flex items-center">
               <button
                 onClick={goBack}
-                className="p-2 bg-blue-500 text-white rounded-full shadow-md hover:bg-blue-400 focus:outline-none"
+                className="p-2 bg-[#9997F5] hover:bg-[#8886E5] text-white rounded-full shadow-md focus:outline-none"
               >
                 <FaChevronLeft className="text-lg" />
               </button>
-              <span className="ml-4 text-xl font-semibold text-gray-700">
+              <span className="ml-4 text-xl font-semibold text-gray-800">
                 Course Title
               </span>
             </div>
             {selectedLecture.type === 'video' ? (
               <>
-                <video ref={videoRef} src={selectedLecture.url} controls className="w-4/5 h-2/3 rounded-lg shadow-md mt-12">
+                <video
+                  ref={videoRef}
+                  src={selectedLecture.url}
+                  controls
+                  className="w-full h-96 mt-20 rounded-lg shadow-md"
+                >
                   Your browser does not support the video tag.
                 </video>
                 <div className="mt-4 text-left w-4/5">
-                  <h3 className="text-2xl font-semibold">{selectedLecture.title}</h3>
+                  <h3 className="text-2xl font-semibold text-gray-800">{selectedLecture.title}</h3>
                   <p className="mt-2 text-gray-600">{selectedLecture.description}</p>
                 </div>
               </>
@@ -247,22 +252,28 @@ const EnrollCourse: React.FC = () => {
                     <>
                       {selectedLecture.questions.map((question) => (
                         <div key={question.id} className="mb-6">
-                          <h3 className="text-1xl font-semibold">{question.question}</h3>
+                          <h3 className="text-xl font-semibold text-gray-800">{question.question}</h3>
                           <div className="mt-4 space-y-2">
                             {question.options.map((option, index) => (
                               <div
                                 key={index}
-                                className="flex items-center cursor-pointer p-3 bg-white"
+                                className="flex items-center cursor-pointer p-3 bg-white rounded-lg shadow-md hover:bg-gray-100"
                               >
                                 <input
                                   type={question.type === 'single' ? 'radio' : 'checkbox'}
                                   name={`quizOption-${question.id}`}
                                   value={index}
                                   checked={selectedOptions[question.id]?.includes(index) || false}
-                                  onChange={() => handleQuizAnswerSelection(question.id, index, question.type === 'multiple')}
+                                  onChange={() =>
+                                    handleQuizAnswerSelection(
+                                      question.id,
+                                      index,
+                                      question.type === 'multiple'
+                                    )
+                                  }
                                   className="mr-2"
                                 />
-                                {option}
+                                <span className="text-gray-800">{option}</span>
                               </div>
                             ))}
                           </div>
@@ -270,7 +281,7 @@ const EnrollCourse: React.FC = () => {
                       ))}
                       <button
                         onClick={handleSubmitQuiz}
-                        className="bg-blue-500 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-400"
+                        className="bg-[#9997F5] hover:bg-[#8886E5] text-white px-4 py-2 rounded-md shadow-md"
                       >
                         Submit
                       </button>
@@ -300,7 +311,8 @@ const EnrollCourse: React.FC = () => {
           <div key={section.id} className="mb-4">
             <button
               onClick={() => toggleSection(section.id)}
-              className="w-full text-left bg-blue-500 text-white p-3 rounded-lg shadow-md">
+              className="w-full text-left bg-[#9997F5] hover:bg-[#8886E5] text-white p-3 rounded-lg shadow-md"
+            >
               {section.title}
             </button>
             {expandedSections.includes(section.id) && (
@@ -317,9 +329,11 @@ const EnrollCourse: React.FC = () => {
                         setSelectedOptions({});
                       }
                     }}
-                    className={`cursor-pointer p-3 bg-white hover:bg-gray-200 rounded-lg shadow-md flex items-center ${!lecture.isCompleted ? 'opacity-50 cursor-not-allowed' : ''}`}>
-                    <FaPlayCircle className="mr-3 text-blue-500" />
-                    {lecture.title}
+                    className={`cursor-pointer p-3 bg-white hover:bg-gray-100 rounded-lg shadow-md flex items-center ${!lecture.isCompleted ? 'opacity-50 cursor-not-allowed' : ''
+                      }`}
+                  >
+                    <FaPlayCircle className="mr-3 text-blue-600" />
+                    <span className="text-gray-800">{lecture.title}</span>
                     {lecture.isCompleted && (
                       <FaCheckCircle className="ml-auto text-green-500" />
                     )}
@@ -330,23 +344,24 @@ const EnrollCourse: React.FC = () => {
           </div>
         ))}
       </div>
-      <div className="absolute bottom-0 w-full bg-gray-300 p-3 flex justify-center space-x-2 items-center">
+      <div className="fixed bottom-0 w-full bg-gray-300 p-3 flex justify-center space-x-2 items-center shadow-md">
         <button
           onClick={handlePreviousLecture}
           disabled={selectedSectionIndex === 0 && selectedLectureIndex === 0}
-          className="bg-blue-500 text-white px-2 py-2 rounded-md shadow-md hover:bg-blue-400 disabled:opacity-50"
+          className="bg-[#9997F5] hover:bg-[#8886E5] text-white px-4 py-2 rounded-md shadow-md disabled:opacity-50"
         >
           Previous Lesson
         </button>
         <button
           onClick={handleNextLecture}
           disabled={!selectedLecture?.isCompleted}
-          className="bg-blue-500 text-white px-2 py-2 rounded-md shadow-md hover:bg-blue-400 disabled:opacity-50"
+          className="bg-[#9997F5] hover:bg-[#8886E5] text-white px-4 py-2 rounded-md shadow-md disabled:opacity-50"
         >
           Next Lesson
         </button>
       </div>
     </div>
+
   );
 };
 

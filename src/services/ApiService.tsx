@@ -15,7 +15,7 @@ export interface CourseData {
     requirements: string;
     Account_Id: string;
     status: boolean;
-    certificateUrl?: string; // Add this optional property
+    certificateUrl?: string; 
 }
 
 export interface UserData {

@@ -8,6 +8,8 @@ import { Form, Input, Button, Radio } from 'antd';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import Artwork from '../assets/Artwork.jpg';
 import ApiService from '../services/ApiService';
+import Lottie from 'react-lottie';
+import animationData from '../assets/Animation - 1719199926629.json';
 const Register: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
@@ -60,6 +62,14 @@ const Register: React.FC = () => {
     const toggleConfirmPasswordVisibility = (): void => {
         setShowConfirmPassword(!showConfirmPassword);
     };
+    const lottieOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+            preserveAspectRatio: 'xMidYMid slice'
+        }
+    };
 
     return (
         <div className="bg-gray-50 min-h-screen flex items-center justify-center">
@@ -68,7 +78,19 @@ const Register: React.FC = () => {
                     <img className='rounded-2xl' src={Artwork} alt="" />
                 </div>
                 <div className='md:w-1/2 px-8 py-4'>
-                    <h2 className="font-bold text-3xl text-[#6C6EDD] mb-4">Register</h2>
+                    <div className="flex items-center">
+                        <div>
+                            <h2 className="font-bold text-3xl text-[#6C6EDD] mb-4">Register</h2>
+                            <p className='text-base mt-2 text-[#4A4DC3]'>Welcome to Clonesera</p>
+                        </div>
+                        <div className="md:block hidden ml-6">
+                            <Lottie
+                                options={lottieOptions}
+                                height={150}
+                                width={150}
+                            />
+                        </div>
+                    </div>
                     <Form
                         form={form}
                         onFinish={handleSubmit}

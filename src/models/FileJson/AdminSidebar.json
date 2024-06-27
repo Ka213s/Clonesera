@@ -6,21 +6,17 @@
       "label": "Dashboard"
     },
     {
+      "key": "/admin/requestManagement",
+      "icon": "DashboardOutlined",
+      "label": "Request Management"
+    },
+    {
       "key": "instructor",
       "icon": "TeamOutlined",
       "label": "Instructor",
       "children": [
-        { "key": "/admin/allInstructor", "label": "All Instructor" },
-        { "key": "/admin/addInstructor", "label": "Add Instructor" }
-      ]
-    },   
-    {
-      "key": "students",
-      "icon": "UsergroupAddOutlined",
-      "label": "Students",
-      "children": [
-        { "key": "/admin/students/list", "label": "Student List" },
-        { "key": "/admin/students/profile", "label": "Student Profile" }
+        { "key": "/admin/allIUser", "label": "All User" },
+        { "key": "/admin/addUser", "label": "Add User" }
       ]
     },
     {
@@ -36,7 +32,7 @@
       "icon": "BookOutlined",
       "label": "Courses",
       "children": [
-        { "key": "/admin/courses", "label": "Courses" },
+        { "key": "/admin/courses", "label": "All Courses" },
         { "key": "/admin/pending_courses", "label": "Pending Courses" },
         { "key": "/admin/reviews", "label": "Reviews" }
       ]

@@ -104,7 +104,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       <Search
         placeholder="Search..."
         onSearch={(value) => console.log(value)}
-        style={{ width: 220 }}
+        style={{ width: 350 }}
         className="mx-4"
       />
 
@@ -120,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             <Button
               onClick={handleCreateCourse}
               type="primary"
-              className="hidden md:block bg-[#9997F5] border-none hover:bg-[#8886E5]"
+              className="hidden md:block bg-[#9997F5] hover:bg-[#8886E5] border-none "
             >
               Create New Course
             </Button>
