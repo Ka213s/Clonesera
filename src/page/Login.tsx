@@ -1,39 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { Modal, Radio } from 'antd';
 import 'react-toastify/dist/ReactToastify.css';
 import { Form, Input, Button } from 'antd';
-import ApiService, { UserData } from '../services/ApiService';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import Artwork from '../assets/Artwork.jpg';
 import { LoginData } from '../models/LoginData';
 import Lottie from 'react-lottie';
 import animationData from '../assets/Animation - 1719199926629.json';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { createApiInstance } from '../services/Api';
+import useAuthCheck from '../hooks/useAuthCheck';
+import { set } from 'mongoose';
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 
 console.log('clientId:', clientId);
 const Login: React.FC = () => {
-  const [loginData, setLoginData] = useState<LoginData>(new LoginData("", ""));
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [googleId, setGoogleId] = useState<string | null>(null);
   const navigate = useNavigate();
+  const api = createApiInstance(navigate);
 
-  useEffect(() => {
-    const userData = localStorage.getItem("userData");
-    if (userData) {
-      navigate("/home");
-    }
+  useAuthCheck();
 
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 0);
-
-    return () => clearTimeout(timer);
-  }, [navigate]);
-
-  const onFinish = async (values: { email: string, password: string }) => {
+  const loginWithEmail = async (values: { email: string, password: string }) => {
     setIsButtonDisabled(true);
 
     try {
@@ -69,8 +63,6 @@ const Login: React.FC = () => {
   };
 
   const handleGoogleLoginSuccess = async (response: any) => {
-    const token = response.credential;
-    console.log('idToken:', token); // Log the response
     try {
       console.log('Google login successful, response:', response); 
       localStorage.setItem('idToken', token);
@@ -116,13 +108,13 @@ const Login: React.FC = () => {
         }
       }
     } catch (error) {
-      toast.error('Error logging in with Google');
       console.error('Error logging in with Google:', error);
+      setGoogleId(response.credential);
+      setIsRoleModalVisible(true);
     }
   };
 
   const handleGoogleLoginError = () => {
-    toast.error('Error logging in with Google');
     console.error('Error logging in with Google');
   };
   const lottieOptions = {
@@ -160,10 +152,23 @@ const Login: React.FC = () => {
                 />
               </div>
             </div>
+            <div className="flex items-center">
+              <div>
+                <h2 className="font-bold text-3xl text-[#6C6EDD]">Login</h2>
+                <p className='text-base mt-2 text-[#4A4DC3]'>If you already a member, easily log in</p>
+              </div>
+              <div className="md:block hidden ml-6">
+                <Lottie
+                  options={lottieOptions}
+                  height={150}
+                  width={150}
+                />
+              </div>
+            </div>
             <Form
               name="login"
               initialValues={{ email: loginData.email, password: loginData.password }}
-              onFinish={onFinish}
+              onFinish={loginWithEmail}
               className="flex flex-col gap-4 mt-6"
             >
               <Form.Item
@@ -220,6 +225,12 @@ const Login: React.FC = () => {
                 onError={handleGoogleLoginError}
               />
             </div>
+            <div className="flex justify-center mt-4">
+              <GoogleLogin
+                onSuccess={handleGoogleLoginSuccess}
+                onError={handleGoogleLoginError}
+              />
+            </div>
             <div className='w-full mt-5 border-b border-gray-400'>
               <Button
                 onClick={handleForgotPasswordClick}
@@ -241,9 +252,25 @@ const Login: React.FC = () => {
           <div className="md:block hidden w-1/2">
             <img className="rounded-2xl" src={Artwork} alt="Artwork" />
           </div>
-          <ToastContainer />
         </div>
       </div>
+
+      <Modal
+        open={isRoleModalVisible}
+        onOk={handleRoleSelection}
+        onCancel={() => setIsRoleModalVisible(false)}
+        okText="Submit"
+      >
+        <div className="text-center mb-6">
+          <p className="text-lg font-bold">Sign up with Google</p>
+        </div>
+        <p className="mb-2">Select Your Role</p>
+        <Radio.Group onChange={(e) => setSelectedRole(e.target.value)} value={selectedRole}>
+          <Radio value="student">Student</Radio>
+          <Radio value="instructor">Instructor</Radio>
+        </Radio.Group>
+      </Modal>
+
     </GoogleOAuthProvider>
   );
   

@@ -1,71 +1,58 @@
 import React, { useState } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { Form, Input, Button, Radio } from 'antd';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
-import Artwork from '../assets/Artwork.jpg';
-import ApiService from '../services/ApiService';
+import { FaEyeSlash } from 'react-icons/fa';
 import Lottie from 'react-lottie';
+
+import { createApiInstance } from '../services/Api';
+import Artwork from '../assets/Artwork.jpg';
 import animationData from '../assets/Animation - 1719199926629.json';
+
 const Register: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-    const [showPassword, setShowPassword] = useState(false);
-    const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const api = createApiInstance(navigate);
 
-    const handleLoginClick = (): void => {
-        navigate('/login');
-    };
+    const handleLoginClick = () => { navigate('/login') };
 
     const handleSubmit = async (values: any): Promise<void> => {
         setIsButtonDisabled(true);
 
         try {
-            const userCredential = await createUserWithEmailAndPassword(auth, values.email, values.password);
-            console.log('Registration successful:', userCredential.user);
-
             const dataToSubmit = {
+                name: values.fullName,
                 password: values.password,
                 email: values.email,
-                createdAt: new Date().toISOString(),
-                roleId: values.role === 'student' ? 2 : 3,
-                status: true,
-                walletId: null,
-                phonenumber: null,
-                avatar: null,
-                updateAt: null,
-                address: null,
-                fullName: null,
+                role: values.role,
             };
+            console.log('Data to submit:', dataToSubmit);
+            const response = await api.registerAccount(dataToSubmit);
 
-            const response = await ApiService.registerAccount(dataToSubmit);
-            toast.success('Registration successful');
-            console.log('Registration successful with External API:', response.data);
+            if (response.emailExists) {
+                setIsButtonDisabled(false);
+                form.setFields([{ name: 'email', errors: [response.message] }]);
+                return;
+            }
+
+            console.log('Registration successful with External API:', response);
             form.resetFields();
-
         } catch (error: any) {
-            toast.error('Error registering: ' + error.message);
-            console.error('Error registering:', error);
-        } finally {
             setIsButtonDisabled(false);
+            if (error.response?.data?.message) {
+                form.setFields([{ name: 'email', errors: [error.response.data.message] }]);
+            } else if (error.emailExists) {
+                form.setFields([{ name: 'email', errors: [error.message] }]);
+            } else {
+                console.error('Error registering:', error);
+            }
         }
     };
 
-    const togglePasswordVisibility = (): void => {
-        setShowPassword(!showPassword);
-    };
-
-    const toggleConfirmPasswordVisibility = (): void => {
-        setShowConfirmPassword(!showConfirmPassword);
-    };
     const lottieOptions = {
         loop: true,
         autoplay: true,
-        animationData: animationData,
+        animationData,
         rendererSettings: {
             preserveAspectRatio: 'xMidYMid slice'
         }
@@ -75,7 +62,7 @@ const Register: React.FC = () => {
         <div className="bg-gray-50 min-h-screen flex items-center justify-center">
             <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-5xl p-5 items-center">
                 <div className='md:block hidden w-1/2'>
-                    <img className='rounded-2xl' src={Artwork} alt="" />
+                    <img className='rounded-2xl' src={Artwork} alt="Artwork" />
                 </div>
                 <div className='md:w-1/2 px-8 py-4'>
                     <div className="flex items-center">
@@ -84,21 +71,27 @@ const Register: React.FC = () => {
                             <p className='text-base mt-2 text-[#4A4DC3]'>Welcome to Clonesera</p>
                         </div>
                         <div className="md:block hidden ml-6">
-                            <Lottie
-                                options={lottieOptions}
-                                height={150}
-                                width={150}
-                            />
+                            <Lottie options={lottieOptions} height={150} width={150} />
                         </div>
                     </div>
                     <Form
                         form={form}
                         onFinish={handleSubmit}
-                        layout="vertical" className="flex flex-col gap-4"
+                        layout="vertical"
+                        className="flex flex-col gap-4"
                     >
                         <Form.Item
+                            name="fullName"
+                            rules={[{ required: true, message: 'Please input your full name!' }]}
+                        >
+                            <Input placeholder='Full Name' className="p-3 rounded-xl border" />
+                        </Form.Item>
+                        <Form.Item
                             name="email"
-                            rules={[{ required: true, message: 'Please input your email!' }, { type: 'email', message: 'Please enter a valid email!' }]}
+                            rules={[
+                                { required: true, message: 'Please input your email!' },
+                                { type: 'email', message: 'Please enter a valid email!' }
+                            ]}
                         >
                             <Input placeholder='Email' className="p-3 rounded-xl border" />
                         </Form.Item>
@@ -107,16 +100,9 @@ const Register: React.FC = () => {
                             rules={[{ required: true, message: 'Please input your password!' }]}
                         >
                             <Input.Password
-                                type={showPassword ? "text" : "password"}
                                 placeholder='Password'
                                 className="p-3 rounded-xl border"
-                                suffix={
-                                    <Button
-                                        type="link"
-                                        icon={showPassword ? <FaEyeSlash /> : <FaEye />}
-                                        onClick={togglePasswordVisibility}
-                                    />
-                                }
+                                suffix={<FaEyeSlash />}
                             />
                         </Form.Item>
                         <Form.Item
@@ -135,20 +121,14 @@ const Register: React.FC = () => {
                             ]}
                         >
                             <Input.Password
-                                type={showConfirmPassword ? "text" : "password"}
                                 placeholder='Confirm Password'
                                 className="p-3 rounded-xl border"
-                                suffix={
-                                    <Button
-                                        type="link"
-                                        icon={showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                                        onClick={toggleConfirmPasswordVisibility}
-                                    />
-                                }
+                                suffix={<FaEyeSlash />}
                             />
                         </Form.Item>
                         <Form.Item
-                            name="role" rules={[{ required: true, message: 'Please select a role!' }]}
+                            name="role"
+                            rules={[{ required: true, message: 'Please select a role!' }]}
                         >
                             <Radio.Group>
                                 <Radio value="student">Student</Radio>
@@ -177,7 +157,6 @@ const Register: React.FC = () => {
                             Sign In
                         </Button>
                     </div>
-                    <ToastContainer />
                 </div>
             </div>
         </div>

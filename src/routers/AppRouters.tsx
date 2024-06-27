@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import MainLayout from '../layouts/MainLayout';
 // Page Components
 import HomePage from '../page/HomePage';
@@ -66,6 +68,7 @@ const AppRouters: React.FC = () => {
   return (
     <Router>
       <RoutesWrapper />
+      <ToastContainer />
     </Router>
   );
 };
@@ -132,7 +135,7 @@ const RoutesWrapper: React.FC = () => {
 
       {/* Shared Routes */}
       <Route path="/view_instructor_profile" element={<ProtectedRoute allowedRoles={[2, 3]}><ViewProfile /></ProtectedRoute>} />
-      <Route path="/settings" element={<ProtectedRoute allowedRoles={[2, 3]}><SettingsPage /></ProtectedRoute>} />
+      <Route path="/settings" element={<SettingsPage />} />
       <Route path="/tests/certification-center" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationCenter /></ProtectedRoute>} />
       <Route path="/tests/test-view" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationTestView /></ProtectedRoute>} />
       <Route path="/tests/test-result" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationTestResult /></ProtectedRoute>} />
