@@ -10,6 +10,7 @@ import animationData from '../assets/Animation - 1719199926629.json';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { createApiInstance } from '../services/Api';
 import useAuthCheck from '../hooks/useAuthCheck';
+import { set } from 'mongoose';
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 
@@ -22,7 +23,6 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const api = createApiInstance(navigate);
 
-
   useAuthCheck();
 
   const loginWithEmail = async (values: { email: string, password: string }) => {
@@ -32,6 +32,9 @@ const Login: React.FC = () => {
       const response = await api.loginAccount(values);
       const token = response.data.token;
       localStorage.setItem('token', token);
+      const getDataUser = await api.getDataUser(token);
+      const dataUser = JSON.stringify(getDataUser.data); 
+      localStorage.setItem('data', dataUser);
       navigate('/home');
     } catch (error) {
       console.error('Error logging in:', error);
@@ -49,9 +52,24 @@ const Login: React.FC = () => {
   };
 
   const handleGoogleLoginSuccess = async (response: any) => {
-    console.log('Google login successful, response:', response);
-    setGoogleId(response.credential);
-    setIsRoleModalVisible(true);
+    try {
+      const googleResponse = await api.loginUserByGoogle({ google_id: response.credential });
+      if (googleResponse) {
+        const token = googleResponse.data.token;
+        localStorage.setItem('token', token);
+        const getDataUser = await api.getDataUser(token);
+        const dataUser = JSON.stringify(getDataUser.data); 
+        localStorage.setItem('data', dataUser);
+        navigate('/home');
+      } else {
+        setGoogleId(response.credential);
+        setIsRoleModalVisible(true);
+      }
+    } catch (error) {
+      console.error('Error logging in with Google:', error);
+      setGoogleId(response.credential);
+      setIsRoleModalVisible(true);
+    }
   };
 
   const handleGoogleLoginError = () => {
@@ -62,13 +80,12 @@ const Login: React.FC = () => {
     if (!googleId || !selectedRole) return;
 
     try {
-      const googleLoginResponse = await api.loginWithGoogle({ google_id: googleId, role: selectedRole });
+      const googleLoginResponse = await api.registerUserByGoogle({ google_id: googleId, role: selectedRole });
       const token = googleLoginResponse.data.token;
       localStorage.setItem('token', token);
       setIsRoleModalVisible(false);
-      navigate('/home');
     } catch (error) {
-      console.error('Error logging in with Google:', error);
+      console.error('Error registering with Google:', error);
     }
   };
 
@@ -184,18 +201,21 @@ const Login: React.FC = () => {
       </div>
 
       <Modal
-        title="Select Your Role"
-        visible={isRoleModalVisible}
+        open={isRoleModalVisible}
         onOk={handleRoleSelection}
         onCancel={() => setIsRoleModalVisible(false)}
         okText="Submit"
       >
+        <div className="text-center mb-6">
+          <p className="text-lg font-bold">Sign up with Google</p>
+        </div>
+        <p className="mb-2">Select Your Role</p>
         <Radio.Group onChange={(e) => setSelectedRole(e.target.value)} value={selectedRole}>
           <Radio value="student">Student</Radio>
           <Radio value="instructor">Instructor</Radio>
-         
         </Radio.Group>
       </Modal>
+
     </GoogleOAuthProvider>
   );
 };
