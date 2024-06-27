@@ -21,6 +21,13 @@ const setupAxiosInterceptors = (navigate: ReturnType<typeof useNavigate>): Axios
             emailExists: true,
             message: errorMessage
           });
+        } else if (status === 400 && errorMessage.includes("Can't parse token payload")) {
+          // Do not navigate to /400 for this specific error message
+          return Promise.reject({
+            ...error,
+            parseTokenError: true,
+            message: errorMessage
+          });
         } else if (status === 400) {
           navigate('/400');
         } else if (status === 404) {
@@ -74,19 +81,38 @@ class Api {
     }
   }
 
-  async loginWithGoogle(data: { google_id: string; role: string; }): Promise<any> {
+  async registerUserByGoogle(data: { google_id: string; role: string; }): Promise<any> {
     try {
       const response = await this.api.post('/api/users/google', data);
-      toast.success('Google login successful');
+      toast.success('Signed up for Google successfully. Please log in again', {
+        autoClose: 8000,
+      });
       return response.data;
     } catch (error: any) {
-      toast.error('Error logging in with Google: ' + (error.response?.data?.message || error.message));
+      toast.error('Error registering with Google: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }
   
 
-  
+  async loginUserByGoogle(data: { google_id: string; }): Promise<any> {
+    try {
+      const response = await this.api.post('/api/auth/google', data);
+      toast.success('Google login successful',{
+        autoClose: 8000, 
+      }) 
+      return response.data;
+    } catch (error: any) {
+      if (error.parseTokenError) {
+        return { parseTokenError: true, message: error.message };
+      }
+      // toast.error('Error logging in with Google: ' + (error.response?.data?.message || error.message));
+      toast.error('You have not signed up for a Google account',{
+        autoClose: 8000, 
+      });
+      throw error;
+    }
+  }
 }
 
 export { createApiInstance, Api };
