@@ -51,8 +51,6 @@ class Api {
 
   async registerAccount(data: { name: string; email: string; password: string; role: string; }): Promise<any> {
     try {
-      console.log('Register request to:', this.api.defaults.baseURL + '/api/users');
-      console.log('Register data:', data);
       const response = await this.api.post('/api/users', data);
       toast.success('Registration successful');
       return response.data;
@@ -67,9 +65,7 @@ class Api {
 
   async loginAccount(data: { email: string; password: string; }): Promise<any> {
     try {
-      console.log('Login request to:', this.api.defaults.baseURL + '/login');
-      console.log('Login data:', data);
-      const response = await this.api.post('/login', data);
+      const response = await this.api.post('/api/auth', data);
       toast.success('Login successful');
       return response.data;
     } catch (error: any) {
@@ -77,6 +73,20 @@ class Api {
       throw error;
     }
   }
+
+  async loginWithGoogle(data: { google_id: string; role: string; }): Promise<any> {
+    try {
+      const response = await this.api.post('/api/users/google', data);
+      toast.success('Google login successful');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error logging in with Google: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+  
+
+  
 }
 
 export { createApiInstance, Api };

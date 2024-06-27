@@ -12,16 +12,13 @@ const Register: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-
     const api = createApiInstance(navigate);
 
-    const handleLoginClick = (): void => {
-        navigate('/login');
-    };
+    const handleLoginClick = () => { navigate('/login') };
 
     const handleSubmit = async (values: any): Promise<void> => {
         setIsButtonDisabled(true);
-    
+
         try {
             const dataToSubmit = {
                 name: values.fullName,
@@ -31,17 +28,15 @@ const Register: React.FC = () => {
             };
             console.log('Data to submit:', dataToSubmit);
             const response = await api.registerAccount(dataToSubmit);
-    
+
             if (response.emailExists) {
                 setIsButtonDisabled(false);
                 form.setFields([{ name: 'email', errors: [response.message] }]);
                 return;
             }
-    
+
             console.log('Registration successful with External API:', response);
             form.resetFields();
-            setIsButtonDisabled(false);  // Reset the button state here
-    
         } catch (error: any) {
             setIsButtonDisabled(false);
             if (error.response?.data?.message) {
@@ -57,7 +52,7 @@ const Register: React.FC = () => {
     const lottieOptions = {
         loop: true,
         autoplay: true,
-        animationData: animationData,
+        animationData,
         rendererSettings: {
             preserveAspectRatio: 'xMidYMid slice'
         }
@@ -76,11 +71,7 @@ const Register: React.FC = () => {
                             <p className='text-base mt-2 text-[#4A4DC3]'>Welcome to Clonesera</p>
                         </div>
                         <div className="md:block hidden ml-6">
-                            <Lottie
-                                options={lottieOptions}
-                                height={150}
-                                width={150}
-                            />
+                            <Lottie options={lottieOptions} height={150} width={150} />
                         </div>
                     </div>
                     <Form
@@ -111,12 +102,7 @@ const Register: React.FC = () => {
                             <Input.Password
                                 placeholder='Password'
                                 className="p-3 rounded-xl border"
-                                suffix={
-                                    <Button
-                                        type="link"
-                                        icon={<FaEyeSlash />}
-                                    />
-                                }
+                                suffix={<FaEyeSlash />}
                             />
                         </Form.Item>
                         <Form.Item
@@ -137,12 +123,7 @@ const Register: React.FC = () => {
                             <Input.Password
                                 placeholder='Confirm Password'
                                 className="p-3 rounded-xl border"
-                                suffix={
-                                    <Button
-                                        type="link"
-                                        icon={<FaEyeSlash />}
-                                    />
-                                }
+                                suffix={<FaEyeSlash />}
                             />
                         </Form.Item>
                         <Form.Item

@@ -1,63 +1,44 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
+import { Modal, Radio } from 'antd';
 import 'react-toastify/dist/ReactToastify.css';
 import { Form, Input, Button } from 'antd';
-import ApiService, { UserData } from '../services/ApiService';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import Artwork from '../assets/Artwork.jpg';
-import { LoginData } from '../models/LoginData';
 import Lottie from 'react-lottie';
 import animationData from '../assets/Animation - 1719199926629.json';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import { createApiInstance } from '../services/Api';
+import useAuthCheck from '../hooks/useAuthCheck';
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 
 const Login: React.FC = () => {
-  const [loginData, setLoginData] = useState<LoginData>(new LoginData("", ""));
+  const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [googleId, setGoogleId] = useState<string | null>(null);
   const navigate = useNavigate();
+  const api = createApiInstance(navigate);
 
-  useEffect(() => {
-    const userData = localStorage.getItem("userData");
-    if (userData) {
-      navigate("/home");
-    }
 
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 0);
+  useAuthCheck();
 
-    return () => clearTimeout(timer);
-  }, [navigate]);
-
-  const onFinish = async (values: { email: string, password: string }) => {
+  const loginWithEmail = async (values: { email: string, password: string }) => {
     setIsButtonDisabled(true);
 
     try {
-      const response = await ApiService.login(values);
-      const account = response.find((account: UserData) =>
-        account.email === values.email &&
-        account.password === values.password &&
-        account.status === true &&
-        !account.isGoogle
-      );
-
-      if (!account) {
-        return;
-      }
-
-      localStorage.setItem('userData', JSON.stringify(account));
+      const response = await api.loginAccount(values);
+      const token = response.data.token;
+      localStorage.setItem('token', token);
       navigate('/home');
     } catch (error) {
       console.error('Error logging in:', error);
     } finally {
       setIsButtonDisabled(false);
-      setIsButtonDisabled(false);
     }
   };
-
 
   const handleRegisterClick = (): void => {
     navigate('/register');
@@ -68,62 +49,29 @@ const Login: React.FC = () => {
   };
 
   const handleGoogleLoginSuccess = async (response: any) => {
-    const token = response.credential;
-    console.log('idToken:', token); // Log the response
+    console.log('Google login successful, response:', response);
+    setGoogleId(response.credential);
+    setIsRoleModalVisible(true);
+  };
+
+  const handleGoogleLoginError = () => {
+    console.error('Error logging in with Google');
+  };
+
+  const handleRoleSelection = async () => {
+    if (!googleId || !selectedRole) return;
+
     try {
-      console.log('Google login successful, response:', response); 
-      localStorage.setItem('idToken', token);
-      const userProfile = await ApiService.verifyGoogleToken(token);
-      if (userProfile) {
-        const { email, name, picture } = userProfile;
-
-        const existingUser = await ApiService.getUserByEmail(email);
-        if (existingUser && existingUser.length > 0) {
-          if (!existingUser[0].isGoogle) {
-            toast.error('This email is already registered. Please use your password to log in.');
-            return;
-          }
-          toast.success('Login successful');
-          localStorage.setItem('userData', JSON.stringify(existingUser[0]));
-          navigate('/home'); // Redirect all users to /home
-          return;
-        }
-
-        const userData: UserData = {
-          fullName: name,
-          email,
-          avatar: picture,
-          createdAt: new Date().toISOString(),
-          status: true,
-          password: null,
-          address: null,
-          updateAt: null,
-          phonenumber: null,
-          walletId: null,
-          roleId: 2,
-          isGoogle: true,
-        };
-
-        try {
-          await ApiService.saveGoogleUserData(userData);
-          toast.success("User logged in successfully!");
-          localStorage.setItem('userData', JSON.stringify(userData));
-          navigate('/home'); // Redirect all users to /home
-        } catch (error) {
-          toast.error('Error saving user data to API');
-          console.error('Error saving user data to API:', error);
-        }
-      }
+      const googleLoginResponse = await api.loginWithGoogle({ google_id: googleId, role: selectedRole });
+      const token = googleLoginResponse.data.token;
+      localStorage.setItem('token', token);
+      setIsRoleModalVisible(false);
+      navigate('/home');
     } catch (error) {
-      toast.error('Error logging in with Google');
       console.error('Error logging in with Google:', error);
     }
   };
 
-  const handleGoogleLoginError = () => {
-    toast.error('Error logging in with Google');
-    console.error('Error logging in with Google');
-  };
   const lottieOptions = {
     loop: true,
     autoplay: true,
@@ -132,14 +80,6 @@ const Login: React.FC = () => {
       preserveAspectRatio: 'xMidYMid slice'
     }
   };
-
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="loader"></div> {/* Replace with any spinner component */}
-      </div>
-    );
-  }
 
   return (
     <GoogleOAuthProvider clientId={clientId}>
@@ -162,7 +102,7 @@ const Login: React.FC = () => {
             <Form
               name="login"
               initialValues={{ email: loginData.email, password: loginData.password }}
-              onFinish={onFinish}
+              onFinish={loginWithEmail}
               className="flex flex-col gap-4 mt-6"
             >
               <Form.Item
@@ -240,12 +180,24 @@ const Login: React.FC = () => {
           <div className="md:block hidden w-1/2">
             <img className="rounded-2xl" src={Artwork} alt="Artwork" />
           </div>
-          <ToastContainer />
         </div>
       </div>
+
+      <Modal
+        title="Select Your Role"
+        visible={isRoleModalVisible}
+        onOk={handleRoleSelection}
+        onCancel={() => setIsRoleModalVisible(false)}
+        okText="Submit"
+      >
+        <Radio.Group onChange={(e) => setSelectedRole(e.target.value)} value={selectedRole}>
+          <Radio value="student">Student</Radio>
+          <Radio value="instructor">Instructor</Radio>
+         
+        </Radio.Group>
+      </Modal>
     </GoogleOAuthProvider>
   );
-  
 };
 
 export default Login;
