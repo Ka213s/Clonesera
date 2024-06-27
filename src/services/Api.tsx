@@ -84,9 +84,43 @@ class Api {
       throw error;
     }
   }
-  
 
-  
+  async updateAccount(userId: string, data: any): Promise<any> {
+    try {
+      const response = await this.api.put(`/api/users/${userId}`, data);
+      toast.success('Account updated successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error updating account: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
+  async getAccountById(userId: string): Promise<any> {
+    try {
+      const response = await this.api.get(`/api/users/${userId}`);
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error fetching user data: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
+  async changePassword(userId: string, email: string, currentPassword: string, newPassword: string): Promise<any> {
+    try {
+      const response = await this.api.put(`/api/users/${userId}/change-password`, {
+        email,
+        currentPassword,
+        newPassword,
+      });
+      toast.success('Password changed successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error changing password: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
 }
 
 export { createApiInstance, Api };
