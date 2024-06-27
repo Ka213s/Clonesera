@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import MainLayout from '../layouts/MainLayout';
 // Page Components
 import HomePage from '../page/HomePage';
@@ -7,7 +9,9 @@ import Login from '../page/Login';
 import ForgotPassword from '../page/ForgotPassword';
 import Logout from '../components/Logout';
 import Register from '../page/Register';
-import PageError from '../page/PageError';
+import PageError404 from '../page/PageError404';
+import PageError403 from '../page/PageError403';
+import PageError400 from '../page/PageError400';
 import BecomeInstructor from '../page/BecomeInstructor';
 // Admin Pages and Components
 import Courses from '../page/Admin/Courses';
@@ -64,13 +68,14 @@ const AppRouters: React.FC = () => {
   return (
     <Router>
       <RoutesWrapper />
+      <ToastContainer />
     </Router>
   );
 };
 
 const RoutesWrapper: React.FC = () => {
   const location = useLocation();
-  const noSidebarPaths = ['/login', '/register', '/forgot-password'];
+  const noSidebarPaths = ['/login', '/register', '/forgot-password', '/404' , '/403' ,'/400'];
 
   const renderRoutes = () => (
     <Routes>
@@ -84,10 +89,11 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/course/:courseId" element={<CourseDetailPage />} />
       <Route path="/tests/certification-fill-form" element={<CertificationForm />} />
       <Route path="/help" element={<HelpPage />} />
-      <Route path="/404" element={<PageError />} />
       <Route path="/become-instructor" element={<BecomeInstructor />} />
       <Route path="/payment" element={<PaymentPage />} />
-
+      <Route path="/404" element={<PageError404 />} />
+      <Route path="/403" element={<PageError403 />} />
+      <Route path="/400" element={<PageError400 />} />
 
       {/* Admin Routes */}
       <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
@@ -129,7 +135,7 @@ const RoutesWrapper: React.FC = () => {
 
       {/* Shared Routes */}
       <Route path="/view_instructor_profile" element={<ProtectedRoute allowedRoles={[2, 3]}><ViewProfile /></ProtectedRoute>} />
-      <Route path="/settings" element={<ProtectedRoute allowedRoles={[2, 3]}><SettingsPage /></ProtectedRoute>} />
+      <Route path="/settings" element={<SettingsPage />} />
       <Route path="/tests/certification-center" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationCenter /></ProtectedRoute>} />
       <Route path="/tests/test-view" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationTestView /></ProtectedRoute>} />
       <Route path="/tests/test-result" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationTestResult /></ProtectedRoute>} />
