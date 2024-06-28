@@ -5,7 +5,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Form, Input, Button } from 'antd';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import Artwork from '../assets/Artwork.jpg';
-import { LoginData } from '../models/LoginData';
 import Lottie from 'react-lottie';
 import animationData from '../assets/Animation - 1719199926629.json';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
@@ -15,7 +14,6 @@ import { set } from 'mongoose';
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 
-console.log('clientId:', clientId);
 const Login: React.FC = () => {
   const [loginData, setLoginData] = useState({ email: "", password: "" });
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -31,28 +29,19 @@ const Login: React.FC = () => {
     setIsButtonDisabled(true);
 
     try {
-      const response = await ApiService.login(values);
-      const account = response.find((account: UserData) =>
-        account.email === values.email &&
-        account.password === values.password &&
-        account.status === true &&
-        !account.isGoogle
-      );
-
-      if (!account) {
-        return;
-      }
-
-      localStorage.setItem('userData', JSON.stringify(account));
+      const response = await api.loginAccount(values);
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      const getDataUser = await api.getDataUser(token);
+      const dataUser = JSON.stringify(getDataUser.data); 
+      localStorage.setItem('data', dataUser);
       navigate('/home');
     } catch (error) {
       console.error('Error logging in:', error);
     } finally {
       setIsButtonDisabled(false);
-      setIsButtonDisabled(false);
     }
   };
-
 
   const handleRegisterClick = (): void => {
     navigate('/register');
@@ -64,48 +53,17 @@ const Login: React.FC = () => {
 
   const handleGoogleLoginSuccess = async (response: any) => {
     try {
-      console.log('Google login successful, response:', response); 
-      localStorage.setItem('idToken', token);
-      const userProfile = await ApiService.verifyGoogleToken(token);
-      if (userProfile) {
-        const { email, name, picture } = userProfile;
-
-        const existingUser = await ApiService.getUserByEmail(email);
-        if (existingUser && existingUser.length > 0) {
-          if (!existingUser[0].isGoogle) {
-            toast.error('This email is already registered. Please use your password to log in.');
-            return;
-          }
-          toast.success('Login successful');
-          localStorage.setItem('userData', JSON.stringify(existingUser[0]));
-          navigate('/home'); // Redirect all users to /home
-          return;
-        }
-
-        const userData: UserData = {
-          fullName: name,
-          email,
-          avatar: picture,
-          createdAt: new Date().toISOString(),
-          status: true,
-          password: null,
-          address: null,
-          updateAt: null,
-          phonenumber: null,
-          walletId: null,
-          roleId: 2,
-          isGoogle: true,
-        };
-
-        try {
-          await ApiService.saveGoogleUserData(userData);
-          toast.success("User logged in successfully!");
-          localStorage.setItem('userData', JSON.stringify(userData));
-          navigate('/home'); // Redirect all users to /home
-        } catch (error) {
-          toast.error('Error saving user data to API');
-          console.error('Error saving user data to API:', error);
-        }
+      const googleResponse = await api.loginUserByGoogle({ google_id: response.credential });
+      if (googleResponse) {
+        const token = googleResponse.data.token;
+        localStorage.setItem('token', token);
+        const getDataUser = await api.getDataUser(token);
+        const dataUser = JSON.stringify(getDataUser.data); 
+        localStorage.setItem('data', dataUser);
+        navigate('/home');
+      } else {
+        setGoogleId(response.credential);
+        setIsRoleModalVisible(true);
       }
     } catch (error) {
       console.error('Error logging in with Google:', error);
@@ -117,6 +75,20 @@ const Login: React.FC = () => {
   const handleGoogleLoginError = () => {
     console.error('Error logging in with Google');
   };
+
+  const handleRoleSelection = async () => {
+    if (!googleId || !selectedRole) return;
+
+    try {
+      const googleLoginResponse = await api.registerUserByGoogle({ google_id: googleId, role: selectedRole });
+      const token = googleLoginResponse.data.token;
+      localStorage.setItem('token', token);
+      setIsRoleModalVisible(false);
+    } catch (error) {
+      console.error('Error registering with Google:', error);
+    }
+  };
+
   const lottieOptions = {
     loop: true,
     autoplay: true,
@@ -126,32 +98,11 @@ const Login: React.FC = () => {
     }
   };
 
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-gray-50">
-        <div className="loader"></div> {/* Replace with any spinner component */}
-      </div>
-    );
-  }
-
   return (
     <GoogleOAuthProvider clientId={clientId}>
       <div className="bg-gray-50 min-h-screen flex items-center justify-center">
         <div className="bg-gray-100 flex rounded-2xl shadow-lg max-w-5xl p-5 items-center">
           <div className='md:w-1/2 px-16'>
-            <div className="flex items-center">
-              <div>
-                <h2 className="font-bold text-3xl text-[#6C6EDD]">Login</h2>
-                <p className='text-base mt-2 text-[#4A4DC3]'>If you already a member, easily log in</p>
-              </div>
-              <div className="md:block hidden ml-6">
-                <Lottie
-                  options={lottieOptions}
-                  height={150}
-                  width={150}
-                />
-              </div>
-            </div>
             <div className="flex items-center">
               <div>
                 <h2 className="font-bold text-3xl text-[#6C6EDD]">Login</h2>
@@ -225,12 +176,6 @@ const Login: React.FC = () => {
                 onError={handleGoogleLoginError}
               />
             </div>
-            <div className="flex justify-center mt-4">
-              <GoogleLogin
-                onSuccess={handleGoogleLoginSuccess}
-                onError={handleGoogleLoginError}
-              />
-            </div>
             <div className='w-full mt-5 border-b border-gray-400'>
               <Button
                 onClick={handleForgotPasswordClick}
@@ -273,7 +218,6 @@ const Login: React.FC = () => {
 
     </GoogleOAuthProvider>
   );
-  
 };
 
 export default Login;
