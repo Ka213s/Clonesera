@@ -9,9 +9,9 @@ import Login from '../page/Login';
 import ForgotPassword from '../page/ForgotPassword';
 import Logout from '../components/Logout';
 import Register from '../page/Register';
-import PageError404 from '../page/PageError404';
-import PageError403 from '../page/PageError403';
-import PageError400 from '../page/PageError400';
+import PageError404 from '../page/Error/PageError404';
+import PageError403 from '../page/Error/PageError403';
+import PageError400 from '../page/Error/PageError400';
 import BecomeInstructor from '../page/BecomeInstructor';
 // Admin Pages and Components
 import Courses from '../page/Admin/Courses';
@@ -20,7 +20,7 @@ import AdminDashboard from '../page/Admin/Dashboard';
 import CoursesPending from '../page/Admin/CoursesPending';
 import Review from '../page/Admin/Review';
 import CategoryManagement from '../page/Admin/CategoryManagement';
-import AllInstructor from '../page/Admin/allInstructor';
+import AllInstructor from '../page/Admin/allIUser';
 import AddInstructor from '../page/Admin/addInstructor';
 import EditCourse from '../page/Admin/EditCourse';
 import RequestManagement from '../page/Admin/RequestManagement';
@@ -49,7 +49,7 @@ import MyLesson from '../page/Instructor/MyLesson';
 import Messages from '../components/Messages';
 import Notifications from '../components/Notifications';
 import Reviews from '../components/Reviews';
-import SettingsPage from '../components/SettingsPage';
+import SettingsPage from '../page/SettingsPage';
 
 // Certification Pages and Components
 import CertificationCenter from '../page/CertificationCenter';
@@ -119,7 +119,7 @@ const RoutesWrapper: React.FC = () => {
 
       {/* Instructor Routes */}
       <Route path="/createCourse" element={<ProtectedRoute allowedRoles={['instructor']}><CreateCourse /></ProtectedRoute>} />
-      <Route path="/instructor/courses" element={<ListCourse />} />
+      <Route path="/instructor/courses" element={<ProtectedRoute allowedRoles={['instructor']}><ListCourse /></ProtectedRoute>} />
       <Route path="/instructor/dashboard" element={<ProtectedRoute allowedRoles={['instructor']}><Dashboard /></ProtectedRoute>} />
       <Route path="/instructor/analysis" element={<ProtectedRoute allowedRoles={['instructor']}><Analysis /></ProtectedRoute>} />
       <Route path="/instructor/messages" element={<ProtectedRoute allowedRoles={['instructor']}><Messages /></ProtectedRoute>} />
@@ -134,7 +134,7 @@ const RoutesWrapper: React.FC = () => {
 
       {/* Shared Routes */}
       <Route path="/view_instructor_profile" element={<ProtectedRoute allowedRoles={['student', 'instructor']}><ViewProfile /></ProtectedRoute>} />
-      <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/settings" element={<ProtectedRoute allowedRoles={['student', 'instructor']}><SettingsPage /></ProtectedRoute>} />
       <Route path="/tests/certification-center" element={<ProtectedRoute allowedRoles={['student', 'instructor']}><CertificationCenter /></ProtectedRoute>} />
       <Route path="/tests/test-view" element={<ProtectedRoute allowedRoles={['student', 'instructor']}><CertificationTestView /></ProtectedRoute>} />
       <Route path="/tests/test-result" element={<ProtectedRoute allowedRoles={['student', 'instructor']}><CertificationTestResult /></ProtectedRoute>} />

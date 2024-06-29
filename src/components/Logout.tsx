@@ -2,7 +2,8 @@ import React, { useEffect, useCallback } from 'react';
 import { useNavigate, NavigateFunction } from 'react-router-dom';
 
 const handleLogout = (navigate: NavigateFunction): void => {
-    localStorage.removeItem('userData');
+    localStorage.removeItem('data');
+    localStorage.removeItem('token');
     navigate('/login');
 };
 

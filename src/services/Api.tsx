@@ -158,11 +158,53 @@ class Api {
       throw error;
     }
   }
-
+  async searchUsers(searchCondition: any): Promise<any> {
+    try {
+      const token = localStorage.getItem('token'); 
+      const response = await this.api.post('/api/users/search', {
+        searchCondition,
+        pageInfo: {
+          pageNum: 1,
+          pageSize: 10
+        }
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+  
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error searching users: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+  async changeUserStatus(userId: string, status: boolean): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.put('/api/users/change-status', {
+        user_id: userId,
+        status: status,
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      toast.success('User status updated successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error updating user status: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
   async changePassword(userId: string, oldPassword: string, newPassword: string): Promise<any> {
     try {
       const token = localStorage.getItem('token');
-      const response = await this.api.put(`/api/users/change-password`, { old_password: oldPassword, new_password: newPassword }, {
+      const response = await this.api.put(`/api/users/change-password`, {
+        user_id: userId,
+        old_password: oldPassword,
+        new_password: newPassword,
+      }, {
         headers: {
           Authorization: `Bearer ${token}`
         }
@@ -174,7 +216,7 @@ class Api {
       throw error;
     }
   }
-
+  
 }
 
 export { createApiInstance, Api };
