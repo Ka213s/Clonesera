@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { storage } from "../firebaseConfig";
-import { Form, Input, Button, Upload } from 'antd';
-import { UploadOutlined } from '@ant-design/icons';
+import { Form, Input, Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { createApiInstance } from '../services/Api';
 import ResizableTextArea from "antd/lib/input";
+import AvatarUpload from './AvatarUpload';
 
 const AccountSettings: React.FC = () => {
   const navigate = useNavigate();
@@ -32,21 +30,6 @@ const AccountSettings: React.FC = () => {
   useEffect(() => {
     fetchUserData();
   }, []);
-
-  const handleAvatarChange = async (info: any) => {
-    const file = info.fileList[0]?.originFileObj;
-    if (file) {
-      try {
-        const storageRef = ref(storage, `avatars/${userData.userId}/${file.name}`);
-        const snapshot = await uploadBytes(storageRef, file);
-        const downloadURL = await getDownloadURL(snapshot.ref);
-        setAvatar(downloadURL);
-        setAvatarUrl(downloadURL); // Cập nhật URL hiển thị avatar
-      } catch (error) {
-        console.error("Error handling avatar change:", error);
-      }
-    }
-  };
 
   const handleSaveChanges = async (values: any) => {
     setSaving(true);
@@ -78,26 +61,22 @@ const AccountSettings: React.FC = () => {
       <h2 className="text-xl font-bold mb-2 mt-10">Basic Profile</h2>
       <p>Add information about yourself</p>
       <div className="flex items-center mb-4">
-        <div className="relative mt-4">
-          <div className="w-32 h-32 rounded-full overflow-hidden bg-gray-200">
-            {avatarUrl ? (
-              <img src={avatarUrl} alt="Profile" className="w-full h-full object-cover cursor-pointer" onClick={() => document.getElementById('avatarUpload')?.click()} />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-4xl text-gray-400 cursor-pointer" onClick={() => document.getElementById('avatarUpload')?.click()}></div>
-            )}
-          </div>
-          <Upload
-            id="avatarUpload"
-            showUploadList={false}
-            beforeUpload={() => false}
-            onChange={handleAvatarChange}
-          >
-            <Button className='mt-3' icon={<UploadOutlined />}>Upload Avatar</Button>
-          </Upload>
-        </div>
+        <AvatarUpload 
+          userId={userData.userId}
+          avatarUrl={avatarUrl}
+          setAvatar={setAvatar}
+          setAvatarUrl={setAvatarUrl}
+        />
       </div>
       <div className="mt-6">
-        <Form layout="vertical" onFinish={handleSaveChanges} initialValues={userData}>
+        <Form
+          layout="vertical"
+          onFinish={handleSaveChanges}
+          initialValues={{
+            ...userData,
+            dob: userData.dob ? userData.dob.split('T')[0] : null, // Format date for input field
+          }}
+        >
           <Form.Item
             label="Full Name"
             name="name"
@@ -114,6 +93,13 @@ const AccountSettings: React.FC = () => {
             ]}
           >
             <Input maxLength={10} />
+          </Form.Item>
+          <Form.Item
+            label="Date of Birth"
+            name="dob"
+            rules={[{ required: true, message: 'Date of Birth is required' }]}
+          >
+            <Input type="date" />
           </Form.Item>
           <Form.Item
             label="Description"
