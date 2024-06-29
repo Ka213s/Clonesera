@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { storage } from "../firebaseConfig";
-import ApiService from '../services/ApiService';
+import { createApiInstance } from '../services/Api';
 import AccountSettings from './AccountSettings';
 import PrivacySettings from './PrivacySettings';
 import NotificationSettings from './NotificationSettings';
@@ -13,14 +14,13 @@ import ChangePassword from './ChangePassword';
 const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Account');
   const [avatar, setAvatar] = useState<string | ArrayBuffer | null>(null);
-  const [fullName, setFullName] = useState('');
-  const [address, setAddress] = useState('');
-  const [phoneNumber, setPhoneNumber] = useState('');
+  const [name, setName] = useState<string | null>(null);
+  const [phone_number, setPhoneNumber] = useState<string | null>(null);
   const [password, setPassword] = useState<string>('');
-  const [description, setDescription] = useState('');
-  const [email, setEmail] = useState('');
-  const [profileVisibility, setProfileVisibility] = useState(true);
-  const [showCourses, setShowCourses] = useState(false);
+  const [description, setDescription] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
+  const [role, setRole] = useState<string | null>(null);
+  const [video, setVideo] = useState<string | null>(null);
   const [notifications, setNotifications] = useState({
     subscriptions: true,
     recommendedCourses: false,
@@ -28,33 +28,16 @@ const SettingsPage: React.FC = () => {
     repliesToComments: true,
   });
   const [errors, setErrors] = useState({
-    fullName: '',
-    address: '',
-    phoneNumber: '',
+    name: '',
+    phone_number: '',
     email: '',
     description: ''
   });
-  const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-  const userId = userData.id || '';
 
-  useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const data = await ApiService.getAccountById(userId);
-        setFullName(data.fullName || '');
-        setAddress(data.address || '');
-        setPhoneNumber(data.phonenumber || '');
-        setDescription(data.description || '');
-        setEmail(data.email || '');
-        setAvatar(data.avatar || null);
-        setProfileVisibility(data.profileVisibility !== undefined ? data.profileVisibility : true);
-        setShowCourses(data.showCourses !== undefined ? data.showCourses : false);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
-    fetchUserData();
-  }, [userId]);
+  const userIdFromLocalStorage = localStorage.getItem('data');
+  const userId = userIdFromLocalStorage ? JSON.parse(userIdFromLocalStorage)._id : '';
+
+  const api = createApiInstance(useNavigate());
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -73,22 +56,18 @@ const SettingsPage: React.FC = () => {
 
   const validateForm = () => {
     let formValid = true;
-    let errors = { fullName: '', address: '', phoneNumber: '', email: '', description: '' };
+    let errors = { name: '', phone_number: '', email: '', description: '' };
 
-    if (!fullName) {
+    if (!name) {
       formValid = false;
-      errors.fullName = 'Full Name is required';
+      errors.name = 'Name is required';
     }
-    if (!address) {
+    if (!phone_number) {
       formValid = false;
-      errors.address = 'Address is required';
-    }
-    if (!phoneNumber) {
+      errors.phone_number = 'Phone Number is required';
+    } else if (!/^\d{10}$/.test(phone_number)) {
       formValid = false;
-      errors.phoneNumber = 'Phone Number is required';
-    } else if (!/^\d{10}$/.test(phoneNumber)) {
-      formValid = false;
-      errors.phoneNumber = 'Phone Number must be 10 digits';
+      errors.phone_number = 'Phone Number must be 10 digits';
     }
     if (!email) {
       formValid = false;
@@ -113,18 +92,17 @@ const SettingsPage: React.FC = () => {
     }
 
     const updatedProfile = {
-      fullName,
-      address,
-      phonenumber: phoneNumber,
-      description,
-      email,
-      avatar,
-      profileVisibility,
-      showCourses
+      name: name || null,
+      phone_number: phone_number || null,
+      description: description || null,
+      email: email || null,
+      avatar: avatar || null,
+      video: video || null,
     };
-
+console.log(updatedProfile);
     try {
-      await ApiService.updateAccount(userId, updatedProfile);
+      await api.updateAccount(userId, updatedProfile);
+      toast.success('Profile updated successfully');
     } catch (error) {
       console.error('Error updating profile:', error);
       toast.error('Error updating profile');
@@ -145,11 +123,9 @@ const SettingsPage: React.FC = () => {
           <AccountSettings 
             avatar={avatar}
             handleAvatarChange={handleAvatarChange}
-            fullName={fullName}
-            setFullName={setFullName}
-            address={address}
-            setAddress={setAddress}
-            phoneNumber={phoneNumber}
+            name={name}
+            setName={setName}
+            phone_number={phone_number}
             setPhoneNumber={setPhoneNumber}
             email={email}
             setEmail={setEmail}
@@ -162,10 +138,6 @@ const SettingsPage: React.FC = () => {
       case 'Privacy':
         return (
           <PrivacySettings 
-            profileVisibility={profileVisibility}
-            setProfileVisibility={setProfileVisibility}
-            showCourses={showCourses}
-            setShowCourses={setShowCourses}
             handleSaveChanges={handleSaveChanges}
           />
         );
@@ -188,7 +160,6 @@ const SettingsPage: React.FC = () => {
           <CloseAccount 
             password={password}
             setPassword={setPassword}
-            // handleCloseAccount={handleCloseAccount}
           />
         );
       default:

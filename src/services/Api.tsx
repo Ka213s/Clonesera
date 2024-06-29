@@ -94,9 +94,42 @@ class Api {
     }
   }
 
-  async updateAccount(userId: string, data: any): Promise<any> {
+  async loginUserByGoogle(data: { google_id: string; }): Promise<any> {
     try {
-      const response = await this.api.put(`/api/users/${userId}`, data);
+      const response = await this.api.post('/api/auth/google', data);
+      toast.success('Google login successful',{
+        autoClose: 8000, 
+      }) 
+      return response.data;
+    } catch (error: any) {
+      if (error.parseTokenError) {
+        return { parseTokenError: true, message: error.message };
+      }
+      // toast.error('Error logging in with Google: ' + (error.response?.data?.message || error.message));
+      toast.error('You have not signed up for a Google account',{
+        autoClose: 8000, 
+      });
+      throw error;
+    }
+  }
+
+  async getDataUser(token: string): Promise<any> {
+    try {
+      const response = await this.api.get('/api/auth', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error getting user data: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
+  async updateAccount(_id: string, data: any): Promise<any> {
+    try {
+      const response = await this.api.put(`/api/users/${_id}`, data);
       toast.success('Account updated successfully');
       return response.data;
     } catch (error: any) {
@@ -104,32 +137,28 @@ class Api {
       throw error;
     }
   }
-
-  async getAccountById(userId: string): Promise<any> {
+  
+  async getUserData(_id: string): Promise<any> {
     try {
-      const response = await this.api.get(`/api/users/${userId}`);
+      const response = await this.api.get(`/api/users/${_id}`);
       return response.data;
     } catch (error: any) {
       toast.error('Error fetching user data: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }
-
-  async changePassword(userId: string, email: string, currentPassword: string, newPassword: string): Promise<any> {
+  
+  async handleSaveChanges(_id: string, updatedProfile: any): Promise<any> {
     try {
-      const response = await this.api.put(`/api/users/${userId}/change-password`, {
-        email,
-        currentPassword,
-        newPassword,
-      });
-      toast.success('Password changed successfully');
+      const response = await this.api.put(`/api/users/${_id}`, updatedProfile);
+      toast.success('Profile updated successfully');
       return response.data;
     } catch (error: any) {
-      toast.error('Error changing password: ' + (error.response?.data?.message || error.message));
+      toast.error('Error updating profile: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }
-
+  
 }
 
 export { createApiInstance, Api };
