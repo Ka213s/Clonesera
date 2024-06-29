@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import AccountSettings from './AccountSettings';
-import PrivacySettings from './PrivacySettings';
-import NotificationSettings from './NotificationSettings';
-import CloseAccount from './CloseAccount';
-import ChangePassword from './ChangePassword';
+import AccountSettings from '../components/AccountSettings';
+import PrivacySettings from '../components/PrivacySettings';
+import NotificationSettings from '../components/NotificationSettings';
+import CloseAccount from '../components/CloseAccount';
+import ChangePassword from '../components/ChangePassword';
 
 const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Account');

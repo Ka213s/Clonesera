@@ -140,7 +140,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
           </Dropdown>
         </Badge>
 
-        {isLoggedIn ? (
+        {isLoggedIn && userRole ? (
           <Dropdown overlay={userMenu} trigger={['click']}>
             <UserOutlined className="text-2xl cursor-pointer" />
           </Dropdown>

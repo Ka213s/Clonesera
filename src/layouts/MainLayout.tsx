@@ -10,44 +10,44 @@ import { Layout } from 'antd';
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [showMenu, setShowMenu] = useState(true);
-  const [roleId, setRoleId] = useState<number | null>(null);
+  const [role, setRole] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const userData = localStorage.getItem('userData');
+    const userData = localStorage.getItem('data');
     if (userData) {
       const parsedData = JSON.parse(userData);
-      setRoleId(parsedData.roleId);
+      setRole(parsedData.role);
     }
   }, []);
 
   useEffect(() => {
-    if (location.pathname === '/home' && roleId === 1) {
+    if (location.pathname === '/home' && role === 'admin') {
       navigate('/admin/dashboard');
     }
-  }, [location.pathname, roleId, navigate]);
+  }, [location.pathname, role, navigate]);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
   };
 
   const renderSidebar = useMemo(() => {
-    if (/^\/(home|course|tests)/.test(location.pathname) || roleId === null) {
+    if (/^\/(home|course|tests)/.test(location.pathname) || role === null) {
       return <SidebarHome showMenu={showMenu} />;
     }
 
-    switch (roleId) {
-      case 1:
+    switch (role) {
+      case 'admin':
         return <SidebarAdmin showMenu={showMenu} />;
-      case 2:
+      case 'student':
         return <SidebarStudent showMenu={showMenu} />;
-      case 3:
+      case 'instructor':
         return <SidebarInstructor showMenu={showMenu} />;
       default:
         return <SidebarHome showMenu={showMenu} />;
     }
-  }, [location.pathname, roleId, showMenu]);
+  }, [location.pathname, role, showMenu]);
 
   return (
     <Layout className="min-h-screen">
@@ -61,9 +61,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             </div>
             <Footer />
           </div>
-      
         </div>
-   
       </div>
     </Layout>
   );
