@@ -9,19 +9,17 @@ import ChangePassword from './ChangePassword';
 const SettingsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState('Account');
   const [password, setPassword] = useState<string>('');
-  const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-  const userId = userData.id || '';
 
   const renderTabContent = () => {
     switch (activeTab) {
       case 'Account':
-        return <AccountSettings  />;
+        return <AccountSettings />;
       case 'Privacy':
         return <PrivacySettings />;
       case 'Notification':
         return <NotificationSettings />;
       case 'Change Password':
-        return <ChangePassword userId={userId} />;
+        return <ChangePassword />;
       case 'Close Account':
         return <CloseAccount password={password} setPassword={setPassword} />;
       default:
@@ -45,6 +43,14 @@ const SettingsPage: React.FC = () => {
             </li>
             <li className="mr-2">
               <button
+                className={`inline-block p-4 border-b-2 ${activeTab === 'Change Password' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
+                onClick={() => setActiveTab('Change Password')}
+              >
+                Change Password
+              </button>
+            </li>
+            <li className="mr-2">
+              <button
                 className={`inline-block p-4 border-b-2 ${activeTab === 'Notification' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
                 onClick={() => setActiveTab('Notification')}
               >
@@ -57,14 +63,6 @@ const SettingsPage: React.FC = () => {
                 onClick={() => setActiveTab('Privacy')}
               >
                 Privacy
-              </button>
-            </li>
-            <li className="mr-2">
-              <button
-                className={`inline-block p-4 border-b-2 ${activeTab === 'Change Password' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
-                onClick={() => setActiveTab('Change Password')}
-              >
-                Change Password
               </button>
             </li>
             <li className="mr-2">

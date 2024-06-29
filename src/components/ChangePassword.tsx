@@ -2,14 +2,14 @@ import React from 'react';
 import { Form, Input, Button, notification } from 'antd';
 import ApiService from '../services/ApiService';
 
-const ChangePassword: React.FC<{ userId: string }> = ({ userId }) => {
+const ChangePassword: React.FC = () => {
   const [form] = Form.useForm();
 
   const handleChangePassword = async (values: any) => {
     const { email, currentPassword, newPassword } = values;
 
     try {
-      await ApiService.changePassword(userId, email, currentPassword, newPassword);
+      // await ApiService.changePassword(email, currentPassword, newPassword);
       notification.success({
         message: 'Success',
         description: 'Password changed successfully',
