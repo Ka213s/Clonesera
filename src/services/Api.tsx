@@ -124,19 +124,25 @@ class Api {
     }
   }
 
-  async getDataUser(token: string): Promise<any> {
+  async getDataUser(token: string | null): Promise<any> {
     try {
+      if (!token) {
+        throw new Error('Token is null or empty');
+      }
+  
       const response = await this.api.get('/api/auth', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+  
       return response.data;
     } catch (error: any) {
       toast.error('Error getting user data: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }
+  
   async updateAccount(userId: string, data: { name: string; phone_number: string; description: string; email: string; avatar: string | ArrayBuffer | null; role: string; video: string; }): Promise<any> {
     try {
       const token = localStorage.getItem('token');
