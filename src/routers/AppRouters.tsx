@@ -120,7 +120,7 @@ const RoutesWrapper: React.FC = () => {
 
       {/* Instructor Routes */}
       <Route path="/createCourse" element={<ProtectedRoute allowedRoles={[3]}><CreateCourse /></ProtectedRoute>} />
-      <Route path="/instructor/courses" element={<ProtectedRoute allowedRoles={[3]}><ListCourse /></ProtectedRoute>} />
+      <Route path="/instructor/courses" element={<ListCourse />} />
       <Route path="/instructor/dashboard" element={<ProtectedRoute allowedRoles={[3]}><Dashboard /></ProtectedRoute>} />
       <Route path="/instructor/analysis" element={<ProtectedRoute allowedRoles={[3]}><Analysis /></ProtectedRoute>} />
       <Route path="/instructor/messages" element={<ProtectedRoute allowedRoles={[3]}><Messages /></ProtectedRoute>} />
