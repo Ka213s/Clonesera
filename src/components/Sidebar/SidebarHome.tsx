@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { Menu } from 'antd';
 import {
   HomeOutlined,
   VideoCameraOutlined,
@@ -47,67 +48,70 @@ const iconComponents: { [key: string]: JSX.Element } = {
 const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [expandedMenus, setExpandedMenus] = useState<string[]>([]);
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
+  const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
 
   useEffect(() => {
+    const currentOpenKeys: string[] = [];
+    const selectedKeys: string[] = [location.pathname];
     sidebarMenuItemsData.menuItems.forEach((item: MenuItem) => {
       if (item.subItems) {
         item.subItems.forEach((subItem) => {
           if (location.pathname === subItem.url) {
-            setExpandedMenus((prevExpandedMenus) => [...prevExpandedMenus, item.text]);
+            currentOpenKeys.push(item.text);
+            selectedKeys.push(item.text);
           }
         });
       }
     });
+    setOpenKeys(currentOpenKeys);
+    setSelectedKeys(selectedKeys);
   }, [location.pathname]);
 
-  const toggleMenu = (menu: string) => {
-    setExpandedMenus(expandedMenus.includes(menu)
-      ? expandedMenus.filter(item => item !== menu)
-      : [...expandedMenus, menu]);
+  const handleClick = (url: string, parentKey?: string) => {
+    navigate(url);
+    if (parentKey) {
+      setSelectedKeys([url, parentKey]);
+    } else {
+      setSelectedKeys([url]);
+    }
   };
 
-  const handleNavigation = (url: string) => {
-    navigate(url);
+  const onOpenChange = (keys: string[]) => {
+    setOpenKeys(keys);
   };
 
   return (
-    <aside className={`fixed top-10 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-56' : 'w-0 overflow-hidden'}`}>
-      <ul className="mt-8 max-h-full overflow-y-auto">
-        {sidebarMenuItemsData.menuItems.map((item: MenuItem, index: number) => (
-          <React.Fragment key={index}>
-            <li
-              className={`group flex items-center p-4 cursor-pointer ${location.pathname === item.url ? 'bg-[#9997F5] text-white' : 'hover:bg-[#9997F5] hover:text-white'}`}
-              onClick={() => handleNavigation(item.url)}
+    <aside className={`fixed top-16 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-56' : 'w-0 overflow-hidden'}`}>
+      <Menu
+        mode="inline"
+        openKeys={openKeys}
+        onOpenChange={onOpenChange}
+        selectedKeys={selectedKeys}
+        style={{ height: '100%', borderRight: 0 }}
+        className="custom-menu"
+      >
+        {sidebarMenuItemsData.menuItems.map((item: MenuItem) =>
+          item.subItems ? (
+            <Menu.SubMenu
+              key={item.text}
+              icon={item.icon ? iconComponents[item.icon] : null}
+              title={item.text}
+              className="custom-menu-item"
             >
-              <span className="flex items-center space-x-3 ${location.pathname === item.url ? 'text-white' : 'text-gray-700'} group-hover:text-white">
-                {item.icon && <span className="group-hover:text-white">{iconComponents[item.icon]}</span>}
-                <span className="group-hover:text-white">{item.text}</span>
-                {item.subItems && (
-                  <button onClick={(e) => { e.stopPropagation(); toggleMenu(item.text); }} className="ml-auto">
-                    {expandedMenus.includes(item.text) ? <UpOutlined className="group-hover:text-white" /> : <DownOutlined className="group-hover:text-white" />}
-                  </button>
-                )}
-              </span>
-            </li>
-            {item.subItems && expandedMenus.includes(item.text) && (
-              <ul className="ml-8">
-                {item.subItems.map((subItem, subIndex) => (
-                  <li
-                    key={subIndex}
-                    className={`group flex items-center p-2 cursor-pointer ${location.pathname === subItem.url ? 'bg-[#8886e5] text-white' : 'hover:bg-[#9997F5] hover:text-white'}`}
-                    onClick={() => handleNavigation(subItem.url)}
-                  >
-                    <span className="flex items-center space-x-3 ${location.pathname === subItem.url ? 'text-white' : 'text-gray-700'} group-hover:text-white">
-                      <span className="group-hover:text-white">{subItem.text}</span>
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </React.Fragment>
-        ))}
-      </ul>
+              {item.subItems.map((subItem) => (
+                <Menu.Item key={subItem.url} onClick={() => handleClick(subItem.url, item.text)} className="custom-menu-item">
+                  {subItem.text}
+                </Menu.Item>
+              ))}
+            </Menu.SubMenu>
+          ) : (
+            <Menu.Item key={item.url} icon={item.icon ? iconComponents[item.icon] : null} onClick={() => handleClick(item.url)} className="custom-menu-item">
+              {item.text}
+            </Menu.Item>
+          )
+        )}
+      </Menu>
     </aside>
   );
 };

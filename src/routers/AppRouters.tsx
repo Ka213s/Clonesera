@@ -1,5 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import MainLayout from '../layouts/MainLayout';
 // Page Components
 import HomePage from '../page/HomePage';
@@ -7,7 +9,9 @@ import Login from '../page/Login';
 import ForgotPassword from '../page/ForgotPassword';
 import Logout from '../components/Logout';
 import Register from '../page/Register';
-import PageError from '../page/PageError';
+import PageError404 from '../page/PageError404';
+import PageError403 from '../page/PageError403';
+import PageError400 from '../page/PageError400';
 import BecomeInstructor from '../page/BecomeInstructor';
 // Admin Pages and Components
 import Courses from '../page/Admin/Courses';
@@ -19,6 +23,7 @@ import CategoryManagement from '../page/Admin/CategoryManagement';
 import AllInstructor from '../page/Admin/allInstructor';
 import AddInstructor from '../page/Admin/addInstructor';
 import EditCourse from '../page/Admin/EditCourse';
+import RequestManagement from '../page/Admin/RequestManagement';
 // Student Pages and Components
 import StudentDashboard from '../page/Student/StudentDashboard';
 import PurchasedCourses from '../page/Student/PurchasedCourse';
@@ -63,13 +68,14 @@ const AppRouters: React.FC = () => {
   return (
     <Router>
       <RoutesWrapper />
+      <ToastContainer />
     </Router>
   );
 };
 
 const RoutesWrapper: React.FC = () => {
   const location = useLocation();
-  const noSidebarPaths = ['/login', '/register', '/forgot-password'];
+  const noSidebarPaths = ['/login', '/register', '/forgot-password', '/404' , '/403' ,'/400'];
 
   const renderRoutes = () => (
     <Routes>
@@ -83,55 +89,57 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/course/:courseId" element={<CourseDetailPage />} />
       <Route path="/tests/certification-fill-form" element={<CertificationForm />} />
       <Route path="/help" element={<HelpPage />} />
-      <Route path="/404" element={<PageError />} />
       <Route path="/become-instructor" element={<BecomeInstructor />} />
       <Route path="/payment" element={<PaymentPage />} />
+      <Route path="/404" element={<PageError404 />} />
+      <Route path="/403" element={<PageError403 />} />
+      <Route path="/400" element={<PageError400 />} />
 
       {/* Admin Routes */}
-      <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={[1]}><AdminDashboard /></ProtectedRoute>} />
-      <Route path="/admin/courses" element={<ProtectedRoute allowedRoles={[1]}><Courses /></ProtectedRoute>} />
-      <Route path="/admin/course/:id" element={<ProtectedRoute allowedRoles={[1]}><CourseDetail /></ProtectedRoute>} />
-      <Route path="/admin/pending_courses" element={<ProtectedRoute allowedRoles={[1]}><CoursesPending /></ProtectedRoute>} />
-      <Route path="/admin/reviews" element={<ProtectedRoute allowedRoles={[1]}><Review /></ProtectedRoute>} />
-      <Route path="/admin/category-management" element={<ProtectedRoute allowedRoles={[1]}><CategoryManagement /></ProtectedRoute>} />
-      <Route path="/admin/allInstructor" element={<ProtectedRoute allowedRoles={[1]}><AllInstructor /></ProtectedRoute>} />
-      <Route path="/admin/addInstructor" element={<ProtectedRoute allowedRoles={[1]}><AddInstructor /></ProtectedRoute>} />
-      <Route path="/admin/editCourse/:id" element={<ProtectedRoute allowedRoles={[1]}><EditCourse /></ProtectedRoute>} />
-
+      <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
+      <Route path="/admin/courses" element={<ProtectedRoute allowedRoles={['admin']}><Courses /></ProtectedRoute>} />
+      <Route path="/admin/course/:id" element={<ProtectedRoute allowedRoles={['admin']}><CourseDetail /></ProtectedRoute>} />
+      <Route path="/admin/pending_courses" element={<ProtectedRoute allowedRoles={['admin']}><CoursesPending /></ProtectedRoute>} />
+      <Route path="/admin/reviews" element={<ProtectedRoute allowedRoles={['admin']}><Review /></ProtectedRoute>} />
+      <Route path="/admin/category-management" element={<ProtectedRoute allowedRoles={['admin']}><CategoryManagement /></ProtectedRoute>} />
+      <Route path="/admin/allIUser" element={<ProtectedRoute allowedRoles={['admin']}><AllInstructor /></ProtectedRoute>} />
+      <Route path="/admin/addUser" element={<ProtectedRoute allowedRoles={['admin']}><AddInstructor /></ProtectedRoute>} />
+      <Route path="/admin/editCourse/:id" element={<ProtectedRoute allowedRoles={['admin']}><EditCourse /></ProtectedRoute>} />
+      <Route path="/admin/requestManagement" element={<ProtectedRoute allowedRoles={['admin']}><RequestManagement /></ProtectedRoute>} />
 
       {/* Student Routes */}
-      <Route path="/student/dashboard" element={<ProtectedRoute allowedRoles={[2]}><StudentDashboard /></ProtectedRoute>} />
-      <Route path="/student/purchasedCourses" element={<ProtectedRoute allowedRoles={[2]}><PurchasedCourses /></ProtectedRoute>} />
-      <Route path="/student/myCertificates" element={<ProtectedRoute allowedRoles={[2]}><StudentCertificates /></ProtectedRoute>} />
-      <Route path="/student/notifications" element={<ProtectedRoute allowedRoles={[2]}><Notifications /></ProtectedRoute>} />
-      <Route path="/student/reviews" element={<ProtectedRoute allowedRoles={[2]}><Reviews /></ProtectedRoute>} />
-      <Route path="/student/messages" element={<ProtectedRoute allowedRoles={[2]}><Messages /></ProtectedRoute>} />
-      <Route path="/student/statements" element={<ProtectedRoute allowedRoles={[2]}><Statements /></ProtectedRoute>} />
-      <Route path="/feedback" element={<ProtectedRoute allowedRoles={[2]}><SendFeedback /></ProtectedRoute>} />
+      <Route path="/student/dashboard" element={<ProtectedRoute allowedRoles={['student']}><StudentDashboard /></ProtectedRoute>} />
+      <Route path="/student/purchasedCourses" element={<ProtectedRoute allowedRoles={['student']}><PurchasedCourses /></ProtectedRoute>} />
+      <Route path="/student/myCertificates" element={<ProtectedRoute allowedRoles={['student']}><StudentCertificates /></ProtectedRoute>} />
+      <Route path="/student/notifications" element={<ProtectedRoute allowedRoles={['student']}><Notifications /></ProtectedRoute>} />
+      <Route path="/student/reviews" element={<ProtectedRoute allowedRoles={['student']}><Reviews /></ProtectedRoute>} />
+      <Route path="/student/messages" element={<ProtectedRoute allowedRoles={['student']}><Messages /></ProtectedRoute>} />
+      <Route path="/student/statements" element={<ProtectedRoute allowedRoles={['student']}><Statements /></ProtectedRoute>} />
+      <Route path="/feedback" element={<ProtectedRoute allowedRoles={['student']}><SendFeedback /></ProtectedRoute>} />
 
       {/* Instructor Routes */}
-      <Route path="/createCourse" element={<ProtectedRoute allowedRoles={[3]}><CreateCourse /></ProtectedRoute>} />
-      <Route path="/instructor/courses" element={<ProtectedRoute allowedRoles={[3]}><ListCourse /></ProtectedRoute>} />
-      <Route path="/instructor/dashboard" element={<ProtectedRoute allowedRoles={[3]}><Dashboard /></ProtectedRoute>} />
-      <Route path="/instructor/analysis" element={<ProtectedRoute allowedRoles={[3]}><Analysis /></ProtectedRoute>} />
-      <Route path="/instructor/messages" element={<ProtectedRoute allowedRoles={[3]}><Messages /></ProtectedRoute>} />
-      <Route path="/instructor/notifications" element={<ProtectedRoute allowedRoles={[3]}><Notifications /></ProtectedRoute>} />
-      <Route path="/instructor/myCertificates" element={<ProtectedRoute allowedRoles={[3]}><MyCertificate /></ProtectedRoute>} />
-      <Route path="/instructor/verification" element={<ProtectedRoute allowedRoles={[3]}><Verification /></ProtectedRoute>} />
-      <Route path="/instructor/reviews" element={<ProtectedRoute allowedRoles={[3]}><Reviews /></ProtectedRoute>} />
-      <Route path="/instructor/earning" element={<ProtectedRoute allowedRoles={[3]}><Earning /></ProtectedRoute>} />
-      <Route path="/instructor/payout" element={<ProtectedRoute allowedRoles={[3]}><PayOut /></ProtectedRoute>} />
-      <Route path="/instructor/statements" element={<ProtectedRoute allowedRoles={[3]}><StatementsIns /></ProtectedRoute>} />
-      <Route path="/instructor/myLesson" element={<ProtectedRoute allowedRoles={[3]}><MyLesson /></ProtectedRoute>} />
+      <Route path="/createCourse" element={<ProtectedRoute allowedRoles={['instructor']}><CreateCourse /></ProtectedRoute>} />
+      <Route path="/instructor/courses" element={<ListCourse />} />
+      <Route path="/instructor/dashboard" element={<ProtectedRoute allowedRoles={['instructor']}><Dashboard /></ProtectedRoute>} />
+      <Route path="/instructor/analysis" element={<ProtectedRoute allowedRoles={['instructor']}><Analysis /></ProtectedRoute>} />
+      <Route path="/instructor/messages" element={<ProtectedRoute allowedRoles={['instructor']}><Messages /></ProtectedRoute>} />
+      <Route path="/instructor/notifications" element={<ProtectedRoute allowedRoles={['instructor']}><Notifications /></ProtectedRoute>} />
+      <Route path="/instructor/myCertificates" element={<ProtectedRoute allowedRoles={['instructor']}><MyCertificate /></ProtectedRoute>} />
+      <Route path="/instructor/verification" element={<ProtectedRoute allowedRoles={['instructor']}><Verification /></ProtectedRoute>} />
+      <Route path="/instructor/reviews" element={<ProtectedRoute allowedRoles={['instructor']}><Reviews /></ProtectedRoute>} />
+      <Route path="/instructor/earning" element={<ProtectedRoute allowedRoles={['instructor']}><Earning /></ProtectedRoute>} />
+      <Route path="/instructor/payout" element={<ProtectedRoute allowedRoles={['instructor']}><PayOut /></ProtectedRoute>} />
+      <Route path="/instructor/statements" element={<ProtectedRoute allowedRoles={['instructor']}><StatementsIns /></ProtectedRoute>} />
+      <Route path="/instructor/myLesson" element={<ProtectedRoute allowedRoles={['instructor']}><MyLesson /></ProtectedRoute>} />
 
       {/* Shared Routes */}
-      <Route path="/view_instructor_profile" element={<ProtectedRoute allowedRoles={[2, 3]}><ViewProfile /></ProtectedRoute>} />
-      <Route path="/settings" element={<ProtectedRoute allowedRoles={[2, 3]}><SettingsPage /></ProtectedRoute>} />
-      <Route path="/tests/certification-center" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationCenter /></ProtectedRoute>} />
-      <Route path="/tests/test-view" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationTestView /></ProtectedRoute>} />
-      <Route path="/tests/test-result" element={<ProtectedRoute allowedRoles={[2, 3]}><CertificationTestResult /></ProtectedRoute>} />
-      <Route path="/purchasedCourse/:courseId" element={<ProtectedRoute allowedRoles={[2,3]}><PurchasedCourseDetail /></ProtectedRoute>} />
-      <Route path="/enrollCourse" element={<ProtectedRoute allowedRoles={[2,3]}><EnrollCourse /></ProtectedRoute>} />
+      <Route path="/view_instructor_profile" element={<ProtectedRoute allowedRoles={['student', 'instructor']}><ViewProfile /></ProtectedRoute>} />
+      <Route path="/settings" element={<SettingsPage />} />
+      <Route path="/tests/certification-center" element={<ProtectedRoute allowedRoles={['student', 'instructor']}><CertificationCenter /></ProtectedRoute>} />
+      <Route path="/tests/test-view" element={<ProtectedRoute allowedRoles={['student', 'instructor']}><CertificationTestView /></ProtectedRoute>} />
+      <Route path="/tests/test-result" element={<ProtectedRoute allowedRoles={['student', 'instructor']}><CertificationTestResult /></ProtectedRoute>} />
+      <Route path="/purchasedCourse/:courseId" element={<ProtectedRoute allowedRoles={['student', 'instructor']}><PurchasedCourseDetail /></ProtectedRoute>} />
+      <Route path="/enrollCourse" element={<ProtectedRoute allowedRoles={['student', 'instructor']}><EnrollCourse /></ProtectedRoute>} />
       {/* Catch-all route */}
       <Route path="*" element={<Navigate to="/home" />} />
     </Routes>

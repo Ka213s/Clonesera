@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Table, Button, Input, Select, Row, Col, Modal, Form } from 'antd';
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import { EditOutlined } from '@ant-design/icons';
 import data from '../../models/FileJson/allInstructor.json';
 import img from '../../assets/Avatar03.jpg';
 
@@ -14,18 +14,24 @@ interface Instructor {
   mobile: string;
   email: string;
   joiningDate: string;
-  password: string; 
+  password: string;
+  role: string;
+  isActive: boolean;
 }
 
+// Initialize data with isActive attribute
+const initialData = data.map(item => ({ ...item, isActive: true }));
+
 const AllInstructor: React.FC = () => {
-  const [filteredData, setFilteredData] = useState<Instructor[]>(data);
+  const [filteredData, setFilteredData] = useState<Instructor[]>(initialData);
   const [filters, setFilters] = useState({
     name: '',
     gender: '',
     mobile: '',
     email: '',
     joiningDate: '',
-    password: ''
+    password: '',
+    role: ''
   });
 
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -39,7 +45,7 @@ const AllInstructor: React.FC = () => {
   };
 
   const applyFilters = () => {
-    let filtered = data;
+    let filtered = initialData;
     if (filters.name) {
       filtered = filtered.filter((item) => item.name.toLowerCase().includes(filters.name.toLowerCase()));
     }
@@ -55,6 +61,9 @@ const AllInstructor: React.FC = () => {
     if (filters.joiningDate) {
       filtered = filtered.filter((item) => item.joiningDate.includes(filters.joiningDate));
     }
+    if (filters.role) {
+      filtered = filtered.filter((item) => item.role === filters.role);
+    }
     setFilteredData(filtered);
   };
 
@@ -65,9 +74,10 @@ const AllInstructor: React.FC = () => {
       mobile: '',
       email: '',
       joiningDate: '',
-      password: ''
+      password: '',
+      role: ''
     });
-    setFilteredData(data);
+    setFilteredData(initialData);
   };
 
   const showEditModal = (instructor: Instructor) => {
@@ -90,6 +100,16 @@ const AllInstructor: React.FC = () => {
         [key]: value
       });
     }
+  };
+
+
+
+  const toggleActiveStatus = (instructor: Instructor) => {
+    setFilteredData((prevData) =>
+      prevData.map((item) =>
+        item.id === instructor.id ? { ...item, isActive: !item.isActive } : item
+      )
+    );
   };
 
   const columns = [
@@ -130,6 +150,59 @@ const AllInstructor: React.FC = () => {
       key: 'password'
     },
     {
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role'
+    },
+    {
+      title: 'Active',
+      key: 'isActive',
+      render: (_: any, record: Instructor) => (
+        <div style={{ position: 'relative', width: '60px', display: 'inline-block', textAlign: 'left', top: '5px' }}>
+          <input
+            style={{ display: 'none' }}
+            id={`toggle-switch-${record.id}`}
+            type="checkbox"
+            checked={record.isActive}
+            onChange={() => toggleActiveStatus(record)}
+          />
+          <label
+            htmlFor={`toggle-switch-${record.id}`}
+            style={{
+              display: 'block',
+              overflow: 'hidden',
+              cursor: 'pointer',
+              height: '32px',
+              padding: '0',
+              lineHeight: '32px',
+              border: '2px solid #ddd',
+              borderRadius: '32px',
+              backgroundColor: record.isActive ? '#4caf50' : '#ddd',
+              transition: 'background-color 0.3s ease-in',
+            }}
+          >
+            <span
+              style={{
+                content: '',
+                display: 'block',
+                width: '32px',
+                height: '32px',
+                margin: '0',
+                background: '#fff',
+                position: 'absolute',
+                top: '0',
+                bottom: '0',
+                right: record.isActive ? '0px' : '28px',
+                border: '2px solid #ddd',
+                borderRadius: '32px',
+                transition: 'all 0.3s ease-in 0s',
+              }}
+            />
+          </label>
+        </div>
+      )
+    },
+    {
       title: 'Action',
       key: 'action',
       render: (_: any, record: Instructor) => (
@@ -140,12 +213,7 @@ const AllInstructor: React.FC = () => {
             icon={<EditOutlined />}
             onClick={() => showEditModal(record)}
           />
-          <Button
-            type="primary"
-            danger
-            style={{ backgroundColor: '#6A0DAD', borderColor: '#6A0DAD' }}
-            icon={<DeleteOutlined />}
-          />
+         
         </div>
       )
     }
@@ -158,30 +226,36 @@ const AllInstructor: React.FC = () => {
         <Button type="primary" style={{ backgroundColor: '#6A0DAD', borderColor: '#6A0DAD' }}>+ Add new</Button>
       </div>
       <Row gutter={[16, 16]} className="mb-4">
-        <Col span={4}>
+        <Col span={3}>
           <Input placeholder="Name" value={filters.name} onChange={(e) => handleFilterChange('name', e.target.value)} />
         </Col>
-        <Col span={4}>
+        <Col span={3}>
           <Select placeholder="Gender" value={filters.gender} onChange={(value) => handleFilterChange('gender', value)} style={{ width: '100%' }}>
-            <Option value="">All</Option>
+            <Option value="">Gender</Option>
             <Option value="Male">Male</Option>
             <Option value="Female">Female</Option>
           </Select>
         </Col>
-        <Col span={4}>
+        <Col span={3}>
+          <Select placeholder="Role" value={filters.role} onChange={(value) => handleFilterChange('role', value)} style={{ width: '100%' }}>
+            <Option value="">Role</Option>
+            <Option value="Instructor">Instructor</Option>
+            <Option value="Student">Student</Option>
+          </Select>
+        </Col>
+        <Col span={3}>
           <Input placeholder="Mobile" value={filters.mobile} onChange={(e) => handleFilterChange('mobile', e.target.value)} />
         </Col>
-        <Col span={4}>
+        <Col span={3}>
           <Input placeholder="Email" value={filters.email} onChange={(e) => handleFilterChange('email', e.target.value)} />
         </Col>
-        <Col span={4}>
+        <Col span={3}>
           <Input placeholder="Joining Date" value={filters.joiningDate} onChange={(e) => handleFilterChange('joiningDate', e.target.value)} />
         </Col>
-      
-        <Col span={1}>
+        <Col span={1.5}>
           <Button type="primary" style={{ backgroundColor: '#6A0DAD', borderColor: '#6A0DAD' }} onClick={applyFilters}>Filter</Button>
         </Col>
-        <Col span={1}>
+        <Col span={1.5}>
           <Button type="default" onClick={clearFilters}>Clear</Button>
         </Col>
       </Row>
@@ -215,6 +289,12 @@ const AllInstructor: React.FC = () => {
           </Form.Item>
           <Form.Item label="Password">
             <Input value={editingInstructor?.password} onChange={(e) => handleEditChange('password', e.target.value)} />
+          </Form.Item>
+          <Form.Item label="Role">
+            <Select value={editingInstructor?.role} onChange={(value) => handleEditChange('role', value)} style={{ width: '100%' }}>
+              <Option value="Instructor">Instructor</Option>
+              <Option value="Student">Student</Option>
+            </Select>
           </Form.Item>
         </Form>
       </Modal>

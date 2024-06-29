@@ -11,24 +11,27 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-/* PrivacySettings.module.css */
-.toggle-label {
-  color: #4b5563; /* Màu văn bản cho label */
+
+/* custom.css */
+.custom-menu .ant-menu-item,
+.custom-menu .ant-menu-submenu-title {
+  transition: background-color 0.3s, color 0.3s; /* Smooth transition */
 }
 
-.toggle-switch {
-  --bg-opacity: 1; /* Độ trong suốt của nền */
-  background-color: rgba(153, 151, 245, var(--bg-opacity)); /* Màu nền */
-  border-color: transparent; /* Màu viền */
+.custom-menu .ant-menu-item:hover,
+.custom-menu .ant-menu-submenu-title:hover,
+.custom-menu .ant-menu-item-selected,
+.custom-menu .ant-menu-submenu-title-selected {
+  background-color: #7c3aed !important; /* Tailwind's purple-500 */
+  color: #ffffff !important; /* White text */
 }
 
-.toggle-switch:checked {
-  --ring-color: rgba(34, 193, 195, 0.5); /* Màu vòng viền khi được chọn */
-  --bg-opacity: 1; /* Độ trong suốt của nền khi được chọn */
-  background-color: rgba(52, 211, 153, var(--bg-opacity)); /* Màu nền khi được chọn */
-  border-color: transparent; /* Màu viền khi được chọn */
+/* Apply the same styles to the active items */
+.custom-menu .ant-menu-item-active,
+.custom-menu .ant-menu-submenu-title-active {
+  background-color: #7c3aed !important; /* Tailwind's purple-500 */
+  color: #ffffff !important; /* White text */
 }
 
-.toggle-switch:focus {
-  box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.5); /* Hiệu ứng focus */
-}
+
+
