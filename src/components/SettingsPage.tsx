@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import 'react-toastify/dist/ReactToastify.css';
 import AccountSettings from './AccountSettings';
 import PrivacySettings from './PrivacySettings';
 import NotificationSettings from './NotificationSettings';

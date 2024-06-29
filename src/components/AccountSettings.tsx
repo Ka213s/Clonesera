@@ -21,7 +21,7 @@ const AccountSettings: React.FC = () => {
       const userDetail = await api.getDataUser(token);
       setUserData(userDetail.data);
       if (userDetail.data.avatar) {
-        setAvatar(userDetail.avatar);
+        setAvatar(userDetail.data.avatar);
         setAvatarUrl(userDetail.data.avatar); 
       }
     } catch (error) {

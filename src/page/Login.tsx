@@ -10,7 +10,6 @@ import animationData from '../assets/Animation - 1719199926629.json';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import { createApiInstance } from '../services/Api';
 import useAuthCheck from '../hooks/useAuthCheck';
-import { set } from 'mongoose';
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 
@@ -30,12 +29,12 @@ const Login: React.FC = () => {
 
     try {
       const response = await api.loginAccount(values);
+      navigate('/home');
       const token = response.data.token;
       localStorage.setItem('token', token);
       const getDataUser = await api.getDataUser(token);
       const dataUser = JSON.stringify(getDataUser.data); 
       localStorage.setItem('data', dataUser);
-      navigate('/home');
     } catch (error) {
       console.error('Error logging in:', error);
     } finally {
@@ -55,12 +54,12 @@ const Login: React.FC = () => {
     try {
       const googleResponse = await api.loginUserByGoogle({ google_id: response.credential });
       if (googleResponse) {
+        navigate('/home');
         const token = googleResponse.data.token;
         localStorage.setItem('token', token);
         const getDataUser = await api.getDataUser(token);
         const dataUser = JSON.stringify(getDataUser.data); 
         localStorage.setItem('data', dataUser);
-        navigate('/home');
       } else {
         setGoogleId(response.credential);
         setIsRoleModalVisible(true);
