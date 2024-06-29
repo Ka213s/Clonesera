@@ -152,11 +152,14 @@ const AllUser: React.FC = () => {
       );
       setIsModalVisible(false);
       setSelectedUser(null);
+  
+      // Log the updated user data
+      console.log('Saved user data:', updatedUser);
     } catch (error) {
       console.error('Error updating user:', error);
     }
   };
-
+  
   const handleSearch = (value: string) => {
     setSearchKeyword(value);
     if (value.trim() === '') {
