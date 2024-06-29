@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Form, Input, Button } from 'antd';
@@ -10,6 +10,7 @@ import { LoginData } from '../models/LoginData';
 import Lottie from 'react-lottie';
 import animationData from '../assets/Animation - 1719199926629.json';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import logo from '../../assets/Logo-2.jpg';
 
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 
@@ -71,7 +72,7 @@ const Login: React.FC = () => {
     const token = response.credential;
     console.log('idToken:', token); // Log the response
     try {
-      console.log('Google login successful, response:', response); 
+      console.log('Google login successful, response:', response);
       localStorage.setItem('idToken', token);
       const userProfile = await ApiService.verifyGoogleToken(token);
       if (userProfile) {
@@ -245,7 +246,7 @@ const Login: React.FC = () => {
       </div>
     </GoogleOAuthProvider>
   );
-  
+
 };
 
 export default Login;
