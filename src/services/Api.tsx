@@ -28,7 +28,7 @@ const handleErrorResponse = (error: any, navigate: ReturnType<typeof useNavigate
   if (specificError) return specificError;
 
   const status = error.response ? error.response.status : null;
- 
+
   if (status) {
     if (status === 400) {
       navigate('/400');
@@ -129,20 +129,20 @@ class Api {
       if (!token) {
         throw new Error('Token is null or empty');
       }
-  
+
       const response = await this.api.get('/api/auth', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
-  
+
       return response.data;
     } catch (error: any) {
       toast.error('Error getting user data: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }
-  
+
   async updateAccount(userId: string, data: { name: string; phone_number: string; description: string; email: string; avatar: string | ArrayBuffer | null; role: string; video: string; }): Promise<any> {
     try {
       const token = localStorage.getItem('token');
@@ -158,8 +158,23 @@ class Api {
       throw error;
     }
   }
-  
-  
+
+  async changePassword(userId: string, oldPassword: string, newPassword: string): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.put(`/api/users/change-password`, { old_password: oldPassword, new_password: newPassword }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      toast.success('Password changed successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error changing password: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
 }
 
 export { createApiInstance, Api };

@@ -11,7 +11,7 @@ const AccountSettings: React.FC = () => {
   const navigate = useNavigate();
   const api = createApiInstance(navigate);
   const [avatar, setAvatar] = useState<string | null>(null);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null); 
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [userData, setUserData] = useState<any>(null);
 
@@ -21,8 +21,8 @@ const AccountSettings: React.FC = () => {
       const userDetail = await api.getDataUser(token);
       setUserData(userDetail.data);
       if (userDetail.data.avatar) {
-        setAvatar(userDetail.avatar);
-        setAvatarUrl(userDetail.data.avatar); 
+        setAvatar(userDetail.data.avatar);
+        setAvatarUrl(userDetail.data.avatar);
       }
     } catch (error) {
       console.error('Error fetching user data:', error);
@@ -41,7 +41,7 @@ const AccountSettings: React.FC = () => {
         const snapshot = await uploadBytes(storageRef, file);
         const downloadURL = await getDownloadURL(snapshot.ref);
         setAvatar(downloadURL);
-        setAvatarUrl(downloadURL); // Cập nhật URL hiển thị avatar
+        setAvatarUrl(downloadURL); 
       } catch (error) {
         console.error("Error handling avatar change:", error);
       }
