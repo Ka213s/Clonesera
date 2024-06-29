@@ -18,6 +18,32 @@ export interface CourseData {
     certificateUrl?: string; 
 }
 
+export interface SectionData {
+    id: string;
+    title: string;
+    shortDescription: string;
+    description: string;
+    skillCourse: string;
+    price: string;
+    requirements: string;
+    Account_Id: string;
+    status: boolean;
+    certificateUrl?: string; 
+}
+
+export interface LectureData {
+    id: string;
+    title: string;
+    shortDescription: string;
+    description: string;
+    skillCourse: string;
+    price: string;
+    requirements: string;
+    Account_Id: string;
+    status: boolean;
+    certificateUrl?: string; 
+}
+
 export interface UserData {
     fullName: string;
     email: string;
@@ -273,6 +299,132 @@ class ApiService {
         } catch (error) {
             toast.error('Error soft deleting course');
             console.error("Error soft deleting course:", error);
+            throw error;
+        }
+    }
+
+     // Section Management Methods
+
+     static async getSections(): Promise<SectionData[]> {
+        try {
+            const response = await axios.get<SectionData[]>(BASE_URL_COURSE);
+            return response.data;
+        } catch (error) {
+            toast.error('Error fetching sections');
+            console.error("Error fetching sections:", error);
+            throw error;
+        }
+    }
+
+    static async addSection(section: SectionData): Promise<SectionData> {
+        try {
+            const response = await axios.post(BASE_URL_COURSE, section);
+            toast.success('Section added successfully');
+            return response.data;
+        } catch (error) {
+            toast.error('Error adding section');
+            console.error('Error adding section:', error);
+            throw error;
+        }
+    }
+
+    static async updateSectionById(
+        id: string,
+        sectionData: Partial<SectionData>
+    ): Promise<SectionData> {
+        try {
+            const response = await axios.put(`${BASE_URL_COURSE}/${id}`, sectionData);
+            toast.success('Section updated successfully');
+            return response.data;
+        } catch (error) {
+            toast.error('Error updating section');
+            console.error('Error updating section:', error);
+            throw error;
+        }
+    }
+
+    static async deleteSection(id: string): Promise<void> {
+        try {
+            await axios.delete(`${BASE_URL_COURSE}/${id}`);
+            toast.success('Section deleted successfully');
+        } catch (error) {
+            toast.error('Error deleting section');
+            console.error('Error deleting section:', error);
+            throw error;
+        }
+    }
+
+    static async softDeleteSection(id: string): Promise<SectionData> {
+        try {
+            const response = await axios.put(`${BASE_URL_COURSE}/${id}`, { status: false });
+            toast.success('Section soft deleted successfully');
+            return response.data;
+        } catch (error) {
+            toast.error('Error soft deleting section');
+            console.error('Error soft deleting section:', error);
+            throw error;
+        }
+    }
+
+     // Lecture Management Methods
+
+     static async getLectures(): Promise<LectureData[]> {
+        try {
+            const response = await axios.get<LectureData[]>(BASE_URL_COURSE);
+            return response.data;
+        } catch (error) {
+            toast.error('Error fetching lectures');
+            console.error('Error fetching lectures:', error);
+            throw error;
+        }
+    }
+
+    static async addLecture(lecture: LectureData): Promise<LectureData> {
+        try {
+            const response = await axios.post(BASE_URL_COURSE, lecture);
+            toast.success('Lecture added successfully');
+            return response.data;
+        } catch (error) {
+            toast.error('Error adding lecture');
+            console.error('Error adding lecture:', error);
+            throw error;
+        }
+    }
+
+    static async updateLectureById(
+        id: string,
+        lectureData: Partial<LectureData>
+    ): Promise<LectureData> {
+        try {
+            const response = await axios.put(`${BASE_URL_COURSE}/${id}`, lectureData);
+            toast.success('Lecture updated successfully');
+            return response.data;
+        } catch (error) {
+            toast.error('Error updating lecture');
+            console.error('Error updating lecture:', error);
+            throw error;
+        }
+    }
+
+    static async deleteLecture(id: string): Promise<void> {
+        try {
+            await axios.delete(`${BASE_URL_COURSE}/${id}`);
+            toast.success('Lecture deleted successfully');
+        } catch (error) {
+            toast.error('Error deleting lecture');
+            console.error('Error deleting lecture:', error);
+            throw error;
+        }
+    }
+
+    static async softDeleteLecture(id: string): Promise<LectureData> {
+        try {
+            const response = await axios.put(`${BASE_URL_COURSE}/${id}`, { status: false });
+            toast.success('Lecture soft deleted successfully');
+            return response.data;
+        } catch (error) {
+            toast.error('Error soft deleting lecture');
+            console.error('Error soft deleting lecture:', error);
             throw error;
         }
     }

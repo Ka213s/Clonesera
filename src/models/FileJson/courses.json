@@ -8,7 +8,7 @@
       "description": "An introductory course to Python programming.",
       "author": "John Doe",
       "price": 29.99,
-      "vid": "path/to/video1.jpg"
+      "vid": "https://th.bing.com/th/id/OIP.yNXte9jhMD5Pnpbjo4apAAHaE7?w=1000&h=666&rs=1&pid=ImgDetMain"
     },
     {
       "id": "javascript-course",
@@ -18,7 +18,7 @@
       "description": "Advanced JavaScript course for web development.",
       "author": "Jane Smith",
       "price": 39.99,
-      "vid": "path/to/video2.jpg"
+      "vid": "https://th.bing.com/th/id/OIP.yNXte9jhMD5Pnpbjo4apAAHaE7?w=1000&h=666&rs=1&pid=ImgDetMain"
     },
     {
       "id": "react-course",
@@ -28,7 +28,7 @@
       "description": "A complete guide to React for new developers.",
       "author": "Alice Johnson",
       "price": 24.99,
-      "vid": "path/to/video3.jpg"
+      "vid": "https://th.bing.com/th/id/OIP.yNXte9jhMD5Pnpbjo4apAAHaE7?w=1000&h=666&rs=1&pid=ImgDetMain"
     },
     {
       "id": "data-structures-algorithms",
@@ -38,7 +38,7 @@
       "description": "In-depth course on data structures and algorithms.",
       "author": "Bob Brown",
       "price": 49.99,
-      "vid": "path/to/video4.jpg"
+      "vid": "https://th.bing.com/th/id/OIP.yNXte9jhMD5Pnpbjo4apAAHaE7?w=1000&h=666&rs=1&pid=ImgDetMain"
     },
     {
       "id": "full-stack-web-development",
@@ -48,7 +48,7 @@
       "description": "Comprehensive full stack web development course.",
       "author": "Carol White",
       "price": 59.99,
-      "vid": "path/to/video5.jpg"
+      "vid": "https://th.bing.com/th/id/OIP.yNXte9jhMD5Pnpbjo4apAAHaE7?w=1000&h=666&rs=1&pid=ImgDetMain"
     }
   ],
   "newestCourses": [
