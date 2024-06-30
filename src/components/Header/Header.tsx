@@ -100,7 +100,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 
       <div className="flex items-center flex-grow justify-center">
         <Link to="/home">
-          <img src={logo} alt="Logo" className="h-12 cursor-pointer" />
+          <img src={logo} alt="Logo" className="h-16 w-30 cursor-pointer" />
         </Link>
       </div>
 
