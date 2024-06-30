@@ -63,7 +63,7 @@ const Register: React.FC = () => {
             <div className="bg-gray-100 flex flex-col rounded-2xl shadow-lg max-w-5xl p-5 items-center">
                 <div className="flex justify-center mb-5">
                     <Link to="/home">
-                        <img src={logo} alt="Logo" className="h-12 cursor-pointer" />
+                        <img src={logo} alt="Logo" className="h-24 w-31 cursor-pointer" />
                     </Link>
                 </div>
                 <div className="flex w-full">
