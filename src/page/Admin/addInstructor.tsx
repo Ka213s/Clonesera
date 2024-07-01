@@ -49,11 +49,11 @@ const AddInstructor: React.FC = () => {
           </Form.Item>
         </div>
         <Form.Item className="flex justify-end space-x-4">
-          <Button type="primary" htmlType="submit" className="bg-purple-500 border-none text-white text-lg px-6 py-2 mr-5">
-            Submit
-          </Button>
-          <Button type="default" className="bg-purple-500 text-white border-none text-lg px-6 py-2">
+          <Button type="default" className="bg-[#9997F5] hover:!bg-[#8886E5] hover:!text-white border-none text-white text-lg px-6 py-2 mr-5">
             Cancel
+          </Button>
+          <Button type="primary" htmlType="submit" className="bg-[#9997F5] hover:!bg-[#8886E5] text-white border-none text-lg px-6 py-2">
+            Submit
           </Button>
         </Form.Item>
       </Form>
