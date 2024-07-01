@@ -1,41 +1,50 @@
 import React, { Component } from "react";
-import { FaBook, FaEdit, FaTrashAlt } from "react-icons/fa";
-import {
-  Button,
-  Modal,
-  Form,
-  Input,
-  Select,
-  message,
-  Popconfirm,
-  Tag,
-} from "antd";
+import { FaBook } from "react-icons/fa";
+import { message } from "antd";
 import NavigationTabs from "../../components/Instructor/NavigationTabs";
-import ApiService, { CourseData, AccountData } from "../../services/ApiService";
-
-
-const { Option } = Select;
+import ApiService, { CourseData, AccountData, SectionData, LectureData } from "../../services/ApiService";
+import MyCourses from "./MyCourses";
+import MySections from "./MySections";
+import MyLectures from "./MyLectures";
 
 interface ListCourseState {
+  activeTab: string;
   isModalVisible: boolean;
   editingCourse: CourseData | null;
   courses: CourseData[];
   accounts: AccountData[];
+  sections: SectionData[];
+  lectures: LectureData[];
+  isSectionModalVisible: boolean;
+  editingSection: SectionData | null;
+  isLectureModalVisible: boolean;
+  editingLecture: LectureData | null;
 }
 
 class ListCourse extends Component<{}, ListCourseState> {
-  formRef = React.createRef<any>();
+  courseFormRef = React.createRef<any>();
+  sectionFormRef = React.createRef<any>();
+  lectureFormRef = React.createRef<any>();
 
   state: ListCourseState = {
+    activeTab: '1',
     isModalVisible: false,
     editingCourse: null,
     courses: [],
     accounts: [],
+    sections: [],
+    lectures: [],
+    isSectionModalVisible: false,
+    editingSection: null,
+    isLectureModalVisible: false,
+    editingLecture: null,
   };
 
   componentDidMount() {
     this.fetchCourses();
     this.fetchAccounts();
+    this.fetchSections();
+    this.fetchLectures();
   }
 
   fetchCourses = async () => {
@@ -56,34 +65,81 @@ class ListCourse extends Component<{}, ListCourseState> {
     }
   };
 
+  fetchSections = async () => {
+    try {
+      const sections = await ApiService.getSections();
+      this.setState({ sections });
+    } catch (error) {
+      message.error("Failed to fetch sections.");
+    }
+  };
+
+  fetchLectures = async () => {
+    try {
+      const lectures = await ApiService.getLectures();
+      this.setState({ lectures });
+    } catch (error) {
+      message.error("Failed to fetch lectures.");
+    }
+  };
+
   showModal = (course?: CourseData) => {
     if (course) {
       this.setState({
         isModalVisible: true,
         editingCourse: course,
       });
-      this.formRef.current?.setFieldsValue(course);
+      this.courseFormRef.current?.setFieldsValue(course);
     } else {
       this.setState({
         isModalVisible: true,
         editingCourse: null,
       });
-      this.formRef.current?.resetFields();
+      this.courseFormRef.current?.resetFields();
+    }
+  };
+
+  showSectionModal = (section?: SectionData) => {
+    if (section) {
+      this.setState({
+        isSectionModalVisible: true,
+        editingSection: section,
+      });
+      this.sectionFormRef.current?.setFieldsValue(section);
+    } else {
+      this.setState({
+        isSectionModalVisible: true,
+        editingSection: null,
+      });
+      this.sectionFormRef.current?.resetFields();
+    }
+  };
+
+  showLectureModal = (lecture?: LectureData) => {
+    if (lecture) {
+      this.setState({
+        isLectureModalVisible: true,
+        editingLecture: lecture,
+      });
+      this.lectureFormRef.current?.setFieldsValue(lecture);
+    } else {
+      this.setState({
+        isLectureModalVisible: true,
+        editingLecture: null,
+      });
+      this.lectureFormRef.current?.resetFields();
     }
   };
 
   handleOk = async () => {
     try {
-      const values = await this.formRef.current.validateFields();
+      const values = await this.courseFormRef.current.validateFields();
       const updatedValues = {
         ...values,
         update_at: new Date().toISOString(),
       };
       if (this.state.editingCourse) {
-        await ApiService.updateCourseById(
-          this.state.editingCourse.id,
-          updatedValues
-        );
+        await ApiService.updateCourseById(this.state.editingCourse.id, updatedValues);
         message.success("Course updated successfully.");
       } else {
         const newCourse = {
@@ -102,10 +158,78 @@ class ListCourse extends Component<{}, ListCourseState> {
     }
   };
 
+  handleSectionOk = async () => {
+    try {
+      const values = await this.sectionFormRef.current.validateFields();
+      const updatedValues = {
+        ...values,
+        update_at: new Date().toISOString(),
+      };
+      if (this.state.editingSection) {
+        await ApiService.updateSectionById(this.state.editingSection.id, updatedValues);
+        message.success("Section updated successfully.");
+      } else {
+        const newSection = {
+          ...updatedValues,
+          id: (this.state.sections.length + 1).toString(),
+        };
+        this.setState((prevState) => ({
+          sections: [...prevState.sections, newSection],
+        }));
+        message.success("Section added successfully.");
+      }
+      this.fetchSections();
+      this.setState({ isSectionModalVisible: false, editingSection: null });
+    } catch (error) {
+      message.error("Failed to save section.");
+    }
+  };
+
+  handleLectureOk = async () => {
+    try {
+      const values = await this.lectureFormRef.current.validateFields();
+      const updatedValues = {
+        ...values,
+        update_at: new Date().toISOString(),
+      };
+      if (this.state.editingLecture) {
+        await ApiService.updateLectureById(this.state.editingLecture.id, updatedValues);
+        message.success("Lecture updated successfully.");
+      } else {
+        const newLecture = {
+          ...updatedValues,
+          id: (this.state.lectures.length + 1).toString(),
+        };
+        this.setState((prevState) => ({
+          lectures: [...prevState.lectures, newLecture],
+        }));
+        message.success("Lecture added successfully.");
+      }
+      this.fetchLectures();
+      this.setState({ isLectureModalVisible: false, editingLecture: null });
+    } catch (error) {
+      message.error("Failed to save lecture.");
+    }
+  };
+
   handleCancel = () => {
     this.setState({
       isModalVisible: false,
       editingCourse: null,
+    });
+  };
+
+  handleSectionCancel = () => {
+    this.setState({
+      isSectionModalVisible: false,
+      editingSection: null,
+    });
+  };
+
+  handleLectureCancel = () => {
+    this.setState({
+      isLectureModalVisible: false,
+      editingLecture: null,
     });
   };
 
@@ -118,231 +242,90 @@ class ListCourse extends Component<{}, ListCourseState> {
       message.error("Failed to delete course.");
     }
   };
-  
+
+  softDeleteSection = async (id: string) => {
+    try {
+      await ApiService.softDeleteSection(id);
+      message.success("Section deleted successfully.");
+      this.fetchSections();
+    } catch (error) {
+      message.error("Failed to delete section.");
+    }
+  };
+
+  softDeleteLecture = async (id: string) => {
+    try {
+      await ApiService.softDeleteLecture(id);
+      message.success("Lecture deleted successfully.");
+      this.fetchLectures();
+    } catch (error) {
+      message.error("Failed to delete lecture.");
+    }
+  };
+
+  handleTabChange = (key: string) => {
+    this.setState({ activeTab: key });
+  };
 
   render() {
-    const { isModalVisible, editingCourse, courses, accounts } = this.state;
-    const courseCategories = [
-      "Communications",
-      "Software Engineering",
-      "Finance",
-      "Web Development",
-      "Data Science",
-    ];
+    const { activeTab, isModalVisible, editingCourse, courses, accounts, sections, lectures, isSectionModalVisible, editingSection, isLectureModalVisible, editingLecture } = this.state;
 
     return (
-     
-        <div className="bg-white p-8">
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center space-x-2">
-              <FaBook className="h-6 w-6 text-gray-700" />
-              <h1 className="text-2xl font-bold">Courses</h1>
-            </div>
+      <div className="bg-white p-8">
+        <div className="flex justify-between items-center mb-4">
+          <div className="flex items-center space-x-2">
+            <FaBook className="h-6 w-6 text-gray-700" />
+            <h1 className="text-2xl font-bold">Courses</h1>
           </div>
-          <div className="bg-white p-4 shadow mb-4 flex justify-between items-center">
-            <div className="flex items-center space-x-2">
-              <FaBook className="h-6 w-6 text-gray-700" />
-              <h2 className="text-xl">Jump Into Course Creation</h2>
-            </div>
-        
-          </div>
-          <NavigationTabs />
-          <table className="min-w-full bg-white">
-            <thead>
-              <tr className="bg-purple-200 text-center">
-                <th className="py-2 px-4 border-b border-gray-200">
-                  Item No.
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200">
-                  Title
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200">
-                  Short Description
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200">
-                  Description
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200">
-                  Skill Course
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200">
-                  Price
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200">
-                  Requirements
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200">
-                  Account
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200">
-                  Status
-                </th>
-                <th className="py-2 px-4 border-b border-gray-200">
-                  Action
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {courses.map((course) => (
-                <tr className="hover:bg-purple-100" key={course.id}>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {course.id}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {course.title}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {course.shortDescription}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {course.description}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {course.skillCourse}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {course.price}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {course.requirements}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    {accounts.find(
-                      (account) => account.id === course.Account_Id
-                    )?.fullName || "N/A"}
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200">
-                    <Tag color={course.status ? "green" : "red"}>
-                      {course.status ? "Active" : "Inactive"}
-                    </Tag>
-                  </td>
-                  <td className="py-2 px-4 border-b border-gray-200 flex space-x-2">
-                    <Button
-                      type="link"
-                      icon={<FaEdit />}
-                      onClick={() => this.showModal(course)}
-                    >
-                      Edit
-                    </Button>
-                    <Popconfirm
-                      title="Are you sure to delete this course?"
-                      onConfirm={() => this.softDeleteCourse(course.id)}
-                      okText="Yes"
-                      cancelText="No"
-                    >
-                      <Button type="link" danger icon={<FaTrashAlt />}>
-                        Delete
-                      </Button>
-                    </Popconfirm>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-          <Modal
-            title={editingCourse ? "Edit Course" : "Add Course"}
-            visible={isModalVisible}
-            onOk={this.handleOk}
-            onCancel={this.handleCancel}
-            okText="Save"
-            cancelText="Cancel"
-          >
-            <Form
-              ref={this.formRef}
-              layout="vertical"
-              initialValues={editingCourse || {}}
-            >
-              <Form.Item
-                label="Title"
-                name="title"
-                rules={[
-                  { required: true, message: "Please input the course title!" },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Short Description"
-                name="shortDescription"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please input the short description!",
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Description"
-                name="description"
-                rules={[
-                  { required: true, message: "Please input the description!" },
-                ]}
-              >
-                <Input.TextArea rows={4} />
-              </Form.Item>
-              <Form.Item
-                label="Skill Course"
-                name="skillCourse"
-                rules={[
-                  { required: true, message: "Please input the skill course!" },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Price"
-                name="price"
-                rules={[{ required: true, message: "Please input the price!" }]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Requirements"
-                name="requirements"
-                rules={[
-                  { required: true, message: "Please input the requirements!" },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Course Category"
-                name="courseCategory"
-                rules={[
-                  {
-                    required: true,
-                    message: "Please select the course category!",
-                  },
-                ]}
-              >
-                <Select mode="multiple" placeholder="Select categories">
-                  {courseCategories.map((category) => (
-                    <Option key={category} value={category}>
-                      {category}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                label="Account"
-                name="Account_Id"
-                rules={[
-                  { required: true, message: "Please select the account!" },
-                ]}
-              >
-                <Select placeholder="Select account">
-                  {accounts.map((account) => (
-                    <Option key={account.id} value={account.id}>
-                      {account.fullName}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-            </Form>
-          </Modal>
         </div>
+
+        <NavigationTabs
+          activeKey={activeTab}
+          onTabChange={this.handleTabChange}
+        />
+
+        {activeTab === '1' && (
+          <MyCourses
+            courses={courses}
+            accounts={accounts}
+            showModal={this.showModal}
+            softDeleteCourse={this.softDeleteCourse}
+            handleOk={this.handleOk}
+            handleCancel={this.handleCancel}
+            formRef={this.courseFormRef}
+            isModalVisible={isModalVisible}
+            editingCourse={editingCourse}
+          />
+        )}
+
+        {activeTab === '2' && (
+          <MySections
+            sections={sections}
+            accounts={accounts}
+            showModal={this.showSectionModal}
+            softDeleteSection={this.softDeleteSection}
+            handleOk={this.handleSectionOk}
+            handleCancel={this.handleSectionCancel}
+            formRef={this.sectionFormRef}
+            isModalVisible={isSectionModalVisible}
+            editingSection={editingSection}
+          />
+        )}
+
+        {activeTab === '3' && (
+          <MyLectures
+            lectures={lectures}
+            accounts={accounts}
+            showModal={this.showLectureModal}
+            softDeleteLecture={this.softDeleteLecture}
+            handleOk={this.handleLectureOk}
+            handleCancel={this.handleLectureCancel}
+            formRef={this.lectureFormRef}
+            isModalVisible={isLectureModalVisible}
+            editingLecture={editingLecture}
+          />
+        )}
+      </div>
     );
   }
 }

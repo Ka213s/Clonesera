@@ -11,7 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.ant-switch-checked .ant-switch-inner {
+  background-color: #52c41a; /* Màu xanh khi active */
+}
 
+.ant-switch-inner {
+  background-color: #f5222d; /* Màu đỏ khi inactive */
+}
 /* custom.css */
 .custom-menu .ant-menu-item,
 .custom-menu .ant-menu-submenu-title {
@@ -22,14 +28,14 @@ code {
 .custom-menu .ant-menu-submenu-title:hover,
 .custom-menu .ant-menu-item-selected,
 .custom-menu .ant-menu-submenu-title-selected {
-  background-color: #7c3aed !important; /* Tailwind's purple-500 */
+  background-color: #9667D1 !important; /* Tailwind's purple-500 */
   color: #ffffff !important; /* White text */
 }
 
 /* Apply the same styles to the active items */
 .custom-menu .ant-menu-item-active,
 .custom-menu .ant-menu-submenu-title-active {
-  background-color: #7c3aed !important; /* Tailwind's purple-500 */
+  background-color: #9667D1 !important; /* Tailwind's purple-500 */
   color: #ffffff !important; /* White text */
 }
 

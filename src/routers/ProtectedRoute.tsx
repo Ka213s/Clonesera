@@ -1,21 +1,16 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
-interface ProtectedRouteProps {
-  allowedRoles: (string | number)[];
-  children: JSX.Element;
-}
+const ProtectedRoute: React.FC<{ allowedRoles: string[], children: JSX.Element }> = ({ allowedRoles, children }) => {
+  const data = localStorage.getItem('data');
+  let userRole: string | null = null;
 
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ allowedRoles, children }) => {
-  const userData = localStorage.getItem('userData');
-  let userRole: number | null = null;
-
-  if (userData) {
+  if (data) {
     try {
-      const parsedUserData = JSON.parse(userData);
-      userRole = parsedUserData.roleId;
+      const parsedData = JSON.parse(data);
+      userRole = parsedData.role; // Assuming role is a string like 'student' or 'instructor'
     } catch (error) {
-      console.error('Error parsing userData:', error);
+      console.error('Error parsing data:', error);
     }
   }
 

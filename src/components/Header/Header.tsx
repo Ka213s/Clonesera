@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { MenuOutlined, SearchOutlined, PlusOutlined, ShoppingCartOutlined, MailOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
+import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, MailOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate, Link } from 'react-router-dom';
 import { Layout, Input, Badge, Avatar, Menu, Dropdown, Button } from 'antd';
 import logo from '../../assets/Logo-5.png';
@@ -9,55 +9,46 @@ import userMenuItemsData from '../../models/FileJson/userMenuItems.json';
 const { Header: AntHeader } = Layout;
 const { Search } = Input;
 
-interface Notification {
+type Notification = {
   id: number;
   avatar: string;
   message: string;
   time: string;
-}
+};
 
-interface UserData {
-  roleId: number;
+type UserData = {
+  role: string;
   name: string;
   email: string;
-}
+};
 
-interface HeaderProps {
+type HeaderProps = {
   toggleMenu: () => void;
-}
+};
 
 const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState<number | null>(null);
+  const [userRole, setUserRole] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [userName, setUserName] = useState<string>('');
-  const [userEmail, setUserEmail] = useState<string>('');
 
   useEffect(() => {
-    setNotifications(notificationsData);
+    setNotifications(notificationsData as Notification[]);
   }, []);
 
   useEffect(() => {
-    const userData = localStorage.getItem('userData');
+    const userData = localStorage.getItem('data');
     if (userData) {
-      const parsedUserData: UserData = JSON.parse(userData);
-      setUserRole(parsedUserData.roleId);
+      const parsedUserData = JSON.parse(userData) as UserData;
+      setUserRole(parsedUserData.role);
       setIsLoggedIn(true);
       setUserName(parsedUserData.name);
-      setUserEmail(parsedUserData.email);
     }
   }, []);
 
   const handleCreateCourse = useCallback(() => {
     navigate('/createCourse');
-  }, [navigate]);
-
-  const handleLogout = useCallback(() => {
-    localStorage.removeItem('userData');
-    setIsLoggedIn(false);
-    setUserRole(null);
-    navigate('/login');
   }, [navigate]);
 
   const handleMenuClick = useCallback((url: string) => {
@@ -70,11 +61,10 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         <div className="font-bold">
           Welcome, <span className="text-purple-500">{userName}</span>
         </div>
-        <div className="text-gray-500">{userEmail}</div>
       </Menu.Item>
       <Menu.Divider />
-      {userMenuItemsData.menuItems.map((item, index) => (
-        <Menu.Item key={index} onClick={() => handleMenuClick(item.url)}>
+      {userMenuItemsData.menuItems.map((item) => (
+        <Menu.Item key={item.text} onClick={() => handleMenuClick(item.url)}>
           {item.text}
         </Menu.Item>
       ))}
@@ -99,7 +89,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 
   return (
     <AntHeader className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
-      <Button icon={<MenuOutlined />} onClick={toggleMenu} shape="circle" className="bg-[#8886E5] text-[#ffffff]" />
+      <Button icon={<MenuOutlined />} onClick={toggleMenu} shape="circle" className="bg-[#9667D1] text-[#ffffff]" />
 
       <Search
         placeholder="Search..."
@@ -110,17 +100,17 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 
       <div className="flex items-center flex-grow justify-center">
         <Link to="/home">
-          <img src={logo} alt="Logo" className="h-12 cursor-pointer" />
+          <img src={logo} alt="Logo" className="h-16 w-30 cursor-pointer" />
         </Link>
       </div>
 
       <div className="flex items-center ml-auto space-x-8 pr-4">
-        {userRole === 3 && (
+        {userRole === 'instructor' && (
           <>
             <Button
               onClick={handleCreateCourse}
               type="primary"
-              className="hidden md:block bg-[#9997F5] hover:bg-[#8886E5] border-none "
+              className="hidden md:block bg-[#9997F5] hover:bg-[##9667D1] border-none"
             >
               Create New Course
             </Button>
@@ -129,7 +119,8 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               type="primary"
               shape="circle"
               icon={<PlusOutlined />}
-              className="block md:hidden bg-[#9997F5] border-none hover:bg-[#8886E5]"
+              className="block md:hidden bg-[#9667D1] border-none hover:!bg-[#8886E5]"
+              
             />
           </>
         )}
@@ -150,13 +141,16 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
           </Dropdown>
         </Badge>
 
-        {isLoggedIn ? (
+        {isLoggedIn && userRole ? (
           <Dropdown overlay={userMenu} trigger={['click']}>
             <UserOutlined className="text-2xl cursor-pointer" />
           </Dropdown>
         ) : (
-          <Button type="primary" className="bg-[#9997F5] border-none hover:bg-[#8886E5]">
-            <Link to="/login">Sign in</Link>
+          <Button
+            type="primary"
+            className="!bg-[#9667D1] !border-none hover:!bg-[#8886E5] hover:!text-white"
+          >
+            <Link to="/login" className="hover:!text-white">Sign in</Link>
           </Button>
         )}
       </div>

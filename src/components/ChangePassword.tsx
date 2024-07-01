@@ -1,19 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, notification } from 'antd';
-import ApiService from '../services/ApiService';
+import { createApiInstance } from '../services/Api';
+import { useNavigate } from 'react-router-dom';
 
-const ChangePassword: React.FC<{ userId: string }> = ({ userId }) => {
+const ChangePassword: React.FC = () => {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
+  const api = createApiInstance(navigate);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const token = localStorage.getItem('token'); 
+        const userData = await api.getDataUser(token);
+        setUserId(userData.data._id);
+      } catch (error) {
+        console.error('Error fetching user data:', error);
+        notification.error({
+          message: 'Error',
+          description: 'Error fetching user data',
+        });
+      }
+    };
+
+    fetchUserData();
+  }, [api]);
 
   const handleChangePassword = async (values: any) => {
-    const { email, currentPassword, newPassword } = values;
+    const { currentPassword, newPassword } = values;
+
+    if (!userId) {
+      notification.error({
+        message: 'Error',
+        description: 'User ID not found',
+      });
+      return;
+    }
 
     try {
-      await ApiService.changePassword(userId, email, currentPassword, newPassword);
+      await api.changePassword(userId, currentPassword, newPassword);
       notification.success({
         message: 'Success',
         description: 'Password changed successfully',
       });
+      form.resetFields(); 
     } catch (error) {
       console.error('Error changing password:', error);
       notification.error({
@@ -30,19 +61,8 @@ const ChangePassword: React.FC<{ userId: string }> = ({ userId }) => {
         form={form}
         layout="vertical"
         onFinish={handleChangePassword}
-        initialValues={{ email: '', currentPassword: '', newPassword: '', confirmNewPassword: '' }}
+        initialValues={{ currentPassword: '', newPassword: '', confirmNewPassword: '' }}
       >
-        <Form.Item
-          label="Email"
-          name="email"
-          rules={[
-            { required: true, message: 'Email is required' },
-            { type: 'email', message: 'Please enter a valid email' },
-          ]}
-        >
-          <Input />
-        </Form.Item>
-        
         <Form.Item
           label="Current Password"
           name="currentPassword"
@@ -61,7 +81,6 @@ const ChangePassword: React.FC<{ userId: string }> = ({ userId }) => {
         >
           <Input.Password />
         </Form.Item>
-        
         <Form.Item
           label="Confirm New Password"
           name="confirmNewPassword"
@@ -80,7 +99,6 @@ const ChangePassword: React.FC<{ userId: string }> = ({ userId }) => {
         >
           <Input.Password />
         </Form.Item>
-
         <Form.Item>
           <Button type="primary" htmlType="submit" className="bg-[#9997F5] hover:bg-[#8886E5] text-white font-bold py-2 px-4 rounded">
             Change Password
