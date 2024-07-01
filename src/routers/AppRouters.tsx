@@ -21,7 +21,7 @@ import CoursesPending from '../page/Admin/CoursesPending';
 import Review from '../page/Admin/Review';
 import CategoryManagement from '../page/Admin/CategoryManagement';
 import AllInstructor from '../page/Admin/allIUser';
-import AddInstructor from '../page/Admin/addInstructor';
+import AddInstructor from '../page/Admin/addIUser';
 import EditCourse from '../page/Admin/EditCourse';
 import RequestManagement from '../page/Admin/RequestManagement';
 // Student Pages and Components

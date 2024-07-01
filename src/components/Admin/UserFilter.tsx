@@ -1,76 +1,51 @@
 import React, { useState } from 'react';
-import { Input, Button } from 'antd';
+import { Input, Select, Button, Form } from 'antd';
 
-interface UserFilterProps {
-  onFilter: (filters: any) => void;
-  onClear: () => void;
-}
+const { Option } = Select;
 
-const UserFilter: React.FC<UserFilterProps> = ({ onFilter, onClear }) => {
-  const [searchID, setSearchID] = useState('');
-  const [searchName, setSearchName] = useState('');
-  const [searchEmail, setSearchEmail] = useState('');
-  const [searchRole, setSearchRole] = useState('');
-  const [searchStatus, setSearchStatus] = useState('');
+const UserFilter: React.FC<{ onFilter: (filters: any) => void, onClear: () => void }> = ({ onFilter, onClear }) => {
+  const [form] = Form.useForm();
 
-  const handleFilter = () => {
-    onFilter({
-      searchID,
-      searchName,
-      searchEmail,
-      searchRole,
-      searchStatus,
-    });
+  const handleFilter = (values: any) => {
+    onFilter(values);
   };
 
   const handleClear = () => {
-    setSearchID('');
-    setSearchName('');
-    setSearchEmail('');
-    setSearchRole('');
-    setSearchStatus('');
+    form.resetFields();
     onClear();
   };
 
   return (
-    <div style={{ marginBottom: 16, display: 'flex', gap: 8 }}>
-      <Input
-        placeholder="Search by ID"
-        value={searchID}
-        onChange={(e) => setSearchID(e.target.value)}
-        style={{ width: 200 }}
-      />
-      <Input
-        placeholder="Search by Name"
-        value={searchName}
-        onChange={(e) => setSearchName(e.target.value)}
-        style={{ width: 200 }}
-      />
-      <Input
-        placeholder="Search by Email"
-        value={searchEmail}
-        onChange={(e) => setSearchEmail(e.target.value)}
-        style={{ width: 200 }}
-      />
-      <Input
-        placeholder="Search by Role"
-        value={searchRole}
-        onChange={(e) => setSearchRole(e.target.value)}
-        style={{ width: 200 }}
-      />
-      <Input
-        placeholder="Search by Status (active/inactive)"
-        value={searchStatus}
-        onChange={(e) => setSearchStatus(e.target.value)}
-        style={{ width: 200 }}
-      />
-      <Button type="primary" onClick={handleFilter}>
-        Filter
-      </Button>
-      <Button onClick={handleClear}>
-        Clear
-      </Button>
-    </div>
+    <Form form={form} layout="inline" onFinish={handleFilter} className="mb-4">
+      <Form.Item name="searchID" label="ID">
+        <Input placeholder="Search by ID" />
+      </Form.Item>
+      <Form.Item name="searchName" label="Name">
+        <Input placeholder="Search by Name" />
+      </Form.Item>
+      <Form.Item name="searchEmail" label="Email">
+        <Input placeholder="Search by Email" />
+      </Form.Item>
+      <Form.Item name="searchRole" label="Role">
+        <Select placeholder="Select Role" allowClear>
+          <Option value="admin">Admin</Option>
+          <Option value="instructor">Instructor</Option>
+          <Option value="student">Student</Option>
+        </Select>
+      </Form.Item>
+      <Form.Item name="searchStatus" label="Status">
+        <Select placeholder="Select Status" allowClear>
+          <Option value="active">Active</Option>
+          <Option value="inactive">Inactive</Option>
+        </Select>
+      </Form.Item>
+      <Form.Item>
+        <Button type="primary" htmlType="submit">Filter</Button>
+      </Form.Item>
+      <Form.Item>
+        <Button onClick={handleClear}>Clear</Button>
+      </Form.Item>
+    </Form>
   );
 };
 

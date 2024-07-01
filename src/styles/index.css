@@ -18,26 +18,24 @@ code {
 .ant-switch-inner {
   background-color: #f5222d; /* Màu đỏ khi inactive */
 }
-/* custom.css */
 .custom-menu .ant-menu-item,
 .custom-menu .ant-menu-submenu-title {
-  transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+  transition: background-color 0.2s, color 0.2s; /* Smooth transition */
 }
 
 .custom-menu .ant-menu-item:hover,
 .custom-menu .ant-menu-submenu-title:hover,
 .custom-menu .ant-menu-item-selected,
 .custom-menu .ant-menu-submenu-title-selected {
-  background-color: #9667D1 !important; /* Tailwind's purple-500 */
+  background-color: #9997F5 !important; /* Tailwind's purple-500 */
   color: #ffffff !important; /* White text */
 }
 
 /* Apply the same styles to the active items */
 .custom-menu .ant-menu-item-active,
 .custom-menu .ant-menu-submenu-title-active {
-  background-color: #9667D1 !important; /* Tailwind's purple-500 */
+  background-color: #9997F5 !important; /* Tailwind's purple-500 */
   color: #ffffff !important; /* White text */
 }
-
 
 

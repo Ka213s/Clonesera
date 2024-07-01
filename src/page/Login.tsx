@@ -12,7 +12,6 @@ import { createApiInstance } from '../services/Api';
 import useAuthCheck from '../hooks/useAuthCheck';
 import logo from '../assets/Logo-2.png';
 
-
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 
 const Login: React.FC = () => {
@@ -31,7 +30,7 @@ const Login: React.FC = () => {
 
     try {
       const response = await api.loginAccount(values);
-      
+
       const token = response.data.token;
       localStorage.setItem('token', token);
       const getDataUser = await api.getDataUser(token);
@@ -57,7 +56,7 @@ const Login: React.FC = () => {
     try {
       const googleResponse = await api.loginUserByGoogle({ google_id: response.credential });
       if (googleResponse) {
-       
+
         const token = googleResponse.data.token;
         localStorage.setItem('token', token);
         const getDataUser = await api.getDataUser(token);
