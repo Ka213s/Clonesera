@@ -160,7 +160,7 @@ class Api {
   }
   async searchUsers(searchCondition: any): Promise<any> {
     try {
-      const token = localStorage.getItem('token'); 
+      const token = localStorage.getItem('token');
       const response = await this.api.post('/api/users/search', {
         searchCondition,
         pageInfo: {
@@ -172,7 +172,7 @@ class Api {
           Authorization: `Bearer ${token}`
         }
       });
-  
+
       return response.data;
     } catch (error: any) {
       toast.error('Error searching users: ' + (error.response?.data?.message || error.message));
@@ -216,7 +216,40 @@ class Api {
       throw error;
     }
   }
-  
+
+  // All category function here
+  async createCategory(data: { name: string }): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.post('/api/category', data, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      toast.success('Category created successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error creating category: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
+  async getCategories(): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.get('/api/category', {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error fetching categories: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }  
+
+
 }
 
 export { createApiInstance, Api };
