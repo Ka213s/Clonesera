@@ -158,27 +158,28 @@ class Api {
       throw error;
     }
   }
-  async searchUsers(searchCondition: any): Promise<any> {
+  async searchUsers(searchCondition: any, pageNum: number, pageSize: number): Promise<any> {
     try {
       const token = localStorage.getItem('token'); 
       const response = await this.api.post('/api/users/search', {
         searchCondition,
         pageInfo: {
-          pageNum: 1,
-          pageSize: 20
+          pageNum,
+          pageSize
         }
       }, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-  
+     
       return response.data;
     } catch (error: any) {
       toast.error('Error searching users: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }
+  
   async changeUserStatus(userId: string, status: boolean): Promise<any> {
     try {
       const token = localStorage.getItem('token');
@@ -213,6 +214,76 @@ class Api {
       return response.data;
     } catch (error: any) {
       toast.error('Error changing password: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+  async createCourse(data: { 
+    name: string; 
+    category_id: string; 
+    description: string; 
+    content: string; 
+    video_url: string; 
+    image_url: string; 
+    price: number; 
+    discount: number; 
+  }): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.post('/api/course', data, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      toast.success('Course created successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error creating course: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+  
+  async createSession(data: { 
+    name: string; 
+    course_id: string; 
+    description: string; 
+  }): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.post('/api/session', data, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      toast.success('Session created successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error creating session: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+  
+  async createLesson(data: { 
+    name: string; 
+    course_id: string; 
+    session_id: string; 
+    lesson_type: string; 
+    description: string; 
+    video_url: string; 
+    image_url: string; 
+    full_time: number; 
+    position_order: number; 
+  }): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.post('/api/lesson', data, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      toast.success('Lesson created successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error creating lesson: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }

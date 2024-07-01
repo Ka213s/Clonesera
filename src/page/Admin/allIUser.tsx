@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal } from 'antd';
-import { ColumnsType, TablePaginationConfig } from 'antd/es/table';
+import { Table, Button, Modal, Pagination } from 'antd';
+import { ColumnsType } from 'antd/es/table';
 import { createApiInstance } from '../../services/Api';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
@@ -15,48 +15,51 @@ const AllUser: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [pagination, setPagination] = useState<TablePaginationConfig>({ current: 1, pageSize: 10, total: 0 });
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
+
+  const fetchUsersData = async (pageNum = 1, pageSize = 10) => {
+    try {
+      const api = createApiInstance(navigate);
+  
+      const activeUsersSearchData = {
+        keyword: '',
+        role: 'all',
+        status: true,
+        is_delete: false,
+      };
+  
+      const inactiveUsersSearchData = {
+        keyword: '',
+        role: 'all',
+        status: false, 
+        is_delete: false,
+      };
+  
+      const [activeUsersResult, inactiveUsersResult] = await Promise.all([
+        api.searchUsers(activeUsersSearchData, pageNum, pageSize),
+        api.searchUsers(inactiveUsersSearchData, pageNum, pageSize),
+      ]);
+  
+      const combinedResults = [
+        ...activeUsersResult.data.pageData,
+        ...inactiveUsersResult.data.pageData,
+      ];
+  console.log('combinedResults:', activeUsersResult );
+      setUsersData(combinedResults);
+      setFilteredUsers(combinedResults);
+      setPagination({
+        current: pageNum,
+        pageSize,
+        total: activeUsersResult.data.pageInfo.totalItems + inactiveUsersResult.data.pageInfo.totalItems, // Adjust total items count
+      });
+    } catch (error) {
+      console.error('Error searching users:', error);
+    }
+  };
+  
 
   useEffect(() => {
-    const fetchUsersData = async (page = 1, pageSize = 20) => {
-      try {
-        const api = createApiInstance(navigate);
-
-        const activeUsersSearchData = {
-          keyword: '',
-          role: 'all',
-          status: true,
-          is_delete: false,
-          page,
-          pageSize,
-        };
-        const activeUsersResult = await api.searchUsers(activeUsersSearchData);
-
-        const inactiveUsersSearchData = {
-          keyword: '',
-          role: 'all',
-          status: false,
-          is_delete: false,
-          page,
-          pageSize,
-        };
-        const inactiveUsersResult = await api.searchUsers(inactiveUsersSearchData);
-
-        const combinedResults = [
-          ...activeUsersResult.data.pageData,
-          ...inactiveUsersResult.data.pageData,
-        ];
-
-        setUsersData(combinedResults);
-        setFilteredUsers(combinedResults); // Initialize filtered data with all users
-        console.log(combinedResults)
-        setPagination({ ...pagination, total: combinedResults.length });
-      } catch (error) {
-        console.error('Error searching users:', error);
-      }
-    };
-
-    fetchUsersData();
+    fetchUsersData(pagination.current, pagination.pageSize);
   }, [navigate, pagination.current, pagination.pageSize]);
 
   const columns: ColumnsType<any> = [
@@ -166,7 +169,7 @@ const AllUser: React.FC = () => {
       );
       setIsModalVisible(false);
       setSelectedUser(null);
-  
+
       // Log the updated user data
       console.log('Saved user data:', updatedUser);
     } catch (error) {
@@ -184,14 +187,17 @@ const AllUser: React.FC = () => {
       (!searchStatus || (user.status ? 'active' : 'inactive').includes(searchStatus.toLowerCase()))
     );
     setFilteredUsers(filtered);
+    setPagination({ ...pagination, total: filtered.length, current: 1 }); 
   };
 
   const handleClear = () => {
-    setFilteredUsers(usersData); // Reset to all users
+    setFilteredUsers(usersData);
+    setPagination({ ...pagination, total: usersData.length, current: 1 });
   };
 
-  const handleTableChange = (pagination: TablePaginationConfig) => {
-    setPagination(pagination);
+  const handlePaginationChange = (page: number, pageSize: number) => {
+    setPagination({ ...pagination, current: page, pageSize });
+    fetchUsersData(page, pageSize);
   };
 
   return (
@@ -201,9 +207,16 @@ const AllUser: React.FC = () => {
         dataSource={filteredUsers}
         columns={columns}
         rowKey="_id"
-        pagination={pagination}
-        onChange={handleTableChange}
+        pagination={false}
         scroll={{ x: 1300 }}
+      />
+
+      <Pagination
+        total={pagination.total}
+        showTotal={(total) => `Total ${total} items`}
+        pageSize={pagination.pageSize}
+        current={pagination.current}
+        onChange={handlePaginationChange}
       />
 
       <Modal
