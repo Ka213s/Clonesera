@@ -152,7 +152,7 @@ const AllUser: React.FC = () => {
   const handleSave = async (updatedUser: any) => {
     try {
       const api = createApiInstance(navigate);
-      await api.updateAccount(updatedUser._id, {
+      const response = await api.updateAccount(updatedUser._id, {
         name: updatedUser.name,
         phone_number: updatedUser.phone_number,
         description: updatedUser.description,
@@ -161,21 +161,30 @@ const AllUser: React.FC = () => {
         role: updatedUser.role,
         video: updatedUser.video || '',
       });
-      setUsersData((prevData) =>
-        prevData.map((user) => (user._id === updatedUser._id ? updatedUser : user))
-      );
-      setFilteredUsers((prevData) =>
-        prevData.map((user) => (user._id === updatedUser._id ? updatedUser : user))
-      );
-      setIsModalVisible(false);
-      setSelectedUser(null);
 
-      // Log the updated user data
-      console.log('Saved user data:', updatedUser);
+      // Check if the update was successful
+      if (response.success) {
+        // Update local state with the updated user
+        setUsersData((prevData) =>
+          prevData.map((user) => (user._id === updatedUser._id ? { ...user, ...updatedUser } : user))
+        );
+        setFilteredUsers((prevData) =>
+          prevData.map((user) => (user._id === updatedUser._id ? { ...user, ...updatedUser } : user))
+        );
+
+        // Close the modal after saving
+        handleCancel();
+
+        // Log the updated user data
+        console.log('Saved user data:', updatedUser);
+      } else {
+        console.error('Failed to update user:', response.message);
+      }
     } catch (error) {
       console.error('Error updating user:', error);
     }
   };
+
 
   const handleFilter = (filters: any) => {
     const { searchID, searchName, searchEmail, searchRole, searchStatus } = filters;
