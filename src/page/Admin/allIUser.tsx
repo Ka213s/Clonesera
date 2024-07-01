@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Input } from 'antd';
+import { Table, Button, Modal } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { createApiInstance } from '../../services/Api';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import UserStatusUpdater from '../../components/Admin/UserStatusUpdater';
 import EditUserForm from '../../components/Admin/EditUserForm';
+import UserFilter from '../../components/Admin/UserFilter';
 
 const AllUser: React.FC = () => {
   const navigate = useNavigate();
@@ -14,7 +15,6 @@ const AllUser: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [searchKeyword, setSearchKeyword] = useState('');
 
   useEffect(() => {
     const fetchUsersData = async () => {
@@ -159,30 +159,26 @@ const AllUser: React.FC = () => {
       console.error('Error updating user:', error);
     }
   };
-  
-  const handleSearch = (value: string) => {
-    setSearchKeyword(value);
-    if (value.trim() === '') {
-      setFilteredUsers(usersData); // Reset to all users if search input is empty
-    } else {
-      const filtered = usersData.filter(user =>
-        user.name.toLowerCase().includes(value.toLowerCase()) ||
-        user.email.toLowerCase().includes(value.toLowerCase()) ||
-        user.role.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredUsers(filtered);
-    }
+
+  const handleFilter = (filters: any) => {
+    const { searchID, searchName, searchEmail, searchRole, searchStatus } = filters;
+    const filtered = usersData.filter(user =>
+      (!searchID || user._id.includes(searchID)) &&
+      (!searchName || user.name.toLowerCase().includes(searchName.toLowerCase())) &&
+      (!searchEmail || user.email.toLowerCase().includes(searchEmail.toLowerCase())) &&
+      (!searchRole || user.role.toLowerCase().includes(searchRole.toLowerCase())) &&
+      (!searchStatus || (user.status ? 'active' : 'inactive').includes(searchStatus.toLowerCase()))
+    );
+    setFilteredUsers(filtered);
+  };
+
+  const handleClear = () => {
+    setFilteredUsers(usersData); // Reset to all users
   };
 
   return (
     <div className="p-4 bg-white text-black min-h-screen">
-      <Input.Search
-        placeholder="Search by name, email, or role"
-        value={searchKeyword}
-        onChange={(e) => handleSearch(e.target.value)}
-        style={{ marginBottom: 16, width: 300 }}
-      />
-
+      <UserFilter onFilter={handleFilter} onClear={handleClear} />
       <Table
         dataSource={filteredUsers}
         columns={columns}
