@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, Input } from 'antd';
-import { ColumnsType } from 'antd/es/table';
+import { Table, Button, Modal } from 'antd';
+import { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { createApiInstance } from '../../services/Api';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
 import UserStatusUpdater from '../../components/Admin/UserStatusUpdater';
 import EditUserForm from '../../components/Admin/EditUserForm';
+import UserFilter from '../../components/Admin/UserFilter';
 
 const AllUser: React.FC = () => {
   const navigate = useNavigate();
@@ -14,10 +15,10 @@ const AllUser: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [searchKeyword, setSearchKeyword] = useState('');
+  const [pagination, setPagination] = useState<TablePaginationConfig>({ current: 1, pageSize: 10, total: 0 });
 
   useEffect(() => {
-    const fetchUsersData = async () => {
+    const fetchUsersData = async (page = 1, pageSize = 20) => {
       try {
         const api = createApiInstance(navigate);
 
@@ -26,6 +27,8 @@ const AllUser: React.FC = () => {
           role: 'all',
           status: true,
           is_delete: false,
+          page,
+          pageSize,
         };
         const activeUsersResult = await api.searchUsers(activeUsersSearchData);
 
@@ -34,6 +37,8 @@ const AllUser: React.FC = () => {
           role: 'all',
           status: false,
           is_delete: false,
+          page,
+          pageSize,
         };
         const inactiveUsersResult = await api.searchUsers(inactiveUsersSearchData);
 
@@ -44,15 +49,24 @@ const AllUser: React.FC = () => {
 
         setUsersData(combinedResults);
         setFilteredUsers(combinedResults); // Initialize filtered data with all users
+        console.log(combinedResults)
+        setPagination({ ...pagination, total: combinedResults.length });
       } catch (error) {
         console.error('Error searching users:', error);
       }
     };
 
     fetchUsersData();
-  }, [navigate]);
+  }, [navigate, pagination.current, pagination.pageSize]);
 
   const columns: ColumnsType<any> = [
+    {
+      title: 'STT',
+      dataIndex: 'index',
+      key: 'index',
+      render: (text: any, record: any, index: number) => (pagination.current! - 1) * pagination.pageSize! + index + 1,
+      width: 50,
+    },
     {
       title: 'ID',
       dataIndex: '_id',
@@ -159,34 +173,36 @@ const AllUser: React.FC = () => {
       console.error('Error updating user:', error);
     }
   };
-  
-  const handleSearch = (value: string) => {
-    setSearchKeyword(value);
-    if (value.trim() === '') {
-      setFilteredUsers(usersData); // Reset to all users if search input is empty
-    } else {
-      const filtered = usersData.filter(user =>
-        user.name.toLowerCase().includes(value.toLowerCase()) ||
-        user.email.toLowerCase().includes(value.toLowerCase()) ||
-        user.role.toLowerCase().includes(value.toLowerCase())
-      );
-      setFilteredUsers(filtered);
-    }
+
+  const handleFilter = (filters: any) => {
+    const { searchID, searchName, searchEmail, searchRole, searchStatus } = filters;
+    const filtered = usersData.filter(user =>
+      (!searchID || user._id.includes(searchID)) &&
+      (!searchName || user.name.toLowerCase().includes(searchName.toLowerCase())) &&
+      (!searchEmail || user.email.toLowerCase().includes(searchEmail.toLowerCase())) &&
+      (!searchRole || user.role.toLowerCase().includes(searchRole.toLowerCase())) &&
+      (!searchStatus || (user.status ? 'active' : 'inactive').includes(searchStatus.toLowerCase()))
+    );
+    setFilteredUsers(filtered);
+  };
+
+  const handleClear = () => {
+    setFilteredUsers(usersData); // Reset to all users
+  };
+
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    setPagination(pagination);
   };
 
   return (
-    <div className="p-4 bg-white text-black min-h-screen">
-      <Input.Search
-        placeholder="Search by name, email, or role"
-        value={searchKeyword}
-        onChange={(e) => handleSearch(e.target.value)}
-        style={{ marginBottom: 16, width: 300 }}
-      />
-
+    <div className="p-10 bg-white text-black min-h-screen">
+      <UserFilter onFilter={handleFilter} onClear={handleClear} />
       <Table
         dataSource={filteredUsers}
         columns={columns}
         rowKey="_id"
+        pagination={pagination}
+        onChange={handleTableChange}
         scroll={{ x: 1300 }}
       />
 
