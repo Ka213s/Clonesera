@@ -89,7 +89,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 
   return (
     <AntHeader className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
-      <Button icon={<MenuOutlined />} onClick={toggleMenu} shape="circle" className="bg-[#8886E5] text-[#ffffff]" />
+      <Button icon={<MenuOutlined />} onClick={toggleMenu} shape="circle" className="bg-[#9667D1] text-[#ffffff]" />
 
       <Search
         placeholder="Search..."
@@ -100,7 +100,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 
       <div className="flex items-center flex-grow justify-center">
         <Link to="/home">
-          <img src={logo} alt="Logo" className="h-12 cursor-pointer" />
+          <img src={logo} alt="Logo" className="h-16 w-30 cursor-pointer" />
         </Link>
       </div>
 
@@ -110,7 +110,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             <Button
               onClick={handleCreateCourse}
               type="primary"
-              className="hidden md:block bg-[#9997F5] hover:bg-[#8886E5] border-none"
+              className="hidden md:block bg-[#9997F5] hover:bg-[##9667D1] border-none"
             >
               Create New Course
             </Button>
@@ -119,7 +119,8 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               type="primary"
               shape="circle"
               icon={<PlusOutlined />}
-              className="block md:hidden bg-[#9997F5] border-none hover:bg-[#8886E5]"
+              className="block md:hidden bg-[#9667D1] border-none hover:!bg-[#8886E5]"
+              
             />
           </>
         )}
@@ -145,8 +146,11 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             <UserOutlined className="text-2xl cursor-pointer" />
           </Dropdown>
         ) : (
-          <Button type="primary" className="bg-[#9997F5] border-none hover:bg-[#8886E5]">
-            <Link to="/login">Sign in</Link>
+          <Button
+            type="primary"
+            className="!bg-[#9667D1] !border-none hover:!bg-[#8886E5] hover:!text-white"
+          >
+            <Link to="/login" className="hover:!text-white">Sign in</Link>
           </Button>
         )}
       </div>

@@ -12,9 +12,8 @@ const ChangePassword: React.FC = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const token = localStorage.getItem('token'); // Adjust this according to your auth setup
+        const token = localStorage.getItem('token'); 
         const userData = await api.getDataUser(token);
-        console.log('User data :', userData);
         setUserId(userData.data._id);
       } catch (error) {
         console.error('Error fetching user data:', error);
