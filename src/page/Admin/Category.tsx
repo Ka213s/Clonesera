@@ -1,100 +1,94 @@
-import React, { useState } from 'react';
-import { Table, Button, Modal, Form, Input } from 'antd';
-import { AiOutlinePlus } from 'react-icons/ai';
-import categoriesData from './../../models/FileJson/categories.json';
+import React, { useState, useEffect } from 'react';
+import { Table, Button, Modal, message } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import CategoryForm from './CategoryForm';
+import { createApiInstance } from '../../services/Api'; // Import the API functions
 
 interface Category {
-  key: number;
+  id: number;
   name: string;
 }
 
 const Category: React.FC = () => {
-  const [categories, setCategories] = useState<Category[]>(categoriesData.categories.map((name, index) => ({ key: index, name })));
+  const [data, setData] = useState<Category[]>([]);
+  const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [editingCategory, setEditingCategory] = useState<Category | null>(null);
-
-  const showAddCategoryModal = () => {
-    setEditingCategory(null);
-    setIsModalVisible(true);
-  };
-
-  const showEditCategoryModal = (category: Category) => {
-    setEditingCategory(category);
-    setIsModalVisible(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
-  };
-
-  const handleSaveCategory = (values: { name: string }) => {
-    if (editingCategory) {
-      // Update existing category
-      const updatedCategories = categories.map(cat =>
-        cat.key === editingCategory.key ? { ...cat, name: values.name } : cat
-      );
-      setCategories(updatedCategories);
-    } else {
-      // Add new category
-      const newCategory: Category = { key: categories.length, name: values.name };
-      setCategories([...categories, newCategory]);
+  const [pagination, setPagination] = useState({
+    current: 1,
+    pageSize: 10,
+    total: 0,
+  });
+  const navigate = useNavigate();
+  const api = createApiInstance(navigate);
+  const fetchCategoriesData = async (pageNum = 1, pageSize = 10) => {
+    try {
+      const searchCondition = {};
+      const result = await api.getCategories(searchCondition, pageNum, pageSize);
+      const categories = result.data.pageData;
+      console.log('categories:', categories);
+      setData(categories);
+      setFilteredCategories(categories);
+      setPagination({
+        current: pageNum,
+        pageSize,
+        total: result.data.pageInfo.totalItems,
+      });
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      message.error('Failed to fetch categories');
     }
-    setIsModalVisible(false);
   };
 
-  const columns = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (_: any, record: Category) => (
-        <Button type="link" onClick={() => showEditCategoryModal(record)}>
-          Edit
-        </Button>
-      ),
-    },
-  ];
+  useEffect(() => {
+    fetchCategoriesData(pagination.current, pagination.pageSize);
+  }, [navigate, pagination.current, pagination.pageSize]);
+
+  const handleFormSubmit = async (values: { name: string }) => {
+    try {
+      const newCategory = await api.createCategory(values);
+      fetchCategoriesData(pagination.current, pagination.pageSize);
+      message.success('Category added successfully');
+      setIsModalVisible(false);
+    } catch (error) {
+      console.error('Failed to handle form submission:', error);
+      message.error('Failed to add category');
+    }
+  };
 
   return (
-    
-      <div className="pt-10 px-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-semibold">Category Management</h1>
-          <Button type="primary" icon={<AiOutlinePlus />} onClick={showAddCategoryModal}>
-            + Add New Category
-          </Button>
-        </div>
-        <Table columns={columns} dataSource={categories} rowKey="key" />
-        <Modal
-          title={editingCategory ? 'Edit Category' : 'Add New Category'}
-          visible={isModalVisible}
-          onCancel={handleCancel}
-          footer={null}
-        >
-          <Form
-            initialValues={{ name: editingCategory?.name || '' }}
-            onFinish={handleSaveCategory}
-          >
-            <Form.Item
-              label="Name"
-              name="name"
-              rules={[{ required: true, message: 'Please input the category name!' }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Save
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal>
-      </div>
-
+    <div className="pt-10 px-6">
+      <Button
+        type="primary"
+        icon={<PlusOutlined />}
+        onClick={() => setIsModalVisible(true)}
+      >
+        Add New Category
+      </Button>
+      <Table
+        dataSource={filteredCategories}
+        rowKey="id"
+        pagination={{
+          current: pagination.current,
+          pageSize: pagination.pageSize,
+          total: pagination.total,
+          onChange: (page, size) => {
+            setPagination(prev => ({ ...prev, current: page, pageSize: size }));
+            fetchCategoriesData(page, size);
+          },
+        }}
+      >
+        <Table.Column title="Name" dataIndex="name" key="name" />
+      </Table>
+      <Modal
+        title="Add New Category"
+        visible={isModalVisible}
+        onCancel={() => setIsModalVisible(false)}
+        footer={null}
+      >
+        <CategoryForm onSubmit={handleFormSubmit} />
+      </Modal>
+    </div>
   );
 };
 
