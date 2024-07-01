@@ -1,21 +1,33 @@
 import React, { useState } from 'react';
-import BasicInformation from '../BasicInformation';
+import { useNavigate } from 'react-router-dom';
+import { createApiInstance } from '../../services/Api';
+import BasicInformation from './BasicInformation';
 import Curriculum from './Curriculum';
 import Media from './Media';
 import Price from './Price';
 import Publish from './Publish';
 
 const CreateCourse: React.FC = () => {
+  const navigate = useNavigate();
+  const api = createApiInstance(navigate);
+
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
     title: '',
     shortDescription: '',
     description: '',
-    skillCourse: '',
-    price: '',
+    content: '',
+    price: 0,
     requirements: '',
     created_at: '',
+    category_id: '',
+    video_url: '',
+    image_url: '',
+    discount: 0,
   });
+
+  const [courseId, setCourseId] = useState<string | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
   const nextStep = () => {
     setStep((prevStep) => prevStep + 1);
@@ -25,18 +37,68 @@ const CreateCourse: React.FC = () => {
     setStep((prevStep) => prevStep - 1);
   };
 
+  const publishCourse = async () => {
+    try {
+      const courseData = {
+        name: formData.title,
+        category_id: formData.category_id,
+        description: formData.description,
+        content: formData.content,
+        video_url: formData.video_url,
+        image_url: formData.image_url,
+        price: Number(formData.price),
+        discount: Number(formData.discount),
+      };
+      console.log('Course Data:', courseData);
+
+      const courseResponse = await api.createCourse(courseData);
+      
+      setCourseId(courseResponse.data._id);
+
+      const sessionData = {
+        name: 'Session One',
+        course_id: courseResponse.data._id,
+        description: '',
+      };
+      console.log('Session Data:', sessionData);
+
+      const sessionResponse = await api.createSession(sessionData);
+      console.log('sessionResponse:', sessionResponse);
+      setSessionId(sessionResponse.data._id);
+
+      const lessonData = {
+        name: 'Lesson One',
+        course_id: courseResponse.data._id,
+        session_id: sessionResponse.data._id,
+        lesson_type: 'video',
+        description: '',
+        video_url: formData.video_url,
+        image_url: formData.image_url,
+        full_time: 100,
+        position_order: 1,
+      };
+      console.log('Lesson Data:', lessonData);
+
+      await api.createLesson(lessonData);
+
+      nextStep();
+    } catch (error) {
+      console.error('Error publishing course:', error);
+    }
+  };
+
   const renderStep = () => {
     switch (step) {
       case 1:
         return <BasicInformation formData={formData} setFormData={setFormData} nextStep={nextStep} />;
       case 2:
-        return <Curriculum formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />;
+        return <Curriculum nextStep={nextStep} prevStep={prevStep} courseId={courseId} api={api} />;
       case 3:
         return <Media formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />;
       case 4:
         return <Price formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />;
       case 5:
-        return <Publish formData={formData} prevStep={prevStep} />;
+        return <Publish prevStep={prevStep} publishCourse={publishCourse} />;
       default:
         return null;
     }
@@ -49,7 +111,7 @@ const CreateCourse: React.FC = () => {
           <h2 className="text-xl font-bold">Create New Course</h2>
         </div>
         <div className="flex items-center justify-between mb-6">
-          <div className="flex w-full items-center relative ml-20"> {/* Added left margin here */}
+          <div className="flex w-full items-center relative ml-20">
             {['BASIC', 'CURRICULUM', 'MEDIA', 'PRICE', 'PUBLISH'].map((label, index) => (
               <div key={index} className="flex items-center w-full">
                 <div className="flex flex-col items-center">

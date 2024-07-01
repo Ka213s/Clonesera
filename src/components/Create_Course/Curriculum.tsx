@@ -1,83 +1,93 @@
 import React, { useState } from 'react';
-import { Button, Typography } from 'antd';
-import Section from './Section';
-import SectionNamePopup from './SectionNamePopup';
 
-interface SectionData {
-  id: number;
-  name: string;
-}
-
-interface CurriculumProps {
-  formData: {
-    title: string;
-    shortDescription: string;
-    description: string;
-    skillCourse: string;
-    price: string;
-    requirements: string;
-    created_at: string;
-  };
-  setFormData: React.Dispatch<React.SetStateAction<any>>;
+interface Props {
   nextStep: () => void;
   prevStep: () => void;
+  courseId: string | null;
+  api: any;
 }
 
-const { Title } = Typography;
+const Curriculum: React.FC<Props> = ({ nextStep, prevStep, courseId, api }) => {
+  const [sessionName, setSessionName] = useState('');
+  const [sessionDescription, setSessionDescription] = useState('');
+  const [sessionsToAdd, setSessionsToAdd] = useState<{ name: string; description: string }[]>([]);
+  const [sessions, setSessions] = useState<{ _id: string; name: string; course_id: string; description: string }[]>([]);
 
-const Curriculum: React.FC<CurriculumProps> = ({ formData, setFormData, nextStep, prevStep }) => {
-  const [sections, setSections] = useState<SectionData[]>([]);
-  const [sectionCounter, setSectionCounter] = useState(0);
-  const [showSectionNamePopup, setShowSectionNamePopup] = useState(false);
-
-  const addSection = () => {
-    setShowSectionNamePopup(true);
+  const addSessionToList = () => {
+    setSessionsToAdd([...sessionsToAdd, { name: sessionName, description: sessionDescription }]);
+    setSessionName('');
+    setSessionDescription('');
   };
 
-  const saveSectionName = (sectionName: string) => {
-    setSections([...sections, { id: sectionCounter, name: sectionName }]);
-    setSectionCounter(sectionCounter + 1);
-    setShowSectionNamePopup(false);
+  const addSessions = async () => {
+    if (!courseId) {
+      console.error('Course ID is required to create sessions.');
+      return;
+    }
+
+    try {
+      const sessionResponses = await Promise.all(sessionsToAdd.map(sessionData => {
+        return api.createSession({ ...sessionData, course_id: courseId });
+      }));
+
+      const createdSessions = sessionResponses.map(response => response.data);
+      setSessions([...sessions, ...createdSessions]);
+      setSessionsToAdd([]);
+      console.log('Sessions created:', createdSessions);
+    } catch (error) {
+      console.error('Error creating sessions:', error);
+    }
   };
 
   return (
-    <div className="max-w-6xl mx-auto p-6 bg-white shadow-md rounded-md">
-      <Title level={2} className="text-gray-800 mb-6">Curriculum</Title>
-      <Button 
-        type="primary" 
-        onClick={addSection} 
-        className="mb-4 bg-[#9997F5] hover:bg-[#8886E5] border-none"
-      >
-        New Section
-      </Button>
-      
-      {sections.map((sectionData) => (
-        <Section
-          key={sectionData.id}
-          sectionId={sectionData.id}
-          sectionName={sectionData.name}
-          formData={formData}
-          setFormData={setFormData}
-          nextStep={nextStep}
-          prevStep={prevStep}
-        />
-      ))}
-      
-      <div className="flex justify-between mt-4">
-        <Button type="default" onClick={prevStep} className="bg-gray-500 text-white border-none hover:bg-gray-500">
-          Previous
-        </Button>
-        <Button type="primary" onClick={nextStep} className="bg-[#9997F5] hover:bg-[#8886E5] border-none">
-          Next
-        </Button>
+    <div>
+      <h3 className="text-lg font-semibold">Curriculum</h3>
+      <div className="mb-4">
+        <p>Here you can add and manage the curriculum of your course.</p>
       </div>
-      
-      {showSectionNamePopup && (
-        <SectionNamePopup
-          onClose={() => setShowSectionNamePopup(false)}
-          onSave={saveSectionName}
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Session Name"
+          value={sessionName}
+          onChange={(e) => setSessionName(e.target.value)}
+          className="border p-2 mb-2 w-full"
         />
-      )}
+        <textarea
+          placeholder="Session Description"
+          value={sessionDescription}
+          onChange={(e) => setSessionDescription(e.target.value)}
+          className="border p-2 w-full"
+        />
+        <button type="button" onClick={addSessionToList} className="bg-green-500 text-white py-2 px-4 rounded mt-2">
+          Add Session
+        </button>
+      </div>
+      <div className="mb-4">
+        {sessionsToAdd.map((session, index) => (
+          <div key={index} className="mb-2 p-2 border">
+            <h4 className="font-semibold">{session.name}</h4>
+            <p>{session.description}</p>
+          </div>
+        ))}
+      </div>
+      <div className="mb-4">
+        {sessions.map((session, index) => (
+          <div key={index} className="mb-2 p-2 border">
+            <h4 className="font-semibold">{session.name}</h4>
+            <p>{session.description}</p>
+          </div>
+        ))}
+      </div>
+      <button type="button" onClick={prevStep} className="bg-gray-500 text-white py-2 px-4 rounded mr-2">
+        Back
+      </button>
+      <button type="button" onClick={addSessions} className="bg-blue-500 text-white py-2 px-4 rounded mr-2">
+        Add All Sessions
+      </button>
+      <button type="button" onClick={nextStep} className="bg-blue-500 text-white py-2 px-4 rounded">
+        Next
+      </button>
     </div>
   );
 };
