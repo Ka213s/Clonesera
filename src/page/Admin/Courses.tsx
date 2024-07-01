@@ -102,8 +102,8 @@ const Courses: React.FC = () => {
                 <td className="border px-4 py-2">{course.price}</td>
                 <td className="border px-4 py-2">
                   <div className="flex justify-center space-x-2">
-                    <button className="bg-purple-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-300 transition duration-200">
-                      View all
+                    <button className="bg-[#9997F5] text-white px-4 py-2 rounded-lg shadow-md hover:bg-[#8886E5] focus:outline-none focus:ring-2 focus:ring-purple-300 transition duration-200">
+                      View
                     </button>
                     <button 
                       className="bg-blue-500 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300 transition duration-200"

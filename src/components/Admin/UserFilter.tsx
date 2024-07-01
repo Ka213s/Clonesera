@@ -40,7 +40,7 @@ const UserFilter: React.FC<{ onFilter: (filters: any) => void, onClear: () => vo
         </Select>
       </Form.Item>
       <Form.Item>
-        <Button type="primary" htmlType="submit">Filter</Button>
+        <Button type="primary" htmlType="submit" className='!bg-[#9997F5] hover:!bg-[#8886E5]'>Filter</Button>
       </Form.Item>
       <Form.Item>
         <Button onClick={handleClear}>Clear</Button>

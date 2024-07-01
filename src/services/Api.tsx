@@ -158,14 +158,14 @@ class Api {
       throw error;
     }
   }
-  async searchUsers(searchCondition: any): Promise<any> {
+  async searchUsers(searchCondition: any, pageNum: number, pageSize: number): Promise<any> {
     try {
       const token = localStorage.getItem('token');
       const response = await this.api.post('/api/users/search', {
         searchCondition,
         pageInfo: {
-          pageNum: 1,
-          pageSize: 20
+          pageNum,
+          pageSize
         }
       }, {
         headers: {
@@ -179,6 +179,7 @@ class Api {
       throw error;
     }
   }
+  
   async changeUserStatus(userId: string, status: boolean): Promise<any> {
     try {
       const token = localStorage.getItem('token');
