@@ -9,7 +9,7 @@ const AccountSettings: React.FC = () => {
   const navigate = useNavigate();
   const api = createApiInstance(navigate);
   const [avatar, setAvatar] = useState<string | null>(null);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null); 
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [userData, setUserData] = useState<any>(null);
 
