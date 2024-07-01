@@ -12,7 +12,6 @@ import { createApiInstance } from '../services/Api';
 import useAuthCheck from '../hooks/useAuthCheck';
 import logo from '../assets/Logo-2.png';
 
-
 const clientId = process.env.REACT_APP_GOOGLE_CLIENT_ID || '';
 
 const Login: React.FC = () => {
@@ -31,7 +30,7 @@ const Login: React.FC = () => {
 
     try {
       const response = await api.loginAccount(values);
-      
+
       const token = response.data.token;
       localStorage.setItem('token', token);
       const getDataUser = await api.getDataUser(token);
@@ -57,7 +56,7 @@ const Login: React.FC = () => {
     try {
       const googleResponse = await api.loginUserByGoogle({ google_id: response.credential });
       if (googleResponse) {
-       
+
         const token = googleResponse.data.token;
         localStorage.setItem('token', token);
         const getDataUser = await api.getDataUser(token);
@@ -219,10 +218,14 @@ const Login: React.FC = () => {
         <div className="text-center mb-6">
           <p className="text-lg font-bold">Sign up with Google</p>
         </div>
-        <p className="mb-2">Select Your Role</p>
-        <Radio.Group onChange={(e) => setSelectedRole(e.target.value)} value={selectedRole}>
-          <Radio value="student">Student</Radio>
-          <Radio value="instructor">Instructor</Radio>
+        <p className="mb-2 text-base">Select Your Role</p>
+        <Radio.Group
+          onChange={(e) => setSelectedRole(e.target.value)}
+          value={selectedRole}
+          className="flex flex-col space-y-2"
+        >
+          <Radio value="student" className="hover:bg-gray-100 p-2 rounded-lg">Student</Radio>
+          <Radio value="instructor" className="hover:bg-gray-100 p-2 rounded-lg">Instructor</Radio>
         </Radio.Group>
       </Modal>
 

@@ -22,14 +22,14 @@ code {
 .custom-menu .ant-menu-submenu-title:hover,
 .custom-menu .ant-menu-item-selected,
 .custom-menu .ant-menu-submenu-title-selected {
-  background-color: #7c3aed !important; /* Tailwind's purple-500 */
+  background-color: #9997F5 !important; /* Tailwind's purple-500 */
   color: #ffffff !important; /* White text */
 }
 
 /* Apply the same styles to the active items */
 .custom-menu .ant-menu-item-active,
 .custom-menu .ant-menu-submenu-title-active {
-  background-color: #7c3aed !important; /* Tailwind's purple-500 */
+  background-color: #9997F5 !important; /* Tailwind's purple-500 */
   color: #ffffff !important; /* White text */
 }
 
