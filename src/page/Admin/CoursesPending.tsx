@@ -74,7 +74,7 @@ const CoursesPending: React.FC = () => {
               <td className="py-3 px-4 text-lg font-semibold text-purple-500">{course.price}</td>
               <td className="py-3 px-4">
                 <div className="flex flex-col space-y-2">
-                  <button className="bg-purple-500 text-white px-4 py-2 rounded-full shadow-md transform transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
+                  <button className="bg-[#9997F5] hover:bg-[#8886E5] text-white px-4 py-2 rounded-full shadow-md transform transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-opacity-50">
                     Approve
                   </button>
                   <button className="bg-red-500 text-white px-4 py-2 rounded-full shadow-md transform transition-transform duration-200 hover:scale-105 active:scale-95 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
