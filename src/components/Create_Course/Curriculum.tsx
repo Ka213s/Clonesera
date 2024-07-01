@@ -5,13 +5,13 @@ interface Props {
   prevStep: () => void;
   courseId: string | null;
   api: any;
+  setSessions: React.Dispatch<React.SetStateAction<{ name: string; description: string }[]>>;
 }
 
-const Curriculum: React.FC<Props> = ({ nextStep, prevStep, courseId, api }) => {
+const Curriculum: React.FC<Props> = ({ nextStep, prevStep, courseId, api, setSessions }) => {
   const [sessionName, setSessionName] = useState('');
   const [sessionDescription, setSessionDescription] = useState('');
   const [sessionsToAdd, setSessionsToAdd] = useState<{ name: string; description: string }[]>([]);
-  const [sessions, setSessions] = useState<{ _id: string; name: string; course_id: string; description: string }[]>([]);
 
   const addSessionToList = () => {
     setSessionsToAdd([...sessionsToAdd, { name: sessionName, description: sessionDescription }]);
@@ -31,8 +31,8 @@ const Curriculum: React.FC<Props> = ({ nextStep, prevStep, courseId, api }) => {
       }));
 
       const createdSessions = sessionResponses.map(response => response.data);
-      setSessions([...sessions, ...createdSessions]);
       setSessionsToAdd([]);
+      setSessions((prevSessions) => [...prevSessions, ...createdSessions]);
       console.log('Sessions created:', createdSessions);
     } catch (error) {
       console.error('Error creating sessions:', error);
@@ -65,14 +65,6 @@ const Curriculum: React.FC<Props> = ({ nextStep, prevStep, courseId, api }) => {
       </div>
       <div className="mb-4">
         {sessionsToAdd.map((session, index) => (
-          <div key={index} className="mb-2 p-2 border">
-            <h4 className="font-semibold">{session.name}</h4>
-            <p>{session.description}</p>
-          </div>
-        ))}
-      </div>
-      <div className="mb-4">
-        {sessions.map((session, index) => (
           <div key={index} className="mb-2 p-2 border">
             <h4 className="font-semibold">{session.name}</h4>
             <p>{session.description}</p>

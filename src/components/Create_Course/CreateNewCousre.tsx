@@ -27,7 +27,7 @@ const CreateCourse: React.FC = () => {
   });
 
   const [courseId, setCourseId] = useState<string | null>(null);
-  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [sessions, setSessions] = useState<{ name: string; description: string }[]>([]);
 
   const nextStep = () => {
     setStep((prevStep) => prevStep + 1);
@@ -55,31 +55,28 @@ const CreateCourse: React.FC = () => {
       
       setCourseId(courseResponse.data._id);
 
-      const sessionData = {
-        name: 'Session One',
-        course_id: courseResponse.data._id,
-        description: '',
-      };
-      console.log('Session Data:', sessionData);
+      const sessionResponses = await Promise.all(sessions.map(sessionData => {
+        return api.createSession({ ...sessionData, course_id: courseResponse.data._id });
+      }));
+      
+      const createdSessions = sessionResponses.map(response => response.data);
+      console.log('Sessions created:', createdSessions);
 
-      const sessionResponse = await api.createSession(sessionData);
-      console.log('sessionResponse:', sessionResponse);
-      setSessionId(sessionResponse.data._id);
-
-      const lessonData = {
-        name: 'Lesson One',
-        course_id: courseResponse.data._id,
-        session_id: sessionResponse.data._id,
-        lesson_type: 'video',
-        description: '',
-        video_url: formData.video_url,
-        image_url: formData.image_url,
-        full_time: 100,
-        position_order: 1,
-      };
-      console.log('Lesson Data:', lessonData);
-
-      await api.createLesson(lessonData);
+      if (createdSessions.length > 0) {
+        const lessonData = {
+          name: 'Lesson One',
+          course_id: courseResponse.data._id,
+          session_id: createdSessions[0]._id,
+          lesson_type: 'video',
+          description: '',
+          video_url: formData.video_url,
+          image_url: formData.image_url,
+          full_time: 100,
+          position_order: 1,
+        };
+        console.log('Lesson Data:', lessonData);
+        await api.createLesson(lessonData);
+      }
 
       nextStep();
     } catch (error) {
@@ -92,7 +89,7 @@ const CreateCourse: React.FC = () => {
       case 1:
         return <BasicInformation formData={formData} setFormData={setFormData} nextStep={nextStep} />;
       case 2:
-        return <Curriculum nextStep={nextStep} prevStep={prevStep} courseId={courseId} api={api} />;
+        return <Curriculum nextStep={nextStep} prevStep={prevStep} courseId={courseId} api={api} setSessions={setSessions} />;
       case 3:
         return <Media formData={formData} setFormData={setFormData} nextStep={nextStep} prevStep={prevStep} />;
       case 4:
