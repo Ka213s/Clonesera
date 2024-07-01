@@ -12,7 +12,7 @@ const AllUser: React.FC = () => {
   const navigate = useNavigate();
   const [usersData, setUsersData] = useState<any[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
-  const [selectedUser, setSelectedUser] = useState<any | null>(null);
+  const [selectedUser, setSelectedUser] = useState<any | null>(null); // State to store selected user for editing
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
   const [pagination, setPagination] = useState<TablePaginationConfig>({ current: 1, pageSize: 10, total: 0 });
@@ -49,7 +49,6 @@ const AllUser: React.FC = () => {
 
         setUsersData(combinedResults);
         setFilteredUsers(combinedResults); // Initialize filtered data with all users
-        console.log(combinedResults)
         setPagination({ ...pagination, total: combinedResults.length });
       } catch (error) {
         console.error('Error searching users:', error);
@@ -131,25 +130,23 @@ const AllUser: React.FC = () => {
   };
 
   const editUser = (record: any) => {
-    setSelectedUser(record);
+    setSelectedUser(record); // Set selected user for editing
     setIsEditMode(true);
     setIsModalVisible(true);
   };
 
   const handleOk = () => {
     setIsModalVisible(false);
-    setSelectedUser(null);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
-    setSelectedUser(null);
   };
 
   const handleSave = async (updatedUser: any) => {
     try {
       const api = createApiInstance(navigate);
-      await api.updateAccount(updatedUser._id, {
+      const response = await api.updateAccount(updatedUser._id, {
         name: updatedUser.name,
         phone_number: updatedUser.phone_number,
         description: updatedUser.description,
@@ -158,17 +155,25 @@ const AllUser: React.FC = () => {
         role: updatedUser.role,
         video: updatedUser.video || '',
       });
-      setUsersData((prevData) =>
-        prevData.map((user) => (user._id === updatedUser._id ? updatedUser : user))
-      );
-      setFilteredUsers((prevData) =>
-        prevData.map((user) => (user._id === updatedUser._id ? updatedUser : user))
-      );
-      setIsModalVisible(false);
-      setSelectedUser(null);
-  
-      // Log the updated user data
-      console.log('Saved user data:', updatedUser);
+
+      // Check if the update was successful
+      if (response.success) {
+        // Update local state with the updated user
+        setUsersData((prevData) =>
+          prevData.map((user) => (user._id === updatedUser._id ? { ...user, ...updatedUser } : user))
+        );
+        setFilteredUsers((prevData) =>
+          prevData.map((user) => (user._id === updatedUser._id ? { ...user, ...updatedUser } : user))
+        );
+
+        // Close the modal after saving
+        handleCancel();
+
+        // Log the updated user data
+        console.log('Saved user data:', updatedUser);
+      } else {
+        console.error('Failed to update user:', response.message);
+      }
     } catch (error) {
       console.error('Error updating user:', error);
     }
@@ -253,8 +258,13 @@ const AllUser: React.FC = () => {
             </div>
           </div>
         )}
+
         {selectedUser && isEditMode && (
-          <EditUserForm user={selectedUser} onSave={handleSave} onCancel={handleCancel} />
+          <EditUserForm
+            user={selectedUser}
+            onSave={handleSave}
+            onCancel={handleCancel}
+          />
         )}
       </Modal>
     </div>
