@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal } from 'antd';
-import { ColumnsType } from 'antd/es/table';
+import { ColumnsType, TablePaginationConfig } from 'antd/es/table';
 import { createApiInstance } from '../../services/Api';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
@@ -15,9 +15,10 @@ const AllUser: React.FC = () => {
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
+  const [pagination, setPagination] = useState<TablePaginationConfig>({ current: 1, pageSize: 10, total: 0 });
 
   useEffect(() => {
-    const fetchUsersData = async () => {
+    const fetchUsersData = async (page = 1, pageSize = 20) => {
       try {
         const api = createApiInstance(navigate);
 
@@ -26,6 +27,8 @@ const AllUser: React.FC = () => {
           role: 'all',
           status: true,
           is_delete: false,
+          page,
+          pageSize,
         };
         const activeUsersResult = await api.searchUsers(activeUsersSearchData);
 
@@ -34,6 +37,8 @@ const AllUser: React.FC = () => {
           role: 'all',
           status: false,
           is_delete: false,
+          page,
+          pageSize,
         };
         const inactiveUsersResult = await api.searchUsers(inactiveUsersSearchData);
 
@@ -44,15 +49,24 @@ const AllUser: React.FC = () => {
 
         setUsersData(combinedResults);
         setFilteredUsers(combinedResults); // Initialize filtered data with all users
+        console.log(combinedResults)
+        setPagination({ ...pagination, total: combinedResults.length });
       } catch (error) {
         console.error('Error searching users:', error);
       }
     };
 
     fetchUsersData();
-  }, [navigate]);
+  }, [navigate, pagination.current, pagination.pageSize]);
 
   const columns: ColumnsType<any> = [
+    {
+      title: 'STT',
+      dataIndex: 'index',
+      key: 'index',
+      render: (text: any, record: any, index: number) => (pagination.current! - 1) * pagination.pageSize! + index + 1,
+      width: 50,
+    },
     {
       title: 'ID',
       dataIndex: '_id',
@@ -176,13 +190,19 @@ const AllUser: React.FC = () => {
     setFilteredUsers(usersData); // Reset to all users
   };
 
+  const handleTableChange = (pagination: TablePaginationConfig) => {
+    setPagination(pagination);
+  };
+
   return (
-    <div className="p-4 bg-white text-black min-h-screen">
+    <div className="p-10 bg-white text-black min-h-screen">
       <UserFilter onFilter={handleFilter} onClear={handleClear} />
       <Table
         dataSource={filteredUsers}
         columns={columns}
         rowKey="_id"
+        pagination={pagination}
+        onChange={handleTableChange}
         scroll={{ x: 1300 }}
       />
 

@@ -6,8 +6,7 @@ import {
   UserOutlined,
   DashboardOutlined,
   BookOutlined,
-  TeamOutlined,
-  UsergroupAddOutlined
+  TeamOutlined
 } from '@ant-design/icons';
 import sidebarMenuItems from '../../models/FileJson/AdminSidebar.json'; // Adjust the path as needed
 
@@ -26,8 +25,7 @@ const iconComponents = {
   UserOutlined: <UserOutlined />,
   DashboardOutlined: <DashboardOutlined />,
   BookOutlined: <BookOutlined />,
-  TeamOutlined: <TeamOutlined />,
-  UsergroupAddOutlined: <UsergroupAddOutlined />
+  TeamOutlined: <TeamOutlined />
 };
 
 const SidebarAdmin: React.FC<SidebarProps> = ({ showMenu }) => {

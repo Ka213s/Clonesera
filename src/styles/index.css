@@ -18,10 +18,9 @@ code {
 .ant-switch-inner {
   background-color: #f5222d; /* Màu đỏ khi inactive */
 }
-/* custom.css */
 .custom-menu .ant-menu-item,
 .custom-menu .ant-menu-submenu-title {
-  transition: background-color 0.3s, color 0.3s; /* Smooth transition */
+  transition: background-color 0.2s, color 0.2s; /* Smooth transition */
 }
 
 .custom-menu .ant-menu-item:hover,
@@ -38,6 +37,5 @@ code {
   background-color: #9997F5 !important; /* Tailwind's purple-500 */
   color: #ffffff !important; /* White text */
 }
-
 
 
