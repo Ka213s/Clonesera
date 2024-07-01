@@ -13,7 +13,7 @@
     {
       "key": "instructor",
       "icon": "TeamOutlined",
-      "label": "Instructor",
+      "label": "User",
       "children": [
         { "key": "/admin/allIUser", "label": "All User" },
         { "key": "/admin/addUser", "label": "Add User" }

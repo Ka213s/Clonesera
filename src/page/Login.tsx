@@ -210,24 +210,56 @@ const Login: React.FC = () => {
       </div>
 
       <Modal
-        open={isRoleModalVisible}
-        onOk={handleRoleSelection}
-        onCancel={() => setIsRoleModalVisible(false)}
-        okText="Submit"
-      >
-        <div className="text-center mb-6">
-          <p className="text-lg font-bold">Sign up with Google</p>
-        </div>
-        <p className="mb-2 text-base">Select Your Role</p>
-        <Radio.Group
-          onChange={(e) => setSelectedRole(e.target.value)}
+      open={isRoleModalVisible}
+      onOk={handleRoleSelection}
+      onCancel={() => setIsRoleModalVisible(false)}
+      okText="Submit"
+      width={900}
+      className="p-6 rounded-lg shadow-lg"
+    >
+      <div className="text-center mb-6">
+        <p className="text-lg font-bold">Sign up with Google</p>
+      </div>
+      <p className="mb-2 text-base font-semibold">Select Your Role</p>
+      <div className="grid grid-cols-2 gap-4 mb-4">
+        <Radio.Group 
+          onChange={(e) => setSelectedRole(e.target.value)} 
           value={selectedRole}
-          className="flex flex-col space-y-2"
+          className="flex flex-col items-start"
         >
-          <Radio value="student" className="hover:bg-gray-100 p-2 rounded-lg">Student</Radio>
-          <Radio value="instructor" className="hover:bg-gray-100 p-2 rounded-lg">Instructor</Radio>
+          <Radio value="student">
+            <span className="text-base">Student</span>
+          </Radio>
         </Radio.Group>
-      </Modal>
+        <Radio.Group 
+          onChange={(e) => setSelectedRole(e.target.value)} 
+          value={selectedRole}
+          className="flex flex-col items-start"
+        >
+          <Radio value="instructor">
+            <span className="text-base">Instructor</span>
+          </Radio>
+        </Radio.Group>
+      </div>
+      <div className="grid grid-cols-2 gap-4 mt-4">
+        <div>
+          <p className="text-base font-semibold mb-2">Benefits of being a Student:</p>
+          <ul className="list-disc list-inside ml-4">
+            <li className="mb-2">Access to exclusive student resources</li>
+            <li className="mb-2">Join student communities and groups</li>
+            <li className="mb-2">Get personalized study plans</li>
+          </ul>
+        </div>
+        <div>
+          <p className="text-base font-semibold mb-2">Benefits of being an Instructor:</p>
+          <ul className="list-disc list-inside ml-4">
+            <li className="mb-2">Access to teaching tools and resources</li>
+            <li className="mb-2">Join instructor communities and forums</li>
+            <li className="mb-2">Get insights and analytics on student progress</li>
+          </ul>
+        </div>
+      </div>
+    </Modal>
 
     </GoogleOAuthProvider>
   );
