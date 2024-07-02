@@ -21,13 +21,11 @@ const BasicInformation: React.FC<Props> = ({ formData, setFormData, nextStep }) 
         is_delete: false,
       };
       const data = await api.getCategories(searchCondition, 1, 10);
-      console.log('Categories:', data);
       const categoriesArray = Array.isArray(data) ? data : data.data.pageData || [];
       setCategories(categoriesArray);
 
       const childCategoriesArray = categoriesArray.filter((category: any) => category.parent_category_id);
       setChildCategories(childCategoriesArray);
-      console.log('Child categories:', childCategoriesArray);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -40,6 +38,9 @@ const BasicInformation: React.FC<Props> = ({ formData, setFormData, nextStep }) 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    if (name === 'category_id') {
+      console.log('Selected Category ID:', value);
+    }
   };
 
   return (
@@ -84,21 +85,21 @@ const BasicInformation: React.FC<Props> = ({ formData, setFormData, nextStep }) 
           >
             <option value="">Select a category</option>
             {categories.map((category: any) => (
-              <React.Fragment key={category.id}>
+              <React.Fragment key={category._id}>
                 {!category.parent_category_id && (
                   <optgroup label={category.name}>
-                    <option value={category.id}>{category.name}</option>
+                    <option value={category._id}>{category.name}</option>
                     {childCategories
-                      .filter((child: any) => child.parent_category_id === category.id)
+                      .filter((child: any) => child.parent_category_id === category._id)
                       .map((child: any) => (
-                        <option key={child.id} value={child.id}>
+                        <option key={child._id} value={child._id}>
                           {child.name}
                         </option>
                       ))}
                   </optgroup>
                 )}
                 {category.parent_category_id && (
-                  <option value={category.id}>{category.name}</option>
+                  <option value={category._id}>{category.name}</option>
                 )}
               </React.Fragment>
             ))}
