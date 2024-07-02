@@ -27,7 +27,7 @@ const CreateCourse: React.FC = () => {
   });
 
   const [courseId, setCourseId] = useState<string | null>(null);
-  const [sessions, setSessions] = useState<{ name: string; description: string }[]>([]);
+  const [sessions, setSessions] = useState<{ name: string; description: string; lessons: { name: string; description: string; lesson_type: string; full_time: number; position_order: number; video_url?: string; image_url?: string }[] }[]>([]);
 
   const nextStep = () => {
     setStep((prevStep) => prevStep + 1);
@@ -49,33 +49,35 @@ const CreateCourse: React.FC = () => {
         price: Number(formData.price),
         discount: Number(formData.discount),
       };
-      console.log('Course Data:', courseData);
+      console.log('Sending course data:', courseData);
 
       const courseResponse = await api.createCourse(courseData);
-      
+      console.log('Course creation response:', courseResponse);
       setCourseId(courseResponse.data._id);
 
-      const sessionResponses = await Promise.all(sessions.map(sessionData => {
-        return api.createSession({ ...sessionData, course_id: courseResponse.data._id });
-      }));
-      
-      const createdSessions = sessionResponses.map(response => response.data);
-      console.log('Sessions created:', createdSessions);
+      if (sessions.length > 0) {
+        const sessionResponses = await Promise.all(sessions.map(sessionData => {
+          console.log('Sending session data:', sessionData);
+          return api.createSession({ name: sessionData.name, description: sessionData.description, course_id: courseResponse.data._id });
+        }));
 
-      if (createdSessions.length > 0) {
-        const lessonData = {
-          name: 'Lesson One',
-          course_id: courseResponse.data._id,
-          session_id: createdSessions[0]._id,
-          lesson_type: 'video',
-          description: '',
-          video_url: formData.video_url,
-          image_url: formData.image_url,
-          full_time: 100,
-          position_order: 1,
-        };
-        console.log('Lesson Data:', lessonData);
-        await api.createLesson(lessonData);
+        const createdSessions = await Promise.all(sessionResponses.map(async (response, index) => {
+          const session = response.data;
+          const lessons = sessions[index].lessons;
+          const lessonResponses = await Promise.all(lessons.map(lessonData => {
+            const lesson = {
+              ...lessonData,
+              course_id: courseResponse.data._id,
+              session_id: session._id,
+              video_url: lessonData.video_url || '',
+              image_url: lessonData.image_url || '',
+            };
+            console.log('Sending lesson data:', lesson);
+            return api.createLesson(lesson);
+          }));
+          return { ...session, lessons: lessonResponses.map(res => res.data) };
+        }));
+        console.log('Sessions created with lessons:', createdSessions);
       }
 
       nextStep();
