@@ -112,6 +112,7 @@ const SubCategory: React.FC = () => {
           type="primary"
           icon={<PlusOutlined />}
           onClick={() => setIsModalVisible(true)}
+          className='!bg-[#9997F5] hover:!bg-[#8886E5]'
         >
           Add New SubCategory
         </Button>
