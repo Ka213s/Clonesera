@@ -8,7 +8,7 @@ import {
   BookOutlined,
   TeamOutlined
 } from '@ant-design/icons';
-import sidebarMenuItems from '../../models/FileJson/AdminSidebar.json'; // Adjust the path as needed
+import sidebarMenuItems from '../../models/FileJson/AdminSidebar.json'; // Điều chỉnh đường dẫn nếu cần thiết
 
 interface SidebarProps {
   showMenu: boolean;
@@ -38,6 +38,7 @@ const SidebarAdmin: React.FC<SidebarProps> = ({ showMenu }) => {
       key: item.key,
       icon: item.icon ? iconComponents[item.icon as keyof typeof iconComponents] : undefined,
       label: item.label,
+      className: item.children ? 'parent-category' : '',
       children: item.children ? renderMenuItems(item.children) : undefined
     }));
   };
@@ -55,7 +56,7 @@ const SidebarAdmin: React.FC<SidebarProps> = ({ showMenu }) => {
         style={{ height: '100%', borderRight: 0 }}
         items={renderMenuItems(sidebarMenuItems.menuItems)}
         onClick={handleClick}
-        className="custom-menu"
+        className="custom-menu" 
       />
     </aside>
   );

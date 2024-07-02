@@ -16,13 +16,13 @@ const CategoryTabs: React.FC<CategoryTabsProps> = ({ activeKey, onTabChange }) =
   ];
 
   return (
-    <div className="p-4 mb-4">
+    <div className="p-4 mb-4 ">
       <Tabs activeKey={activeKey} onChange={onTabChange}>
         {tabs.map(tab => (
           <TabPane
             key={tab.key}
             tab={
-              <div className="flex items-center">
+              <div className="flex items-center ">
                 {tab.icon}
                 <span className="ml-2">{tab.label}</span>
               </div>
