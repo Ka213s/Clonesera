@@ -63,18 +63,16 @@ const CreateCourse: React.FC = () => {
 
         const createdSessions = await Promise.all(sessionResponses.map(async (response, index) => {
           const session = response.data;
-          const lessons = sessions[index].lessons;
-          const lessonResponses = await Promise.all(lessons.map(lessonData => {
-            const lesson = {
-              ...lessonData,
-              course_id: courseResponse.data._id,
-              session_id: session._id,
-              video_url: lessonData.video_url || '',
-              image_url: lessonData.image_url || '',
-            };
-            console.log('Sending lesson data:', lesson);
-            return api.createLesson(lesson);
+          const lessons = sessions[index].lessons.map(lessonData => ({
+            ...lessonData,
+            course_id: courseResponse.data._id,
+            session_id: session._id,
+            video_url: lessonData.video_url || '',
+            image_url: lessonData.image_url || '',
           }));
+          console.log('Sending lessons data:', lessons);
+
+          const lessonResponses = await Promise.all(lessons.map(lesson => api.createLesson(lesson)));
           return { ...session, lessons: lessonResponses.map(res => res.data) };
         }));
         console.log('Sessions created with lessons:', createdSessions);
