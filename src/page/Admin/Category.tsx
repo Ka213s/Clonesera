@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
 import CategoryForm from './CategoryForm';
-import { createApiInstance } from '../../services/Api'; // Import the API functions
+import { useNavigate } from 'react-router-dom';
+import { createApiInstance } from '../../services/Api';
 
 interface Category {
-  id: number;
+  _id: string;
   name: string;
+  parent_category_id: string | null;
+  created_at: string;
+  updated_at: string;
+  is_deleted: boolean;
 }
 
 const Category: React.FC = () => {
-  const [data, setData] = useState<Category[]>([]);
-  const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
+  const [data, setData] = useState<{ id: string; name: string }[]>([]);
+  const [filteredCategories, setFilteredCategories] = useState<{ id: string; name: string }[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [pagination, setPagination] = useState({
     current: 1,
@@ -21,19 +25,29 @@ const Category: React.FC = () => {
   });
   const navigate = useNavigate();
   const api = createApiInstance(navigate);
-  const fetchCategoriesData = async (pageNum = 1, pageSize = 10) => {
+
+  const fetchCategoriesData = async (pageNum: number = 1, pageSize: number = 10) => {
     try {
       const searchCondition = {};
       const result = await api.getCategories(searchCondition, pageNum, pageSize);
-      const categories = result.data.pageData;
-      console.log('categories:', categories);
-      setData(categories);
-      setFilteredCategories(categories);
-      setPagination({
-        current: pageNum,
-        pageSize,
-        total: result.data.pageInfo.totalItems,
-      });
+      if (result && result.data) {
+        const categories: Category[] = result.data.pageData || [];
+        const filteredCategories = categories
+          .filter(category => category.parent_category_id === null)
+          .map(category => ({
+            id: category._id,
+            name: category.name,
+          }));
+
+        console.log('Categories:', filteredCategories);
+        setData(filteredCategories);
+        setFilteredCategories(filteredCategories);
+        setPagination({
+          current: pageNum,
+          pageSize,
+          total: result.data.pageInfo.totalItems,
+        });
+      }
     } catch (error) {
       console.error('Error fetching categories:', error);
       message.error('Failed to fetch categories');
@@ -42,11 +56,11 @@ const Category: React.FC = () => {
 
   useEffect(() => {
     fetchCategoriesData(pagination.current, pagination.pageSize);
-  }, [navigate, pagination.current, pagination.pageSize]);
+  }, [pagination.current, pagination.pageSize]);
 
   const handleFormSubmit = async (values: { name: string }) => {
     try {
-      const newCategory = await api.createCategory(values);
+      await api.createCategory(values);
       fetchCategoriesData(pagination.current, pagination.pageSize);
       message.success('Category added successfully');
       setIsModalVisible(false);

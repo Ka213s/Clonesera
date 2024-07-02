@@ -1,88 +1,113 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Space, Input, Modal, message } from 'antd';
-import { PlusOutlined, EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons';
+import { Table, Button, Space, Modal, message } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import SubCategoryForm from './SubCategoryForm';
-
-const { Search } = Input;
+import { useNavigate } from 'react-router-dom';
+import { createApiInstance } from '../../services/Api';
 
 interface SubCategory {
-  id: number;
+  _id: string;
+  name: string;
+  parent_category_id: string | null;
+  description: string;
+  created_at: string;
+  updated_at: string;
+  is_deleted: boolean;
+}
+
+interface DisplaySubCategory {
+  id: string;
   name: string;
   parentCategory: string;
 }
 
 const SubCategory: React.FC = () => {
-  const [data, setData] = useState<SubCategory[]>([]);
-  const [editingSubCategory, setEditingSubCategory] = useState<SubCategory | null>(null);
+  const [data, setData] = useState<DisplaySubCategory[]>([]);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [originalData, setOriginalData] = useState<SubCategory[]>([]);
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
+  const navigate = useNavigate();
+  const api = createApiInstance(navigate);
 
-  useEffect(() => {
-    fetchSubCategories();
-  }, []);
-
-  const fetchSubCategories = async () => {
+  const fetchParentCategories = async () => {
     try {
-      const response = await fetch('/src/data/subcategories.json'); 
-      const result = await response.json();
-      const subCategoriesWithId = result.subcategories.map((subCategory: any, index: number) => ({
-        id: index + 1,
-        name: subCategory.name,
-        parentCategory: subCategory.parentCategory,
-      }));
-      setData(subCategoriesWithId);
-      setOriginalData(subCategoriesWithId);
+      const pageNum = 1; 
+      const pageSize = 100; 
+      const searchCondition = {}; 
+  
+      const result = await api.getCategories(searchCondition, pageNum, pageSize);
+      
+      if (result && result.data) {
+        return result.data.pageData.reduce((acc: Record<string, string>, category: any) => {
+          acc[category._id] = category.name;
+          return acc;
+        }, {});
+      }
     } catch (error) {
-      console.error('Failed to fetch subcategories:', error);
+      console.error('Error fetching parent categories:', error);
+      message.error('Failed to fetch parent categories');
+      return {};
     }
   };
-
-  const handleDelete = (id: number) => {
-    const newData = data.filter(subCategory => subCategory.id !== id);
-    setData(newData);
-    setOriginalData(newData);
-    message.success('SubCategory deleted successfully');
+  
+  const fetchSubCategories = async (pageNum: number = 1, pageSize: number = 10) => {
+    try {
+      const searchCondition = {};
+      const result = await api.getSubCategories(searchCondition, pageNum, pageSize);
+  
+      if (result && result.data) {
+        const subcategories: SubCategory[] = result.data.pageData || [];
+        
+        const parentCategoriesMap = await fetchParentCategories();
+  
+        const filteredSubcategories: DisplaySubCategory[] = subcategories
+          .filter(subcategory => subcategory.parent_category_id !== null)
+          .map(subcategory => ({
+            id: subcategory._id,
+            name: subcategory.name,
+            parentCategory: parentCategoriesMap[subcategory.parent_category_id as string] || 'Unknown',
+          }));
+  
+        console.log('Subcategories:', filteredSubcategories);
+        setData(filteredSubcategories);
+        setPagination({
+          current: pageNum,
+          pageSize,
+          total: result.data.pageInfo.totalItems,
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching subcategories:', error);
+      message.error('Failed to fetch subcategories');
+    }
   };
-
-  const handleEdit = (subCategory: SubCategory) => {
-    setEditingSubCategory(subCategory);
-    setIsModalVisible(true);
-  };
-
-  const handleFormSubmit = (values: { name: string; parentCategory: string }) => {
-    if (editingSubCategory) {
-      const newData = data.map(subCat => (subCat.id === editingSubCategory.id ? { ...subCat, ...values } : subCat));
-      setData(newData);
-      setOriginalData(newData);
-      message.success('SubCategory updated successfully');
-    } else {
-      const newSubCategory = {
-        id: data.length ? Math.max(...data.map(subCat => subCat.id)) + 1 : 1,
+  
+  useEffect(() => {
+    fetchSubCategories(pagination.current, pagination.pageSize);
+  }, [pagination.current, pagination.pageSize]);
+  
+  useEffect(() => {
+    fetchSubCategories(pagination.current, pagination.pageSize);
+  }, [pagination.current, pagination.pageSize]);
+  
+  const handleFormSubmit = async (values: { name: string; parentCategory: string; description: string }) => {
+    try {
+      await api.createSubCategory({
         name: values.name,
-        parentCategory: values.parentCategory,
-      };
-      const newData = [...data, newSubCategory];
-      setData(newData);
-      setOriginalData(newData);
+        parent_category_id: values.parentCategory,
+        description: values.description,
+      });
+      console.log('Created SubCategory:', values);
+      fetchSubCategories(pagination.current, pagination.pageSize);
       message.success('SubCategory added successfully');
+    } catch (error) {
+      message.error('Failed to add SubCategory');
     }
     setIsModalVisible(false);
-    setEditingSubCategory(null);
-  };
-
-  const handleSearch = (value: string) => {
-    const filteredData = originalData.filter(subCategory => subCategory.name.toLowerCase().includes(value.toLowerCase()));
-    setData(filteredData);
   };
 
   return (
     <div className="pt-10 px-6">
       <Space style={{ marginBottom: 16 }}>
-        <Search
-          placeholder="Search subcategories"
-          enterButton={<SearchOutlined />}
-          onSearch={handleSearch}
-        />
         <Button
           type="primary"
           icon={<PlusOutlined />}
@@ -91,28 +116,27 @@ const SubCategory: React.FC = () => {
           Add New SubCategory
         </Button>
       </Space>
-      <Table dataSource={data} rowKey="id">
+      <Table
+        dataSource={data}
+        rowKey="id"
+        pagination={{
+          current: pagination.current,
+          pageSize: pagination.pageSize,
+          total: pagination.total,
+          onChange: (page, pageSize) => fetchSubCategories(page, pageSize),
+        }}
+      >
         <Table.Column title="Name" dataIndex="name" key="name" />
         <Table.Column title="Parent Category" dataIndex="parentCategory" key="parentCategory" />
-        <Table.Column
-          title="Action"
-          key="action"
-          render={(_, record: SubCategory) => (
-            <Space size="middle">
-              <Button icon={<EditOutlined />} onClick={() => handleEdit(record)}>Edit</Button>
-              <Button danger icon={<DeleteOutlined />} onClick={() => handleDelete(record.id)}>Delete</Button>
-            </Space>
-          )}
-        />
       </Table>
       <Modal
-        title={editingSubCategory ? "Edit SubCategory" : "Add New SubCategory"}
+        title="Add New SubCategory"
         visible={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         footer={null}
       >
         <SubCategoryForm
-          initialValues={editingSubCategory || undefined}
+          initialValues={undefined}
           onSubmit={handleFormSubmit}
         />
       </Modal>
