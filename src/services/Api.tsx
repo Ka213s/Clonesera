@@ -324,6 +324,45 @@ class Api {
       throw error;
     }
   }
+
+  async createSubCategory(data: { name: string; parent_category_id: string; description: string }): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.post('/api/category', data, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      toast.success('SubCategory created successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error creating subcategory: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
+  async getSubCategories(searchCondition: any, pageNum: number = 1, pageSize: number = 10): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.post('/api/category/search', {
+        searchCondition,
+        pageInfo: {
+          pageNum,
+          pageSize
+        }
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error fetching subcategories: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
 }
 
 export { createApiInstance, Api };
