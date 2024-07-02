@@ -44,6 +44,9 @@ const Curriculum: React.FC<Props> = ({ nextStep, prevStep, courseId, api, setSes
   const [videoUrl, setVideoUrl] = useState<string | undefined>(undefined);
   const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
 
+  const [uploadVideoFileList, setUploadVideoFileList] = useState<any[]>([]);
+  const [uploadImageFileList, setUploadImageFileList] = useState<any[]>([]);
+
   const handleUpload = async (info: any, type: 'video' | 'image') => {
     const file = info.fileList[0]?.originFileObj;
     console.log(`Uploading ${type}:`, file);
@@ -98,6 +101,8 @@ const Curriculum: React.FC<Props> = ({ nextStep, prevStep, courseId, api, setSes
     setPositionOrder(1);
     setVideoUrl(undefined);  // Reset video URL
     setImageUrl(undefined);  // Reset image URL
+    setUploadVideoFileList([]);
+    setUploadImageFileList([]);
     setIsModalVisible(false);
   };
 
@@ -117,6 +122,8 @@ const Curriculum: React.FC<Props> = ({ nextStep, prevStep, courseId, api, setSes
     setPositionOrder(1);
     setVideoUrl(undefined);  // Reset video URL
     setImageUrl(undefined);  // Reset image URL
+    setUploadVideoFileList([]);
+    setUploadImageFileList([]);
     setCurrentSessionIndex(sessionIndex);
     setIsModalVisible(true);
   };
@@ -221,9 +228,13 @@ const Curriculum: React.FC<Props> = ({ nextStep, prevStep, courseId, api, setSes
           </Form.Item>
           <Form.Item label="Upload Video">
             <Upload
+              fileList={uploadVideoFileList}
               showUploadList={false}
               beforeUpload={() => false}
-              onChange={(info) => handleUpload(info, 'video')}
+              onChange={(info) => {
+                handleUpload(info, 'video');
+                setUploadVideoFileList(info.fileList);
+              }}
             >
               <Button icon={<UploadOutlined />}>Upload Video</Button>
             </Upload>
@@ -231,9 +242,13 @@ const Curriculum: React.FC<Props> = ({ nextStep, prevStep, courseId, api, setSes
           </Form.Item>
           <Form.Item label="Upload Image">
             <Upload
+              fileList={uploadImageFileList}
               showUploadList={false}
               beforeUpload={() => false}
-              onChange={(info) => handleUpload(info, 'image')}
+              onChange={(info) => {
+                handleUpload(info, 'image');
+                setUploadImageFileList(info.fileList);
+              }}
             >
               <Button icon={<UploadOutlined />}>Upload Image</Button>
             </Upload>
