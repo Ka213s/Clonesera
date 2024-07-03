@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Input, Select, Button, Form } from 'antd';
 
 const { Option } = Select;
@@ -17,9 +17,7 @@ const UserFilter: React.FC<{ onFilter: (filters: any) => void, onClear: () => vo
 
   return (
     <Form form={form} layout="inline" onFinish={handleFilter} className="mb-4">
-      <Form.Item name="searchID" label="ID">
-        <Input placeholder="Search by ID" />
-      </Form.Item>
+      {/* Remove Form.Item for searchID */}
       <Form.Item name="searchName" label="Name">
         <Input placeholder="Search by Name" />
       </Form.Item>
@@ -35,8 +33,8 @@ const UserFilter: React.FC<{ onFilter: (filters: any) => void, onClear: () => vo
       </Form.Item>
       <Form.Item name="searchStatus" label="Status">
         <Select placeholder="Select Status" allowClear>
-          <Option value="active">Active</Option>
-          <Option value="inactive">Inactive</Option>
+          <Option value={true}>Active</Option>
+          <Option value={false}>Inactive</Option>
         </Select>
       </Form.Item>
       <Form.Item>

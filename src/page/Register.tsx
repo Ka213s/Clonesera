@@ -28,7 +28,7 @@ const Register: React.FC = () => {
             };
             console.log('Data to submit:', dataToSubmit);
             const response = await api.registerAccount(dataToSubmit);
-
+            navigate('/login');
             if (response.emailExists) {
                 setIsButtonDisabled(false);
                 form.setFields([{ name: 'email', errors: [response.message] }]);
@@ -85,6 +85,7 @@ const Register: React.FC = () => {
                             onFinish={handleSubmit}
                             layout="vertical"
                             className="flex flex-col gap-4"
+                            initialValues={{ role: 'student' }}
                         >
                             <Form.Item
                                 name="fullName"

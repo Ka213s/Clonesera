@@ -53,7 +53,16 @@ class Api {
       throw error;
     }
   }
-
+  async createUser(data: { name: string; password: string; email: string; role: string }): Promise<any> {
+    try {
+      const response = await this.api.post('/api/users/create', data);
+      toast.success('User created successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error creating user: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
   async loginUserByGoogle(data: { google_id: string; }): Promise<any> {
     try {
       const response = await this.api.post('/api/auth/google', data);
