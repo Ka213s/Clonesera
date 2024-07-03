@@ -274,14 +274,14 @@ class Api {
           Authorization: `Bearer ${token}`
         }
       });
-  
+
       return response.data;
     } catch (error: any) {
       toast.error('Error fetching categories: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }
-  
+
 
   async createSubCategory(data: { name: string; parent_category_id: string; description: string }): Promise<any> {
     try {

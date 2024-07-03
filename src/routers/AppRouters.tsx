@@ -43,7 +43,7 @@ import MyCertificate from '../components/StudentCertificates';
 import ListCourse from '../page/Instructor/ListCourse';
 import Dashboard from '../page/Instructor/Dashboard';
 import Analysis from '../page/Instructor/Analysis';
-import CreateCourse from '../components/Create_Course/CreateNewCousre';
+import CreateCourse from '../page/Instructor/CreateCourse';
 import Verification from '../page/Instructor/Verification';
 import ViewProfile from '../page/Instructor/ViewProfile';
 import Earning from '../page/Instructor/Earning';

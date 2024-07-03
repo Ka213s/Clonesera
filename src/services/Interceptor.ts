@@ -1,11 +1,10 @@
-// Interceptor.ts
 import axios, { AxiosInstance } from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 class Interceptor {
   private navigate: ReturnType<typeof useNavigate>;
-
+  private setLoading: React.Dispatch<React.SetStateAction<boolean>> | null = null;
+  
   constructor(navigate: ReturnType<typeof useNavigate>) {
     this.navigate = navigate;
   }
