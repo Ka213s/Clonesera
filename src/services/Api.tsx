@@ -25,7 +25,7 @@ class Api {
       if (error.emailExists) {
         return { emailExists: true, message: error.message };
       }
-      toast.error('Error registering: ' + (error.response?.data?.message || error.message));
+      toast.error((error.response?.data?.message || error.message));
       throw error;
     }
   }
@@ -36,7 +36,7 @@ class Api {
       toast.success('Login successful');
       return response.data;
     } catch (error: any) {
-      toast.error('Error logging in: ' + (error.response?.data?.message || error.message));
+      toast.error((error.response?.data?.message || error.message));
       throw error;
     }
   }
@@ -49,7 +49,7 @@ class Api {
       });
       return response.data;
     } catch (error: any) {
-      toast.error('Error registering with Google: ' + (error.response?.data?.message || error.message));
+      toast.error( (error.response?.data?.message || error.message));
       throw error;
     }
   }
