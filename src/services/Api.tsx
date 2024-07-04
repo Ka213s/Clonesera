@@ -1,64 +1,12 @@
-import axios, { AxiosInstance } from 'axios';
+// Api.ts
+import { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { message } from 'antd'; // Import message từ Ant Design
-
-const handleSpecificErrorResponse = (error: any) => {
-  const status = error.response ? error.response.status : null;
-  const errorMessage = error.response?.data?.message || '';
-
-  if (status === 400 && errorMessage.includes('already exists')) {
-    return Promise.reject({
-      ...error,
-      emailExists: true,
-      message: errorMessage
-    });
-  } else if (status === 400 && errorMessage.includes("Can't parse token payload")) {
-    return Promise.reject({
-      ...error,
-      parseTokenError: true,
-      message: errorMessage
-    });
-  }
-
-  return null;
-};
-
-const handleErrorResponse = (error: any, navigate: ReturnType<typeof useNavigate>) => {
-  const specificError = handleSpecificErrorResponse(error);
-  if (specificError) return specificError;
-
-  const status = error.response ? error.response.status : null;
-
-  if (status) {
-    if (status === 400) {
-      navigate('/400');
-    } else if (status === 404) {
-      navigate('/404');
-    } else if (status === 403) {
-      navigate('/403');
-    }
-    console.error(`API error with status ${status}`);
-  }
-  return Promise.reject(error);
-};
-
-const setupAxiosInterceptors = (navigate: ReturnType<typeof useNavigate>): AxiosInstance => {
-  const api = axios.create({
-    baseURL: process.env.REACT_APP_API_BASE_URL,
-  });
-
-  // Add a response interceptor
-  api.interceptors.response.use(
-    response => response,
-    error => handleErrorResponse(error, navigate)
-  );
-
-  return api;
-};
+import Interceptor from './Interceptor';
 
 const createApiInstance = (navigate: ReturnType<typeof useNavigate>): Api => {
-  const apiInstance = setupAxiosInterceptors(navigate);
+  const interceptor = new Interceptor(navigate);
+  const apiInstance = interceptor.setupAxiosInterceptors();
   return new Api(apiInstance);
 };
 
@@ -68,65 +16,53 @@ class Api {
   constructor(apiInstance: AxiosInstance) {
     this.api = apiInstance;
   }
-
-  // Thêm hàm bọc withLoading
-  private async withLoading<T>(apiCall: () => Promise<T>): Promise<T> {
-    const hide = message.loading('Loading...', 0); // Hiển thị thông báo loading
+  async registerAccount(data: { name: string; email: string; password: string; role: string; }): Promise<any> {
     try {
-      const result = await apiCall();
-      hide(); // Ẩn thông báo loading khi thành công
-      return result;
-    } catch (error) {
-      hide(); // Ẩn thông báo loading khi thất bại
+      const response = await this.api.post('/api/users', data);
+      toast.success('Registration successful');
+      return response.data;
+    } catch (error: any) {
+      if (error.emailExists) {
+        return { emailExists: true, message: error.message };
+      }
+      toast.error((error.response?.data?.message || error.message));
       throw error;
     }
   }
 
-  // Bọc các phương thức API bằng withLoading
-  async registerAccount(data: { name: string; email: string; password: string; role: string; }): Promise<any> {
-    return this.withLoading(async () => {
-      try {
-        const response = await this.api.post('/api/users', data);
-        toast.success('Registration successful');
-        return response.data;
-      } catch (error: any) {
-        if (error.emailExists) {
-          return { emailExists: true, message: error.message };
-        }
-        toast.error('Error registering: ' + (error.response?.data?.message || error.message));
-        throw error;
-      }
-    });
-  }
-
   async loginAccount(data: { email: string; password: string; }): Promise<any> {
-    return this.withLoading(async () => {
-      try {
-        const response = await this.api.post('/api/auth', data);
-        toast.success('Login successful');
-        return response.data;
-      } catch (error: any) {
-        toast.error('Error logging in: ' + (error.response?.data?.message || error.message));
-        throw error;
-      }
-    });
+    try {
+      const response = await this.api.post('/api/auth', data);
+      toast.success('Login successful');
+      return response.data;
+    } catch (error: any) {
+      toast.error((error.response?.data?.message || error.message));
+      throw error;
+    }
   }
 
   async registerUserByGoogle(data: { google_id: string; role: string; }): Promise<any> {
-    return this.withLoading(async () => {
-      try {
-        const response = await this.api.post('/api/users/google', data);
-        toast.success('Signed up for Google successfully. Please log in again', {
-          autoClose: 8000,
-        });
-        return response.data;
-      } catch (error: any) {
-        toast.error('Error registering with Google: ' + (error.response?.data?.message || error.message));
-        throw error;
-      }
-    });
+    try {
+      const response = await this.api.post('/api/users/google', data);
+      toast.success('Signed up for Google successfully. Please log in again', {
+        autoClose: 8000,
+      });
+      return response.data;
+    } catch (error: any) {
+      toast.error( (error.response?.data?.message || error.message));
+      throw error;
+    }
   }
-
+  async createUser(data: { name: string; password: string; email: string; role: string }): Promise<any> {
+    try {
+      const response = await this.api.post('/api/users/create', data);
+      toast.success('User created successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error creating user: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
   async loginUserByGoogle(data: { google_id: string; }): Promise<any> {
     return this.withLoading(async () => {
       try {
@@ -349,28 +285,27 @@ class Api {
   }
 
   async getCategories(searchCondition: any, pageNum?: number, pageSize?: number): Promise<any> {
-    return this.withLoading(async () => {
-      try {
-        const token = localStorage.getItem('token');
-        const response = await this.api.post('/api/category/search', {
-          searchCondition,
-          pageInfo: {
-            pageNum,
-            pageSize
-          }
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`
-          }
-        });
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.post('/api/category/search', {
+        searchCondition,
+        pageInfo: {
+          pageNum,
+          pageSize
+        }
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
 
-        return response.data;
-      } catch (error: any) {
-        toast.error('Error fetching categories: ' + (error.response?.data?.message || error.message));
-        throw error;
-      }
-    });
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error fetching categories: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
   }
+
 
   async createSubCategory(data: { name: string; parent_category_id: string; description: string }): Promise<any> {
     return this.withLoading(async () => {
@@ -389,7 +324,6 @@ class Api {
       }
     });
   }
-
   async getSubCategories(searchCondition: any, pageNum: number = 1, pageSize: number = 10): Promise<any> {
     return this.withLoading(async () => {
       try {

@@ -17,50 +17,41 @@ const AllUser: React.FC = () => {
   const [isEditMode, setIsEditMode] = useState(false);
   const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
 
-  const fetchUsersData = async (pageNum = 1, pageSize = 10) => {
+  useEffect(() => {
+    fetchUsersData(pagination.current, pagination.pageSize);
+  }, [navigate, pagination.current, pagination.pageSize]);
+
+  const fetchUsersData = async (pageNum = 1, pageSize = 10, filters: any = {}) => {
     try {
       const api = createApiInstance(navigate);
   
-      const activeUsersSearchData = {
-        keyword: '',
-        role: 'all',
-        status: true,
+      const searchData = {
+        keyword: filters.searchKeyword || '',
+        role: filters.searchRole || 'all',
+        status: filters.searchStatus !== undefined ? filters.searchStatus : true,
         is_delete: false,
       };
+      
   
-      const inactiveUsersSearchData = {
-        keyword: '',
-        role: 'all',
-        status: false, 
-        is_delete: false,
-      };
+      console.log('Sending API request with filters:', searchData); 
   
-      const [activeUsersResult, inactiveUsersResult] = await Promise.all([
-        api.searchUsers(activeUsersSearchData, pageNum, pageSize),
-        api.searchUsers(inactiveUsersSearchData, pageNum, pageSize),
-      ]);
+      const activeUsersResult = await api.searchUsers(searchData, pageNum, pageSize);
   
-      const combinedResults = [
-        ...activeUsersResult.data.pageData,
-        ...inactiveUsersResult.data.pageData,
-      ];
-  console.log('combinedResults:', activeUsersResult );
+      const combinedResults = activeUsersResult.data.pageData;
+  
       setUsersData(combinedResults);
       setFilteredUsers(combinedResults);
       setPagination({
         current: pageNum,
         pageSize,
-        total: activeUsersResult.data.pageInfo.totalItems + inactiveUsersResult.data.pageInfo.totalItems, // Adjust total items count
+        total: activeUsersResult.data.pageInfo.totalItems,
       });
     } catch (error) {
       console.error('Error searching users:', error);
     }
   };
   
-
-  useEffect(() => {
-    fetchUsersData(pagination.current, pagination.pageSize);
-  }, [navigate, pagination.current, pagination.pageSize]);
+  
 
   const columns: ColumnsType<any> = [
     {
@@ -69,19 +60,6 @@ const AllUser: React.FC = () => {
       key: 'index',
       render: (text: any, record: any, index: number) => (pagination.current! - 1) * pagination.pageSize! + index + 1,
       width: 50,
-    },
-    {
-      title: 'ID',
-      dataIndex: '_id',
-      key: 'id',
-      width: 100,
-    },
-    {
-      title: 'Avatar',
-      dataIndex: 'avatar',
-      key: 'avatar',
-      render: (avatar: string) => <img src={avatar} alt="Avatar" style={{ width: 50, height: 50, borderRadius: '50%' }} />,
-      width: 100,
     },
     {
       title: 'Name',
@@ -99,6 +77,13 @@ const AllUser: React.FC = () => {
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
+      width: 100,
+    },
+    {
+      title: 'Avatar',
+      dataIndex: 'avatar',
+      key: 'avatar',
+      render: (avatar: string) => <img src={avatar} alt="Avatar" style={{ width: 50, height: 50, borderRadius: '50%' }} />,
       width: 100,
     },
     {
@@ -126,6 +111,7 @@ const AllUser: React.FC = () => {
       width: 150,
     },
   ];
+  
 
   const showDetails = (record: any) => {
     setSelectedUser(record);
@@ -162,20 +148,14 @@ const AllUser: React.FC = () => {
         video: updatedUser.video || '',
       });
 
-      // Check if the update was successful
       if (response.success) {
-        // Update local state with the updated user
         setUsersData((prevData) =>
           prevData.map((user) => (user._id === updatedUser._id ? { ...user, ...updatedUser } : user))
         );
         setFilteredUsers((prevData) =>
           prevData.map((user) => (user._id === updatedUser._id ? { ...user, ...updatedUser } : user))
         );
-
-        // Close the modal after saving
         handleCancel();
-
-        // Log the updated user data
         console.log('Saved user data:', updatedUser);
       } else {
         console.error('Failed to update user:', response.message);
@@ -187,21 +167,17 @@ const AllUser: React.FC = () => {
 
 
   const handleFilter = (filters: any) => {
-    const { searchID, searchName, searchEmail, searchRole, searchStatus } = filters;
-    const filtered = usersData.filter(user =>
-      (!searchID || user._id.includes(searchID)) &&
-      (!searchName || user.name.toLowerCase().includes(searchName.toLowerCase())) &&
-      (!searchEmail || user.email.toLowerCase().includes(searchEmail.toLowerCase())) &&
-      (!searchRole || user.role.toLowerCase().includes(searchRole.toLowerCase())) &&
-      (!searchStatus || (user.status ? 'active' : 'inactive').includes(searchStatus.toLowerCase()))
-    );
-    setFilteredUsers(filtered);
-    setPagination({ ...pagination, total: filtered.length, current: 1 }); 
+    const { searchName, searchEmail, searchRole, searchStatus } = filters;
+    fetchUsersData(1, pagination.pageSize, {
+      searchKeyword: searchName || searchEmail || '',
+      searchRole: searchRole || 'all',
+      searchStatus: searchStatus, 
+    });
   };
+  
 
   const handleClear = () => {
-    setFilteredUsers(usersData);
-    setPagination({ ...pagination, total: usersData.length, current: 1 });
+    fetchUsersData(1, pagination.pageSize);
   };
 
   const handlePaginationChange = (page: number, pageSize: number) => {
