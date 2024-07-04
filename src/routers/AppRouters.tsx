@@ -70,18 +70,19 @@ import ProtectedRoute from './ProtectedRoute';
 import PurchasedCourseDetail from '../page/Student/PurchasedCourseDetail';
 import PaymentPage from '../components/PaymentPage';
 
+
 const AppRouters: React.FC = () => {
   return (
     <Router>
-      <RoutesWrapper />
-      <ToastContainer />
+        <RoutesWrapper />
+        <ToastContainer />
     </Router>
   );
 };
 
 const RoutesWrapper: React.FC = () => {
   const location = useLocation();
-  const noSidebarPaths = ['/login', '/register', '/forgot-password', '/201', '/202', '/204', '/404' , '/403' ,'/400','/401','/500','/501'];
+  const noSidebarPaths = ['/login', '/register', '/forgot-password', '/201', '/202', '/204', '/404', '/403', '/400', '/401', '/500', '/501'];
 
   const renderRoutes = () => (
     <Routes>

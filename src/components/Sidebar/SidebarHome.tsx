@@ -82,7 +82,7 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
   };
 
   return (
-    <aside className={`fixed top-16 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-56' : 'w-0 overflow-hidden'}`}>
+    <aside className={`fixed top-16 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-56' : 'w-0 overflow-hidden'} overflow-y-auto`}>
       <Menu
         mode="inline"
         openKeys={openKeys}
