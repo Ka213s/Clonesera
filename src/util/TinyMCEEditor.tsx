@@ -11,12 +11,12 @@ const TinyMCEEditor: React.FC<TinyMCEEditorProps> = ({ value, onEditorChange }) 
   const [editorContent, setEditorContent] = useState<string>(value);
 
   useEffect(() => {
-    setEditorContent(value); // Đảm bảo cập nhật giá trị khi props `value` thay đổi
+    setEditorContent(value); 
   }, [value]);
 
   return (
     <Editor
-      apiKey="2yifh7kylzpd5szlkd3irl90etvaxhqgknrd2zfbdz4sjeox"
+      apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
       value={editorContent}
       init={{
         height: 300,
@@ -26,14 +26,12 @@ const TinyMCEEditor: React.FC<TinyMCEEditorProps> = ({ value, onEditorChange }) 
         toolbar: 'undo redo | bold italic backcolor | alignleft aligncenter ' +
           'alignright alignjustify | bullist numlist outdent indent | removeformat | help',
         content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:16px }',
-        // Ensure the plugin_url points to the correct CDN path
         plugin_url: 'https://cdn.tiny.cloud/1/2yifh7kylzpd5szlkd3irl90etvaxhqgknrd2zfbdz4sjeox/tinymce/7.2.1-75/plugins/'
       }}
       onEditorChange={(content) => {
-        setEditorContent(content); // Cập nhật giá trị mới của Editor
-        onEditorChange(content); // Gọi callback để thông báo giá trị đã thay đổi
+        setEditorContent(content); 
+        onEditorChange(content); 
       }}
-      // Chuyển ref tới Editor component
       ref={editorRef}
     />
   );
