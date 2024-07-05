@@ -30,12 +30,23 @@ code {
   background-color: #9997F5 !important; /* Tailwind's purple-500 */
   color: #ffffff !important; /* White text */
 }
+.custom-menu .ant-menu-submenu-selected > .ant-menu-submenu-title {
+  color: #9997F5 !important; /* Tailwind's purple-500 for text */
+}
 
-/* Apply the same styles to the active items */
-.custom-menu .ant-menu-item-active,
-.custom-menu .ant-menu-submenu-title-active {
+/* Ensure icon color changes for selected parent categories */
+.custom-menu .ant-menu-submenu-selected > .ant-menu-submenu-title .anticon {
+  color: #9997F5 !important; /* Tailwind's purple-500 for icon */
+}
+/* Ensure hover effect applies even when parent category is selected */
+.custom-menu .ant-menu-submenu-selected:hover > .ant-menu-submenu-title,
+.custom-menu .ant-menu-submenu-selected:hover > .ant-menu-submenu-title .anticon {
   background-color: #9997F5 !important; /* Tailwind's purple-500 */
   color: #ffffff !important; /* White text */
 }
+
+
+
+
 
 

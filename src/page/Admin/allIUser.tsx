@@ -1,69 +1,53 @@
-import React, { useState, useEffect } from "react";
-import { Table, Button, Modal, Popconfirm } from "antd";
-import { ColumnsType, TablePaginationConfig } from "antd/es/table";
-import { createApiInstance } from "../../services/Api";
-import { useNavigate } from "react-router-dom";
-import moment from "moment";
-import UserStatusUpdater from "../../components/Admin/UserStatusUpdater";
-import EditUserForm from "../../components/Admin/EditUserForm";
-import UserFilter from "../../components/Admin/UserFilter";
+import React, { useState, useEffect, useCallback } from 'react';
+import { Table, Button, Modal, Pagination } from 'antd';
+import { ColumnsType } from 'antd/es/table';
+import { createApiInstance } from '../../services/Api';
+import { useNavigate } from 'react-router-dom';
+import moment from 'moment';
+import UserStatusUpdater from '../../components/Admin/UserStatusUpdater';
+import EditUserForm from '../../components/Admin/EditUserForm';
+import UserFilter from '../../components/Admin/UserFilter';
 
 const AllUser: React.FC = () => {
   const navigate = useNavigate();
-  const [usersData, setUsersData] = useState<any[]>([]);
+
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isEditMode, setIsEditMode] = useState(false);
-  const [pagination, setPagination] = useState<TablePaginationConfig>({
-    current: 1,
-    pageSize: 10,
-    total: 0,
-  });
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 10, total: 0 });
+
+  const fetchUsersData = useCallback(async (pageNum = 1, pageSize = 10, filters: any = {}) => {
+    try {
+      const api = createApiInstance(navigate);
+
+      const searchData = {
+        keyword: filters.searchKeyword || '',
+        role: filters.searchRole || 'all',
+        status: filters.searchStatus !== undefined ? filters.searchStatus : true,
+        is_delete: false,
+      };
+
+      console.log('Sending API request with filters:', searchData);
+
+      const activeUsersResult = await api.searchUsers(searchData, pageNum, pageSize);
+
+      const combinedResults = activeUsersResult.data.pageData;
+
+      setFilteredUsers(combinedResults);
+      setPagination({
+        current: pageNum,
+        pageSize,
+        total: activeUsersResult.data.pageInfo.totalItems,
+      });
+    } catch (error) {
+      console.error('Error searching users:', error);
+    }
+  }, [navigate]);
 
   useEffect(() => {
-    const fetchUsersData = async (page = 1, pageSize = 20) => {
-      try {
-        const api = createApiInstance(navigate);
-
-        const activeUsersSearchData = {
-          keyword: "",
-          role: "all",
-          status: true,
-          is_delete: false,
-          page,
-          pageSize,
-        };
-        const activeUsersResult = await api.searchUsers(activeUsersSearchData);
-
-        const inactiveUsersSearchData = {
-          keyword: "",
-          role: "all",
-          status: false,
-          is_delete: false,
-          page,
-          pageSize,
-        };
-        const inactiveUsersResult = await api.searchUsers(
-          inactiveUsersSearchData
-        );
-
-        const combinedResults = [
-          ...activeUsersResult.data.pageData,
-          ...inactiveUsersResult.data.pageData,
-        ];
-
-        setUsersData(combinedResults);
-        setFilteredUsers(combinedResults); // Initialize filtered data with all users
-        console.log(combinedResults);
-        setPagination({ ...pagination, total: combinedResults.length });
-      } catch (error) {
-        console.error("Error searching users:", error);
-      }
-    };
-
-    fetchUsersData();
-  }, [navigate, pagination.current, pagination.pageSize]);
+    fetchUsersData(pagination.current, pagination.pageSize);
+  }, [pagination, fetchUsersData]);
 
   const columns: ColumnsType<any> = [
     {
@@ -73,25 +57,6 @@ const AllUser: React.FC = () => {
       render: (text: any, record: any, index: number) =>
         (pagination.current! - 1) * pagination.pageSize! + index + 1,
       width: 50,
-    },
-    {
-      title: "ID",
-      dataIndex: "_id",
-      key: "id",
-      width: 100,
-    },
-    {
-      title: "Avatar",
-      dataIndex: "avatar",
-      key: "avatar",
-      render: (avatar: string) => (
-        <img
-          src={avatar}
-          alt="Avatar"
-          style={{ width: 50, height: 50, borderRadius: "50%" }}
-        />
-      ),
-      width: 100,
     },
     {
       title: "Name",
@@ -106,9 +71,16 @@ const AllUser: React.FC = () => {
       width: 200,
     },
     {
-      title: "Role",
-      dataIndex: "role",
-      key: "role",
+      title: 'Role',
+      dataIndex: 'role',
+      key: 'role',
+      width: 100,
+    },
+    {
+      title: 'Avatar',
+      dataIndex: 'avatar',
+      key: 'avatar',
+      render: (avatar: string) => <img src={avatar} alt="Avatar" style={{ width: 50, height: 50, borderRadius: '50%' }} />,
       width: 100,
     },
     {
@@ -121,8 +93,19 @@ const AllUser: React.FC = () => {
       width: 100,
     },
     {
-      title: "Action",
-      key: "action",
+      title: 'Verified',
+      dataIndex: 'is_verified',
+      key: 'is_verified',
+      render: (is_verified: boolean) => (
+        <span style={{ color: is_verified ? 'green' : 'red' }}>
+          {is_verified ? 'Verified' : 'Not Verified'}
+        </span>
+      ),
+      width: 100,
+    },
+    {
+      title: 'Action',
+      key: 'action',
       render: (text: any, record: any) => (
         <>
           <Button type="link" onClick={() => showDetails(record)}>
@@ -172,7 +155,7 @@ const AllUser: React.FC = () => {
   const handleSave = async (updatedUser: any) => {
     try {
       const api = createApiInstance(navigate);
-      await api.updateAccount(updatedUser._id, {
+      const response = await api.updateAccount(updatedUser._id, {
         name: updatedUser.name,
         phone_number: updatedUser.phone_number,
         description: updatedUser.description,
@@ -181,67 +164,37 @@ const AllUser: React.FC = () => {
         role: updatedUser.role,
         video: updatedUser.video || "",
       });
-      setUsersData((prevData) =>
-        prevData.map((user) =>
-          user._id === updatedUser._id ? updatedUser : user
-        )
-      );
-      setFilteredUsers((prevData) =>
-        prevData.map((user) =>
-          user._id === updatedUser._id ? updatedUser : user
-        )
-      );
-      setIsModalVisible(false);
-      setSelectedUser(null);
 
-      // Log the updated user data
-      console.log("Saved user data:", updatedUser);
-    } catch (error) {
-      console.error("Error updating user:", error);
-    }
-  };
-
-  const handleDelete = async (userId: string) => {
-    try {
-      const api = createApiInstance(navigate);
-      await api.deleteUser(userId);
-      setUsersData((prevData) =>
-        prevData.filter((user) => user._id !== userId)
-      );
-      setFilteredUsers((prevData) =>
-        prevData.filter((user) => user._id !== userId)
-      );
+      if (response.success) {
+        setFilteredUsers((prevData) =>
+          prevData.map((user) => (user._id === updatedUser._id ? { ...user, ...updatedUser } : user))
+        );
+        handleCancel();
+        console.log('Saved user data:', updatedUser);
+      } else {
+        console.error('Failed to update user:', response.message);
+      }
     } catch (error) {
       console.error("Error deleting user:", error);
     }
   };
 
   const handleFilter = (filters: any) => {
-    const { searchID, searchName, searchEmail, searchRole, searchStatus } =
-      filters;
-    const filtered = usersData.filter(
-      (user) =>
-        (!searchID || user._id.includes(searchID)) &&
-        (!searchName ||
-          user.name.toLowerCase().includes(searchName.toLowerCase())) &&
-        (!searchEmail ||
-          user.email.toLowerCase().includes(searchEmail.toLowerCase())) &&
-        (!searchRole ||
-          user.role.toLowerCase().includes(searchRole.toLowerCase())) &&
-        (!searchStatus ||
-          (user.status ? "active" : "inactive").includes(
-            searchStatus.toLowerCase()
-          ))
-    );
-    setFilteredUsers(filtered);
+    const { searchName, searchEmail, searchRole, searchStatus } = filters;
+    fetchUsersData(1, pagination.pageSize, {
+      searchKeyword: searchName || searchEmail || '',
+      searchRole: searchRole || 'all',
+      searchStatus: searchStatus,
+    });
   };
 
   const handleClear = () => {
-    setFilteredUsers(usersData); // Reset to all users
+    fetchUsersData(1, pagination.pageSize);
   };
 
-  const handleTableChange = (pagination: TablePaginationConfig) => {
-    setPagination(pagination);
+  const handlePaginationChange = (page: number, pageSize: number) => {
+    setPagination({ ...pagination, current: page, pageSize });
+    fetchUsersData(page, pageSize);
   };
 
   return (
@@ -251,9 +204,16 @@ const AllUser: React.FC = () => {
         dataSource={filteredUsers}
         columns={columns}
         rowKey="_id"
-        pagination={pagination}
-        onChange={handleTableChange}
+        pagination={false}
         scroll={{ x: 1300 }}
+      />
+
+      <Pagination
+        total={pagination.total}
+        showTotal={(total) => `Total ${total} items`}
+        pageSize={pagination.pageSize}
+        current={pagination.current}
+        onChange={handlePaginationChange}
       />
 
       <Modal

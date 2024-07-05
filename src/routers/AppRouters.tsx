@@ -9,9 +9,15 @@ import Login from '../page/Login';
 import ForgotPassword from '../page/ForgotPassword';
 import Logout from '../components/Logout';
 import Register from '../page/Register';
+import PageError201 from '../page/Error/PageError201';
+import PageError202 from '../page/Error/PageError202';
+import PageError204 from '../page/Error/PageError204';
 import PageError404 from '../page/Error/PageError404';
 import PageError403 from '../page/Error/PageError403';
 import PageError400 from '../page/Error/PageError400';
+import PageError401 from '../page/Error/PageError401';
+import PageError500 from '../page/Error/PageError500';
+import PageError501 from '../page/Error/PageError501';
 import BecomeInstructor from '../page/BecomeInstructor';
 // Admin Pages and Components
 import Courses from '../page/Admin/Courses';
@@ -19,7 +25,7 @@ import CourseDetail from '../page/Admin/CourseDetail';
 import AdminDashboard from '../page/Admin/Dashboard';
 import CoursesPending from '../page/Admin/CoursesPending';
 import Review from '../page/Admin/Review';
-import CategoryManagement from '../page/Admin/CategoryManagement';
+// import CategoryManagement from '../page/Admin/CategoryManagement';
 import AllInstructor from '../page/Admin/allIUser';
 import AddInstructor from '../page/Admin/addIUser';
 import EditCourse from '../page/Admin/EditCourse';
@@ -63,19 +69,21 @@ import HelpPage from '../page/HelpPage';
 import ProtectedRoute from './ProtectedRoute';
 import PurchasedCourseDetail from '../page/Student/PurchasedCourseDetail';
 import PaymentPage from '../components/PaymentPage';
+import Category from '../page/Admin/Category';
+
 
 const AppRouters: React.FC = () => {
   return (
     <Router>
-      <RoutesWrapper />
-      <ToastContainer />
+        <RoutesWrapper />
+        <ToastContainer />
     </Router>
   );
 };
 
 const RoutesWrapper: React.FC = () => {
   const location = useLocation();
-  const noSidebarPaths = ['/login', '/register', '/forgot-password', '/404' , '/403' ,'/400'];
+  const noSidebarPaths = ['/login', '/register', '/forgot-password', '/201', '/202', '/204', '/404', '/403', '/400', '/401', '/500', '/501'];
 
   const renderRoutes = () => (
     <Routes>
@@ -91,9 +99,15 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/help" element={<HelpPage />} />
       <Route path="/become-instructor" element={<BecomeInstructor />} />
       <Route path="/payment" element={<PaymentPage />} />
+      <Route path="/201" element={<PageError201 />} />
+      <Route path="/202" element={<PageError202 />} />
+      <Route path="/204" element={<PageError204 />} />
       <Route path="/404" element={<PageError404 />} />
       <Route path="/403" element={<PageError403 />} />
+      <Route path="/401" element={<PageError401 />} />
       <Route path="/400" element={<PageError400 />} />
+      <Route path="/500" element={<PageError500 />} />
+      <Route path="/501" element={<PageError501 />} />
 
       {/* Admin Routes */}
       <Route path="/admin/dashboard" element={<ProtectedRoute allowedRoles={['admin']}><AdminDashboard /></ProtectedRoute>} />
@@ -101,7 +115,7 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/admin/course/:id" element={<ProtectedRoute allowedRoles={['admin']}><CourseDetail /></ProtectedRoute>} />
       <Route path="/admin/pending_courses" element={<ProtectedRoute allowedRoles={['admin']}><CoursesPending /></ProtectedRoute>} />
       <Route path="/admin/reviews" element={<ProtectedRoute allowedRoles={['admin']}><Review /></ProtectedRoute>} />
-      <Route path="/admin/category-management" element={<ProtectedRoute allowedRoles={['admin']}><CategoryManagement /></ProtectedRoute>} />
+      <Route path="/admin/category-management" element={<ProtectedRoute allowedRoles={['admin']}><Category /></ProtectedRoute>} />
       <Route path="/admin/allIUser" element={<ProtectedRoute allowedRoles={['admin']}><AllInstructor /></ProtectedRoute>} />
       <Route path="/admin/addUser" element={<ProtectedRoute allowedRoles={['admin']}><AddInstructor /></ProtectedRoute>} />
       <Route path="/admin/editCourse/:id" element={<ProtectedRoute allowedRoles={['admin']}><EditCourse /></ProtectedRoute>} />
