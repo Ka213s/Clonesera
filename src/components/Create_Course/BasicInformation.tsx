@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Form, Input, Button, Row, Col, Tabs, Select, Table, Modal } from 'antd';
 import TinyMCEEditor from '../../util/TinyMCEEditor';
-import FileUploader from './FileUploader'; // Import the new FileUploader component
+import FileUploader from './FileUploader';
 
 const { TabPane } = Tabs;
 const { Option, OptGroup } = Select;
@@ -29,8 +29,6 @@ interface Course {
   category: string;
   price: number;
   discount: number;
-  video_url: string;
-  image_url: string;
 }
 
 interface BasicInformationProps {
@@ -41,8 +39,6 @@ interface BasicInformationProps {
 }
 
 interface BasicInformationState {
-  uploadingImage: boolean;
-  uploadingVideo: boolean;
   isPaid: boolean;
   categories: Category[];
   categoryTree: { [key: string]: Category[] };
@@ -56,8 +52,6 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
   formRef: React.RefObject<any> = React.createRef();
 
   state: BasicInformationState = {
-    uploadingImage: false,
-    uploadingVideo: false,
     isPaid: false,
     categories: [],
     categoryTree: {},
@@ -117,14 +111,12 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
     } catch (error) {
       console.error('Error fetching courses:', error);
       this.setState({ loadingCourses: false });
-
     }
   };
-  
 
   onFinish = async (values: FormData) => {
     const { api, setCourseId } = this.props;
-    const { isPaid } = this.state;
+    const { isPaid, videoUrl } = this.state;
 
     try {
       const courseData = {
@@ -132,17 +124,16 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
         category_id: values.category_id,
         description: values.description,
         content: values.content,
-        video_url: this.state.videoUrl,
+        video_url: videoUrl,
         image_url: this.props.formData.image_url,
         price: isPaid ? Number(values.price) : 0,
         discount: isPaid ? Number(values.discount) : 0,
       };
 
-      console.log('courseData:', courseData);
       const response = await api.createCourse(courseData);
       setCourseId(response.data._id);
       this.setState({ visible: false });
-      this.fetchCourses(); // Refresh the courses list
+      this.fetchCourses(); 
     } catch (error) {
       console.error('Error creating course:', error);
     }
@@ -165,14 +156,14 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
     this.setState({ visible: false });
   };
 
-  handleVideoUploadSuccess = (url: string) => {
-    this.setState({ videoUrl: url });
-  };
-
-  handleImageUploadSuccess = (url: string) => {
-    this.props.setFormData((prev) => ({
+  handleUploadSuccess = (url: string, type: 'image' | 'video') => {
+    const { setFormData } = this.props;
+    if (type === 'video') {
+      this.setState({ videoUrl: url });
+    }
+    setFormData((prev) => ({
       ...prev,
-      image_url: url,
+      [`${type}_url`]: url,
     }));
   };
 
@@ -182,13 +173,13 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
 
     const columns = [
       { title: 'Title', dataIndex: 'name', key: 'name' },
-      { title: 'Category', dataIndex: 'category', key: 'category' },
+      { title: 'Category', dataIndex: 'category_name', key: 'category' },
       { title: 'Price', dataIndex: 'price', key: 'price' },
       { title: 'Discount', dataIndex: 'discount', key: 'discount' },
       {
         title: 'Action',
         key: 'action',
-        render: (_: any, record: Course) => ( // Explicitly specify 'record' as type 'Course'
+        render: (_: any, record: Course) => (
           <Button type="link" onClick={() => console.log(`Editing ${record._id}`)}>Edit</Button>
         ),
       },
@@ -241,7 +232,7 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
                 value={formData.content}
                 onEditorChange={(content) => {
                   this.props.setFormData({ ...formData, content: content });
-                  this.formRef.current?.setFieldsValue({                     content: content });
+                  this.formRef.current?.setFieldsValue({ content: content });
                 }}
               />
             </Form.Item>
@@ -258,8 +249,19 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
             </Form.Item>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item label="Video URL">
-                  <FileUploader type="video" onUploadSuccess={this.handleVideoUploadSuccess} />
+                <Form.Item 
+                  label="Video URL" 
+                  name="video_url" 
+                  rules={[
+                    {
+                      validator: (_, value) =>
+                        value || videoUrl
+                          ? Promise.resolve()
+                          : Promise.reject('Please upload a video'),
+                    },
+                  ]}
+                >
+                  <FileUploader type="video" onUploadSuccess={(url) => this.handleUploadSuccess(url, 'video')} />
                   {videoUrl && (
                     <video width="100%" controls style={{ marginTop: '10px' }}>
                       <source src={videoUrl} type="video/mp4" />
@@ -269,8 +271,19 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item label="Image URL">
-                  <FileUploader type="image" onUploadSuccess={this.handleImageUploadSuccess} />
+                <Form.Item 
+                  label="Image URL" 
+                  name="image_url" 
+                  rules={[
+                    {
+                      validator: (_, value) =>
+                        value || formData.image_url
+                          ? Promise.resolve()
+                          : Promise.reject('Please upload an image'),
+                    },
+                  ]}
+                >
+                  <FileUploader type="image" onUploadSuccess={(url) => this.handleUploadSuccess(url, 'image')} />
                   {formData.image_url && <img src={formData.image_url} alt="Course" style={{ width: '100%', marginTop: '10px' }} />}
                 </Form.Item>
               </Col>
