@@ -49,7 +49,7 @@ class Api {
       });
       return response.data;
     } catch (error: any) {
-      toast.error( (error.response?.data?.message || error.message));
+      toast.error((error.response?.data?.message || error.message));
       throw error;
     }
   }
@@ -298,7 +298,7 @@ class Api {
       throw error;
     }
   }
-  async getSubCategories(searchCondition: any, pageNum: number , pageSize: number ): Promise<any> {
+  async getSubCategories(searchCondition: any, pageNum: number, pageSize: number): Promise<any> {
     try {
       const token = localStorage.getItem('token');
       const response = await this.api.post('/api/category/search', {
@@ -324,7 +324,7 @@ class Api {
     category: string;
     status: string;
     is_deleted: boolean;
-  }, pageNum: number , pageSize: number ): Promise<any> {
+  }, pageNum: number, pageSize: number): Promise<any> {
     try {
       const token = localStorage.getItem('token');
       const response = await this.api.post('/api/course/search', {
@@ -369,7 +369,39 @@ class Api {
       throw error;
     }
   }
-  
+
+  async editCategory(categoryId: string, data: { name: string; description?: string }): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.put(`/api/category/${categoryId}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      toast.success('Category updated successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error updating category: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
+  async deleteCategory(categoryId: string): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.delete(`/api/category/${categoryId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      toast.success('Category deleted successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error deleting category: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
 }
 
 export { createApiInstance, Api };
