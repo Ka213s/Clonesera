@@ -133,16 +133,30 @@ const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
               <Option value="image">Image</Option>
             </Select>
           </Form.Item>
-          <Form.Item name="full_time" label="Full Time" rules={[{ required: true, message: 'Please enter full time' }]}>
+          <Form.Item
+            name="full_time"
+            label="Full Time"
+            rules={[{ required: true, message: 'Please enter full time' }]}
+          >
             <Input type="number" />
           </Form.Item>
-          <Form.Item name="position_order" label="Position Order" rules={[{ required: true, message: 'Please enter position order' }]}>
+          <Form.Item
+            name="position_order"
+            label="Position Order"
+            rules={[{ required: true, message: 'Please enter position order' }]}
+          >
             <Input type="number" />
           </Form.Item>
-          <Form.Item name="session_id" hidden>
+          <Form.Item
+            name="session_id"
+            hidden
+          >
             <Input />
           </Form.Item>
-          <Form.Item name="course_id" hidden>
+          <Form.Item
+            name="course_id"
+            hidden
+          >
             <Input />
           </Form.Item>
           {modalForm.getFieldValue('lesson_type') === 'image' ? (
