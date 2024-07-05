@@ -1,63 +1,12 @@
-import axios, { AxiosInstance } from 'axios';
+// Api.ts
+import { AxiosInstance } from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
-const handleSpecificErrorResponse = (error: any) => {
-  const status = error.response ? error.response.status : null;
-  const errorMessage = error.response?.data?.message || '';
-
-  if (status === 400 && errorMessage.includes('already exists')) {
-    return Promise.reject({
-      ...error,
-      emailExists: true,
-      message: errorMessage
-    });
-  } else if (status === 400 && errorMessage.includes("Can't parse token payload")) {
-    return Promise.reject({
-      ...error,
-      parseTokenError: true,
-      message: errorMessage
-    });
-  }
-
-  return null;
-};
-
-const handleErrorResponse = (error: any, navigate: ReturnType<typeof useNavigate>) => {
-  const specificError = handleSpecificErrorResponse(error);
-  if (specificError) return specificError;
-
-  const status = error.response ? error.response.status : null;
-
-  if (status) {
-    if (status === 400) {
-      navigate('/400');
-    } else if (status === 404) {
-      navigate('/404');
-    } else if (status === 403) {
-      navigate('/403');
-    }
-    console.error(`API error with status ${status}`);
-  }
-  return Promise.reject(error);
-};
-
-const setupAxiosInterceptors = (navigate: ReturnType<typeof useNavigate>): AxiosInstance => {
-  const api = axios.create({
-    baseURL: process.env.REACT_APP_API_BASE_URL,
-  });
-
-  // Add a response interceptor
-  api.interceptors.response.use(
-    response => response,
-    error => handleErrorResponse(error, navigate)
-  );
-
-  return api;
-};
+import Interceptor from './Interceptor';
 
 const createApiInstance = (navigate: ReturnType<typeof useNavigate>): Api => {
-  const apiInstance = setupAxiosInterceptors(navigate);
+  const interceptor = new Interceptor(navigate);
+  const apiInstance = interceptor.setupAxiosInterceptors();
   return new Api(apiInstance);
 };
 
@@ -67,7 +16,6 @@ class Api {
   constructor(apiInstance: AxiosInstance) {
     this.api = apiInstance;
   }
-
   async registerAccount(data: { name: string; email: string; password: string; role: string; }): Promise<any> {
     try {
       const response = await this.api.post('/api/users', data);
@@ -77,7 +25,7 @@ class Api {
       if (error.emailExists) {
         return { emailExists: true, message: error.message };
       }
-      toast.error('Error registering: ' + (error.response?.data?.message || error.message));
+      toast.error((error.response?.data?.message || error.message));
       throw error;
     }
   }
@@ -88,7 +36,7 @@ class Api {
       toast.success('Login successful');
       return response.data;
     } catch (error: any) {
-      toast.error('Error logging in: ' + (error.response?.data?.message || error.message));
+      toast.error((error.response?.data?.message || error.message));
       throw error;
     }
   }
@@ -101,11 +49,20 @@ class Api {
       });
       return response.data;
     } catch (error: any) {
-      toast.error('Error registering with Google: ' + (error.response?.data?.message || error.message));
+      toast.error( (error.response?.data?.message || error.message));
       throw error;
     }
   }
-
+  async createUser(data: { name: string; password: string; email: string; role: string }): Promise<any> {
+    try {
+      const response = await this.api.post('/api/users/create', data);
+      toast.success('User created successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error creating user: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
   async loginUserByGoogle(data: { google_id: string; }): Promise<any> {
     try {
       const response = await this.api.post('/api/auth/google', data);
@@ -303,7 +260,7 @@ class Api {
     }
   }
 
-  async getCategories(searchCondition: any, pageNum?: number, pageSize?: number): Promise<any> {
+  async getCategories(searchCondition: any, pageNum: number, pageSize: number): Promise<any> {
     try {
       const token = localStorage.getItem('token');
       const response = await this.api.post('/api/category/search', {
@@ -341,8 +298,7 @@ class Api {
       throw error;
     }
   }
-
-  async getSubCategories(searchCondition: any, pageNum: number = 1, pageSize: number = 10): Promise<any> {
+  async getSubCategories(searchCondition: any, pageNum: number , pageSize: number ): Promise<any> {
     try {
       const token = localStorage.getItem('token');
       const response = await this.api.post('/api/category/search', {
@@ -363,39 +319,57 @@ class Api {
       throw error;
     }
   }
-
-  async editCategory(categoryId: string, data: { name: string; description?: string }): Promise<any> {
+  async getCourses(searchCondition: {
+    keyword: string;
+    category: string;
+    status: string;
+    is_deleted: boolean;
+  }, pageNum: number , pageSize: number ): Promise<any> {
     try {
       const token = localStorage.getItem('token');
-      const response = await this.api.put(`/api/category/${categoryId}`, data, {
+      const response = await this.api.post('/api/course/search', {
+        searchCondition,
+        pageInfo: {
+          pageNum,
+          pageSize
+        }
+      }, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      toast.success('Category updated successfully');
       return response.data;
     } catch (error: any) {
-      toast.error('Error updating category: ' + (error.response?.data?.message || error.message));
+      toast.error('Error fetching courses: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }
-
-  async deleteCategory(categoryId: string): Promise<any> {
+  async getSessions(searchCondition: {
+    keyword: string;
+    course_id: string;
+    is_position_order: boolean;
+    is_deleted: boolean;
+  }, pageNum: number, pageSize: number): Promise<any> {
     try {
       const token = localStorage.getItem('token');
-      const response = await this.api.delete(`/api/category/${categoryId}`, {
+      const response = await this.api.post('/api/session/search', {
+        searchCondition,
+        pageInfo: {
+          pageNum,
+          pageSize
+        }
+      }, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       });
-      toast.success('Category deleted successfully');
       return response.data;
     } catch (error: any) {
-      toast.error('Error deleting category: ' + (error.response?.data?.message || error.message));
+      toast.error('Error fetching sessions: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }
-
+  
 }
 
 export { createApiInstance, Api };

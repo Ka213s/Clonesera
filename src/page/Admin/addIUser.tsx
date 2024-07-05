@@ -24,7 +24,7 @@ const AddUser: React.FC = () => {
       };
 
       console.log('Data to submit:', dataToSubmit);
-      const response = await api.registerAccount(dataToSubmit);
+      const response = await api.createUser(dataToSubmit);
 
       if (response.emailExists) {
         setIsButtonDisabled(false);
@@ -89,6 +89,7 @@ const AddUser: React.FC = () => {
             <Select size="large" placeholder="Role">
               <Option value="instructor">Instructor</Option>
               <Option value="student">Student</Option>
+              <Option value="admin">Admin</Option>
             </Select>
           </Form.Item>
         </div>
