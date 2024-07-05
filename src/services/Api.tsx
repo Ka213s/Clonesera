@@ -317,14 +317,14 @@ class Api {
           Authorization: `Bearer ${token}`
         }
       });
-  
+
       return response.data;
     } catch (error: any) {
       toast.error('Error fetching categories: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }
-  
+
 
   async createSubCategory(data: { name: string; parent_category_id: string; description: string }): Promise<any> {
     try {
@@ -360,6 +360,38 @@ class Api {
       return response.data;
     } catch (error: any) {
       toast.error('Error fetching subcategories: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
+  async editCategory(categoryId: string, data: { name: string; description?: string }): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.put(`/api/category/${categoryId}`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      toast.success('Category updated successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error updating category: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
+  async deleteCategory(categoryId: string): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.delete(`/api/category/${categoryId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      toast.success('Category deleted successfully');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error deleting category: ' + (error.response?.data?.message || error.message));
       throw error;
     }
   }

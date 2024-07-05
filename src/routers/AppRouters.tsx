@@ -25,7 +25,7 @@ import CourseDetail from '../page/Admin/CourseDetail';
 import AdminDashboard from '../page/Admin/Dashboard';
 import CoursesPending from '../page/Admin/CoursesPending';
 import Review from '../page/Admin/Review';
-import CategoryManagement from '../page/Admin/CategoryManagement';
+// import CategoryManagement from '../page/Admin/CategoryManagement';
 import AllInstructor from '../page/Admin/allIUser';
 import AddInstructor from '../page/Admin/addIUser';
 import EditCourse from '../page/Admin/EditCourse';
@@ -69,6 +69,7 @@ import HelpPage from '../page/HelpPage';
 import ProtectedRoute from './ProtectedRoute';
 import PurchasedCourseDetail from '../page/Student/PurchasedCourseDetail';
 import PaymentPage from '../components/PaymentPage';
+import Category from '../page/Admin/Category';
 
 const AppRouters: React.FC = () => {
   return (
@@ -113,7 +114,7 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/admin/course/:id" element={<ProtectedRoute allowedRoles={['admin']}><CourseDetail /></ProtectedRoute>} />
       <Route path="/admin/pending_courses" element={<ProtectedRoute allowedRoles={['admin']}><CoursesPending /></ProtectedRoute>} />
       <Route path="/admin/reviews" element={<ProtectedRoute allowedRoles={['admin']}><Review /></ProtectedRoute>} />
-      <Route path="/admin/category-management" element={<ProtectedRoute allowedRoles={['admin']}><CategoryManagement /></ProtectedRoute>} />
+      <Route path="/admin/category-management" element={<ProtectedRoute allowedRoles={['admin']}><Category /></ProtectedRoute>} />
       <Route path="/admin/allIUser" element={<ProtectedRoute allowedRoles={['admin']}><AllInstructor /></ProtectedRoute>} />
       <Route path="/admin/addUser" element={<ProtectedRoute allowedRoles={['admin']}><AddInstructor /></ProtectedRoute>} />
       <Route path="/admin/editCourse/:id" element={<ProtectedRoute allowedRoles={['admin']}><EditCourse /></ProtectedRoute>} />
