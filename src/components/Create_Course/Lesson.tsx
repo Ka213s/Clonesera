@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Input, Select, message, Modal, Form } from 'antd';
-import FileUploader from './FileUploader'; // Adjust the path as needed
+import FileUploader from './FileUploader';
 
 const { Option } = Select;
 
@@ -8,7 +8,6 @@ interface SessionData {
   _id: string;
   title: string;
   course_id: string;
-  is_position_order: boolean;
   is_deleted: boolean;
 }
 
@@ -22,8 +21,8 @@ interface LessonProps {
   courseId: string | null;
 }
 
-const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
 
+const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
   const [sessions, setSessions] = useState<SessionData[]>([]);
   const [courses, setCourses] = useState<CourseData[]>([]);
   const [loading, setLoading] = useState(false);
@@ -36,19 +35,11 @@ const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
     const fetchSessionsAndCourses = async () => {
       setLoading(true);
       try {
-        const sessionsResponse = await api.getSessions(
-          { keyword: '', course_id: courseId || '', is_position_order: true, is_deleted: false },
-          1,
-          10
-        );
+        const sessionsResponse = await api.getSessions({ keyword: '', course_id: courseId || '', is_position_order: true, is_deleted: false }, 1, 10);
         const sessionsData = Array.isArray(sessionsResponse.data.pageData) ? sessionsResponse.data.pageData : [];
         setSessions(sessionsData);
-
-        const coursesResponse = await api.getCourses(
-          { keyword: '', category: '', status: '', is_deleted: false },
-          1,
-          100 // Adjust the page size as needed to fetch all courses
-        );
+  
+        const coursesResponse = await api.getCourses({ keyword: '', category: '', status: '', is_deleted: false }, 1, 100); 
         const coursesData = Array.isArray(coursesResponse.data.pageData) ? coursesResponse.data.pageData : [];
         setCourses(coursesData);
       } catch (error) {
@@ -57,18 +48,16 @@ const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
         setLoading(false);
       }
     };
-
+  
     fetchSessionsAndCourses();
   }, [api, courseId]);
-
+  
   const getCourseNameById = (id: string) => {
     const course = courses.find(course => course._id === id);
     return course ? course.name : id;
   };
 
-  const handleAddSession = async (sessionId: string, courseId: string) => {
-    console.log('Session ID:', sessionId);
-    console.log('Course ID:', courseId);
+  const handleAddSession = (sessionId: string, courseId: string) => {
     setIsModalVisible(true);
     modalForm.setFieldsValue({ session_id: sessionId, course_id: courseId, lesson_type: 'video' });
   };
@@ -81,8 +70,6 @@ const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
         full_time: parseInt(values.full_time, 10),
         position_order: parseInt(values.position_order, 10),
       };
-      console.log('Modal Values:', values);
-      console.log('Payload:', payload);
       await api.createLesson(payload);
       setIsModalVisible(false);
       modalForm.resetFields();
@@ -90,7 +77,7 @@ const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
       setUploadedVideoUrl(null);
       message.success('Lesson added successfully');
     } catch (error) {
-      console.error('Error adding session:', error);
+      console.error('Error adding lesson:', error);
       message.error('Error adding lesson');
     }
   };
@@ -115,34 +102,12 @@ const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
   };
 
   const columns = [
-    {
-      title: 'Course Name',
-      dataIndex: 'course_id',
-      key: 'course_id',
-      render: (courseId: string) => getCourseNameById(courseId),
-    },
-    {
-      title: 'Session Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Deleted',
-      dataIndex: 'is_deleted',
-      key: 'is_deleted',
-      render: (text: boolean) => (text ? 'Yes' : 'No'),
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text: any, record: SessionData) => (
-        <Button onClick={() => handleAddSession(record._id, record.course_id)} type="primary">
-          Add Session
-        </Button>
-      ),
-    },
+    { title: 'Course Name', dataIndex: 'course_id', key: 'course_id', render: (courseId: string) => getCourseNameById(courseId) },
+    { title: 'Session Name', dataIndex: 'name', key: 'name' },
+    { title: 'Deleted', dataIndex: 'is_deleted', key: 'is_deleted', render: (text: boolean) => (text ? 'Yes' : 'No') },
+    { title: 'Action', key: 'action', render: (text: any, record: SessionData) => <Button onClick={() => handleAddSession(record._id, record.course_id)} type="primary">Add Session</Button> },
   ];
-
+  
   return (
     <div>
       <h2>Sessions</h2>
@@ -168,50 +133,28 @@ const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
               <Option value="image">Image</Option>
             </Select>
           </Form.Item>
-          <Form.Item
-            name="full_time"
-            label="Full Time"
-            rules={[{ required: true, message: 'Please enter full time' }]}
-          >
+          <Form.Item name="full_time" label="Full Time" rules={[{ required: true, message: 'Please enter full time' }]}>
             <Input type="number" />
           </Form.Item>
-          <Form.Item
-            name="position_order"
-            label="Position Order"
-            rules={[{ required: true, message: 'Please enter position order' }]}
-          >
+          <Form.Item name="position_order" label="Position Order" rules={[{ required: true, message: 'Please enter position order' }]}>
             <Input type="number" />
           </Form.Item>
-          <Form.Item
-            name="session_id"
-            hidden
-          >
+          <Form.Item name="session_id" hidden>
             <Input />
           </Form.Item>
-          <Form.Item
-            name="course_id"
-            hidden
-          >
+          <Form.Item name="course_id" hidden>
             <Input />
           </Form.Item>
           {modalForm.getFieldValue('lesson_type') === 'image' ? (
             <>
-              <Form.Item
-                name="image_url"
-                label="Upload Image"
-                rules={[{ required: true, message: 'Please upload an image' }]}
-              >
+              <Form.Item name="image_url" label="Upload Image" rules={[{ required: true, message: 'Please upload an image' }]}>
                 <FileUploader type="image" onUploadSuccess={handleImageUploadSuccess} />
               </Form.Item>
               {uploadedImageUrl && <img src={uploadedImageUrl} alt="Uploaded lesson content" style={{ marginTop: '10px', maxWidth: '100%' }} />}
             </>
           ) : (
             <>
-              <Form.Item
-                name="video_url"
-                label="Upload Video"
-                rules={[{ required: true, message: 'Please upload a video' }]}
-              >
+              <Form.Item name="video_url" label="Upload Video" rules={[{ required: true, message: 'Please upload a video' }]}>
                 <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
               </Form.Item>
               {uploadedVideoUrl && (

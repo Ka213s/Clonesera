@@ -120,36 +120,17 @@ const SessionComponent: React.FC<SessionProps> = ({ api }) => {
   };
 
   const columns = [
+    { title: 'Course Name', dataIndex: 'name', key: 'name' },
+    { title: 'Price', dataIndex: 'price', key: 'price' },
+    { title: 'Total Sessions', dataIndex: 'totalSessions', key: 'totalSessions' },
     {
-      title: 'Course Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
-    },
-    {
-      title: 'Total Sessions',
-      dataIndex: 'totalSessions',
-      key: 'totalSessions',
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (text: any, record: Course) => (
+      title: 'Action', key: 'action', render: (text: any, record: Course) => (
         <Space>
-          <Button type="primary" onClick={() => addSession(record._id)}>
-            Add Session
-          </Button>
-          <Button type="default" onClick={() => viewSessions(record._id)}>
-            Detail
-          </Button>
+          <Button type="primary" onClick={() => addSession(record._id)}>Add Session</Button>
+          <Button type="default" onClick={() => viewSessions(record._id)}>Detail</Button>
         </Space>
-      ),
-    },
-  ];
+      )
+    }];
 
   return (
     <div>
