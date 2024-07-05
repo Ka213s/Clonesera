@@ -19,7 +19,7 @@ const TinyMCEEditor: React.FC<TinyMCEEditorProps> = ({ value, onEditorChange }) 
       apiKey="2yifh7kylzpd5szlkd3irl90etvaxhqgknrd2zfbdz4sjeox"
       value={editorContent}
       init={{
-        height: 500,
+        height: 300,
         plugins: [
           'insertdatetime', 'media', 'table', 'help', 'wordcount'
         ],

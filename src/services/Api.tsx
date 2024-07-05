@@ -260,7 +260,7 @@ class Api {
     }
   }
 
-  async getCategories(searchCondition: any, pageNum?: number, pageSize?: number): Promise<any> {
+  async getCategories(searchCondition: any, pageNum: number, pageSize: number): Promise<any> {
     try {
       const token = localStorage.getItem('token');
       const response = await this.api.post('/api/category/search', {
@@ -298,7 +298,7 @@ class Api {
       throw error;
     }
   }
-  async getSubCategories(searchCondition: any, pageNum: number = 1, pageSize: number = 10): Promise<any> {
+  async getSubCategories(searchCondition: any, pageNum: number , pageSize: number ): Promise<any> {
     try {
       const token = localStorage.getItem('token');
       const response = await this.api.post('/api/category/search', {
@@ -319,6 +319,57 @@ class Api {
       throw error;
     }
   }
+  async getCourses(searchCondition: {
+    keyword: string;
+    category: string;
+    status: string;
+    is_deleted: boolean;
+  }, pageNum: number , pageSize: number ): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.post('/api/course/search', {
+        searchCondition,
+        pageInfo: {
+          pageNum,
+          pageSize
+        }
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error fetching courses: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+  async getSessions(searchCondition: {
+    keyword: string;
+    course_id: string;
+    is_position_order: boolean;
+    is_deleted: boolean;
+  }, pageNum: number, pageSize: number): Promise<any> {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await this.api.post('/api/session/search', {
+        searchCondition,
+        pageInfo: {
+          pageNum,
+          pageSize
+        }
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error fetching sessions: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+  
 }
 
 export { createApiInstance, Api };

@@ -6,7 +6,7 @@ import BasicInformation from './BasicInformation';
 import SessionComponent from './Session';
 import LessonComponent from './Lesson';
 
-const { Content, Header } = Layout;
+const { Content } = Layout;
 const { TabPane } = Tabs;
 
 interface FormData {
@@ -19,25 +19,6 @@ interface FormData {
   price: number;
   discount: number;
 }
-
-interface Lesson {
-  name: string;
-  description: string;
-  lesson_type: string;
-  full_time: number;
-  position_order: number;
-  video_url?: string;
-  image_url?: string;
-  _id?: string;
-}
-
-interface Session {
-  name: string;
-  description: string;
-  lessons: Lesson[];
-  _id?: string;
-}
-
 const CreateCourse: React.FC = () => {
   const navigate = useNavigate();
   const api = createApiInstance(navigate);
@@ -54,7 +35,7 @@ const CreateCourse: React.FC = () => {
   });
 
   const [courseId, setCourseId] = useState<string | null>(null);
-  const [sessions, setSessions] = useState<Session[]>([]);
+
 
   return (
     <Layout className="layout">
@@ -70,10 +51,10 @@ const CreateCourse: React.FC = () => {
               />
             </TabPane>
             <TabPane tab="Session" key="2">
-              <SessionComponent sessions={sessions} setSessions={setSessions} api={api} courseId={courseId} />
+              <SessionComponent  api={api}  />
             </TabPane>
             <TabPane tab="Lesson" key="3">
-              <LessonComponent sessions={sessions} setSessions={setSessions} api={api} courseId={courseId} />
+              <LessonComponent api={api} courseId={courseId} />
             </TabPane>
           </Tabs>
         </div>
