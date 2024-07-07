@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, MailOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
 import { useNavigate, Link } from 'react-router-dom';
 import { Layout, Input, Badge, Avatar, Menu, Dropdown, Button } from 'antd';
+import type { MenuProps } from 'antd';
 import logo from '../../assets/Logo-2.png';
 import notificationsData from '../../models/FileJson/notificationsData.json';
 import userMenuItemsData from '../../models/FileJson/userMenuItems.json';
@@ -55,37 +56,35 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     navigate(url);
   }, [navigate]);
 
-  const userMenu = (
-    <Menu>
-      <Menu.Item key="welcome" disabled>
+  const userMenuItems: MenuProps['items'] = [
+    {
+      key: 'welcome',
+      label: (
         <div className="font-bold">
           Welcome, <span className="text-purple-500">{userName}</span>
         </div>
-      </Menu.Item>
-      <Menu.Divider />
-      {userMenuItemsData.menuItems.map((item) => (
-        <Menu.Item key={item.text} onClick={() => handleMenuClick(item.url)}>
-          {item.text}
-        </Menu.Item>
-      ))}
-    </Menu>
-  );
+      ),
+      disabled: true,
+    },
+    ...userMenuItemsData.menuItems.map((item) => ({
+      key: item.text,
+      label: item.text,
+      onClick: () => handleMenuClick(item.url),
+    })),
+  ];
 
-  const notificationMenu = (
-    <Menu>
-      {notifications.map((notification) => (
-        <Menu.Item key={notification.id}>
-          <div className="flex items-center">
-            <Avatar src={notification.avatar} size="small" />
-            <div className="ml-2">
-              <p>{notification.message}</p>
-              <p className="text-xs text-gray-500">{notification.time}</p>
-            </div>
-          </div>
-        </Menu.Item>
-      ))}
-    </Menu>
-  );
+  const notificationMenuItems: MenuProps['items'] = notifications.map((notification) => ({
+    key: notification.id,
+    label: (
+      <div className="flex items-center">
+        <Avatar src={notification.avatar} size="small" />
+        <div className="ml-2">
+          <p>{notification.message}</p>
+          <p className="text-xs text-gray-500">{notification.time}</p>
+        </div>
+      </div>
+    ),
+  }));
 
   return (
     <AntHeader className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
@@ -120,7 +119,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               shape="circle"
               icon={<PlusOutlined />}
               className="block md:hidden bg-[#9997F5] border-none hover:!bg-[#8886E5]"
-              
             />
           </>
         )}
@@ -130,19 +128,19 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         </Badge>
 
         <Badge count={3}>
-          <Dropdown overlay={notificationMenu} trigger={['click']}>
+          <Dropdown menu={{ items: notificationMenuItems }} trigger={['click']}>
             <MailOutlined className="text-xl cursor-pointer" />
           </Dropdown>
         </Badge>
 
         <Badge count={notifications.length}>
-          <Dropdown overlay={notificationMenu} trigger={['click']}>
+          <Dropdown menu={{ items: notificationMenuItems }} trigger={['click']}>
             <BellOutlined className="text-xl cursor-pointer" />
           </Dropdown>
         </Badge>
 
         {isLoggedIn && userRole ? (
-          <Dropdown overlay={userMenu} trigger={['click']}>
+          <Dropdown menu={{ items: userMenuItems }} trigger={['click']}>
             <UserOutlined className="text-2xl cursor-pointer" />
           </Dropdown>
         ) : (
