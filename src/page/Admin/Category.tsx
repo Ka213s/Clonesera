@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Modal, message, Select, Popconfirm } from 'antd';
+import { Button, Modal, message, Select } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { FaEdit, FaTrash } from 'react-icons/fa';
 import CategoryForm from './CategoryForm';
+import ParentTable from './ParentTable';
+import SubTable from './SubTable';
 import { useNavigate } from 'react-router-dom';
 import { createApiInstance } from '../../services/Api';
 
@@ -20,9 +21,10 @@ interface Category {
 const Category: React.FC = () => {
   const [data, setData] = useState<Category[]>([]);
   const [filteredCategories, setFilteredCategories] = useState<Category[]>([]);
-  const [parentCategories, setParentCategories] = useState<{ id: string; name: string }[]>([]);
-  const [selectedParentCategory, setSelectedParentCategory] = useState<string | null>(null);
+  const [parentCategories, setParentCategories] = useState<{ id: string; name: string; numOfSubCategories: number }[]>([]);
+  const [filterOption, setFilterOption] = useState<string>('parent');
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isSubCategoryModal, setIsSubCategoryModal] = useState(false);
   const [pagination, setPagination] = useState({
     current: 1,
     pageSize: 10,
@@ -38,8 +40,21 @@ const Category: React.FC = () => {
       const result = await api.getCategories(searchCondition, pageNum, pageSize);
       if (result && result.data) {
         const categories: Category[] = result.data.pageData || [];
+        
+        const parentCategoriesWithCount = categories
+          .filter(category => category.parent_category_id === null)
+          .map(parent => {
+            const numOfSubCategories = categories.filter(cat => cat.parent_category_id === parent._id).length;
+            return {
+              id: parent._id,
+              name: parent.name,
+              numOfSubCategories
+            };
+          });
+
         setData(categories);
         setFilteredCategories(categories);
+        setParentCategories(parentCategoriesWithCount);
         setPagination({
           current: pageNum,
           pageSize,
@@ -52,40 +67,23 @@ const Category: React.FC = () => {
     }
   };
 
-  const fetchParentCategories = async () => {
-    try {
-      const result = await api.getCategories({}, 1, 100); // Fetch all parent categories
-      if (result && result.data) {
-        const categories: Category[] = result.data.pageData || [];
-        const parentCategories = categories
-          .filter(category => category.parent_category_id === null)
-          .map(category => ({
-            id: category._id,
-            name: category.name,
-          }));
-        setParentCategories(parentCategories);
-      }
-    } catch (error) {
-      console.error('Error fetching parent categories:', error);
-      message.error('Failed to fetch parent categories');
-    }
-  };
-
   useEffect(() => {
     fetchCategoriesData(pagination.current, pagination.pageSize);
-    fetchParentCategories();
   }, []);
 
   useEffect(() => {
-    if (selectedParentCategory) {
-      const filtered = data.filter(category => category.parent_category_id === selectedParentCategory);
+    if (filterOption === 'parent') {
+      const filtered = data.filter(category => category.parent_category_id === null);
+      setFilteredCategories(filtered);
+    } else if (filterOption === 'sub') {
+      const filtered = data.filter(category => category.parent_category_id !== null);
       setFilteredCategories(filtered);
     } else {
       setFilteredCategories(data);
     }
-  }, [selectedParentCategory, data]);
+  }, [filterOption, data]);
 
-  const handleFormSubmit = async (values: { name: string }) => {
+  const handleFormSubmit = async (values: { name: string; parent_category_id?: string | null }) => {
     try {
       if (editingCategory) {
         await api.editCategory(editingCategory._id, values);
@@ -106,6 +104,7 @@ const Category: React.FC = () => {
   const handleEditClick = (category: Category) => {
     setEditingCategory(category);
     setIsModalVisible(true);
+    setIsSubCategoryModal(filterOption === 'sub');
   };
 
   const handleDeleteClick = async (categoryId: string) => {
@@ -118,73 +117,72 @@ const Category: React.FC = () => {
     }
   };
 
+  const handlePageChange = (page: number, pageSize: number) => {
+    setPagination((prev) => ({ ...prev, current: page, pageSize }));
+    fetchCategoriesData(page, pageSize);
+  };
+
+  const handleAddSubCategoryClick = () => {
+    setIsSubCategoryModal(true);
+    setIsModalVisible(true);
+  };
+
   return (
     <div className="pt-10 px-6">
       <div className="flex space-x-4 mb-5">
         <Button
           type="primary"
           icon={<PlusOutlined />}
-          onClick={() => setIsModalVisible(true)}
+          onClick={() => {
+            setIsSubCategoryModal(false); 
+            setIsModalVisible(true);
+          }}
           className='!bg-[#9997F5] hover:!bg-[#8886E5]'
         >
-          New Category
+          Parent Category
+        </Button>
+        <Button
+          type="primary"
+          icon={<PlusOutlined />}
+          onClick={handleAddSubCategoryClick}
+          className='!bg-[#9997F5] hover:!bg-[#8886E5]'
+        >
+          Sub Category
         </Button>
         <Select
-          placeholder="Filter by Parent Category"
+          placeholder="Select"
           style={{ width: 200 }}
-          onChange={value => setSelectedParentCategory(value)}
-          allowClear
+          onChange={value => setFilterOption(value)}
+          value={filterOption}
         >
-          {parentCategories.map(category => (
-            <Option key={category.id} value={category.id}>
-              {category.name}
-            </Option>
-          ))}
+          <Option value="parent">Parent Category</Option>
+          <Option value="sub">Sub Category</Option>
         </Select>
       </div>
-      <Table
-        dataSource={filteredCategories}
-        rowKey="id"
-        pagination={{
-          current: pagination.current,
-          pageSize: pagination.pageSize,
-          total: pagination.total,
-          onChange: (page, size) => {
-            setPagination(prev => ({ ...prev, current: page, pageSize: size }));
-            fetchCategoriesData(page, size);
-          },
-        }}
-      >
-        <Table.Column title="Name" dataIndex="name" key="name" />
-        <Table.Column
-          title="Parent Category"
-          dataIndex="parent_category_id"
-          key="parent_category_id"
-          render={parent_category_id => {
-            const parentCategory = parentCategories.find(category => category.id === parent_category_id);
-            return parentCategory ? parentCategory.name : 'Null';
-          }}
+      {filterOption === 'parent' && (
+        <ParentTable
+          data={filteredCategories}
+          parentCategories={parentCategories}
+          pagination={pagination}
+          onEdit={handleEditClick}
+          onDelete={handleDeleteClick}
+          onPageChange={handlePageChange}
         />
-        <Table.Column
-          title="Action"
-          key="action"
-          render={(_, record: Category) => (
-            <>
-              <Button type="link" icon={<FaEdit />} onClick={() => handleEditClick(record)} />
-              <Popconfirm
-                title="Are you sure you want to delete this category?"
-                onConfirm={() => handleDeleteClick(record._id)}
-                okText="Yes"
-                cancelText="No"
-              >
-                <Button type="link" icon={<FaTrash />} danger />
-              </Popconfirm>
-            </>
-          )}
+      )}
+      {filterOption === 'sub' && (
+        <SubTable
+          data={filteredCategories}
+          parentCategories={parentCategories}
+          pagination={pagination}
+          onEdit={handleEditClick}
+          onDelete={handleDeleteClick}
+          onPageChange={handlePageChange}
         />
-      </Table>
+      )}
       <Modal
-        title={editingCategory ? 'Edit Category' : 'Add New Category'}
+        title={editingCategory 
+          ? (isSubCategoryModal ? 'Edit Sub Category' : 'Edit Category') 
+          : (isSubCategoryModal ? 'Add New SubCategory' : 'Add New Parent Category')}
         visible={isModalVisible}
         onCancel={() => {
           setIsModalVisible(false);
@@ -194,7 +192,13 @@ const Category: React.FC = () => {
       >
         <CategoryForm
           onSubmit={handleFormSubmit}
-          initialValues={editingCategory ? { name: editingCategory.name } : { name: '' }}
+          initialValues={
+            editingCategory
+              ? { name: editingCategory.name, parent_category_id: editingCategory.parent_category_id }
+              : { name: '', parent_category_id: isSubCategoryModal ? '' : null } 
+          }
+          parentCategories={parentCategories}
+          isSubCategory={isSubCategoryModal}
         />
       </Modal>
     </div>
