@@ -28,7 +28,6 @@ const Register: React.FC = () => {
             };
             console.log('Data to submit:', dataToSubmit);
             const response = await api.registerAccount(dataToSubmit);
-            navigate('/login');
             if (response.emailExists) {
                 setIsButtonDisabled(false);
                 form.setFields([{ name: 'email', errors: [response.message] }]);
@@ -37,6 +36,7 @@ const Register: React.FC = () => {
 
             console.log('Registration successful with External API:', response);
             form.resetFields();
+            navigate('/verify-email', { state: { email: values.email } });
         } catch (error: any) {
             setIsButtonDisabled(false);
             if (error.response?.data?.message) {

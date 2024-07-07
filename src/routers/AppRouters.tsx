@@ -9,6 +9,7 @@ import Login from '../page/Login';
 import ForgotPassword from '../page/ForgotPassword';
 import Logout from '../components/Logout';
 import Register from '../page/Register';
+import VerifiMail from '../page/VerifyEmail';
 import PageError201 from '../page/Error/PageError201';
 import PageError202 from '../page/Error/PageError202';
 import PageError204 from '../page/Error/PageError204';
@@ -83,7 +84,7 @@ const AppRouters: React.FC = () => {
 
 const RoutesWrapper: React.FC = () => {
   const location = useLocation();
-  const noSidebarPaths = ['/login', '/register', '/forgot-password', '/201', '/202', '/204', '/404', '/403', '/400', '/401', '/500', '/501'];
+  const noSidebarPaths = ['/login', '/register', '/forgot-password', '/verify-email','/201', '/202', '/204', '/404', '/403', '/400', '/401', '/500', '/501'];
 
   const renderRoutes = () => (
     <Routes>
@@ -94,10 +95,12 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
       <Route path="/logout" element={<Logout />} />
       <Route path="/register" element={<Register />} />
+      <Route path="/verify-email" element={<VerifiMail />} />
       <Route path="/course/:courseId" element={<CourseDetailPage />} />
       <Route path="/tests/certification-fill-form" element={<CertificationForm />} />
       <Route path="/help" element={<HelpPage />} />
       <Route path="/become-instructor" element={<BecomeInstructor />} />
+      <Route path="https://clonesera.vercel.app/verify-email/:id" />
       <Route path="/payment" element={<PaymentPage />} />
       <Route path="/201" element={<PageError201 />} />
       <Route path="/202" element={<PageError202 />} />
