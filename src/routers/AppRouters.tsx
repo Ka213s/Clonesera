@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, matchPath } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import MainLayout from '../layouts/MainLayout';
@@ -10,6 +10,7 @@ import ForgotPassword from '../page/ForgotPassword';
 import Logout from '../components/Logout';
 import Register from '../page/Register';
 import VerifiMail from '../page/VerifyEmail';
+import VerifyEmailDone from '../page/VerifyEmailDone';
 import PageError201 from '../page/Error/PageError201';
 import PageError202 from '../page/Error/PageError202';
 import PageError204 from '../page/Error/PageError204';
@@ -72,19 +73,33 @@ import PurchasedCourseDetail from '../page/Student/PurchasedCourseDetail';
 import PaymentPage from '../components/PaymentPage';
 import Category from '../page/Admin/Category';
 
-
 const AppRouters: React.FC = () => {
   return (
     <Router>
-        <RoutesWrapper />
-        <ToastContainer />
+      <RoutesWrapper />
+      <ToastContainer />
     </Router>
   );
 };
 
 const RoutesWrapper: React.FC = () => {
   const location = useLocation();
-  const noSidebarPaths = ['/login', '/register', '/forgot-password', '/verify-email','/201', '/202', '/204', '/404', '/403', '/400', '/401', '/500', '/501'];
+  const noSidebarPaths = [
+    '/login',
+    '/register',
+    '/forgot-password',
+    '/verify-email',
+    '/verify-email/:token',
+    '/201',
+    '/202',
+    '/204',
+    '/404',
+    '/403',
+    '/400',
+    '/401',
+    '/500',
+    '/501'
+  ];
 
   const renderRoutes = () => (
     <Routes>
@@ -100,7 +115,7 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/tests/certification-fill-form" element={<CertificationForm />} />
       <Route path="/help" element={<HelpPage />} />
       <Route path="/become-instructor" element={<BecomeInstructor />} />
-      <Route path="https://clonesera.vercel.app/verify-email/:id" />
+      <Route path="/verify-email/:token" element={<VerifyEmailDone />} />
       <Route path="/payment" element={<PaymentPage />} />
       <Route path="/201" element={<PageError201 />} />
       <Route path="/202" element={<PageError202 />} />
@@ -162,8 +177,10 @@ const RoutesWrapper: React.FC = () => {
     </Routes>
   );
 
+  const shouldHideSidebar = noSidebarPaths.some(path => matchPath(path, location.pathname));
+
   return (
-    noSidebarPaths.includes(location.pathname) ? renderRoutes() : (
+    shouldHideSidebar ? renderRoutes() : (
       <MainLayout>
         {renderRoutes()}
       </MainLayout>

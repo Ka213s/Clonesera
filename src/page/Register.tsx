@@ -96,8 +96,8 @@ const Register: React.FC = () => {
                             <Form.Item
                                 name="email"
                                 rules={[
-                                    { required: true, message: 'Please input your email!' },
-                                    { type: 'email', message: 'Please enter a valid email!' }
+                                    { required: true, message: 'Please input your password!' },
+                                    { min: 6, message: 'Password must be at least 6 characters long!' } 
                                 ]}
                             >
                                 <Input placeholder='Email' className="p-3 rounded-xl border" />
