@@ -14,7 +14,6 @@ const VerifyEmail: React.FC = () => {
     const handleResendEmail = async () => {
         try {
             await api.resendVerifyEmail({ email });
-            message.success('Verification email resent successfully');
         } catch (error) {
             message.error('Error resending verification email');
         }
