@@ -16,17 +16,18 @@ function VerifyEmailDone() {
   const [countdown, setCountdown] = useState(5);
   const navigate = useNavigate();
   const api = createApiInstance(navigate);
+  const [isVerified, setIsVerified] = useState(false); // New state to control verification
 
   useEffect(() => {
     const verifyEmail = async () => {
-      if (!token) {
-        message.error('Token is missing');
+      if (!token || isVerified) {
         return;
       }
 
       try {
         const result = await api.verifyEmail(token);
         setVerificationResult(result);
+        setIsVerified(true); // Set verification flag
         message.success('Email verification successful');
       } catch (error) {
         message.error('Error verifying email');
@@ -34,7 +35,7 @@ function VerifyEmailDone() {
     };
 
     verifyEmail();
-  }, [token, api]);
+  }, [token, api, isVerified]); // Include isVerified in dependencies
 
   useEffect(() => {
     if (verificationResult) {
