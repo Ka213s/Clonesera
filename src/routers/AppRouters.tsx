@@ -101,8 +101,8 @@ const RoutesWrapper: React.FC = () => {
       <Route path="/tests/certification-fill-form" element={<CertificationForm />} />
       <Route path="/help" element={<HelpPage />} />
       <Route path="/become-instructor" element={<BecomeInstructor />} />
-      <Route path="https://clonesera.vercel.app/verify-email/b0142e5e78d035d2edb906d2b944d4e5" element={<VerifyEmailDone />} />
-      <Route path="https://clonesera.vercel.app/verify-email/:id" element={<VerifyEmailDone />} />
+      <Route path="/verify-email/b0142e5e78d035d2edb906d2b944d4e5" element={<VerifyEmailDone />} />
+      <Route path="/verify-email/:id" element={<VerifyEmailDone />} />
       <Route path="/payment" element={<PaymentPage />} />
       <Route path="/201" element={<PageError201 />} />
       <Route path="/202" element={<PageError202 />} />
