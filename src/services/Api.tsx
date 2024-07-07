@@ -401,7 +401,16 @@ class Api {
       throw error;
     }
   }
-
+  async verifyEmail(token: string): Promise<any> {
+    try {
+      const response = await this.api.post('/api/auth/verify-token', { token });
+      toast.success('Email verification successful');
+      return response.data;
+    } catch (error: any) {
+      toast.error('Error verifying email: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
 }
 
 export { createApiInstance, Api };
