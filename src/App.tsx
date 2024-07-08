@@ -1,27 +1,11 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Router from '../src/router/AppRoutet'
 
-import Test from './pages/test';
-
-
-
-
-const AppRouter: React.FC = () => {
+function App() {
   return (
-    <Router>
-    
-        <Routes>
-          {/* Routes with MainLayout */}
-      
-            <Route path="/" element={<Test />} />
-   
-
-          {/* Routes without MainLayout */}
-        
-        </Routes>
-    
-    </Router>
-  );
+    <div>
+      < Router />
+    </div>
+  )
 }
 
-export default AppRouter;
+export default App
