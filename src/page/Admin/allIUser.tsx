@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Table, Button, Modal, Pagination } from 'antd';
+import { Table, Button, Modal, Pagination, Popconfirm } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { createApiInstance } from '../../services/Api';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,7 @@ import UserFilter from '../../components/Admin/UserFilter';
 const AllUser: React.FC = () => {
   const navigate = useNavigate();
 
+  const [usersData, setUsersData] = useState<any[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -51,23 +52,22 @@ const AllUser: React.FC = () => {
 
   const columns: ColumnsType<any> = [
     {
-      title: "STT",
-      dataIndex: "index",
-      key: "index",
-      render: (text: any, record: any, index: number) =>
-        (pagination.current! - 1) * pagination.pageSize! + index + 1,
+      title: 'STT',
+      dataIndex: 'index',
+      key: 'index',
+      render: (text: any, record: any, index: number) => (pagination.current! - 1) * pagination.pageSize! + index + 1,
       width: 50,
     },
     {
-      title: "Name",
-      dataIndex: "name",
-      key: "name",
+      title: 'Name',
+      dataIndex: 'name',
+      key: 'name',
       width: 150,
     },
     {
-      title: "Email",
-      dataIndex: "email",
-      key: "email",
+      title: 'Email',
+      dataIndex: 'email',
+      key: 'email',
       width: 200,
     },
     {
@@ -84,9 +84,9 @@ const AllUser: React.FC = () => {
       width: 100,
     },
     {
-      title: "Status",
-      dataIndex: "status",
-      key: "status",
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
       render: (status: boolean, record: any) => (
         <UserStatusUpdater checked={status} userId={record._id} />
       ),
@@ -162,7 +162,7 @@ const AllUser: React.FC = () => {
         email: updatedUser.email,
         avatar: updatedUser.avatar,
         role: updatedUser.role,
-        video: updatedUser.video || "",
+        video: updatedUser.video || '',
       });
 
       if (response.success) {
@@ -174,6 +174,21 @@ const AllUser: React.FC = () => {
       } else {
         console.error('Failed to update user:', response.message);
       }
+    } catch (error) {
+      console.error('Error updating user:', error);
+    }
+  };
+
+  const handleDelete = async (userId: string) => {
+    try {
+      const api = createApiInstance(navigate);
+      await api.deleteUser(userId);
+      setUsersData((prevData) =>
+        prevData.filter((user) => user._id !== userId)
+      );
+      setFilteredUsers((prevData) =>
+        prevData.filter((user) => user._id !== userId)
+      );
     } catch (error) {
       console.error("Error deleting user:", error);
     }
@@ -228,82 +243,35 @@ const AllUser: React.FC = () => {
         {selectedUser && !isEditMode && (
           <div className="flex flex-col items-center">
             <div className="mb-4">
-              <img
-                src={selectedUser.avatar}
-                alt="Avatar"
-                className="w-40 h-40 rounded-full"
-              />
+              <img src={selectedUser.avatar} alt="Avatar" className="w-40 h-40 rounded-full" />
             </div>
             <div className="flex flex-col md:flex-row md:items-start md:justify-between md:w-3/4">
               <div className="md:w-1/2">
-                <p>
-                  <strong>ID:</strong> {selectedUser._id}
-                </p>
+                <p><strong>ID:</strong> {selectedUser._id}</p>
                 {selectedUser.google_id ? (
-                  <p>
-                    <strong>Google ID:</strong> {selectedUser.google_id}
-                  </p>
+                  <p><strong>Google ID:</strong> {selectedUser.google_id}</p>
                 ) : (
-                  <p>
-                    <strong>Google ID:</strong>{" "}
-                    <span className="text-yellow-500">
-                      Account not registered with Google
-                    </span>
-                  </p>
+                  <p><strong>Google ID:</strong> <span className="text-yellow-500">Account not registered with Google</span></p>
                 )}
-                <p>
-                  <strong>Name:</strong> {selectedUser.name}
-                </p>
-                <p>
-                  <strong>Email:</strong> {selectedUser.email}
-                </p>
-                <p>
-                  <strong>Role:</strong> {selectedUser.role}
-                </p>
-                <p>
-                  <strong>Status: </strong>
-                  <span
-                    className={
-                      selectedUser.status ? "text-green-500" : "text-red-500"
-                    }
-                  >
-                    {selectedUser.status ? "Active" : "Inactive"}
+                <p><strong>Name:</strong> {selectedUser.name}</p>
+                <p><strong>Email:</strong> {selectedUser.email}</p>
+                <p><strong>Role:</strong> {selectedUser.role}</p>
+                <p><strong>Status: </strong>
+                  <span className={selectedUser.status ? 'text-green-500' : 'text-red-500'}>
+                    {selectedUser.status ? 'Active' : 'Inactive'}
                   </span>
                 </p>
               </div>
               <div className="md:w-1/2 mt-4 md:mt-0">
+                <p><strong>Description:</strong> {selectedUser.description}</p>
+                <p><strong>Phone Number:</strong> {selectedUser.phone_number}</p>
+                <p><strong>Date of Birth:</strong> {moment(selectedUser.dob).format('DD-MM-YYYY')}</p>
+                <p><strong>Created At:</strong> {moment(selectedUser.created_at).format('DD-MM-YYYY HH:mm:ss')}</p>
+                <p><strong>Updated At:</strong> {moment(selectedUser.updated_at).format('DD-MM-YYYY HH:mm:ss')}</p>
                 <p>
-                  <strong>Description:</strong> {selectedUser.description}
-                </p>
-                <p>
-                  <strong>Phone Number:</strong> {selectedUser.phone_number}
-                </p>
-                <p>
-                  <strong>Date of Birth:</strong>{" "}
-                  {moment(selectedUser.dob).format("DD-MM-YYYY")}
-                </p>
-                <p>
-                  <strong>Created At:</strong>{" "}
-                  {moment(selectedUser.created_at).format(
-                    "DD-MM-YYYY HH:mm:ss"
-                  )}
-                </p>
-                <p>
-                  <strong>Updated At:</strong>{" "}
-                  {moment(selectedUser.updated_at).format(
-                    "DD-MM-YYYY HH:mm:ss"
-                  )}
-                </p>
-                <p>
-                  <strong>Is Deleted:</strong>{" "}
-                  <span
-                    className={
-                      selectedUser.is_deleted
-                        ? "text-red-500"
-                        : "text-green-500"
-                    }
-                  >
-                    {selectedUser.is_deleted ? "Yes" : "No"}
+                  <strong>Is Deleted:</strong>{' '}
+                  <span className={selectedUser.is_deleted ? 'text-red-500' : 'text-green-500'}>
+                    {selectedUser.is_deleted ? 'Yes' : 'No'}
                   </span>
                 </p>
               </div>
@@ -311,11 +279,7 @@ const AllUser: React.FC = () => {
           </div>
         )}
         {selectedUser && isEditMode && (
-          <EditUserForm
-            user={selectedUser}
-            onSave={handleSave}
-            onCancel={handleCancel}
-          />
+          <EditUserForm user={selectedUser} onSave={handleSave} onCancel={handleCancel} />
         )}
       </Modal>
     </div>

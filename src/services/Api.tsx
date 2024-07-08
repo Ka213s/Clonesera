@@ -100,7 +100,7 @@ class Api {
     } catch (error: any) {
       toast.error(
         "Error getting user data: " +
-          (error.response?.data?.message || error.message)
+        (error.response?.data?.message || error.message)
       );
       throw error;
     }
@@ -119,7 +119,7 @@ class Api {
     } catch (error: any) {
       toast.error(
         "Error updating profile: " +
-          (error.response?.data?.message || error.message)
+        (error.response?.data?.message || error.message)
       );
       throw error;
     }
@@ -143,7 +143,7 @@ class Api {
     } catch (error: any) {
       toast.error(
         "Error searching users: " +
-          (error.response?.data?.message || error.message)
+        (error.response?.data?.message || error.message)
       );
       throw error;
     }
@@ -169,7 +169,7 @@ class Api {
     } catch (error: any) {
       toast.error(
         "Error updating user status: " +
-          (error.response?.data?.message || error.message)
+        (error.response?.data?.message || error.message)
       );
       throw error;
     }
@@ -199,7 +199,7 @@ class Api {
     } catch (error: any) {
       toast.error(
         "Error changing password: " +
-          (error.response?.data?.message || error.message)
+        (error.response?.data?.message || error.message)
       );
       throw error;
     }
@@ -428,6 +428,24 @@ class Api {
       return response.data;
     } catch (error: any) {
       toast.error('Error deleting category: ' + (error.response?.data?.message || error.message));
+      throw error;
+    }
+  }
+
+  async deleteUser(userId: string): Promise<any> {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await this.api.delete(`/api/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.success("User deleted successfully");
+      return response.data;
+    } catch (error: any) {
+      toast.error(
+        "Error deleting user: " + (error.response?.data?.message || error.message)
+      );
       throw error;
     }
   }
