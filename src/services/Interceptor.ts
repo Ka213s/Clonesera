@@ -53,7 +53,7 @@ class Interceptor {
       baseURL: process.env.REACT_APP_API_BASE_URL,
     });
 
-    // Add a response interceptor
+
     api.interceptors.response.use(
       response => response,
       error => this.handleErrorResponse(error)
