@@ -16,13 +16,28 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess }) =>
 
   const handleUpload = async (file: File) => {
     if (!file) return;
-
+  
+    // Lấy phần mở rộng của file
+    const fileExtension = file.name.split('.').pop()?.toLowerCase();
+    const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
+    const allowedVideoExtensions = ['mp4', 'avi', 'mov', 'mkv'];
+  
+    if (type === 'image' && !allowedImageExtensions.includes(fileExtension!)) {
+      console.error('File type does not match. Only images are allowed.');
+      return;
+    }
+  
+    if (type === 'video' && !allowedVideoExtensions.includes(fileExtension!)) {
+      console.error('File type does not match. Only videos are allowed.');
+      return;
+    }
+  
     setUploading(true);
-
+  
     try {
       const storageRef = ref(storage, `${type}s/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
-
+  
       uploadTask.on(
         'state_changed',
         (snapshot) => {
@@ -43,6 +58,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess }) =>
       setUploading(false);
     }
   };
+  
 
   const uploadProps = {
     beforeUpload: (file: File) => {

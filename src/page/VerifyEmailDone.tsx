@@ -62,7 +62,6 @@ function VerifyEmailDone() {
   const handleResendVerificationEmail = async () => {
     try {
       await api.resendVerifyEmail({ email: resendEmail });
-      message.success('Verification email resent successfully');
     } catch (error: any) {
       message.error('Error resending verification email');
     }

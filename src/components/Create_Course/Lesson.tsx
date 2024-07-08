@@ -7,24 +7,30 @@ const { Option } = Select;
 
 interface SessionData {
   _id: string;
-  title: string;
+  name: string;
   course_id: string;
-  is_deleted: boolean;
 }
 
-interface CourseData {
+interface LessonData {
   _id: string;
   name: string;
+  description: string;
+  course_id: string;
+  session_id: string;
+  lesson_type: string;
+  full_time: number;
+  position_order: number;
+  image_url?: string;
+  video_url?: string;
 }
 
 interface LessonProps {
   api: any;
-  courseId: string | null;
 }
 
-const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
+const LessonComponent: React.FC<LessonProps> = ({ api }) => {
   const [sessions, setSessions] = useState<SessionData[]>([]);
-  const [courses, setCourses] = useState<CourseData[]>([]);
+  const [lessons, setLessons] = useState<LessonData[]>([]);
   const [loading, setLoading] = useState(false);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [modalForm] = Form.useForm();
@@ -32,34 +38,29 @@ const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
   const [uploadedVideoUrl, setUploadedVideoUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchSessionsAndCourses = async () => {
+    const fetchSessionsAndLessons = async () => {
       setLoading(true);
       try {
-        const sessionsResponse = await api.getSessions({ keyword: '', course_id: courseId || '', is_position_order: true, is_deleted: false }, 1, 10);
+        const sessionsResponse = await api.getSessions({ keyword: '', is_deleted: false }, 1, 100);
         const sessionsData = Array.isArray(sessionsResponse.data.pageData) ? sessionsResponse.data.pageData : [];
         setSessions(sessionsData);
-  
-        const coursesResponse = await api.getCourses({ keyword: '', category: '', status: 'new', is_deleted: false }, 1, 100); 
-        const coursesData = Array.isArray(coursesResponse.data.pageData) ? coursesResponse.data.pageData : [];
-        setCourses(coursesData);
+
+        const lessonsResponse = await api.getLessons({ keyword: '', is_deleted: false }, 1, 10);
+        const lessonsData = Array.isArray(lessonsResponse.data.pageData) ? lessonsResponse.data.pageData : [];
+        setLessons(lessonsData);
       } catch (error) {
-        message.error('Error fetching sessions or courses');
+        message.error('Error fetching sessions or lessons');
       } finally {
         setLoading(false);
       }
     };
-  
-    fetchSessionsAndCourses();
-  }, [api, courseId]);
-  
-  const getCourseNameById = (id: string) => {
-    const course = courses.find(course => course._id === id);
-    return course ? course.name : id;
-  };
 
-  const handleAddSession = (sessionId: string, courseId: string) => {
+    fetchSessionsAndLessons();
+  }, [api]);
+
+  const handleAddLesson = () => {
     setIsModalVisible(true);
-    modalForm.setFieldsValue({ session_id: sessionId, course_id: courseId, lesson_type: 'video' });
+    modalForm.setFieldsValue({ lesson_type: 'video' });
   };
 
   const handleModalOk = async () => {
@@ -70,6 +71,7 @@ const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
         full_time: parseInt(values.full_time, 10),
         position_order: parseInt(values.position_order, 10),
       };
+      console.log('Payload to be sent to createLesson API:', payload); // Log payload
       await api.createLesson(payload);
       setIsModalVisible(false);
       modalForm.resetFields();
@@ -101,26 +103,39 @@ const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
     message.success('Video uploaded successfully');
   };
 
+  const handleValuesChange = (changedValues: any, allValues: any) => {
+    if (changedValues.session_id) {
+      const selectedSession = sessions.find(session => session._id === changedValues.session_id);
+      if (selectedSession) {
+        modalForm.setFieldsValue({ course_id: selectedSession.course_id });
+      }
+    }
+  };
+
   const columns = [
-    { title: 'Course Name', dataIndex: 'course_id', key: 'course_id', render: (courseId: string) => getCourseNameById(courseId) },
-    { title: 'Session Name', dataIndex: 'name', key: 'name' },
-    { title: 'Deleted', dataIndex: 'is_deleted', key: 'is_deleted', render: (text: boolean) => (text ? 'Yes' : 'No') },
-    { title: 'Action', key: 'action', render: (text: any, record: SessionData) => <Button onClick={() => handleAddSession(record._id, record.course_id)} type="primary">Add Session</Button> },
+    { title: 'Course ID', dataIndex: 'course_id', key: 'course_id' },
+    { title: 'Lesson Name', dataIndex: 'name', key: 'name' },
+    { title: 'Lesson Type', dataIndex: 'lesson_type', key: 'lesson_type' },
+    { title: 'Full Time', dataIndex: 'full_time', key: 'full_time' },
+    { title: 'Position Order', dataIndex: 'position_order', key: 'position_order' }
   ];
-  
+
   return (
     <div>
-      <h2>Sessions</h2>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
+        <h2>Lessons</h2>
+        <Button type="primary" onClick={handleAddLesson}>Add Lesson</Button>
+      </div>
       <Table
         columns={columns}
-        dataSource={sessions}
+        dataSource={lessons}
         loading={loading}
         rowKey="_id"
         pagination={{ pageSize: 10 }}
       />
 
       <Modal title="Add Lesson" visible={isModalVisible} onOk={handleModalOk} onCancel={handleModalCancel}>
-        <Form form={modalForm} layout="vertical">
+        <Form form={modalForm} layout="vertical" onValuesChange={handleValuesChange}>
           <Form.Item name="name" label="Lesson Name" rules={[{ required: true, message: 'Please enter lesson name' }]}>
             <Input />
           </Form.Item>
@@ -154,9 +169,16 @@ const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
           </Form.Item>
           <Form.Item
             name="session_id"
-            hidden
+            label="Session"
+            rules={[{ required: true, message: 'Please select a session' }]}
           >
-            <Input />
+            <Select style={{ width: '100%' }}>
+              {sessions.map(session => (
+                <Option key={session._id} value={session._id}>
+                  {session.name}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
           <Form.Item
             name="course_id"

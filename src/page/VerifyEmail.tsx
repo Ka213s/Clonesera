@@ -1,22 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useLocation, Link } from 'react-router-dom';
 import { Button, message } from 'antd';
 import { FaEnvelope } from 'react-icons/fa';
 import { createApiInstance } from '../services/Api';
 import { useNavigate } from 'react-router-dom';
+import RecaptchaComponent from '../components/Recaptcha';
 
 const VerifyEmail: React.FC = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const email = location.state?.email || 'your email';
+    const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+    const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const api = createApiInstance(navigate);
 
     const handleResendEmail = async () => {
+        if (!recaptchaToken) {
+            message.error('Please complete the reCAPTCHA!');
+            return;
+        }
+
+        setIsButtonDisabled(true);
+
         try {
             await api.resendVerifyEmail({ email });
+            message.success('Verification email resent successfully');
         } catch (error) {
             message.error('Error resending verification email');
+        } finally {
+            setIsButtonDisabled(false);
         }
+    };
+
+    const handleRecaptchaChange = (token: string | null) => {
+        setRecaptchaToken(token);
     };
 
     return (
@@ -30,6 +47,7 @@ const VerifyEmail: React.FC = () => {
                 <p className="text-base text-[#4A4DC3] mb-6">
                     Click on the link to complete the verification process. You might need to check your spam folder.
                 </p>
+                <RecaptchaComponent onChange={handleRecaptchaChange} />
                 <Button
                     type="primary"
                     style={{
@@ -39,8 +57,9 @@ const VerifyEmail: React.FC = () => {
                     }}
                     className="p-3 rounded-2xl w-full bg-[#9997F5] text-white hover:bg-[#8886E5] hover:scale-105 duration-300 font-bold mb-4"
                     onClick={handleResendEmail}
+                    disabled={isButtonDisabled}
                 >
-                    Resend email
+                    {isButtonDisabled ? 'Please wait...' : 'Resend email'}
                 </Button>
                 <Link to="/login" className="text-base text-[#4A4DC3]">
                     Go back to Login →

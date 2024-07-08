@@ -3,23 +3,28 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Form, Input, Button, Radio, Upload, Row, Col } from 'antd';
 import { FaEyeSlash } from 'react-icons/fa';
 import Lottie from 'react-lottie';
+import RecaptchaComponent from '../components/Recaptcha';
 import logo from '../assets/Logo-2.png';
 import { createApiInstance } from '../services/Api';
 import Artwork from '../assets/Artwork.jpg';
-import FileUploader from '../components/Create_Course/FileUploader';
 import animationData from '../assets/Animation - 1719199926629.json';
 
 const Register: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-    const [role, setRole] = useState('student');
+    const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
     const api = createApiInstance(navigate);
-    
+    const [role, setRole] = useState('student');
 
     const handleLoginClick = () => { navigate('/login') };
 
     const handleSubmit = async (values: any): Promise<void> => {
+        if (!recaptchaToken) {
+            form.setFields([{ name: 'recaptcha', errors: ['Please complete the reCAPTCHA!'] }]);
+            return;
+        }
+
         setIsButtonDisabled(true);
 
         try {
@@ -32,6 +37,7 @@ const Register: React.FC = () => {
                 description: values.description,
                 avatar: values.avatar,
                 video: values.video,
+                recaptchaToken: recaptchaToken,
             };
             console.log('Data to submit:', dataToSubmit);
             const response = await api.registerAccount(dataToSubmit);
@@ -54,6 +60,11 @@ const Register: React.FC = () => {
                 console.error('Error registering:', error);
             }
         }
+    };
+
+    const handleRecaptchaChange = (token: string | null) => {
+        console.log("Recaptcha token:", token);
+        setRecaptchaToken(token);
     };
 
     const lottieOptions = {
@@ -108,8 +119,8 @@ const Register: React.FC = () => {
                             <Form.Item
                                 name="email"
                                 rules={[
-                                    { required: true, message: 'Please input your password!' },
-                                    { min: 6, message: 'Password must be at least 6 characters long!' }
+                                    { required: true, message: 'Please input your email!' },
+                                    { type: 'email', message: 'Please enter a valid email!' }
                                 ]}
                             >
                                 <Input placeholder='Email' className="p-3 rounded-xl border" />
@@ -117,7 +128,10 @@ const Register: React.FC = () => {
 
                             <Form.Item
                                 name="password"
-                                rules={[{ required: true, message: 'Please input your password!' }]}
+                                rules={[
+                                    { required: true, message: 'Please input your password!' },
+                                    { min: 6, message: 'Password must be at least 6 characters long!' } 
+                                ]}
                             >
                                 <Input.Password
                                     placeholder='Password'
@@ -204,7 +218,12 @@ const Register: React.FC = () => {
                                     <Radio value="instructor">Instructor</Radio>
                                 </Radio.Group>
                             </Form.Item>
-
+                            <Form.Item
+                                name="recaptcha"
+                                rules={[{ required: true, message: 'Please complete the reCAPTCHA!' }]}
+                            >
+                                <RecaptchaComponent onChange={handleRecaptchaChange} />
+                            </Form.Item>
                             <Form.Item>
                                 <Button
                                     type="primary"
