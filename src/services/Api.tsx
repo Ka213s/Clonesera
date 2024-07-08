@@ -344,32 +344,58 @@ class Api {
       throw error;
     }
   }
-  async getSessions(searchCondition: {
-    keyword: string;
-    course_id: string;
-    is_position_order: boolean;
-    is_deleted: boolean;
-  }, pageNum: number, pageSize: number): Promise<any> {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await this.api.post('/api/session/search', {
-        searchCondition,
-        pageInfo: {
-          pageNum,
-          pageSize
-        }
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      return response.data;
-    } catch (error: any) {
-      toast.error('Error fetching sessions: ' + (error.response?.data?.message || error.message));
-      throw error;
+    async getSessions(searchCondition: {
+      keyword: string;
+      course_id: string;
+      is_position_order: boolean;
+      is_deleted: boolean;
+    }, pageNum: number, pageSize: number): Promise<any> {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await this.api.post('/api/session/search', {
+          searchCondition,
+          pageInfo: {
+            pageNum,
+            pageSize
+          }
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        return response.data;
+      } catch (error: any) {
+        toast.error('Error fetching sessions: ' + (error.response?.data?.message || error.message));
+        throw error;
+      }
     }
-  }
-
+    async getLessons(searchCondition: {
+      keyword: string;
+      course_id: string;
+      session_id: string;
+      lesson_type: string;
+      is_position_order: boolean;
+      is_deleted: boolean;
+    }, pageNum: number, pageSize: number): Promise<any> {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await this.api.post('/api/lesson/search', {
+          searchCondition,
+          pageInfo: {
+            pageNum,
+            pageSize
+          }
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        return response.data;
+      } catch (error: any) {
+        toast.error('Error fetching lessons: ' + (error.response?.data?.message || error.message));
+        throw error;
+      }
+    }
   async editCategory(categoryId: string, data: { name: string; description?: string }): Promise<any> {
     try {
       const token = localStorage.getItem('token');

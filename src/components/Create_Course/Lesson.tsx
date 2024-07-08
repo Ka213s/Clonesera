@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Input, Select, message, Modal, Form } from 'antd';
+import TinyMCEEditor from '../../util/TinyMCEEditor';
 import FileUploader from './FileUploader';
 
 const { Option } = Select;
@@ -21,7 +22,6 @@ interface LessonProps {
   courseId: string | null;
 }
 
-
 const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
   const [sessions, setSessions] = useState<SessionData[]>([]);
   const [courses, setCourses] = useState<CourseData[]>([]);
@@ -39,7 +39,7 @@ const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
         const sessionsData = Array.isArray(sessionsResponse.data.pageData) ? sessionsResponse.data.pageData : [];
         setSessions(sessionsData);
   
-        const coursesResponse = await api.getCourses({ keyword: '', category: '', status: '', is_deleted: false }, 1, 100); 
+        const coursesResponse = await api.getCourses({ keyword: '', category: '', status: 'new', is_deleted: false }, 1, 100); 
         const coursesData = Array.isArray(coursesResponse.data.pageData) ? coursesResponse.data.pageData : [];
         setCourses(coursesData);
       } catch (error) {
@@ -125,7 +125,12 @@ const LessonComponent: React.FC<LessonProps> = ({ api, courseId }) => {
             <Input />
           </Form.Item>
           <Form.Item name="description" label="Lesson Description" rules={[{ required: true, message: 'Please enter lesson description' }]}>
-            <Input.TextArea />
+            <TinyMCEEditor
+              value={modalForm.getFieldValue('description') || ''}
+              onEditorChange={(content: string) => {
+                modalForm.setFieldsValue({ description: content });
+              }}
+            />
           </Form.Item>
           <Form.Item name="lesson_type" label="Lesson Type" initialValue="video" rules={[{ required: true, message: 'Please select lesson type' }]}>
             <Select style={{ width: '100%' }}>

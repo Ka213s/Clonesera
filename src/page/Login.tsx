@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Modal, Radio } from 'antd';
-import 'react-toastify/dist/ReactToastify.css';
 import { Form, Input, Button } from 'antd';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import Artwork from '../assets/Artwork.jpg';
@@ -56,7 +55,7 @@ const Login: React.FC = () => {
     try {
       const googleResponse = await api.loginUserByGoogle({ google_id: response.credential });
       if (googleResponse) {
-
+        
         const token = googleResponse.data.token;
         localStorage.setItem('token', token);
         const getDataUser = await api.getDataUser(token);

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, Table, Modal, Space } from 'antd';
-
-const { TextArea } = Input;
+import TinyMCEEditor from '../../util/TinyMCEEditor'; 
 
 interface SessionData {
   name: string;
@@ -31,6 +30,7 @@ const SessionComponent: React.FC<SessionProps> = ({ api }) => {
   const [currentCourseId, setCurrentCourseId] = useState<string | null>(null);
   const [currentSession, setCurrentSession] = useState<SessionData>({ name: '', description: '' });
   const [isAddingSession, setIsAddingSession] = useState(false);
+  const [form] = Form.useForm();
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -38,7 +38,7 @@ const SessionComponent: React.FC<SessionProps> = ({ api }) => {
         const response = await api.getCourses({
           keyword: '',
           category: '',
-          status: '',
+          status: 'new',
           is_deleted: false,
         }, 1, 10);
         console.log('Courses:', response);
@@ -74,6 +74,7 @@ const SessionComponent: React.FC<SessionProps> = ({ api }) => {
     setCurrentSession({ name: '', description: '' });
     setIsAddingSession(true);
     setIsModalVisible(true);
+    form.resetFields(); // Reset form fields when adding a new session
   };
 
   const viewSessions = async (courseId: string) => {
@@ -90,28 +91,21 @@ const SessionComponent: React.FC<SessionProps> = ({ api }) => {
       setIsModalVisible(true);
     } catch (error) {
       console.error('Error fetching sessions:', error);
-     
     }
   };
 
   const handleOk = async () => {
-    if (isAddingSession) {
-      if (!currentCourseId) {
-        console.error('Course ID is required to save session.');
-        return;
-      }
-
-      try {
-        const response = await api.createSession({ ...currentSession, course_id: currentCourseId });
-        setSessions([...sessions, { ...currentSession, _id: response.data._id }]);
-       
+    try {
+      const values = await form.validateFields();
+      if (isAddingSession && currentCourseId) {
+        const response = await api.createSession({ ...values, course_id: currentCourseId });
+        setSessions([...sessions, { ...values, _id: response.data._id }]);
         setIsModalVisible(false);
-      } catch (error) {
-        console.error('Error saving session:', error);
-        
+      } else {
+        setIsModalVisible(false);
       }
-    } else {
-      setIsModalVisible(false);
+    } catch (error) {
+      console.error('Error saving session:', error);
     }
   };
 
@@ -141,24 +135,35 @@ const SessionComponent: React.FC<SessionProps> = ({ api }) => {
         rowKey="_id" 
       />
       <Modal 
-        title={isAddingSession ? "Add Session" : "Sessions"} 
+        title={isAddingSession ? "Add Session" : "Session Details"} 
         visible={isModalVisible} 
         onOk={handleOk} 
         onCancel={handleCancel} 
         width={isAddingSession ? 520 : 800}
       >
         {isAddingSession ? (
-          <Form layout="vertical">
-            <Form.Item label="Session Name">
+          <Form form={form} layout="vertical" initialValues={currentSession}>
+            <Form.Item 
+              label="Session Name" 
+              name="name" 
+              rules={[{ required: true, message: 'Please enter the session name!' }]}
+            >
               <Input 
                 value={currentSession.name} 
                 onChange={(e) => setCurrentSession({ ...currentSession, name: e.target.value })} 
               />
             </Form.Item>
-            <Form.Item label="Session Description">
-              <TextArea 
-                value={currentSession.description} 
-                onChange={(e) => setCurrentSession({ ...currentSession, description: e.target.value })} 
+            <Form.Item 
+              label="Session Description" 
+              name="description" 
+              rules={[{ required: true, message: 'Please enter the session description!' }]}
+            >
+              <TinyMCEEditor
+                value={currentSession.description}
+                onEditorChange={(content: string) => {
+                  setCurrentSession({ ...currentSession, description: content });
+                  form.setFieldsValue({ description: content }); // Set the value in the form
+                }}
               />
             </Form.Item>
           </Form>

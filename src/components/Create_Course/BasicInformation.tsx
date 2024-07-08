@@ -70,6 +70,7 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
     const { api } = this.props;
     try {
       const data = await api.getCategories({ keyword: "", is_delete: false }, 1, 10);
+
       const fetchedCategories: Category[] = data.data.pageData;
 
       const tree: { [key: string]: Category[] } = {};
@@ -102,11 +103,11 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
       const searchCondition = {
         keyword: '',
         category: '',
-        status: '',
+        status: 'new',
         is_deleted: false,
       };
       const data = await api.getCourses(searchCondition, 1, 10);
-
+     
       this.setState({ courses: data.data.pageData, loadingCourses: false });
     } catch (error) {
       console.error('Error fetching courses:', error);
@@ -128,6 +129,7 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
         image_url: this.props.formData.image_url,
         price: isPaid ? Number(values.price) : 0,
         discount: isPaid ? Number(values.discount) : 0,
+     
       };
 
       const response = await api.createCourse(courseData);
