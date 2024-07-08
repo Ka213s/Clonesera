@@ -179,7 +179,7 @@ const AllUser: React.FC = () => {
     }
   };
 
-  const handleDelete = async (userId: string) => {
+  const handleDelete = async (userId: any) => {
     try {
       const api = createApiInstance(navigate);
       await api.deleteUser(userId);

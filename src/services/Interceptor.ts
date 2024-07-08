@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
-class Interceptor {
+class Interceptor { 
   private navigate: ReturnType<typeof useNavigate>;
   private setLoading: React.Dispatch<React.SetStateAction<boolean>> | null = null;
   
@@ -22,6 +23,15 @@ class Interceptor {
       });
     }
 
+    return null;
+  }
+
+  private handleErrorByToast(error: any) {
+    const message = error.response?.data?.message ? error.response?.data?.message : error.message;
+    toast.error(message); // Hiển thị thông báo lỗi
+    if (this.setLoading) {
+      this.setLoading(false); // Tắt trạng thái loading nếu có
+    }
     return null;
   }
 
@@ -56,7 +66,10 @@ class Interceptor {
 
     api.interceptors.response.use(
       response => response,
-      error => this.handleErrorResponse(error)
+      error => {
+        this.handleErrorResponse(error);
+        this.handleErrorByToast(error); 
+      }
     );
 
     return api;

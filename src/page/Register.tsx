@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Form, Input, Button, Radio } from 'antd';
+import { Form, Input, Button, Radio, Upload, Row, Col } from 'antd';
 import { FaEyeSlash } from 'react-icons/fa';
 import Lottie from 'react-lottie';
 import logo from '../assets/Logo-2.png';
 import { createApiInstance } from '../services/Api';
 import Artwork from '../assets/Artwork.jpg';
+import FileUploader from '../components/Create_Course/FileUploader';
 import animationData from '../assets/Animation - 1719199926629.json';
 
 const Register: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [role, setRole] = useState('student');
     const api = createApiInstance(navigate);
+    
 
     const handleLoginClick = () => { navigate('/login') };
 
@@ -24,7 +27,11 @@ const Register: React.FC = () => {
                 name: values.fullName,
                 password: values.password,
                 email: values.email,
+                phone_number: values.phoneNumber,
                 role: values.role,
+                description: values.description,
+                avatar: values.avatar,
+                video: values.video,
             };
             console.log('Data to submit:', dataToSubmit);
             const response = await api.registerAccount(dataToSubmit);
@@ -56,6 +63,10 @@ const Register: React.FC = () => {
         rendererSettings: {
             preserveAspectRatio: 'xMidYMid slice'
         }
+    };
+
+    const handleRoleChange = (e: any) => {
+        setRole(e.target.value);
     };
 
     return (
@@ -93,15 +104,17 @@ const Register: React.FC = () => {
                             >
                                 <Input placeholder='Full Name' className="p-3 rounded-xl border" />
                             </Form.Item>
+
                             <Form.Item
                                 name="email"
                                 rules={[
                                     { required: true, message: 'Please input your password!' },
-                                    { min: 6, message: 'Password must be at least 6 characters long!' } 
+                                    { min: 6, message: 'Password must be at least 6 characters long!' }
                                 ]}
                             >
                                 <Input placeholder='Email' className="p-3 rounded-xl border" />
                             </Form.Item>
+
                             <Form.Item
                                 name="password"
                                 rules={[{ required: true, message: 'Please input your password!' }]}
@@ -112,6 +125,7 @@ const Register: React.FC = () => {
                                     suffix={<FaEyeSlash />}
                                 />
                             </Form.Item>
+
                             <Form.Item
                                 name="confirmPassword"
                                 dependencies={['password']}
@@ -133,15 +147,64 @@ const Register: React.FC = () => {
                                     suffix={<FaEyeSlash />}
                                 />
                             </Form.Item>
+
+                            {role === 'instructor' && (
+                                <>
+                                    <Form.Item
+                                        name="phoneNumber"
+                                        rules={[
+                                            { required: true, message: 'Please input your phone number!' },
+                                            { pattern: /^[0-9]+$/, message: 'Phone number must be only digits!' }
+                                        ]}
+                                    >
+                                        <Input placeholder='Phone Number' className="p-3 rounded-xl border" />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="description"
+                                        rules={[{ required: true, message: 'Please input your description!' }]}
+                                    >
+                                        <Input placeholder='Description' className="p-3 rounded-xl border" />
+                                    </Form.Item>
+
+                                    <Row gutter={16}>
+                                        <Col span={12}>
+                                            <Form.Item 
+                                                name="avatar"
+                                                label="Upload Avatar"
+                                                rules={[{ required: true, message: 'Please upload an avatar' }]}
+                                            >
+                                                <Upload>
+                                                    <Button>Click to Upload</Button>
+                                                </Upload>
+                                            </Form.Item>
+                                        </Col>
+
+                                        <Col span={12}>
+                                            <Form.Item
+                                                name="video"
+                                                label="Upload Video"
+                                                rules={[{ required: true, message: 'Please upload a video' }]}
+                                            >
+                                                <Upload>
+                                                    <Button>Click to Upload</Button>
+                                                </Upload>
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </>
+                            )}
+
                             <Form.Item
                                 name="role"
                                 rules={[{ required: true, message: 'Please select a role!' }]}
                             >
-                                <Radio.Group>
+                                <Radio.Group onChange={handleRoleChange} value={role}>
                                     <Radio value="student">Student</Radio>
                                     <Radio value="instructor">Instructor</Radio>
                                 </Radio.Group>
                             </Form.Item>
+
                             <Form.Item>
                                 <Button
                                     type="primary"
