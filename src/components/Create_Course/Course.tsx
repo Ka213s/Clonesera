@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Form, Input, Button, Row, Col, Tabs, Select, Table, Modal } from 'antd';
+import { Form, Input, Button, Row, Col, Select, Table, Modal, Tabs } from 'antd';
 import TinyMCEEditor from '../../util/TinyMCEEditor';
 import FileUploader from './FileUploader';
 
@@ -32,10 +32,7 @@ interface Course {
 }
 
 interface BasicInformationProps {
-  formData: FormData;
-  setFormData: React.Dispatch<React.SetStateAction<FormData>>;
   api: any;
-  setCourseId: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 interface BasicInformationState {
@@ -43,9 +40,11 @@ interface BasicInformationState {
   categories: Category[];
   categoryTree: { [key: string]: Category[] };
   videoUrl: string;
+  imageUrl: string;
   courses: Course[];
   loadingCourses: boolean;
-  open: boolean; // Thay đổi tên visible thành open
+  open: boolean;
+  formData: FormData;
 }
 
 class BasicInformation extends Component<BasicInformationProps, BasicInformationState> {
@@ -55,10 +54,21 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
     isPaid: false,
     categories: [],
     categoryTree: {},
-    videoUrl: this.props.formData.video_url,
+    videoUrl: '',
+    imageUrl: '',
     courses: [],
     loadingCourses: true,
-    open: false, // Khởi tạo open là false
+    open: false,
+    formData: {
+      title: '',
+      description: '',
+      content: '',
+      category_id: '',
+      video_url: '',
+      image_url: '',
+      price: 0,
+      discount: 0,
+    },
   };
 
   componentDidMount() {
@@ -97,17 +107,11 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
     }
   };
 
+
   fetchCourses = async () => {
     const { api } = this.props;
     try {
-      const searchCondition = {
-        keyword: '',
-        category: '',
-        status: 'new',
-        is_deleted: false,
-      };
-      const data = await api.getCourses(searchCondition, 1, 10);
-     
+      const data = await api.getCourses({ keyword: '', category: '', status: 'new', is_deleted: false }, 1, 10);
       this.setState({ courses: data.data.pageData, loadingCourses: false });
     } catch (error) {
       console.error('Error fetching courses:', error);
@@ -116,38 +120,28 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
   };
 
   onFinish = async (values: FormData) => {
-    const { api, setCourseId } = this.props;
-    const { isPaid, videoUrl } = this.state;
+    const { api } = this.props;
+    const { isPaid, videoUrl, imageUrl } = this.state;
 
     try {
       const courseData = {
-        name: values.title,
-        category_id: values.category_id,
-        description: values.description,
-        content: values.content,
+        ...values,
         video_url: videoUrl,
-        image_url: this.props.formData.image_url,
+        image_url: imageUrl,
         price: isPaid ? Number(values.price) : 0,
         discount: isPaid ? Number(values.discount) : 0,
-     
       };
-
-      const response = await api.createCourse(courseData);
-      setCourseId(response.data._id);
-      this.setState({ open: false }); // Thay đổi visible thành open và đóng modal
-      this.fetchCourses(); 
+      console.log('Course data:', courseData);
+      await api.createCourse(courseData);
+      this.setState({ open: false });
+      this.fetchCourses();
     } catch (error) {
       console.error('Error creating course:', error);
     }
   };
 
   onValuesChange = (_changedValues: any, allValues: any) => {
-    const { formData, setFormData } = this.props;
-    setFormData({
-      ...allValues,
-      image_url: formData.image_url,
-      video_url: this.state.videoUrl,
-    });
+    this.setState({ formData: allValues });
   };
 
   showModal = () => {
@@ -159,19 +153,15 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
   };
 
   handleUploadSuccess = (url: string, type: 'image' | 'video') => {
-    const { setFormData } = this.props;
     if (type === 'video') {
       this.setState({ videoUrl: url });
+    } else {
+      this.setState({ imageUrl: url });
     }
-    setFormData((prev) => ({
-      ...prev,
-      [`${type}_url`]: url,
-    }));
   };
 
   render() {
-    const { formData } = this.props;
-    const { isPaid, categories, categoryTree, videoUrl, courses, loadingCourses, open } = this.state;
+    const { categories, categoryTree, videoUrl, imageUrl, courses, loadingCourses, open, formData } = this.state;
 
     const columns = [
       { title: 'Title', dataIndex: 'name', key: 'name' },
@@ -189,9 +179,7 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
 
     return (
       <div>
-        <Button type="primary" onClick={this.showModal}>
-          Add Course
-        </Button>
+        <Button type="primary" onClick={this.showModal}>Add Course</Button>
         <Table
           columns={columns}
           dataSource={courses}
@@ -201,7 +189,7 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
         />
         <Modal
           title="Add Course"
-          open={open} // Thay đổi visible thành open
+          open={open}
           onCancel={this.handleCancel}
           footer={null}
           width={1000}
@@ -213,18 +201,16 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
             initialValues={formData}
             onValuesChange={this.onValuesChange}
           >
-            <Form.Item label="Course Title" name="title" rules={[{ required: true, message: 'Please enter the course title' }]}>
+            <Form.Item label="Course Title" name="name" rules={[{ required: true, message: 'Please enter the course title' }]}>
               <Input />
             </Form.Item>
-            <Form.Item
-              label="Description"
-              name="description"
-              rules={[{ required: true, message: 'Please enter a description' }]}
-            >
+            <Form.Item label="Description" name="description" rules={[{ required: true, message: 'Please enter a description' }]}>
               <TinyMCEEditor
                 value={formData.description}
                 onEditorChange={(content) => {
-                  this.props.setFormData({ ...formData, description: content });
+                  this.setState((prevState) => ({
+                    formData: { ...prevState.formData, description: content },
+                  }));
                   this.formRef.current?.setFieldsValue({ description: content });
                 }}
               />
@@ -233,7 +219,9 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
               <TinyMCEEditor
                 value={formData.content}
                 onEditorChange={(content) => {
-                  this.props.setFormData({ ...formData, content: content });
+                  this.setState((prevState) => ({
+                    formData: { ...prevState.formData, content: content },
+                  }));
                   this.formRef.current?.setFieldsValue({ content: content });
                 }}
               />
@@ -251,18 +239,7 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
             </Form.Item>
             <Row gutter={16}>
               <Col span={12}>
-                <Form.Item 
-                  label="Video URL" 
-                  name="video_url" 
-                  rules={[
-                    {
-                      validator: (_, value) =>
-                        value || videoUrl
-                          ? Promise.resolve()
-                          : Promise.reject('Please upload a video'),
-                    },
-                  ]}
-                >
+                <Form.Item label="Video URL" name="video_url" rules={[{ required: !videoUrl, message: 'Please upload a video' }]}>
                   <FileUploader type="video" onUploadSuccess={(url) => this.handleUploadSuccess(url, 'video')} />
                   {videoUrl && (
                     <video width="100%" controls style={{ marginTop: '10px' }}>
@@ -273,20 +250,9 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item 
-                  label="Image URL" 
-                  name="image_url" 
-                  rules={[
-                    {
-                      validator: (_, value) =>
-                        value || formData.image_url
-                          ? Promise.resolve()
-                          : Promise.reject('Please upload an image'),
-                    },
-                  ]}
-                >
+                <Form.Item label="Image URL" name="image_url" rules={[{ required: !imageUrl, message: 'Please upload an image' }]}>
                   <FileUploader type="image" onUploadSuccess={(url) => this.handleUploadSuccess(url, 'image')} />
-                  {formData.image_url && <img src={formData.image_url} alt="Course" style={{ width: '100%', marginTop: '10px' }} />}
+                  {imageUrl && <img src={imageUrl} alt="Course" style={{ width: '100%', marginTop: '10px' }} />}
                 </Form.Item>
               </Col>
             </Row>
@@ -297,10 +263,10 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
                   <Input type="hidden" value={0} />
                 </TabPane>
                 <TabPane tab="Paid" key="paid">
-                  <Form.Item name="price" rules={[{ required: isPaid, message: 'Please enter the price' }]}>
+                  <Form.Item name="price" rules={[{ required: this.state.isPaid, message: 'Please enter the price' }]}>
                     <Input type="number" />
                   </Form.Item>
-                  {isPaid && (
+                  {this.state.isPaid && (
                     <Form.Item label="Discount" name="discount">
                       <Input type="number" />
                     </Form.Item>
@@ -309,9 +275,7 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
               </Tabs>
             </Form.Item>
             <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Save Basic Information
-              </Button>
+              <Button type="primary" htmlType="submit">Save Basic Information</Button>
             </Form.Item>
           </Form>
         </Modal>
