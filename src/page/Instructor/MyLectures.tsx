@@ -57,6 +57,7 @@ const MyLectures: React.FC<MyLecturesProps> = ({
                 <Button
                     type="primary"
                     icon={<FaPlus />}
+                    onClick={() => showModal()}
                 >
                     Add Lecture
                 </Button>
@@ -73,7 +74,7 @@ const MyLectures: React.FC<MyLecturesProps> = ({
                     </tr>
                 </thead>
                 <tbody>
-                    {lectures.map((lecture) => (
+                    {filteredLectures.map((lecture) => (
                         <tr className="hover:bg-gray-50" key={lecture.id}>
                             <td className="py-2 px-4 border-b border-gray-200">{lecture.id}</td>
                             <td className="py-2 px-4 border-b border-gray-200">{lecture.title}</td>
@@ -105,7 +106,7 @@ const MyLectures: React.FC<MyLecturesProps> = ({
 
             <Modal
                 title={editingLecture ? 'Edit Lecture' : 'Add Lecture'}
-                visible={isModalVisible}
+                open={isModalVisible}
                 onOk={handleOk}
                 onCancel={handleCancel}
                 okText="Save"

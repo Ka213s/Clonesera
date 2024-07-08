@@ -47,7 +47,6 @@ class Notifications extends Component {
           </Button>
         </div>
 
-   
         <Card>
           <List
             itemLayout="horizontal"
@@ -56,7 +55,7 @@ class Notifications extends Component {
               <List.Item>
                 <List.Item.Meta
                   avatar={<Avatar src={item.avatar} />}
-                  title={<Title level={4}>{item.title}</Title>}
+                  title={<Text strong>{item.title}</Text>}
                   description={
                     <>
                       <Text>{item.description}</Text>

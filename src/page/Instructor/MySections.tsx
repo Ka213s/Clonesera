@@ -1,4 +1,3 @@
-// MySections.tsx
 import React, { useState } from "react";
 import { Button, Popconfirm, Tag, Modal, Form, Input, Select, message } from "antd";
 import { FaEdit, FaTrashAlt, FaSearch, FaPlus } from "react-icons/fa";
@@ -56,6 +55,7 @@ const MySections: React.FC<MySectionsProps> = ({
                 <Button
                     type="primary"
                     icon={<FaPlus />}
+                    onClick={() => showModal()}
                 >
                     Add Section
                 </Button>
@@ -71,7 +71,7 @@ const MySections: React.FC<MySectionsProps> = ({
                     </tr>
                 </thead>
                 <tbody>
-                    {sections.map((section) => (
+                    {filteredSections.map((section) => (
                         <tr className="hover:bg-gray-50" key={section.id}>
                             <td className="py-2 px-4 border-b border-gray-200">{section.id}</td>
                             <td className="py-2 px-4 border-b border-gray-200">{section.title}</td>
@@ -103,7 +103,7 @@ const MySections: React.FC<MySectionsProps> = ({
 
             <Modal
                 title={editingSection ? "Edit Section" : "Add Section"}
-                visible={isModalVisible}
+                open={isModalVisible}
                 onOk={handleOk}
                 onCancel={handleCancel}
                 okText="Save"

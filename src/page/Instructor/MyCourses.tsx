@@ -117,7 +117,7 @@ const MyCourses: React.FC<MyCoursesProps> = ({
 
       <Modal
         title={editingCourse ? "Edit Course" : "Add Course"}
-        visible={isModalVisible}
+        open={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
         okText="Save"

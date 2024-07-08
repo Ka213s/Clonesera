@@ -45,7 +45,7 @@ interface BasicInformationState {
   videoUrl: string;
   courses: Course[];
   loadingCourses: boolean;
-  visible: boolean;
+  open: boolean; // Thay đổi tên visible thành open
 }
 
 class BasicInformation extends Component<BasicInformationProps, BasicInformationState> {
@@ -58,7 +58,7 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
     videoUrl: this.props.formData.video_url,
     courses: [],
     loadingCourses: true,
-    visible: false,
+    open: false, // Khởi tạo open là false
   };
 
   componentDidMount() {
@@ -132,7 +132,7 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
 
       const response = await api.createCourse(courseData);
       setCourseId(response.data._id);
-      this.setState({ visible: false });
+      this.setState({ open: false }); // Thay đổi visible thành open và đóng modal
       this.fetchCourses(); 
     } catch (error) {
       console.error('Error creating course:', error);
@@ -149,11 +149,11 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
   };
 
   showModal = () => {
-    this.setState({ visible: true });
+    this.setState({ open: true });
   };
 
   handleCancel = () => {
-    this.setState({ visible: false });
+    this.setState({ open: false });
   };
 
   handleUploadSuccess = (url: string, type: 'image' | 'video') => {
@@ -169,7 +169,7 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
 
   render() {
     const { formData } = this.props;
-    const { isPaid, categories, categoryTree, videoUrl, courses, loadingCourses, visible } = this.state;
+    const { isPaid, categories, categoryTree, videoUrl, courses, loadingCourses, open } = this.state;
 
     const columns = [
       { title: 'Title', dataIndex: 'name', key: 'name' },
@@ -199,7 +199,7 @@ class BasicInformation extends Component<BasicInformationProps, BasicInformation
         />
         <Modal
           title="Add Course"
-          visible={visible}
+          open={open} // Thay đổi visible thành open
           onCancel={this.handleCancel}
           footer={null}
           width={1000}

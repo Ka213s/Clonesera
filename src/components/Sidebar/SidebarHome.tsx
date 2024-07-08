@@ -81,6 +81,28 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
     setOpenKeys(keys);
   };
 
+  const menuItems = sidebarMenuItemsData.menuItems.map((item: MenuItem) => {
+    if (item.subItems) {
+      return {
+        key: item.text,
+        icon: item.icon ? iconComponents[item.icon] : null,
+        label: item.text,
+        children: item.subItems.map((subItem) => ({
+          key: subItem.url,
+          label: subItem.text,
+          onClick: () => handleClick(subItem.url, item.text),
+        })),
+      };
+    } else {
+      return {
+        key: item.url,
+        icon: item.icon ? iconComponents[item.icon] : null,
+        label: item.text,
+        onClick: () => handleClick(item.url),
+      };
+    }
+  });
+
   return (
     <aside className={`fixed top-16 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-56' : 'w-0 overflow-hidden'} overflow-y-auto`}>
       <Menu
@@ -90,28 +112,8 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
         selectedKeys={selectedKeys}
         style={{ height: '100%', borderRight: 0 }}
         className="custom-menu"
-      >
-        {sidebarMenuItemsData.menuItems.map((item: MenuItem) =>
-          item.subItems ? (
-            <Menu.SubMenu
-              key={item.text}
-              icon={item.icon ? iconComponents[item.icon] : null}
-              title={item.text}
-              className="custom-menu-item"
-            >
-              {item.subItems.map((subItem) => (
-                <Menu.Item key={subItem.url} onClick={() => handleClick(subItem.url, item.text)} className="custom-menu-item">
-                  {subItem.text}
-                </Menu.Item>
-              ))}
-            </Menu.SubMenu>
-          ) : (
-            <Menu.Item key={item.url} icon={item.icon ? iconComponents[item.icon] : null} onClick={() => handleClick(item.url)} className="custom-menu-item">
-              {item.text}
-            </Menu.Item>
-          )
-        )}
-      </Menu>
+        items={menuItems}
+      />
     </aside>
   );
 };

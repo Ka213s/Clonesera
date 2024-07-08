@@ -48,6 +48,13 @@ const StudentSidebar: React.FC<{ showMenu: boolean }> = ({ showMenu }) => {
     setSelectedKeys([url]);
   };
 
+  const menuItems = studentSidebarItemData.studentSidebarItem.map((item: MenuItem) => ({
+    key: item.url,
+    icon: iconComponents[item.icon as keyof typeof iconComponents],
+    label: item.text,
+    onClick: () => handleClick(item.url),
+  }));
+
   return (
     <aside className={`fixed top-16 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-56' : 'w-0 overflow-hidden'}`}>
       <Menu
@@ -55,17 +62,8 @@ const StudentSidebar: React.FC<{ showMenu: boolean }> = ({ showMenu }) => {
         selectedKeys={selectedKeys}
         style={{ height: '100%', borderRight: 0 }}
         className="custom-menu"
-      >
-        {studentSidebarItemData.studentSidebarItem.map((item: MenuItem, index: number) => (
-          <Menu.Item
-            key={item.url}
-            icon={iconComponents[item.icon as keyof typeof iconComponents]}
-            onClick={() => handleClick(item.url)}
-          >
-            {item.text}
-          </Menu.Item>
-        ))}
-      </Menu>
+        items={menuItems}
+      />
     </aside>
   );
 };
