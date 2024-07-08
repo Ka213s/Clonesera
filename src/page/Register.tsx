@@ -7,11 +7,13 @@ import logo from '../assets/Logo-2.png';
 import { createApiInstance } from '../services/Api';
 import Artwork from '../assets/Artwork.jpg';
 import animationData from '../assets/Animation - 1719199926629.json';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const Register: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [captchaValue, setCaptchaValue] = useState<string | null>(null);
     const api = createApiInstance(navigate);
 
     const handleLoginClick = () => { navigate('/login') };
@@ -19,12 +21,19 @@ const Register: React.FC = () => {
     const handleSubmit = async (values: any): Promise<void> => {
         setIsButtonDisabled(true);
 
+        if (!captchaValue) {
+            form.setFields([{ name: 'captcha', errors: ['Please complete the CAPTCHA!'] }]);
+            setIsButtonDisabled(false);
+            return;
+        }
+
         try {
             const dataToSubmit = {
                 name: values.fullName,
                 password: values.password,
                 email: values.email,
                 role: values.role,
+                captcha: captchaValue,
             };
             console.log('Data to submit:', dataToSubmit);
             const response = await api.registerAccount(dataToSubmit);
@@ -56,6 +65,10 @@ const Register: React.FC = () => {
         rendererSettings: {
             preserveAspectRatio: 'xMidYMid slice'
         }
+    };
+
+    const onCaptchaChange = (value: string | null) => {
+        setCaptchaValue(value);
     };
 
     return (
@@ -96,8 +109,8 @@ const Register: React.FC = () => {
                             <Form.Item
                                 name="email"
                                 rules={[
-                                    { required: true, message: 'Please input your password!' },
-                                    { min: 6, message: 'Password must be at least 6 characters long!' } 
+                                    { required: true, message: 'Please input your email!' },
+                                    { type: 'email', message: 'Please enter a valid email address!' }
                                 ]}
                             >
                                 <Input placeholder='Email' className="p-3 rounded-xl border" />
@@ -141,6 +154,15 @@ const Register: React.FC = () => {
                                     <Radio value="student">Student</Radio>
                                     <Radio value="instructor">Instructor</Radio>
                                 </Radio.Group>
+                            </Form.Item>
+                            <Form.Item
+                                name="captcha"
+                                rules={[{ required: true, message: 'Please complete the CAPTCHA!' }]}
+                            >
+                                <ReCAPTCHA
+                                    sitekey="6LedsAoqAAAAAPbIjK2C0zrf5QidZKCuOvPC5eZu"
+                                    onChange={onCaptchaChange}
+                                />
                             </Form.Item>
                             <Form.Item>
                                 <Button
