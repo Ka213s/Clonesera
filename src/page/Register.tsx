@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Form, Input, Button, Radio } from 'antd';
+import { Form, Input, Button, Radio, Upload, Row, Col } from 'antd';
 import { FaEyeSlash } from 'react-icons/fa';
 import Lottie from 'react-lottie';
 import RecaptchaComponent from '../components/Recaptcha';
@@ -15,6 +15,7 @@ const Register: React.FC = () => {
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
     const api = createApiInstance(navigate);
+    const [role, setRole] = useState('student');
 
     const handleLoginClick = () => { navigate('/login') };
 
@@ -31,7 +32,11 @@ const Register: React.FC = () => {
                 name: values.fullName,
                 password: values.password,
                 email: values.email,
+                phone_number: values.phoneNumber,
                 role: values.role,
+                description: values.description,
+                avatar: values.avatar,
+                video: values.video,
                 recaptchaToken: recaptchaToken,
             };
             console.log('Data to submit:', dataToSubmit);
@@ -71,6 +76,10 @@ const Register: React.FC = () => {
         }
     };
 
+    const handleRoleChange = (e: any) => {
+        setRole(e.target.value);
+    };
+
     return (
         <div className="bg-gray-50 min-h-screen flex items-center justify-center">
             <div className="bg-gray-100 flex flex-col rounded-2xl shadow-lg max-w-5xl p-5 items-center">
@@ -106,6 +115,7 @@ const Register: React.FC = () => {
                             >
                                 <Input placeholder='Full Name' className="p-3 rounded-xl border" />
                             </Form.Item>
+
                             <Form.Item
                                 name="email"
                                 rules={[
@@ -115,6 +125,7 @@ const Register: React.FC = () => {
                             >
                                 <Input placeholder='Email' className="p-3 rounded-xl border" />
                             </Form.Item>
+
                             <Form.Item
                                 name="password"
                                 rules={[
@@ -128,6 +139,7 @@ const Register: React.FC = () => {
                                     suffix={<FaEyeSlash />}
                                 />
                             </Form.Item>
+
                             <Form.Item
                                 name="confirmPassword"
                                 dependencies={['password']}
@@ -149,11 +161,59 @@ const Register: React.FC = () => {
                                     suffix={<FaEyeSlash />}
                                 />
                             </Form.Item>
+
+                            {role === 'instructor' && (
+                                <>
+                                    <Form.Item
+                                        name="phoneNumber"
+                                        rules={[
+                                            { required: true, message: 'Please input your phone number!' },
+                                            { pattern: /^[0-9]+$/, message: 'Phone number must be only digits!' }
+                                        ]}
+                                    >
+                                        <Input placeholder='Phone Number' className="p-3 rounded-xl border" />
+                                    </Form.Item>
+
+                                    <Form.Item
+                                        name="description"
+                                        rules={[{ required: true, message: 'Please input your description!' }]}
+                                    >
+                                        <Input placeholder='Description' className="p-3 rounded-xl border" />
+                                    </Form.Item>
+
+                                    <Row gutter={16}>
+                                        <Col span={12}>
+                                            <Form.Item 
+                                                name="avatar"
+                                                label="Upload Avatar"
+                                                rules={[{ required: true, message: 'Please upload an avatar' }]}
+                                            >
+                                                <Upload>
+                                                    <Button>Click to Upload</Button>
+                                                </Upload>
+                                            </Form.Item>
+                                        </Col>
+
+                                        <Col span={12}>
+                                            <Form.Item
+                                                name="video"
+                                                label="Upload Video"
+                                                rules={[{ required: true, message: 'Please upload a video' }]}
+                                            >
+                                                <Upload>
+                                                    <Button>Click to Upload</Button>
+                                                </Upload>
+                                            </Form.Item>
+                                        </Col>
+                                    </Row>
+                                </>
+                            )}
+
                             <Form.Item
                                 name="role"
                                 rules={[{ required: true, message: 'Please select a role!' }]}
                             >
-                                <Radio.Group>
+                                <Radio.Group onChange={handleRoleChange} value={role}>
                                     <Radio value="student">Student</Radio>
                                     <Radio value="instructor">Instructor</Radio>
                                 </Radio.Group>
