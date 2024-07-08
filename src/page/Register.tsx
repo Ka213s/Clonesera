@@ -3,17 +3,17 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Form, Input, Button, Radio } from 'antd';
 import { FaEyeSlash } from 'react-icons/fa';
 import Lottie from 'react-lottie';
+import ReCAPTCHA from 'react-google-recaptcha';
 import logo from '../assets/Logo-2.png';
 import { createApiInstance } from '../services/Api';
 import Artwork from '../assets/Artwork.jpg';
 import animationData from '../assets/Animation - 1719199926629.json';
-import ReCAPTCHA from 'react-google-recaptcha';
 
 const Register: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
-    const [captchaValue, setCaptchaValue] = useState<string | null>(null);
+    const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
     const api = createApiInstance(navigate);
 
     const handleLoginClick = () => { navigate('/login') };
@@ -21,19 +21,13 @@ const Register: React.FC = () => {
     const handleSubmit = async (values: any): Promise<void> => {
         setIsButtonDisabled(true);
 
-        if (!captchaValue) {
-            form.setFields([{ name: 'captcha', errors: ['Please complete the CAPTCHA!'] }]);
-            setIsButtonDisabled(false);
-            return;
-        }
-
         try {
             const dataToSubmit = {
                 name: values.fullName,
                 password: values.password,
                 email: values.email,
                 role: values.role,
-                captcha: captchaValue,
+                recaptchaToken,
             };
             console.log('Data to submit:', dataToSubmit);
             const response = await api.registerAccount(dataToSubmit);
@@ -58,6 +52,10 @@ const Register: React.FC = () => {
         }
     };
 
+    const handleRecaptchaChange = (token: string | null) => {
+        setRecaptchaToken(token);
+    };
+
     const lottieOptions = {
         loop: true,
         autoplay: true,
@@ -65,10 +63,6 @@ const Register: React.FC = () => {
         rendererSettings: {
             preserveAspectRatio: 'xMidYMid slice'
         }
-    };
-
-    const onCaptchaChange = (value: string | null) => {
-        setCaptchaValue(value);
     };
 
     return (
@@ -110,7 +104,7 @@ const Register: React.FC = () => {
                                 name="email"
                                 rules={[
                                     { required: true, message: 'Please input your email!' },
-                                    { type: 'email', message: 'Please enter a valid email address!' }
+                                    { type: 'email', message: 'Please enter a valid email!' }
                                 ]}
                             >
                                 <Input placeholder='Email' className="p-3 rounded-xl border" />
@@ -155,13 +149,10 @@ const Register: React.FC = () => {
                                     <Radio value="instructor">Instructor</Radio>
                                 </Radio.Group>
                             </Form.Item>
-                            <Form.Item
-                                name="captcha"
-                                rules={[{ required: true, message: 'Please complete the CAPTCHA!' }]}
-                            >
+                            <Form.Item>
                                 <ReCAPTCHA
-                                    sitekey="6LedsAoqAAAAAPbIjK2C0zrf5QidZKCuOvPC5eZu"
-                                    onChange={onCaptchaChange}
+                                    sitekey="6Lc9sQoqAAAAAOPQeN6nDpBKqtqzsq05JdmEH5ls"
+                                    onChange={handleRecaptchaChange}
                                 />
                             </Form.Item>
                             <Form.Item>
