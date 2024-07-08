@@ -451,6 +451,25 @@ class Api {
       throw error;
     }
   }
+
+  async deleteUser(userId: string): Promise<any> {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await this.api.delete(`/api/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.success("User deleted successfully");
+      return response.data;
+    } catch (error: any) {
+      toast.error(
+        "Error deleting user: " + (error.response?.data?.message || error.message)
+      );
+      throw error;
+    }
+  }
+
 }
 
 export { createApiInstance, Api };
