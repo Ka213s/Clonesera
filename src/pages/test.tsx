@@ -1,50 +1,20 @@
-import  { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Table } from 'antd';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect } from 'react';
 
-
-interface CatFact {
-  fact: string;
-  length: number;
-}
-
-const Test = () => {
-  const [data, setData] = useState<CatFact[]>([]);
-
+const Test: React.FC = () => {
   useEffect(() => {
-    axios.get('https://catfact.ninja/fact')
-      .then(response => {
-        console.log('Fetched data:', response.data);
-        setData([response.data]);
-        toast.success('Cat facst fetched successfully!');
-      })
-      .catch(error => {
-        console.error('Error fetching the cat fact:', error);
-        toast.error('Failed to fetch cat fact.');
-      });
+    // Log the environment variables to the console
+    console.log('GOOGLE_CLIENT_ID:', import.meta.env.VITE_GOOGLE_CLIENT_ID);
+    console.log('API_BASE_URL:', import.meta.env.VITE_API_BASE_URL);
+    console.log('TINYMCE_API_KEY:', import.meta.env.VITE_TINYMCE_API_KEY);
+    console.log('RECAPTCHA_SITE_KEY:', import.meta.env.VITE_RECAPTCHA_SITE_KEY);
   }, []);
-
-  const columns = [
-    {
-      title: 'Fact',
-      dataIndex: 'fact',
-      key: 'fact',
-    },
-    {
-      title: 'Length',
-      dataIndex: 'length',
-      key: 'length',
-    },
-  ];
 
   return (
     <div>
-      <ToastContainer />
-      <Table dataSource={data} columns={columns} rowKey="fact" />
+      <h1>Test Page</h1>
+      <p>Check the console for environment variable values.</p>
     </div>
   );
-}
+};
 
 export default Test;
