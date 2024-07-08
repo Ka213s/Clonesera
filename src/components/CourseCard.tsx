@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaStar, FaStarHalfAlt, FaRegStar } from 'react-icons/fa';
+import { StarFilled, StarTwoTone, StarOutlined } from '@ant-design/icons';
 
 interface CourseCardProps {
   name: string;
@@ -18,21 +18,21 @@ const CourseCard: React.FC<CourseCardProps> = ({ name, views, date, description,
     const stars = [];
     for (let i = 1; i <= 5; i++) {
       if (i <= rating) {
-        stars.push(<FaStar key={i} className="text-yellow-500" />);
+        stars.push(<StarFilled key={i} className="text-yellow-500" />);
       } else if (i - 0.5 <= rating) {
-        stars.push(<FaStarHalfAlt key={i} className="text-yellow-500" />);
+        stars.push(<StarTwoTone key={i} twoToneColor="#fadb14" />);
       } else {
-        stars.push(<FaRegStar key={i} className="text-yellow-500" />);
+        stars.push(<StarOutlined key={i} className="text-yellow-500" />);
       }
     }
     return stars;
   };
+
   return (
-    <body className='bg-gray-100 flex items-center justify-center gap-10'>
+    <div className='bg-gray-100 flex items-center justify-center gap-10'>
       <div className='card'>
         <img src={require('../assets/Course.png')} alt="Your Image" className="w-full h-full object-cover rounded-t-lg mb-4" />
         <div className="p-5 flex flex-col gap-3">
-
           <h2 className="product-tille">{name}</h2>
           <div>
             <p className="text-xl font-bold"><strong>Price:</strong> ${price.toFixed(2)}</p>
@@ -56,7 +56,7 @@ const CourseCard: React.FC<CourseCardProps> = ({ name, views, date, description,
           </div>
         </div>
       </div>
-    </body>
+    </div>
   );
 };
 
