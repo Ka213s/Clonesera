@@ -2,8 +2,6 @@ import React from 'react';
 import { Tabs } from 'antd';
 import { BookOutlined } from '@ant-design/icons';
 
-const { TabPane } = Tabs;
-
 interface NavigationTabsProps {
   activeKey: string;
   onTabChange: (key: string) => void;
@@ -16,21 +14,19 @@ const NavigationTabs: React.FC<NavigationTabsProps> = ({ activeKey, onTabChange 
     { key: '3', icon: <BookOutlined />, label: 'My Lectures' },
   ];
 
+  const tabItems = tabs.map(tab => ({
+    key: tab.key,
+    label: (
+      <div className="flex items-center">
+        {tab.icon}
+        <span className="ml-2">{tab.label}</span>
+      </div>
+    ),
+  }));
+
   return (
-    <div className=" p-4 mb-4">
-      <Tabs activeKey={activeKey} onChange={onTabChange}>
-        {tabs.map(tab => (
-          <TabPane
-            key={tab.key}
-            tab={
-              <div className="flex items-center">
-                {tab.icon}
-                <span className="ml-2">{tab.label}</span>
-              </div>
-            }
-          />
-        ))}
-      </Tabs>
+    <div className="p-4 mb-4">
+      <Tabs activeKey={activeKey} onChange={onTabChange} items={tabItems} />
     </div>
   );
 };
