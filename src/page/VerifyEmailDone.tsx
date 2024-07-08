@@ -28,7 +28,7 @@ function VerifyEmailDone() {
         const result = await api.verifyEmail(token);
         setVerificationResult(result);
         setIsVerified(true);
-        message.success('Email verification successful');
+       
       } catch (error) {
         message.error('Error verifying email');
       }
@@ -45,7 +45,7 @@ function VerifyEmailDone() {
 
       const timeout = setTimeout(() => {
         navigate('/login');
-      }, 5000);
+      }, 10000);
 
       return () => {
         clearInterval(timer);

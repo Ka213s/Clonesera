@@ -34,18 +34,19 @@ class Notifications extends Component {
 
     return (
       <div className="bg-gray-100 p-6">
-        <div className="flex justify-between items-center mb-6">
+        <div className="flex justify-between items-center mb-4">
           <div className="flex items-center space-x-2">
             <BellOutlined className="text-2xl text-gray-700" />
             <Title level={2}>Notifications</Title>
           </div>
         </div>
 
-        <div className="p-4 rounded mb-6">
-          <Button type="primary" className="bg-[#9997F5] hover:bg-[#8886E5]">
+        <div className="p-2 rounded mb-8">
+          <button className="bg-[#9997F5] hover:bg-[#8886E5] text-white px-4 py-2 rounded">
             Notification Setting
-          </Button>
+          </button>
         </div>
+
 
         <Card>
           <List

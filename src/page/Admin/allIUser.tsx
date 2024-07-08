@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Table, Button, Modal, Pagination } from 'antd';
+import { Table, Button, Modal, Pagination, Popconfirm } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { createApiInstance } from '../../services/Api';
 import { useNavigate } from 'react-router-dom';
@@ -11,6 +11,7 @@ import UserFilter from '../../components/Admin/UserFilter';
 const AllUser: React.FC = () => {
   const navigate = useNavigate();
 
+  const [usersData, setUsersData] = useState<any[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<any[]>([]);
   const [selectedUser, setSelectedUser] = useState<any | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -113,6 +114,16 @@ const AllUser: React.FC = () => {
           <Button type="link" onClick={() => editUser(record)}>
             Edit
           </Button>
+          <Popconfirm
+            title="Are you sure to delete this user?"
+            onConfirm={() => handleDelete(record._id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button type="link" danger>
+              Delete
+            </Button>
+          </Popconfirm>
         </>
       ),
       width: 150,
@@ -165,6 +176,21 @@ const AllUser: React.FC = () => {
       }
     } catch (error) {
       console.error('Error updating user:', error);
+    }
+  };
+
+  const handleDelete = async (userId: string) => {
+    try {
+      const api = createApiInstance(navigate);
+      await api.deleteUser(userId);
+      setUsersData((prevData) =>
+        prevData.filter((user) => user._id !== userId)
+      );
+      setFilteredUsers((prevData) =>
+        prevData.filter((user) => user._id !== userId)
+      );
+    } catch (error) {
+      console.error("Error deleting user:", error);
     }
   };
 

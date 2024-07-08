@@ -87,10 +87,8 @@ const Category: React.FC = () => {
     try {
       if (editingCategory) {
         await api.editCategory(editingCategory._id, values);
-        message.success('Category updated successfully');
       } else {
         await api.createCategory(values);
-        message.success('Category added successfully');
       }
       fetchCategoriesData(pagination.current, pagination.pageSize);
       setIsModalVisible(false);
@@ -113,7 +111,6 @@ const Category: React.FC = () => {
       fetchCategoriesData(pagination.current, pagination.pageSize);
     } catch (error) {
       console.error('Failed to delete category:', error);
-      message.error('Failed to delete category');
     }
   };
 

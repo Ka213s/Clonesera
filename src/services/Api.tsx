@@ -18,8 +18,8 @@ class Api {
   }
   async registerAccount(data: { name: string; email: string; password: string; role: string; }): Promise<any> {
     try {
-      const response = await this.api.post('/api/users', data);
-      toast.success('Registration successful');
+      const response = await this.api.post("/api/users", data);
+      toast.success("Registration successful");
       return response.data;
     } catch (error: any) {
       if (error.emailExists) {
@@ -30,10 +30,10 @@ class Api {
     }
   }
 
-  async loginAccount(data: { email: string; password: string; }): Promise<any> {
+  async loginAccount(data: { email: string; password: string }): Promise<any> {
     try {
-      const response = await this.api.post('/api/auth', data);
-      toast.success('Login successful');
+      const response = await this.api.post("/api/auth", data);
+      toast.success("Login successful");
       return response.data;
     } catch (error: any) {
       toast.error((error.response?.data?.message || error.message));
@@ -41,10 +41,13 @@ class Api {
     }
   }
 
-  async registerUserByGoogle(data: { google_id: string; role: string; }): Promise<any> {
+  async registerUserByGoogle(data: {
+    google_id: string;
+    role: string;
+  }): Promise<any> {
     try {
-      const response = await this.api.post('/api/users/google', data);
-      toast.success('Signed up for Google successfully. Please log in again', {
+      const response = await this.api.post("/api/users/google", data);
+      toast.success("Signed up for Google successfully. Please log in again", {
         autoClose: 8000,
       });
       return response.data;
@@ -65,8 +68,8 @@ class Api {
   }
   async loginUserByGoogle(data: { google_id: string; }): Promise<any> {
     try {
-      const response = await this.api.post('/api/auth/google', data);
-      toast.success('Google login successful', {
+      const response = await this.api.post("/api/auth/google", data);
+      toast.success("Google login successful", {
         autoClose: 8000,
       });
       return response.data;
@@ -74,7 +77,7 @@ class Api {
       if (error.parseTokenError) {
         return { parseTokenError: true, message: error.message };
       }
-      toast.error('You have not signed up for a Google account', {
+      toast.error("You have not signed up for a Google account", {
         autoClose: 8000,
       });
       throw error;
@@ -84,7 +87,7 @@ class Api {
   async getDataUser(token: string | null): Promise<any> {
     try {
       if (!token) {
-        throw new Error('Token is null or empty');
+        throw new Error("Token is null or empty");
       }
 
       const response = await this.api.get('/api/auth', {
@@ -95,23 +98,29 @@ class Api {
 
       return response.data;
     } catch (error: any) {
-      toast.error('Error getting user data: ' + (error.response?.data?.message || error.message));
+      toast.error(
+        "Error getting user data: " +
+        (error.response?.data?.message || error.message)
+      );
       throw error;
     }
   }
 
   async updateAccount(userId: string, data: { name: string; phone_number: string; description: string; email: string; avatar: string | ArrayBuffer | null; role: string; video: string; }): Promise<any> {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
       const response = await this.api.put(`/api/users/${userId}`, data, {
         headers: {
-          Authorization: `Bearer ${token}`
-        }
+          Authorization: `Bearer ${token}`,
+        },
       });
-      toast.success('Profile updated successfully');
+      toast.success("Profile updated successfully");
       return response.data;
     } catch (error: any) {
-      toast.error('Error updating profile: ' + (error.response?.data?.message || error.message));
+      toast.error(
+        "Error updating profile: " +
+        (error.response?.data?.message || error.message)
+      );
       throw error;
     }
   }
@@ -132,45 +141,66 @@ class Api {
 
       return response.data;
     } catch (error: any) {
-      toast.error('Error searching users: ' + (error.response?.data?.message || error.message));
+      toast.error(
+        "Error searching users: " +
+        (error.response?.data?.message || error.message)
+      );
       throw error;
     }
   }
 
   async changeUserStatus(userId: string, status: boolean): Promise<any> {
     try {
-      const token = localStorage.getItem('token');
-      const response = await this.api.put('/api/users/change-status', {
-        user_id: userId,
-        status: status,
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const token = localStorage.getItem("token");
+      const response = await this.api.put(
+        "/api/users/change-status",
+        {
+          user_id: userId,
+          status: status,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
-      toast.success('User status updated successfully');
+      );
+      toast.success("User status updated successfully");
       return response.data;
     } catch (error: any) {
-      toast.error('Error updating user status: ' + (error.response?.data?.message || error.message));
+      toast.error(
+        "Error updating user status: " +
+        (error.response?.data?.message || error.message)
+      );
       throw error;
     }
   }
-  async changePassword(userId: string, oldPassword: string, newPassword: string): Promise<any> {
+  async changePassword(
+    userId: string,
+    oldPassword: string,
+    newPassword: string
+  ): Promise<any> {
     try {
-      const token = localStorage.getItem('token');
-      const response = await this.api.put(`/api/users/change-password`, {
-        user_id: userId,
-        old_password: oldPassword,
-        new_password: newPassword,
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
+      const token = localStorage.getItem("token");
+      const response = await this.api.put(
+        `/api/users/change-password`,
+        {
+          user_id: userId,
+          old_password: oldPassword,
+          new_password: newPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
         }
-      });
-      toast.success('Password changed successfully');
+      );
+      toast.success("Password changed successfully");
       return response.data;
     } catch (error: any) {
-      toast.error('Error changing password: ' + (error.response?.data?.message || error.message));
+      toast.error(
+        "Error changing password: " +
+        (error.response?.data?.message || error.message)
+      );
       throw error;
     }
   }
@@ -344,32 +374,58 @@ class Api {
       throw error;
     }
   }
-  async getSessions(searchCondition: {
-    keyword: string;
-    course_id: string;
-    is_position_order: boolean;
-    is_deleted: boolean;
-  }, pageNum: number, pageSize: number): Promise<any> {
-    try {
-      const token = localStorage.getItem('token');
-      const response = await this.api.post('/api/session/search', {
-        searchCondition,
-        pageInfo: {
-          pageNum,
-          pageSize
-        }
-      }, {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
-      });
-      return response.data;
-    } catch (error: any) {
-      toast.error('Error fetching sessions: ' + (error.response?.data?.message || error.message));
-      throw error;
+    async getSessions(searchCondition: {
+      keyword: string;
+      course_id: string;
+      is_position_order: boolean;
+      is_deleted: boolean;
+    }, pageNum: number, pageSize: number): Promise<any> {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await this.api.post('/api/session/search', {
+          searchCondition,
+          pageInfo: {
+            pageNum,
+            pageSize
+          }
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        return response.data;
+      } catch (error: any) {
+        toast.error('Error fetching sessions: ' + (error.response?.data?.message || error.message));
+        throw error;
+      }
     }
-  }
-
+    async getLessons(searchCondition: {
+      keyword: string;
+      course_id: string;
+      session_id: string;
+      lesson_type: string;
+      is_position_order: boolean;
+      is_deleted: boolean;
+    }, pageNum: number, pageSize: number): Promise<any> {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await this.api.post('/api/lesson/search', {
+          searchCondition,
+          pageInfo: {
+            pageNum,
+            pageSize
+          }
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        return response.data;
+      } catch (error: any) {
+        toast.error('Error fetching lessons: ' + (error.response?.data?.message || error.message));
+        throw error;
+      }
+    }
   async editCategory(categoryId: string, data: { name: string; description?: string }): Promise<any> {
     try {
       const token = localStorage.getItem('token');
@@ -421,6 +477,25 @@ class Api {
       throw error;
     }
   }
+
+  async deleteUser(userId: string): Promise<any> {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await this.api.delete(`/api/users/${userId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      toast.success("User deleted successfully");
+      return response.data;
+    } catch (error: any) {
+      toast.error(
+        "Error deleting user: " + (error.response?.data?.message || error.message)
+      );
+      throw error;
+    }
+  }
+
 }
 
 export { createApiInstance, Api };

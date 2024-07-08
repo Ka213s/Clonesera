@@ -56,6 +56,8 @@ const MyLectures: React.FC<MyLecturesProps> = ({
                 />
                 <Button
                     type="primary"
+                    style={{ backgroundColor: '#9997F5' }}
+                    className="hover:bg-[#8886E5] text-white px-4 py-2 rounded"
                     icon={<FaPlus />}
                     onClick={() => showModal()}
                 >

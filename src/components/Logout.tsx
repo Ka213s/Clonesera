@@ -15,7 +15,7 @@ const Logout: React.FC = () => {
         memoizedHandleLogout();
     }, [memoizedHandleLogout]);
 
-    return null; // Return null to prevent rendering anything in the component
+    return null;
 };
 
 export default Logout;
