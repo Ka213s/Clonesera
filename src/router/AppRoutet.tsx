@@ -1,25 +1,14 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import Test from '../pages/test';
-
-
-
+const Test = lazy(() => import('../pages/test'));
 
 const AppRouter: React.FC = () => {
   return (
     <Router>
-    
-        <Routes>
-          {/* Routes with MainLayout */}
-      
-            <Route path="/" element={<Test />} />
-   
-
-          {/* Routes without MainLayout */}
-        
-        </Routes>
-    
+      <Routes>
+        <Route path="/" element={<Suspense fallback={<div>Loading...</div>}> <Test /> </Suspense>} />
+      </Routes>
     </Router>
   );
 }
