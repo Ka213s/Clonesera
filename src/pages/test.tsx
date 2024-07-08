@@ -17,8 +17,8 @@ const Test = () => {
     axios.get('https://catfact.ninja/fact')
       .then(response => {
         console.log('Fetched data:', response.data);
-        setData([response.data]); // Since we're getting a single fact, we wrap it in an array
-        toast.success('Cat fact fetched successfully!');
+        setData([response.data]);
+        toast.success('Cat facst fetched successfully!');
       })
       .catch(error => {
         console.error('Error fetching the cat fact:', error);
