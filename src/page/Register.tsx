@@ -3,7 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { Form, Input, Button, Radio } from 'antd';
 import { FaEyeSlash } from 'react-icons/fa';
 import Lottie from 'react-lottie';
-import ReCAPTCHA from 'react-google-recaptcha';
+import RecaptchaComponent from '../components/Recaptcha';
 import logo from '../assets/Logo-2.png';
 import { createApiInstance } from '../services/Api';
 import Artwork from '../assets/Artwork.jpg';
@@ -19,6 +19,11 @@ const Register: React.FC = () => {
     const handleLoginClick = () => { navigate('/login') };
 
     const handleSubmit = async (values: any): Promise<void> => {
+        if (!recaptchaToken) {
+            form.setFields([{ name: 'recaptcha', errors: ['Please complete the reCAPTCHA!'] }]);
+            return;
+        }
+
         setIsButtonDisabled(true);
 
         try {
@@ -27,7 +32,7 @@ const Register: React.FC = () => {
                 password: values.password,
                 email: values.email,
                 role: values.role,
-                recaptchaToken,
+                recaptchaToken: recaptchaToken,
             };
             console.log('Data to submit:', dataToSubmit);
             const response = await api.registerAccount(dataToSubmit);
@@ -53,6 +58,7 @@ const Register: React.FC = () => {
     };
 
     const handleRecaptchaChange = (token: string | null) => {
+        console.log("Recaptcha token:", token);
         setRecaptchaToken(token);
     };
 
@@ -111,7 +117,10 @@ const Register: React.FC = () => {
                             </Form.Item>
                             <Form.Item
                                 name="password"
-                                rules={[{ required: true, message: 'Please input your password!' }]}
+                                rules={[
+                                    { required: true, message: 'Please input your password!' },
+                                    { min: 6, message: 'Password must be at least 6 characters long!' } 
+                                ]}
                             >
                                 <Input.Password
                                     placeholder='Password'
@@ -149,11 +158,11 @@ const Register: React.FC = () => {
                                     <Radio value="instructor">Instructor</Radio>
                                 </Radio.Group>
                             </Form.Item>
-                            <Form.Item>
-                                <ReCAPTCHA
-                                    sitekey="6Lc9sQoqAAAAAOPQeN6nDpBKqtqzsq05JdmEH5ls"
-                                    onChange={handleRecaptchaChange}
-                                />
+                            <Form.Item
+                                name="recaptcha"
+                                rules={[{ required: true, message: 'Please complete the reCAPTCHA!' }]}
+                            >
+                                <RecaptchaComponent onChange={handleRecaptchaChange} />
                             </Form.Item>
                             <Form.Item>
                                 <Button
