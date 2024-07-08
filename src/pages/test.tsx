@@ -1,16 +1,23 @@
 import  { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Table } from 'antd';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+
+interface CatFact {
+  fact: string;
+  length: number;
+}
+
 const Test = () => {
-  const [fact, setFact] = useState<string>('');
+  const [data, setData] = useState<CatFact[]>([]);
 
   useEffect(() => {
     axios.get('https://catfact.ninja/fact')
       .then(response => {
         console.log('Fetched data:', response.data);
-        setFact(response.data.fact);
+        setData([response.data]); // Since we're getting a single fact, we wrap it in an array
         toast.success('Cat fact fetched successfully!');
       })
       .catch(error => {
@@ -19,10 +26,23 @@ const Test = () => {
       });
   }, []);
 
+  const columns = [
+    {
+      title: 'Fact',
+      dataIndex: 'fact',
+      key: 'fact',
+    },
+    {
+      title: 'Length',
+      dataIndex: 'length',
+      key: 'length',
+    },
+  ];
+
   return (
     <div>
       <ToastContainer />
-      {fact ? fact : 'Loading...'}
+      <Table dataSource={data} columns={columns} rowKey="fact" />
     </div>
   );
 }
