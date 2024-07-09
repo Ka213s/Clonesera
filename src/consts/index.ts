@@ -1,12 +1,10 @@
-// src/consts/index.ts
-export interface MenuItem {
-    text: string;
-    icon?: string;
-    url: string;
-    subItems?: MenuItem[];
-  }
-  
-  export const sidebarMenuItemsData: { menuItems: MenuItem[] } = {
+export const roles = {
+  ADMIN: "admin",
+  STUDENT: "student",
+  INSTRUCTOR: "instructor",
+};
+
+export const sidebarMenuItemsData = {
     menuItems: [
       { text: 'Home', icon: 'HomeOutlined', url: '/home' },
       { text: 'LiveStream', icon: 'VideoCameraOutlined', url: '/livestream' },

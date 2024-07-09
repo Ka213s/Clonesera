@@ -3,9 +3,8 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LayoutRoute from '../layout/LayoutRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-// Page Public
-
+import PrivateRoute from './PrivateRoute';
+import {roles} from '../utils/commonImports';
 const AnotherPage = lazy(() => import('../pages/AnotherPage'));
 const Login = lazy(() => import('../pages/Login'));
 const CoursesTable = lazy(() => import('../pages/CoursesTable'));
@@ -18,25 +17,23 @@ const PageError403 = lazy(() => import('../pages/Error/PageError403'));
 
 // Instructor Pages and Components
 
-
 const AppRouter: React.FC = () => {
     return (
         <Router>
-            <Suspense >
+            <Suspense>
                 <Routes>
                     {/* Routes with MainLayout */}
                     <Route element={<LayoutRoute />}>
                         {/* Public Routes */}
                         <Route path="/403" element={<PageError403 />} />
-                        <Route path="/404" element={<PageError404 />} />
-                        <Route path="/500" element={<PageError500 />} />
-                   
+                        {/* <Route path="/404" element={<PageError404 />} /> */}
+                        {/* <Route path="/500" element={<PageError500 />} /> */}
 
                         {/* Admin Routes */}
-
+                        <Route path="/404" element={<PrivateRoute element={PageError404} allowedRoles={[roles.ADMIN]} />} />
 
                         {/* Student Routes */}
-
+                        <Route path="/500" element={<PrivateRoute element={PageError500} allowedRoles={[roles.STUDENT]} />} />
 
                         {/* Instructor Routes */}
                        
@@ -44,15 +41,6 @@ const AppRouter: React.FC = () => {
 
                     {/* Routes without MainLayout */}
                     {/* Public Routes */}
-
-
-                    {/* Admin Routes */}
-
-
-                    {/* Student Routes */}
-
-
-                    {/* Instructor Routes */}F
                     <Route path="/another-page" element={<AnotherPage />} />
                     <Route path="/courses" element={<CoursesTable />} />
                     <Route path="/" element={<Login />} />
