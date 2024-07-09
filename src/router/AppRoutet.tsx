@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LayoutRoute from '../layout/LayoutRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Category from '../pages/Category';
 
 // Page Public
 const Test = lazy(() => import('../pages/test'));
@@ -34,7 +35,6 @@ const AppRouter: React.FC = () => {
 
                         {/* Admin Routes */}
 
-
                         {/* Student Routes */}
 
 
@@ -56,6 +56,7 @@ const AppRouter: React.FC = () => {
                     <Route path="/another-page" element={<AnotherPage />} />
                     <Route path="/courses" element={<CoursesTable />} />
                     <Route path="/" element={<Login />} />
+                    <Route path="/categories" element={<Category />} />
                 </Routes>
             </Suspense>
             <ToastContainer />
