@@ -6,7 +6,7 @@ export { loginAccount, getCourses, getCurrentLogin } from '../services/Api';
 export { setGlobalLoadingHandler } from '../services/axiosInstance';
 export { default as config } from '../config/config';
 export { default as logo } from '../assets/Logo-2.png';
-export { default as Artwork } from '../assets/Artwork.webp';
+export { default as Artwork } from '../assets/Artwork.jpg';
 export { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 export { Form, Input, Button } from 'antd';
 export { roles } from '../consts/index';
