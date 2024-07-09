@@ -1,6 +1,5 @@
-import { React, useState, GoogleOAuthProvider, GoogleLogin, loginAccount, config, logo, Artwork, Form, Input, Button, EyeOutlined, EyeInvisibleOutlined } from '../util/commonImports';
+import { React, useState, GoogleOAuthProvider, GoogleLogin, loginAccount,getCurrentLogin , config, logo, Artwork, Form, Input, Button, EyeOutlined, EyeInvisibleOutlined } from '../utils/commonImports';
 import {  CredentialResponse } from '@react-oauth/google';
-
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -12,6 +11,8 @@ const Login: React.FC = () => {
     try {
       const response = await loginAccount(values);
       console.log('Login successful:', response);
+      const GetCurrentLogin = await getCurrentLogin();
+      localStorage.setItem('userData', JSON.stringify(GetCurrentLogin));
     } catch (error) {
       console.error('Error logging in:', error);
     } finally {

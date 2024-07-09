@@ -1,4 +1,10 @@
-const sidebarMenuItemsData = {
+export const roles = {
+  ADMIN: "admin",
+  STUDENT: "student",
+  INSTRUCTOR: "instructor",
+};
+
+export const sidebarMenuItemsData = {
     menuItems: [
       { text: "Home", icon: "HomeOutlined", url: "/home" },
       { text: "LiveStream", icon: "VideoCameraOutlined", url: "/livestream" },
@@ -43,6 +49,4 @@ const sidebarMenuItemsData = {
       { text: "Send Feedback", icon: "SendOutlined", url: "/feedback" },
     ],
   };
-  
-  export default sidebarMenuItemsData;
   
