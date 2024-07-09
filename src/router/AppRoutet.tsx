@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 // Page Public
-const Test = lazy(() => import('../pages/test'));
+
 const AnotherPage = lazy(() => import('../pages/AnotherPage'));
 const Login = lazy(() => import('../pages/Login'));
 const CoursesTable = lazy(() => import('../pages/CoursesTable'));
@@ -39,7 +39,7 @@ const AppRouter: React.FC = () => {
 
 
                         {/* Instructor Routes */}
-                        <Route path="/test" element={<Test />} />
+                       
                     </Route>
 
                     {/* Routes without MainLayout */}

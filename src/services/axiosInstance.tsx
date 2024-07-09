@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-
+import config from '../config/config';
 let setLoading: (loading: boolean) => void = () => {};
 
 export const setGlobalLoadingHandler = (loadingHandler: (loading: boolean) => void) => {
@@ -9,7 +9,7 @@ export const setGlobalLoadingHandler = (loadingHandler: (loading: boolean) => vo
 };
 
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL,
+  baseURL: config.API_BASE_URL,
   headers: {
     'content-type': 'application/json; charset=UTF-8'
   },

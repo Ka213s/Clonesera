@@ -1,14 +1,6 @@
-import React, { useState } from 'react';
-import { Form, Input, Button } from 'antd';
-import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-import logo from '../assets/Logo-2.png';
-// import animationData from '../assets/Animation - 1719199926629.json'; 
-import Artwork from '../assets/Artwork.jpg';
-// import Lottie from 'react-lottie';
-import { loginAccount } from '../services/Api';
+import { React, useState, GoogleOAuthProvider, GoogleLogin, loginAccount, config, logo, Artwork, Form, Input, Button, EyeOutlined, EyeInvisibleOutlined } from '../util/commonImports';
+import {  CredentialResponse } from '@react-oauth/google';
 
-const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -27,27 +19,16 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleGoogleLoginSuccess = async (response: any) => {
+  const handleGoogleLoginSuccess = async (response: CredentialResponse) => {
     console.log('Google login successful:', response);
-    // Handle Google login success logic
   };
 
   const handleGoogleLoginError = () => {
     console.error('Error logging in with Google');
-    // Handle Google login error logic
   };
 
-  // const lottieOptions = {
-  //   loop: true,
-  //   autoplay: true,
-  //   animationData: animationData,
-  //   rendererSettings: {
-  //     preserveAspectRatio: 'xMidYMid slice'
-  //   }
-  // };
-
   return (
-    <GoogleOAuthProvider clientId={clientId}>
+    <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
       <div className="bg-gray-50 min-h-screen flex items-center justify-center">
         <div className="bg-gray-100 flex flex-col rounded-2xl shadow-lg max-w-7xl w-full p-10 items-center">
           <div className="flex justify-center mb-5">
@@ -61,11 +42,6 @@ const Login: React.FC = () => {
                   <p className='text-base mt-2 text-[#4A4DC3]'>If you already a member, easily log in</p>
                 </div>
                 <div className="md:block hidden ml-6">
-                  {/* <Lottie
-                    options={lottieOptions}
-                    height={150}
-                    width={150}
-                  /> */}
                 </div>
               </div>
               <Form
