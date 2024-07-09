@@ -17,27 +17,7 @@ export const loginAccount = async (data: { email: string; password: string }) =>
   return response.data;
 };
 
-export const getCategories = (searchCondition: any, pageNum: number, pageSize: number): Promise<any> => {
-  return axiosInstance.post('/api/category/search', {
-    searchCondition,
-    pageInfo: {
-      pageNum,
-      pageSize
-    }
-  }).then(response => response);
-};
-
-export const createCategory = async (data: { name: string; description: string; parent_category_id?: string }) => {
-  const response = await axiosInstance.post('/api/category', data);
-  return response.data;
-};
-
-export const editCategory = async (id: string, data: { name: string; description: string; parent_category_id?: string }) => {
-  const response = await axiosInstance.put(`/api/category/${id}`, data);
-  return response.data;
-};
-
-export const deleteCategory = async (id: string) => {
-  const response = await axiosInstance.delete(`/api/category/${id}`);
+export const getCurrentLogin = async () => {
+  const response = await axiosInstance.get("/api/auth");
   return response.data;
 };
