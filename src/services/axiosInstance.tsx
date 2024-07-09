@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
 
 let setLoading: (loading: boolean) => void = () => {};
 
@@ -40,10 +41,19 @@ axiosInstance.interceptors.response.use(
     setLoading(false);
     const { response } = err;
     if (response) {
+      handleErrorByToast(err);
+      const navigate = useNavigate();
       switch (response.status) {
         case 400:
+          break;
+        case 403:
+          navigate('/403');
+          break;
         case 404:
-          handleErrorByToast(err);
+          navigate('/404');
+          break;
+        case 500:
+          navigate('/500');
           break;
         default:
           break;
@@ -62,3 +72,37 @@ const handleErrorByToast = (error: AxiosError) => {
 };
 
 export default axiosInstance;
+
+export const getCourses = async (searchCondition: {
+  keyword: string;
+  category: string;
+  status: string;
+  is_deleted: boolean;
+}, pageNum: number, pageSize: number) => {
+  const response = await axiosInstance.post('/api/course/search', {
+    searchCondition,
+    pageInfo: {
+      pageNum,
+      pageSize
+    }
+  });
+  return response.data;
+};
+
+export const callApiWithToken = async (endpoint: string) => {
+  const response = await axiosInstance.get(endpoint);
+  return response.data;
+};
+
+export const callApiWithoutToken = async (endpoint: string) => {
+  const response = await axiosInstance.get(endpoint);
+  return response.data;
+};
+
+export const loginAccount = async (data: { email: string; password: string }) => {
+  const response = await axiosInstance.post("/api/auth", data);
+  if (response.data.token) {
+    localStorage.setItem('token', response.data.token); // Store token in localStorage
+  }
+  return response.data;
+};
