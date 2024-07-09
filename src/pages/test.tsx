@@ -11,8 +11,6 @@ const Test: React.FC = () => {
 
   return (
     <div>
-      <h1>Test Page</h1>
-      <p>Check the console for environment variable values.</p>
     </div>
   );
 };
