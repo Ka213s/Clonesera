@@ -41,8 +41,6 @@ const Test = () => {
 
   return (
     <div>
-      <ToastContainer />
-      <Table dataSource={data} columns={columns} rowKey="fact" />
     </div>
   );
 }
