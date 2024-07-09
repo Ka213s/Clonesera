@@ -1,12 +1,30 @@
-import { React, useState, GoogleOAuthProvider, GoogleLogin, loginAccount,getCurrentLogin , config, logo, Artwork, Form, Input, Button, EyeOutlined, EyeInvisibleOutlined } from '../utils/commonImports';
-import {  CredentialResponse } from '@react-oauth/google';
+import {
+  React,
+  useState,
+  GoogleOAuthProvider,
+  GoogleLogin,
+  loginAccount,
+  getCurrentLogin,
+  config,
+  logo,
+  Form,
+  Input,
+  Button,
+  EyeOutlined,
+  useNavigate,
+  EyeInvisibleOutlined,
+} from '../utils/commonImports';
+import { CredentialResponse } from '@react-oauth/google';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
 
-  const handleSubmit = async (values: { email: string, password: string }) => {
+  const handleLoginClick = () => { navigate('/register') };
+
+  const handleSubmit = async (values: { email: string; password: string }) => {
     setIsButtonDisabled(true);
     try {
       const response = await loginAccount(values);
@@ -30,41 +48,36 @@ const Login: React.FC = () => {
 
   return (
     <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
-      <div className="w-full h-screen flex items-start">
-        <div className="relative w-1/2 h-full flex flex-col">
-          <img className="w-full h-full object-cover object-center max-w-full max-h-full" src={Artwork} />
-        </div>
+      <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-purple-300 to-blue-200 relative">
+        <div className="flex flex-col w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10 md:flex-row">
+          <div className="w-full md:w-1/2 px-4 md:px-20 py-10 flex flex-col justify-between">
+            <div>
+              <img src={logo} alt="Logo" className="h-10 w-auto mb-8 relative z-10" />
+              <h3 className="text-3xl font-bold mb-1">Welcome Back</h3>
+              <p className="text-sm text-gray-600 mb-6">Login to your account</p>
 
-        <div className='w-1/2 h-full bg-[#f5f5f5] flex flex-col p-20 justify-between'>
-        <img src={logo} alt="Logo" className="h-24 w-auto cursor-pointer" />
-          <div className="w-full flex flex-col">
-            <div className='w-full flex flex-col max-w-[500px]'>
-              <h3 className="text-3xl font-semibold mb-5">Login</h3>
-              <p className='text-base mb-2'>If you already a member, easily log in</p>
-            </div>
-            <div className='w-full flex flex-col'>
               <Form
                 name="login"
                 initialValues={{ email, password }}
                 onFinish={handleSubmit}
-                className="flex flex-col gap-4 mt-6"
+                className="flex flex-col w-full"
               >
                 <Form.Item
                   name="email"
                   rules={[
                     { required: true, message: 'Please input your email!' },
-                    { type: 'email', message: 'Invalid email format!' }
+                    { type: 'email', message: 'Invalid email format!' },
                   ]}
                 >
                   <Input
                     type="email"
-                    placeholder="Email"
+                    placeholder="Username"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none 
-                            focus:outline-none"
+                    className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </Form.Item>
+
                 <Form.Item
                   name="password"
                   rules={[{ required: true, message: 'Please input your password!' }]}
@@ -73,64 +86,60 @@ const Login: React.FC = () => {
                     placeholder="Password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full text-black py-2 my-2 bg-transparent border-b border-black outline-none 
-                            focus:outline-none"
-                    iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+                    className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    iconRender={(visible) => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
                   />
                 </Form.Item>
-              </Form>
-            </div>
-            <div className='w-full flex items-center justify-between'>
-              <div className='w-full flex items-center'>
-                <input type="checkbox" className='w-4 h-4 mr-2' />
-                <p className='text-sm'>Remember Me</p>
-              </div>
-              <Button
-                type="link"
-                className='text-sm font-medium whitespase-nowrap cursor-pointer
-                            underline underline-offset-2'
-              >
-                Forgot your password?
-              </Button>
-            </div>
-            <div className='w-full flex flex-col my-4'>
-              <Form.Item>
+
+                <div className="flex items-center justify-between w-full mb-6">
+                  <div className="flex items-center">
+                    <input type="checkbox" className="w-4 h-4 mr-2" />
+                    <p className="text-sm">Remember Me</p>
+                  </div>
+                  <Button type="link" className="text-sm font-medium text-gray-500 underline">
+                    Forgot password?
+                  </Button>
+                </div>
+
                 <Button
                   type="primary"
                   htmlType="submit"
                   disabled={isButtonDisabled}
-                  style={{
-                    backgroundColor: '#060606',
-                    borderColor: '#060606',
-                    color: '#fff',
-                  }}
-                  className="w-full text-white bg-[#060606] rounded-md p-4 text-center
-                              flex items-center justify-center"
+                  className="w-full py-3 mb-4 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700"
                 >
                   {isButtonDisabled ? 'Please wait...' : 'Login'}
                 </Button>
-              </Form.Item>
+
+                <div className="flex items-center justify-center w-full mb-4">
+                  <hr className="border-gray-300 flex-1" />
+                  <p className="px-4 text-gray-500">OR</p>
+                  <hr className="border-gray-300 flex-1" />
+                </div>
+
+                <div className="flex justify-center mb-4">
+                  <GoogleLogin onSuccess={handleGoogleLoginSuccess} onError={handleGoogleLoginError} />
+                </div>
+              </Form>
             </div>
-            <div className='mt-4 grid grid-cols-3 items-center text-gray-500'>
-              <hr className='border-gray-400' />
-              <p className='text-center'>OR</p>
-              <hr className='border-gray-400' />
-            </div>
-            <div className="flex justify-center mt-4">
-              <GoogleLogin
-                onSuccess={handleGoogleLoginSuccess}
-                onError={handleGoogleLoginError}
-              />
+
+            <div className="mt-3 text-base flex justify-between items-center">
+              <p>Don't have an account?</p>
+              <Button onClick={handleLoginClick} className="py-2 px-5 bg-white border rounded-xl hover:scale-110 duration-300">
+                Sign Up
+              </Button>
             </div>
           </div>
-          <div className='mt-3 text-base flex justify-between items-center'>
-            <p>Don't have an account?</p>
-            <Button
-              className="py-2 px-5 bg-white border rounded-xl hover:scale-110 duration-300"
-            >
-              Sign Up
-            </Button>
+          <div className="relative w-full md:w-1/2 flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
+            <div className="absolute inset-0 w-full h-full overflow-hidden">
+              <div className="blob bg-blue-400 w-full h-full"></div>
+              <div className="blob bg-green-400 animation-delay-2000 w-full h-full"></div>
+              <div className="blob bg-purple-400 animation-delay-4000 w-full h-full"></div>
+            </div>
           </div>
+        </div>
+        <div className="ocean">
+          <div className="wave"></div>
+          <div className="wave"></div>
         </div>
       </div>
     </GoogleOAuthProvider>
