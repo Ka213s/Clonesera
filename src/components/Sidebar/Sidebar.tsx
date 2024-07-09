@@ -13,16 +13,10 @@ import {
   HistoryOutlined,
   SendOutlined,
 } from '@ant-design/icons';
+import { sidebarMenuItemsData } from '../../consts'; // Adjust the path as needed
 
 interface SidebarProps {
   showMenu: boolean;
-}
-
-interface MenuItem {
-  text: string;
-  icon?: JSX.Element;
-  url: string;
-  subItems?: MenuItem[];
 }
 
 const iconComponents: { [key: string]: JSX.Element } = {
@@ -40,54 +34,12 @@ const iconComponents: { [key: string]: JSX.Element } = {
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
-  const menuItems: MenuItem[] = [
-    { text: 'Home', icon: iconComponents['HomeOutlined'], url: '/home' },
-    { text: 'LiveStream', icon: iconComponents['VideoCameraOutlined'], url: '/livestream' },
-    { text: 'Explore', icon: iconComponents['CompassOutlined'], url: '/explore' },
-    {
-      text: 'Categories',
-      icon: iconComponents['UnorderedListOutlined'],
-      url: '#',
-      subItems: [
-        { text: 'Development', url: '/categories/development' },
-        { text: 'Business', url: '/categories/business' },
-        { text: 'Finance & Accounting', url: '/categories/finance-accounting' },
-        { text: 'IT & Software', url: '/categories/it-software' },
-        { text: 'Office Productivity', url: '/categories/office-productivity' },
-        { text: 'Personal Development', url: '/categories/personal-development' },
-        { text: 'Design', url: '/categories/design' },
-        { text: 'Marketing', url: '/categories/marketing' },
-        { text: 'Lifestyle', url: '/categories/lifestyle' },
-        { text: 'Photography', url: '/categories/photography' },
-        { text: 'Health & Fitness', url: '/categories/health-fitness' },
-        { text: 'Music', url: '/categories/music' },
-        { text: 'Teaching & Academics', url: '/categories/teaching-academics' },
-      ],
-    },
-    {
-      text: 'Tests',
-      icon: iconComponents['BookOutlined'],
-      url: '#',
-      subItems: [
-        { text: 'Certification Center', url: '/tests/certification-center' },
-        { text: 'Certification Fill Form', url: '/tests/certification-fill-form' },
-        { text: 'Test View', url: '/tests/test-view' },
-        { text: 'Test Result', url: '/tests/test-result' },
-        { text: 'My Certification', url: '/tests/my-certification' },
-      ],
-    },
-    { text: 'Saved Course', icon: iconComponents['SaveOutlined'], url: '/saved' },
-    { text: 'Page Subscription', icon: iconComponents['BellOutlined'], url: '/subscription' },
-    { text: 'Setting', icon: iconComponents['SettingOutlined'], url: '/settings' },
-    { text: 'Help', icon: iconComponents['QuestionCircleOutlined'], url: '/help' },
-    { text: 'Report History', icon: iconComponents['HistoryOutlined'], url: '/report-history' },
-    { text: 'Send Feedback', icon: iconComponents['SendOutlined'], url: '/feedback' },
-  ];
+  const { menuItems } = sidebarMenuItemsData;
 
-  const renderMenuItems = (items: MenuItem[]) =>
+  const renderMenuItems = (items: typeof menuItems) =>
     items.map((item) =>
       item.subItems ? (
-        <Menu.SubMenu key={item.text} title={item.text} icon={item.icon}>
+        <Menu.SubMenu key={item.text} title={item.text} icon={iconComponents[item.icon || '']}>
           {item.subItems.map((subItem) => (
             <Menu.Item key={subItem.url} onClick={() => console.log('Navigate to:', subItem.url)}>
               {subItem.text}
@@ -95,7 +47,7 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
           ))}
         </Menu.SubMenu>
       ) : (
-        <Menu.Item key={item.url} icon={item.icon} onClick={() => console.log('Navigate to:', item.url)}>
+        <Menu.Item key={item.url} icon={iconComponents[item.icon || '']}>
           {item.text}
         </Menu.Item>
       )
