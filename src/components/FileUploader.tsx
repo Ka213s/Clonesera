@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { Upload, Button } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { storage } from '../util/firebaseConfig';
+import { storage } from '../config/firebaseConfig';
 
 interface FileUploaderProps {
   type: 'image' | 'video';

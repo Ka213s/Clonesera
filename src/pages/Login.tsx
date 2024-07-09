@@ -1,12 +1,5 @@
-import React, { useState } from 'react';
-import { Form, Input, Button } from 'antd';
-import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-// import logo from '../assets/Logo-2.png';
-// import animationData from '../assets/Animation - 1719199926629.json'; 
-import Artwork from '../assets/Artwork.jpeg';
-// import Lottie from 'react-lottie';
-import { loginAccount } from '../services/Api';
+import { React, useState, GoogleOAuthProvider, GoogleLogin, loginAccount, Artwork, Form, Input, logo, Button, EyeOutlined, EyeInvisibleOutlined } from '../util/commonImports';
+import { CredentialResponse } from '@react-oauth/google';
 
 const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
@@ -27,9 +20,8 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleGoogleLoginSuccess = async (response: any) => {
+  const handleGoogleLoginSuccess = async (response: CredentialResponse) => {
     console.log('Google login successful:', response);
-    // Handle Google login success logic
   };
 
   const handleGoogleLoginError = () => {
@@ -37,45 +29,20 @@ const Login: React.FC = () => {
     // Handle Google login error logic
   };
 
-  // const lottieOptions = {
-  //   loop: true,
-  //   autoplay: true,
-  //   animationData: animationData,
-  //   rendererSettings: {
-  //     preserveAspectRatio: 'xMidYMid slice'
-  //   }
-  // };
-  // const colors = {
-  //   primary: "#060606",
-  //   background: "#f5f5f5",
-  //   disbaled: "#D9D9D9"
-  // }
-
   return (
     <GoogleOAuthProvider clientId={clientId}>
       <div className="w-full h-screen flex items-start">
         <div className="relative w-1/2 h-full flex flex-col">
-          {/* <div className="absolute top-[20%] left-[10%] flex flex-col">
-            <h1 className='text-4xl text-black font-bold my-4'>Turn your idea into reality</h1>
-            <p className='text-xl text-black font-normal'>Start for free and get attractive offers from the community </p>
-          </div> */}
-          <img className="w-full h-full object-cover object-center" src={Artwork} />
+          <img className="w-full h-full object-cover object-center max-w-full max-h-full" src={Artwork} />
         </div>
 
         <div className='w-1/2 h-full bg-[#f5f5f5] flex flex-col p-20 justify-between'>
-          <h1 className='text-base text-[#060606] font-semibold'>Clonesera</h1>
+        <img src={logo} alt="Logo" className="h-24 w-auto cursor-pointer" />
           <div className="w-full flex flex-col">
             <div className='w-full flex flex-col max-w-[500px]'>
               <h3 className="text-3xl font-semibold mb-5">Login</h3>
               <p className='text-base mb-2'>If you already a member, easily log in</p>
             </div>
-            {/* <div className="md:block hidden ml-6">
-              <Lottie
-                    options={lottieOptions}
-                    height={150}
-                    width={150}
-                  />
-            </div> */}
             <div className='w-full flex flex-col'>
               <Form
                 name="login"
@@ -167,7 +134,7 @@ const Login: React.FC = () => {
           </div>
         </div>
       </div>
-    </GoogleOAuthProvider >
+    </GoogleOAuthProvider>
   );
 };
 
