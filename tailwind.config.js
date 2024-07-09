@@ -9,7 +9,18 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      animation: {
+        'blob': 'blob 8s infinite',
+      },
+      keyframes: {
+        blob: {
+          '0%, 100%': { transform: 'scale(1) translate(0, 0)' },
+          '33%': { transform: 'scale(1.1) translate(20px, -20px)' },
+          '66%': { transform: 'scale(0.9) translate(-20px, 20px)' },
+        },
+      },
+    },
   },
   plugins: [],
 }
