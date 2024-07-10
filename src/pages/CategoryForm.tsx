@@ -6,8 +6,14 @@ interface CategoryFormProps {
     isEditing: boolean;
     editingCategory: Category | null;
     parentCategories: Category[];
-    onSubmit: (values: any) => void;
+    onSubmit: (values: FormValues) => void;
     onCancel: () => void;
+}
+
+interface FormValues {
+    name: string;
+    description: string;
+    parent_category_id?: string;
 }
 
 const CategoryForm: React.FC<CategoryFormProps> = ({
@@ -44,7 +50,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
             open={isVisible}
             onOk={async () => {
                 try {
-                    const values = await form.validateFields();
+                    const values: FormValues = await form.validateFields();
                     onSubmit(values);
                 } catch (error) {
                     console.error('Validation failed:', error);

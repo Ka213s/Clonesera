@@ -9,6 +9,12 @@ interface Category {
     parent_category_id: string | null;
 }
 
+interface FormValues {
+    name: string;
+    description: string;
+    parent_category_id?: string;
+}
+
 const Category: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [parentCategories, setParentCategories] = useState<Category[]>([]);
@@ -26,16 +32,13 @@ const Category: React.FC = () => {
         async (page: number, pageSize: number, filterOption: string, keyword: string) => {
             setLoading(true);
             try {
-                // Tạo điều kiện tìm kiếm với keyword và is_deleted: false
                 const searchCondition = {
                     keyword,
                     is_deleted: false,
                 };
     
-                // Lấy danh sách các categories với searchCondition, pageNum và pageSize
                 const data = await getCategories(searchCondition, page, pageSize);
     
-                // Lọc các category dựa trên filterOption
                 let filteredCategories = data.pageData;
                 if (filterOption === 'parent') {
                     filteredCategories = filteredCategories.filter((cat: Category) => cat.parent_category_id === null);
@@ -43,23 +46,19 @@ const Category: React.FC = () => {
                     filteredCategories = filteredCategories.filter((cat: Category) => cat.parent_category_id !== null);
                 }
     
-                // Cập nhật danh sách các categories và tổng số mục
                 setCategories(filteredCategories);
                 setTotalItems(data.pageInfo.totalItems);
     
-                // Lấy danh sách các parent categories
                 const parentData = await getCategories({ keyword: '', is_deleted: false }, 1, 1000);
                 setParentCategories(parentData.pageData);
             } catch (error) {
-                // Xử lý lỗi nếu có
                 console.error('Error fetching categories:', error);
             } finally {
                 setLoading(false);
             }
         },
-        []  // Dependency array có thể cần thêm các dependency nếu có
+        []
     );
-    
 
     useEffect(() => {
         setGlobalLoadingHandler(setLoading);
@@ -139,7 +138,7 @@ const Category: React.FC = () => {
         });
     };
 
-    const handleSubmit = async (values: any) => {
+    const handleSubmit = async (values: FormValues) => {
         try {
             if (isEditing && editingCategory) {
                 await editCategory(editingCategory._id, values);
