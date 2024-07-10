@@ -49,12 +49,17 @@ axiosInstance.interceptors.response.use(
   }
 );
 
-const handleErrorByToast = (error: AxiosError) => {
-  const data = error.response?.data as { message?: string };
-  const message = data?.message ?? error.message;
+const handleErrorByToast = (errors: AxiosError) => {
+  const data = errors.response?.data as { message?: string; errors?: { message?: string }[] };
+  let message = data?.message ?? errors.message ?? 'An error occurred';
+  if (!data?.message && data?.errors?.length) {
+    const errorMessages = data.errors.map(error => error.message).filter(Boolean);
+    if (errorMessages.length) {
+      message = errorMessages.join(', ');
+    }
+  }
   toast.error(message);
-  console.log('Error message:', message);
-  return Promise.reject(error);
+  return Promise.reject(errors);
 };
 
 export default axiosInstance;
