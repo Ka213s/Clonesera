@@ -1,4 +1,4 @@
-import { React, useState, GoogleOAuthProvider, GoogleLogin, loginAccount, getCurrentLogin, config, logo, Form, Input, Button, EyeOutlined, useNavigate, EyeInvisibleOutlined } from '../utils/commonImports';
+import { React, useState, GoogleOAuthProvider, GoogleLogin, loginAccount, Link, getCurrentLogin, config, logo, Form, Input, Button, EyeOutlined, useNavigate, EyeInvisibleOutlined } from '../utils/commonImports';
 import { CredentialResponse } from '@react-oauth/google';
 
 const Login: React.FC = () => {
@@ -36,7 +36,9 @@ const Login: React.FC = () => {
         <div className="flex flex-col w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10 md:flex-row">
           <div className="w-full md:w-1/2 px-4 md:px-20 py-10 flex flex-col justify-between">
             <div>
+              <Link to={'/'}>
               <img src={logo} alt="Logo" className="h-10 w-auto mb-8 relative z-10" />
+              </Link>
               <h3 className="text-3xl font-bold mb-1">Welcome Back</h3>
               <p className="text-sm text-gray-600 mb-6">Login to your account</p>
 
