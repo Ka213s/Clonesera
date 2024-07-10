@@ -1,6 +1,6 @@
 // src/utils/commonImports.ts
 export { default as React, useState, useEffect, createContext, useContext, useCallback, useMemo } from 'react';
-export { useNavigate,Navigate , useLocation } from 'react-router-dom';
+export { useNavigate,Navigate , useLocation, Link } from 'react-router-dom';
 export { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 export { createSession,createCourse,loginAccount, loginUserByGoogle, registerUserByGoogle ,getCourses, getCurrentLogin, getCategories, createCategory, editCategory, deleteCategory } from '../services/Api';
 export { setGlobalLoadingHandler } from '../services/axiosInstance';

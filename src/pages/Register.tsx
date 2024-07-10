@@ -39,7 +39,7 @@ const Register: React.FC = () => {
         <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-purple-300 to-blue-200 relative">
             <div className="flex w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10">
                 <div className="w-full md:w-1/2 px-6 py-8 flex flex-col justify-center overflow-y-auto">
-                    <Link to="/home">
+                    <Link to="/">
                         <img src={logo} alt="Logo" className="h-10 w-auto mb-6 cursor-pointer" />
                     </Link>
                     <h2 className="text-2xl md:text-3xl font-bold mb-1">Register</h2>
