@@ -5,6 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoute from './PrivateRoute';
 import {roles} from '../utils/commonImports';
+import Category from '../pages/Category';
 const AnotherPage = lazy(() => import('../pages/AnotherPage'));
 const Login = lazy(() => import('../pages/Login'));
 const CoursesTable = lazy(() => import('../pages/CoursesTable'));
@@ -43,6 +44,7 @@ const AppRouter: React.FC = () => {
                     {/* Public Routes */}
                     <Route path="/another-page" element={<AnotherPage />} />
                     <Route path="/courses" element={<CoursesTable />} />
+                    <Route path="/categories" element={<Category />} />
                     <Route path="/" element={<Login />} />
                 </Routes>
             </Suspense>
