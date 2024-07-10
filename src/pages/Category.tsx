@@ -1,4 +1,4 @@
-import { Table, Pagination, Button, Modal, Select, Input, React, useEffect, useState, useCallback, useMemo, setGlobalLoadingHandler, getCategories, createCategory, editCategory, deleteCategory, EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '../util/commonImports';
+import { Table, Pagination, Button, Modal, Select, Input, React, useEffect, useState, useCallback, useMemo, getCategories, createCategory, editCategory, deleteCategory, EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '../util/commonImports';
 import { ColumnsType } from 'antd/es/table';
 import CategoryForm from './CategoryForm';
 
@@ -12,7 +12,6 @@ interface Category {
 const Category: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [parentCategories, setParentCategories] = useState<Category[]>([]);
-    const [loading, setLoading] = useState(false);
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
@@ -24,7 +23,7 @@ const Category: React.FC = () => {
 
     const fetchCategories = useCallback(
         async (page: number, pageSize: number, filterOption: string, keyword: string) => {
-            setLoading(true);
+
             try {
                 const searchCondition: any = {
                     filterOption,
@@ -46,15 +45,11 @@ const Category: React.FC = () => {
                 const parentData = await getCategories({ filterOption: 'parent' }, 1, 1000);
                 setParentCategories(parentData.data.pageData);
             } finally {
-                setLoading(false);
+
             }
         },
         []
     );
-
-    useEffect(() => {
-        setGlobalLoadingHandler(setLoading);
-    }, []);
 
     useEffect(() => {
         fetchCategories(page, pageSize, filterOption, searchKeyword);
@@ -150,7 +145,7 @@ const Category: React.FC = () => {
 
     const handleSearch = (event?: React.KeyboardEvent<HTMLInputElement>) => {
         if (!event || event.key === 'Enter') {
-            setPage(1); 
+            setPage(1);
             fetchCategories(1, pageSize, filterOption, searchKeyword);
         }
     };
@@ -163,7 +158,7 @@ const Category: React.FC = () => {
                     placeholder="Select"
                     onChange={(value) => {
                         setFilterOption(value as 'parent' | 'sub' | '');
-                        setPage(1); 
+                        setPage(1);
                         fetchCategories(1, pageSize, value as 'parent' | 'sub' | '', searchKeyword);
                     }}
                     allowClear
@@ -187,7 +182,6 @@ const Category: React.FC = () => {
             <Table
                 columns={columns}
                 dataSource={categories.map(category => ({ ...category, key: category._id }))}
-                loading={loading}
                 pagination={false}
                 className="mb-4"
             />
