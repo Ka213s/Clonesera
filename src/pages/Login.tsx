@@ -3,6 +3,9 @@ import { CredentialResponse } from '@react-oauth/google';
 
 const Login: React.FC = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [googleId, setGoogleId] = useState<string | null>(null);
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);
   const navigate = useNavigate();
 
   const handleLoginClick = () => { navigate('/register'); };
@@ -23,7 +26,38 @@ const Login: React.FC = () => {
   };
 
   const handleGoogleLoginSuccess = async (response: CredentialResponse) => {
-    console.log('Google login successful:', response);
+    try {
+      const googleResponse = await loginUserByGoogle({ google_id: response.credential });
+      if (googleResponse) {
+        const token = googleResponse.data.token;
+        localStorage.setItem('token', token);
+        const userResponse = await getDataUser(token);
+        const dataUser = JSON.stringify(userResponse.data);
+        localStorage.setItem('data', dataUser);
+        navigate('/home');
+      } else {
+        setGoogleId(response.credential);
+        setIsRoleModalVisible(true);
+      }
+    } catch (error) {
+      console.error('Error logging in with Google:', error);
+      setGoogleId(response.credential);
+      setIsRoleModalVisible(true);
+    }
+  };
+
+  const handleRoleSelection = async () => {
+    if (!googleId || !selectedRole) return;
+
+    try {
+      const response = await registerUserByGoogle({ google_id: googleId, role: selectedRole });
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      setIsRoleModalVisible(false);
+      navigate('/home');
+    } catch (error) {
+      console.error('Error registering with Google:', error);
+    }
   };
 
   const handleGoogleLoginError = () => {
@@ -121,6 +155,20 @@ const Login: React.FC = () => {
           <div className="wave"></div>
         </div>
       </div>
+
+      {isRoleModalVisible && (
+        <div className="role-modal">
+          <div className="role-modal-content">
+            <h2>Select Your Role</h2>
+            <select onChange={(e) => setSelectedRole(e.target.value)}>
+              <option value="">Select Role</option>
+              <option value="user">User</option>
+              <option value="admin">Admin</option>
+            </select>
+            <button onClick={handleRoleSelection}>Submit</button>
+          </div>
+        </div>
+      )}
     </GoogleOAuthProvider>
   );
 };

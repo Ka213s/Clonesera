@@ -23,14 +23,15 @@ export const getCurrentLogin = async () => {
   return response.data;
 };
 
-export const getCategories = (searchCondition: any, pageNum: number, pageSize: number): Promise<any> => {
-  return axiosInstance.post('/api/category/search', {
+export const getCategories = async (searchCondition: { keyword: string; category: string; status: string; is_deleted: boolean; }, pageNum: number, pageSize: number) => {
+  const response = await axiosInstance.post('/api/category/search', {
     searchCondition,
     pageInfo: {
       pageNum,
       pageSize
     }
-  }).then(response => response);
+  });
+  return response.data;
 };
 
 export const createCategory = async (data: { name: string; description: string; parent_category_id?: string }) => {
@@ -45,5 +46,13 @@ export const editCategory = async (id: string, data: { name: string; description
 
 export const deleteCategory = async (id: string) => {
   const response = await axiosInstance.delete(`/api/category/${id}`);
+  return response.data;
+};
+export const loginUserByGoogle = async (data: { google_id: string; }) => {
+  const response = await axiosInstance.post("/api/auth/google", data);
+  if (response.data.token) {
+    localStorage.setItem('token', response.data.token);
+  }
+  toast.success("Google login successful");
   return response.data;
 };
