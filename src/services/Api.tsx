@@ -1,3 +1,4 @@
+import { toast } from 'react-toastify';
 import axiosInstance from './axiosInstance';
 
 export const getCourses = async (searchCondition: { keyword: string; category: string; status: string; is_deleted: boolean; }, pageNum: number, pageSize: number) => {
@@ -8,12 +9,12 @@ export const getCourses = async (searchCondition: { keyword: string; category: s
   return response.data;
 };
 
-
 export const loginAccount = async (data: { email: string; password: string }) => {
   const response = await axiosInstance.post("/api/auth", data);
   if (response.data.token) {
     localStorage.setItem('token', response.data.token); 
   }
+  toast.success('Login successful');
   return response.data;
 };
 

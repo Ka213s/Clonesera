@@ -2,7 +2,6 @@ import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { Table, Pagination } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { getCourses } from '../services/Api';
-import { setGlobalLoadingHandler } from '../services/axiosInstance';
 
 interface Course {
   _id: string;
@@ -12,36 +11,31 @@ interface Course {
 
 const CoursesTable: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
-  const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchCourses = useCallback(
     async (page: number, pageSize: number) => {
-      setLoading(true);
+      setIsLoading(true); // Start loading
       try {
         const searchCondition = { keyword: '', category: '', status: 'new', is_deleted: false };
         const data = await getCourses(searchCondition, page, pageSize);
         setCourses(data.pageData);
       } finally {
-        setLoading(false);
+        setIsLoading(false); // End loading
       }
     },
     []
   );
 
-  // Debounce logic implementation
   const debouncedFetchCourses = useMemo(() => {
     let timeout: NodeJS.Timeout;
     return (page: number, pageSize: number) => {
       clearTimeout(timeout);
-      timeout = setTimeout(() => fetchCourses(page, pageSize), 300); // Adjust debounce delay as necessary
+      timeout = setTimeout(() => fetchCourses(page, pageSize), 300);
     };
   }, [fetchCourses]);
-
-  useEffect(() => {
-    setGlobalLoadingHandler(setLoading);
-  }, []);
 
   useEffect(() => {
     debouncedFetchCourses(page, pageSize);
@@ -65,12 +59,14 @@ const CoursesTable: React.FC = () => {
 
   return (
     <div>
-      <Table
-        columns={columns}
-        dataSource={courses.map(course => ({ ...course, key: course._id }))}
-        loading={loading}
-        pagination={false}
-      />
+      {!isLoading && (
+        <Table
+          columns={columns}
+          dataSource={courses.map(course => ({ ...course, key: course._id }))}
+          pagination={false}
+          locale={{ emptyText: 'No Data' }}
+        />
+      )}
       <Pagination
         current={page}
         pageSize={pageSize}

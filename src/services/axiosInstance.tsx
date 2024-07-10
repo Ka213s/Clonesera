@@ -1,7 +1,8 @@
 import axios, { AxiosInstance, AxiosError } from 'axios';
 import { toast } from 'react-toastify';
-import { useNavigate } from 'react-router-dom';
 import config from '../config/config';
+import { handleHttpErrors } from '../consts/errorHandler';
+
 let setLoading: (loading: boolean) => void = () => {};
 
 export const setGlobalLoadingHandler = (loadingHandler: (loading: boolean) => void) => {
@@ -42,22 +43,7 @@ axiosInstance.interceptors.response.use(
     const { response } = err;
     if (response) {
       handleErrorByToast(err);
-      const navigate = useNavigate();
-      switch (response.status) {
-        case 400:
-          break;
-        case 403:
-          navigate('/403');
-          break;
-        case 404:
-          navigate('/404');
-          break;
-        case 500:
-          navigate('/500');
-          break;
-        default:
-          break;
-      }
+      handleHttpErrors(response.status);
     }
     return Promise.reject(err);
   }
@@ -66,8 +52,8 @@ axiosInstance.interceptors.response.use(
 const handleErrorByToast = (error: AxiosError) => {
   const data = error.response?.data as { message?: string };
   const message = data?.message ?? error.message;
-  console.log(message);
   toast.error(message);
+  console.log('Error message:', message);
   return Promise.reject(error);
 };
 
