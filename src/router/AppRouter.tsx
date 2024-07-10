@@ -45,6 +45,7 @@ const AppRouter: React.FC = () => {
                     {/* Public Routes */}
                     <Route path="/another-page" element={<AnotherPage />} />
                     <Route path="/courses" element={<CoursesTable />} />
+                    <Route path="/categories" element={<Category />} />
                     <Route path="/login" element={<Login />} />
                     <Route path="/register" element={<Register />} />
                 </Routes>
