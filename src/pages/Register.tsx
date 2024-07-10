@@ -4,6 +4,14 @@ import { Form, Input, Button, Radio } from 'antd';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import { logo } from '../utils/commonImports';
 
+interface FormValues {
+    fullName: string;
+    email: string;
+    password: string;
+    confirmPassword: string;
+    role: 'student' | 'instructor';
+}
+
 const Register: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
@@ -11,30 +19,20 @@ const Register: React.FC = () => {
 
     const handleLoginClick = () => { navigate('/login') };
 
-    const handleSubmit = async (values: any): Promise<void> => {
+    const handleSubmit = async (values: FormValues): Promise<void> => {
         setIsButtonDisabled(true);
-        try {
-            const dataToSubmit = {
-                name: values.fullName,
-                password: values.password,
-                email: values.email,
-                role: values.role,
-            };
-            console.log('Data to submit:', dataToSubmit);
-            // Perform API call or other actions here
+        
+        const dataToSubmit = {
+            name: values.fullName,
+            password: values.password,
+            email: values.email,
+            role: values.role,
+        };
+        console.log('Data to submit:', dataToSubmit);
+        // Perform API call or other actions here
 
-            form.resetFields();
-            navigate('/verify-email', { state: { email: values.email } });
-        } catch (error: any) {
-            setIsButtonDisabled(false);
-            if (error.response?.data?.message) {
-                form.setFields([{ name: 'email', errors: [error.response.data.message] }]);
-            } else if (error.emailExists) {
-                form.setFields([{ name: 'email', errors: [error.message] }]);
-            } else {
-                console.error('Error registering:', error);
-            }
-        }
+        form.resetFields();
+        navigate('/verify-email', { state: { email: values.email } });
     };
 
     return (

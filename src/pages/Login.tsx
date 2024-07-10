@@ -1,36 +1,20 @@
-import {
-  React,
-  useState,
-  GoogleOAuthProvider,
-  GoogleLogin,
-  loginAccount,
-  getCurrentLogin,
-  config,
-  logo,
-  Form,
-  Input,
-  Button,
-  EyeOutlined,
-  useNavigate,
-  EyeInvisibleOutlined,
-} from '../utils/commonImports';
+import { React, useState, GoogleOAuthProvider, GoogleLogin, loginAccount, getCurrentLogin, config, logo, Form, Input, Button, EyeOutlined, useNavigate, EyeInvisibleOutlined } from '../utils/commonImports';
 import { CredentialResponse } from '@react-oauth/google';
 
 const Login: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate();
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const navigate = useNavigate();
 
-  const handleLoginClick = () => { navigate('/register') };
+  const handleLoginClick = () => { navigate('/register'); };
 
   const handleSubmit = async (values: { email: string; password: string }) => {
     setIsButtonDisabled(true);
     try {
       const response = await loginAccount(values);
-      console.log('Login successful:', response);
-      const GetCurrentLogin = await getCurrentLogin();
-      localStorage.setItem('userData', JSON.stringify(GetCurrentLogin));
+      console.log('Login response:', response);
+      const currentLogin = await getCurrentLogin();
+      localStorage.setItem('userData', JSON.stringify(currentLogin));
+      navigate('/');
     } catch (error) {
       console.error('Error logging in:', error);
     } finally {
@@ -58,7 +42,6 @@ const Login: React.FC = () => {
 
               <Form
                 name="login"
-                initialValues={{ email, password }}
                 onFinish={handleSubmit}
                 className="flex flex-col w-full"
               >
@@ -72,8 +55,6 @@ const Login: React.FC = () => {
                   <Input
                     type="email"
                     placeholder="Username"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
                     className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   />
                 </Form.Item>
@@ -84,8 +65,6 @@ const Login: React.FC = () => {
                 >
                   <Input.Password
                     placeholder="Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
                     className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     iconRender={(visible) => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
                   />

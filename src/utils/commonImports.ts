@@ -9,4 +9,4 @@ export { default as logo } from '../assets/Logo-2.png';
 export { default as Artwork } from '../assets/Artwork.webp';
 export { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 export { Form, Input, Button, Radio } from 'antd';
-export { roles } from '../consts/index';
+export { ROLES, PATHS } from '../consts/index';
