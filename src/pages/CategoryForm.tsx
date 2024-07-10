@@ -1,5 +1,11 @@
-import { React, Form, Input, Select, Modal, useEffect } from '../util/commonImports';
-import Category from './Category';
+import { React, Form, Input, Select, Modal, useEffect } from '../utils/commonImports';
+
+interface Category {
+    _id: string;
+    name: string;
+    description: string;
+    parent_category_id: string | null;
+}
 
 interface CategoryFormProps {
     isVisible: boolean;
@@ -77,7 +83,10 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
                         name="parent_category_id"
                         label="Parent Category"
                     >
-                        <Select placeholder="Select a parent category">
+                        <Select 
+                            placeholder="Select a parent category"
+                            onChange={(value: string) => form.setFieldsValue({ parent_category_id: value })}
+                        >
                             {filteredParentCategories.map(parentCategory => (
                                 <Select.Option key={parentCategory._id} value={parentCategory._id}>
                                     {parentCategory.name}

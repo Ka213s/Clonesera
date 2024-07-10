@@ -8,7 +8,7 @@ export const handleHttpErrors = (status: number) => {
         window.location.href = '/403';
         break;
       case 404:
-        window.location.href = '/404';
+      
         break;
       case 500:
         window.location.href = '/500';

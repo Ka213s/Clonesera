@@ -1,8 +1,11 @@
-import { React, useState, GoogleOAuthProvider, GoogleLogin, loginAccount, getCurrentLogin, config, logo, Form, Input, Button, EyeOutlined, useNavigate, EyeInvisibleOutlined } from '../utils/commonImports';
+import { React, useState, GoogleOAuthProvider, GoogleLogin, Link, loginAccount, getCurrentLogin, registerUserByGoogle, loginUserByGoogle, config, logo, Form, Input, Button, EyeOutlined, useNavigate, EyeInvisibleOutlined } from '../utils/commonImports';
 import { CredentialResponse } from '@react-oauth/google';
 
 const Login: React.FC = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+  const [googleId, setGoogleId] = useState<string | null>(null);
+  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);
   const navigate = useNavigate();
 
   const handleLoginClick = () => { navigate('/register'); };
@@ -23,7 +26,45 @@ const Login: React.FC = () => {
   };
 
   const handleGoogleLoginSuccess = async (response: CredentialResponse) => {
-    console.log('Google login successful:', response);
+    if (!response.credential) {
+      console.error('Error: Google credential is undefined');
+      return;
+    }
+
+    try {
+      const googleResponse = await loginUserByGoogle({ google_id: response.credential });
+      console.log('Google login response:', googleResponse);
+      if (googleResponse) {
+        const token = googleResponse.token;
+        localStorage.setItem('token', token);
+        const userResponse = await getCurrentLogin();
+        const dataUser = JSON.stringify(userResponse);
+        localStorage.setItem('userData', dataUser);
+        navigate('/');
+      } else {
+        setGoogleId(response.credential);
+        setIsRoleModalVisible(true);
+      }
+    } catch (error) {
+      console.error('Error logging in with Google:', error);
+  
+      setGoogleId(response.credential);
+      setIsRoleModalVisible(true);
+    }
+  };
+
+  const handleRoleSelection = async () => {
+    if (!googleId || !selectedRole) return;
+
+    try {
+      const response = await registerUserByGoogle({ google_id: googleId, role: selectedRole });
+      const token = response.data.token;
+      localStorage.setItem('token', token);
+      setIsRoleModalVisible(false);
+      navigate('/home');
+    } catch (error) {
+      console.error('Error registering with Google:', error);
+    }
   };
 
   const handleGoogleLoginError = () => {
@@ -36,7 +77,9 @@ const Login: React.FC = () => {
         <div className="flex flex-col w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10 md:flex-row">
           <div className="w-full md:w-1/2 px-4 md:px-20 py-10 flex flex-col justify-between">
             <div>
+              <Link to={'/'}>
               <img src={logo} alt="Logo" className="h-10 w-auto mb-8 relative z-10" />
+              </Link>
               <h3 className="text-3xl font-bold mb-1">Welcome Back</h3>
               <p className="text-sm text-gray-600 mb-6">Login to your account</p>
 
@@ -121,6 +164,28 @@ const Login: React.FC = () => {
           <div className="wave"></div>
         </div>
       </div>
+
+      {isRoleModalVisible && (
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="role-modal-content bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl mb-4">Select Your Role</h2>
+            <select 
+              onChange={(e) => setSelectedRole(e.target.value)} 
+              className="w-full p-2 border rounded-lg mb-4"
+            >
+              <option value="">Select Role</option>
+              <option value="student">Student</option>
+              <option value="instructor">Instructor</option>
+            </select>
+            <button 
+              onClick={handleRoleSelection} 
+              className="w-full py-2 bg-blue-600 text-white rounded-lg"
+            >
+              Submit
+            </button>
+          </div>
+        </div>
+      )}
     </GoogleOAuthProvider>
   );
 };
