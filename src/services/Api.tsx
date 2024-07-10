@@ -1,5 +1,5 @@
 import axiosInstance from './axiosInstance';
-
+import { toast } from 'react-toastify';
 
 
 export const loginAccount = async (data: { email: string; password: string }) => {
@@ -15,21 +15,12 @@ export const getCurrentLogin = async () => {
   return response.data;
 };
 
-<<<<<<< HEAD
+
 export const getCategories = async (searchCondition: { keyword: string; category: string; status: string; is_deleted: boolean; }, pageNum: number, pageSize: number) => {
   const response = await axiosInstance.post('/api/category/search', { 
     searchCondition, 
     pageInfo: { pageNum, pageSize } });
-=======
-export const getCategories = async (searchCondition: { keyword: string; is_deleted: boolean }, pageNum: number, pageSize: number) => {
-  const response = await axiosInstance.post('/api/category/search', {
-    searchCondition,  
-    pageInfo: {      
-      pageNum,
-      pageSize,
-    },
-  });
->>>>>>> 3d3846adf733915098f31ffb1bdd13b1049d2e73
+
   return response.data;
 };
 
