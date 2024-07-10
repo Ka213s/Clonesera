@@ -1,4 +1,4 @@
-import { Table, Pagination, Button, Modal, Select, Input, React, useEffect, useState, useCallback, useMemo, getCategories, createCategory, editCategory, deleteCategory, EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '../util/commonImports';
+import { Table, Pagination, Button, Modal, Select, Input, React, useEffect, useState, useCallback, useMemo, getCategories, createCategory, editCategory, deleteCategory, EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '../utils/commonImports';
 import { ColumnsType } from 'antd/es/table';
 import CategoryForm from './CategoryForm';
 

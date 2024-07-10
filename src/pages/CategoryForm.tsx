@@ -1,4 +1,4 @@
-import { React, Form, Input, Select, Modal, useEffect } from '../util/commonImports';
+import { React, Form, Input, Select, Modal, useEffect } from '../utils/commonImports';
 import Category from './Category';
 
 interface CategoryFormProps {

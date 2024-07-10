@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { Editor as TinyMCEEditor } from 'tinymce';
-
+import {config} from './commonImports';
 interface TinyMCEEditorProps {
   value: string;
   onEditorChange: (content: string) => void;
@@ -17,7 +17,7 @@ const TinyMCEEditorComponent: React.FC<TinyMCEEditorProps> = ({ value, onEditorC
 
   return (
     <Editor
-      apiKey={process.env.REACT_APP_TINYMCE_API_KEY}
+      apiKey={config.TINYMCE_API_KEY}
       value={editorContent}
       init={{
         height: 300,

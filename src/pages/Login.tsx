@@ -1,4 +1,4 @@
-import { React, useState, GoogleOAuthProvider, GoogleLogin, loginAccount, getCurrentLogin, config, logo, Form, Input, Button, EyeOutlined, useNavigate, EyeInvisibleOutlined } from '../utils/commonImports';
+import { React, useState, GoogleOAuthProvider, GoogleLogin, loginAccount, getCurrentLogin, registerUserByGoogle, loginUserByGoogle, config, logo, Form, Input, Button, EyeOutlined, useNavigate, EyeInvisibleOutlined } from '../utils/commonImports';
 import { CredentialResponse } from '@react-oauth/google';
 
 const Login: React.FC = () => {
@@ -26,21 +26,28 @@ const Login: React.FC = () => {
   };
 
   const handleGoogleLoginSuccess = async (response: CredentialResponse) => {
+    if (!response.credential) {
+      console.error('Error: Google credential is undefined');
+      return;
+    }
+
     try {
       const googleResponse = await loginUserByGoogle({ google_id: response.credential });
+      console.log('Google login response:', googleResponse);
       if (googleResponse) {
-        const token = googleResponse.data.token;
+        const token = googleResponse.token;
         localStorage.setItem('token', token);
-        const userResponse = await getDataUser(token);
-        const dataUser = JSON.stringify(userResponse.data);
-        localStorage.setItem('data', dataUser);
-        navigate('/home');
+        const userResponse = await getCurrentLogin();
+        const dataUser = JSON.stringify(userResponse);
+        localStorage.setItem('userData', dataUser);
+        navigate('/');
       } else {
         setGoogleId(response.credential);
         setIsRoleModalVisible(true);
       }
     } catch (error) {
       console.error('Error logging in with Google:', error);
+  
       setGoogleId(response.credential);
       setIsRoleModalVisible(true);
     }
@@ -157,15 +164,23 @@ const Login: React.FC = () => {
       </div>
 
       {isRoleModalVisible && (
-        <div className="role-modal">
-          <div className="role-modal-content">
-            <h2>Select Your Role</h2>
-            <select onChange={(e) => setSelectedRole(e.target.value)}>
+        <div className="fixed inset-0 flex items-center justify-center z-50">
+          <div className="role-modal-content bg-white p-6 rounded-lg shadow-lg">
+            <h2 className="text-2xl mb-4">Select Your Role</h2>
+            <select 
+              onChange={(e) => setSelectedRole(e.target.value)} 
+              className="w-full p-2 border rounded-lg mb-4"
+            >
               <option value="">Select Role</option>
-              <option value="user">User</option>
-              <option value="admin">Admin</option>
+              <option value="student">Student</option>
+              <option value="instructor">Instructor</option>
             </select>
-            <button onClick={handleRoleSelection}>Submit</button>
+            <button 
+              onClick={handleRoleSelection} 
+              className="w-full py-2 bg-blue-600 text-white rounded-lg"
+            >
+              Submit
+            </button>
           </div>
         </div>
       )}

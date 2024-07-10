@@ -9,14 +9,14 @@ export const ROLES = {
 export const PATHS = {
   HOME: '/',
   LOGOUT: '/logout',
-  COURSES: '/courses',
   ERROR500: '/500',
   ERROR403: '/403',
   ERROR404: '/404',
   ANOTHER_PAGE: '/another-page',
   LOGIN: '/login',
   REGISTER: '/register',
-  CATEGORY: '/categories'
+  CATEGORY: '/categories',
+  COURSE : '/courses'
 };
 
 export const sidebarMenuItemsData = {
