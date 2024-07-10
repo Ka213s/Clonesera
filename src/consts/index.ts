@@ -16,6 +16,7 @@ export const PATHS = {
   ANOTHER_PAGE: '/another-page',
   LOGIN: '/login',
   REGISTER: '/register',
+  CATEGORY: '/categories'
 };
 
 export const sidebarMenuItemsData = {
