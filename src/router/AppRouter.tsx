@@ -8,6 +8,7 @@ import {roles} from '../utils/commonImports';
 import Category from '../pages/Category';
 const AnotherPage = lazy(() => import('../pages/AnotherPage'));
 const Login = lazy(() => import('../pages/Login'));
+const Register = lazy(() => import('../pages/Register'));
 const CoursesTable = lazy(() => import('../pages/CoursesTable'));
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));
@@ -44,8 +45,8 @@ const AppRouter: React.FC = () => {
                     {/* Public Routes */}
                     <Route path="/another-page" element={<AnotherPage />} />
                     <Route path="/courses" element={<CoursesTable />} />
-                    <Route path="/categories" element={<Category />} />
-                    <Route path="/" element={<Login />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
                 </Routes>
             </Suspense>
             <ToastContainer />
