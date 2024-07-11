@@ -1,6 +1,6 @@
 import { createCourse, getCategories ,useEffect, useState } from '../../../utils/commonImports';
 import { Button, Modal, Form, Input, InputNumber, Select } from 'antd';
-import FileUploader from '../FileUploader'; 
+import FileUploader from '../../FileUploader'; 
 import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor'; 
 
 const { Option, OptGroup } = Select;

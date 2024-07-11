@@ -18,9 +18,9 @@ export const loginUserByGoogle = async (data: { google_id: string; }) => {
   }
   toast.success("Google login successful");
   return response.data;
- };
+};
 
- export const registerUserByGoogle = async (data: { google_id: string; role: string; }) => {
+export const registerUserByGoogle = async (data: { google_id: string; role: string; }) => {
   const response = await axiosInstance.post("/api/users/google", data);
   if (response.data.token) {
     localStorage.setItem('token', response.data.token);
@@ -28,10 +28,27 @@ export const loginUserByGoogle = async (data: { google_id: string; }) => {
   toast.success("Google registration successful");
   return response.data;
 };
- export const getCurrentLogin = async () => {
+
+export const getCurrentLogin = async () => {
   const response = await axiosInstance.get("/api/auth");
   return response.data;
- };
+};
+
+export const getUserData = async (id: string) => {
+  const response = await axiosInstance.get(`/api/users/${id}`);
+  return response.data;
+};
+
+export const changePassword = async (data: { user_id: string; old_password: string; new_password: string }) => {
+  const response = await axiosInstance.put("/api/users/change-password", data);
+  toast.success("Password changed successfully");
+  return response.data;
+};
+
+export const updateAccount = async (id: string, data: { name?: string; description?: string; phone_number?: string; avatar?: string; dob?: string }) => {
+  const response = await axiosInstance.put(`/api/users/${id}`, data);
+  return response.data;
+};
 
 export const getCategories = async (searchCondition: { keyword: string; category: string; status: string; is_deleted: boolean; }, pageNum: number, pageSize: number) => {
   const response = await axiosInstance.post('/api/category/search', {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import AccountSetting from '../pages/AccountSetting';
+import ChangePassword from '../pages/ChangePassword';
 
 
 const SettingPage: React.FC = () => {
@@ -9,6 +10,8 @@ const SettingPage: React.FC = () => {
         switch (activeTab) {
             case 'Account':
                 return <AccountSetting />;
+            case 'Change Password':
+                return <ChangePassword />;
             default:
                 return null;
         }
@@ -26,6 +29,14 @@ const SettingPage: React.FC = () => {
                                 onClick={() => setActiveTab('Account')}
                             >
                                 Account
+                            </button>
+                        </li>
+                        <li className="mr-2">
+                            <button
+                                className={`inline-block p-4 border-b-2 ${activeTab === 'Change Password' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
+                                onClick={() => setActiveTab('Change Password')}
+                            >
+                                Change Password
                             </button>
                         </li>
                     </ul>

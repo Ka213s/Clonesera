@@ -1,9 +1,24 @@
 import { React, useState, useEffect, Form, Input, Button, getUserData, updateAccount, getCurrentLogin } from '../utils/commonImports';
 import ResizableTextArea from "antd/lib/input";
+import FileUploader from '../components/FileUploader';
+
+interface UserData {
+    _id: string;
+    name: string;
+    email: string;
+    role: string;
+    status: string;
+    description: string;
+    phone_number: string;
+    avatar: string;
+    video: string;
+    dob: string;
+}
 
 const AccountSettings: React.FC = () => {
     const [saving, setSaving] = useState(false);
-    const [userData, setUserData] = useState<any>(null);
+    const [userData, setUserData] = useState<UserData | null>(null);
+    const [imageURL, setImageURL] = useState<string | null>(null);
 
     const fetchUserData = async (id: string) => {
         try {
@@ -29,16 +44,18 @@ const AccountSettings: React.FC = () => {
         initialize();
     }, []);
 
-    const handleSaveChanges = async (values: any) => {
+    const handleSaveChanges = async (values: Partial<UserData>) => {
         setSaving(true);
 
-        const updatedProfile = {
-            ...userData,
+        const updatedProfile: UserData = {
+            ...userData!,
             ...values,
+            avatar: imageURL || userData!.avatar,
+            dob: values.dob || userData!.dob
         };
 
         try {
-            await updateAccount(userData._id, updatedProfile);
+            await updateAccount(userData!._id, updatedProfile);
             setUserData(updatedProfile);
         } catch (error) {
             console.error('Error updating profile:', error);
@@ -66,6 +83,12 @@ const AccountSettings: React.FC = () => {
                         dob: userData.dob ? userData.dob.split('T')[0] : null,
                     }}
                 >
+                    <Form.Item
+                        label="Upload Image"
+                        rules={[{ required: true, message: 'Please upload an image!' }]}
+                    >
+                        <FileUploader type="image" onUploadSuccess={setImageURL} />
+                    </Form.Item>
                     <Form.Item
                         label="Full Name"
                         name="name"

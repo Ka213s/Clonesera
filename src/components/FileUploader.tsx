@@ -1,10 +1,9 @@
-// FileUploader.tsx
-
 import React, { useState } from 'react';
-import { Upload, Button } from 'antd';
+import { Upload, Button, message } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../config/firebaseConfig';
+
 
 interface FileUploaderProps {
   type: 'image' | 'video';
@@ -16,49 +15,51 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess }) =>
 
   const handleUpload = async (file: File) => {
     if (!file) return;
-  
-    // Lấy phần mở rộng của file
+
+    // Get file extension
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
     const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
     const allowedVideoExtensions = ['mp4', 'avi', 'mov', 'mkv'];
-  
+
     if (type === 'image' && !allowedImageExtensions.includes(fileExtension!)) {
-      console.error('File type does not match. Only images are allowed.');
+      message.error('File type does not match. Only images are allowed.');
       return;
     }
-  
+
     if (type === 'video' && !allowedVideoExtensions.includes(fileExtension!)) {
-      console.error('File type does not match. Only videos are allowed.');
+      message.error('File type does not match. Only videos are allowed.');
       return;
     }
-  
+
     setUploading(true);
-  
+
     try {
       const storageRef = ref(storage, `${type}s/${file.name}`);
       const uploadTask = uploadBytesResumable(storageRef, file);
-  
+
       uploadTask.on(
         'state_changed',
         (snapshot) => {
           console.log(`${type.toUpperCase()} upload state:`, snapshot.state);
         },
         (error) => {
+          message.error('Upload error');
           console.error('Upload error:', error);
           setUploading(false);
         },
         async () => {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
           onUploadSuccess(downloadURL);
+          message.success(`${type.charAt(0).toUpperCase() + type.slice(1)} uploaded successfully`);
           setUploading(false);
         }
       );
     } catch (error) {
+      message.error('Error uploading file');
       console.error('Error uploading file:', error);
       setUploading(false);
     }
   };
-  
 
   const uploadProps = {
     beforeUpload: (file: File) => {
