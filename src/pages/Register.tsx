@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Form, Input, Button, Radio } from 'antd';
-import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
+import { Form, Input, Button, Radio, Upload } from 'antd';
+import { EyeInvisibleOutlined, EyeOutlined, UploadOutlined } from '@ant-design/icons';
 import { logo } from '../utils/commonImports';
+// import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+// import { storage } from "../utils/firebaseConfig";
 
 interface FormValues {
     fullName: string;
@@ -10,29 +12,44 @@ interface FormValues {
     password: string;
     confirmPassword: string;
     role: 'student' | 'instructor';
+    description?: string;
+    video?: any;
+    avatar?: any;
 }
 
 const Register: React.FC = () => {
     const [form] = Form.useForm();
     const navigate = useNavigate();
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
+    const [selectedRole, setSelectedRole] = useState<'student' | 'instructor'>('student');
 
     const handleLoginClick = () => { navigate('/login') };
 
     const handleSubmit = async (values: FormValues): Promise<void> => {
         setIsButtonDisabled(true);
-        
-        const dataToSubmit = {
+
+        const dataToSubmit: any = {
             name: values.fullName,
             password: values.password,
             email: values.email,
             role: values.role,
         };
+
+        if (values.role === 'instructor') {
+            dataToSubmit.description = values.description;
+            dataToSubmit.video = values.video;
+            dataToSubmit.avatar = values.avatar;
+        }
+
         console.log('Data to submit:', dataToSubmit);
         // Perform API call or other actions here
 
         form.resetFields();
         navigate('/verify-email', { state: { email: values.email } });
+    };
+
+    const handleRoleChange = (e: any) => {
+        setSelectedRole(e.target.value);
     };
 
     return (
@@ -104,11 +121,43 @@ const Register: React.FC = () => {
                             name="role"
                             rules={[{ required: true, message: 'Please select a role!' }]}
                         >
-                            <Radio.Group>
+                            <Radio.Group onChange={handleRoleChange}>
                                 <Radio value="student">Student</Radio>
                                 <Radio value="instructor">Instructor</Radio>
                             </Radio.Group>
                         </Form.Item>
+                        {selectedRole === 'instructor' && (
+                            <>
+                                <Form.Item
+                                    name="description"
+                                    rules={[{ required: true, message: 'Please input your description!' }]}
+                                >
+                                    <Input.TextArea placeholder='Description' rows={4} size="large" />
+                                </Form.Item>
+                                <div className="flex gap-4">
+                                    <Form.Item
+                                        name="video"
+                                        rules={[{ required: true, message: 'Please upload a video!' }]}
+                                        valuePropName="fileList"
+                                        getValueFromEvent={(e) => e.fileList}
+                                    >
+                                        <Upload beforeUpload={() => false} listType="picture">
+                                            <Button icon={<UploadOutlined />}>Upload Video</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="avatar"
+                                        rules={[{ required: true, message: 'Please upload an avatar!' }]}
+                                        valuePropName="fileList"
+                                        getValueFromEvent={(e) => e.fileList}
+                                    >
+                                        <Upload beforeUpload={() => false} listType="picture">
+                                            <Button icon={<UploadOutlined />}>Upload Avatar</Button>
+                                        </Upload>
+                                    </Form.Item>
+                                </div>
+                            </>
+                        )}
                         <Form.Item>
                             <Button
                                 type="primary"
