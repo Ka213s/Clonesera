@@ -16,6 +16,7 @@ export const PATHS = {
   LOGIN: '/login',
   REGISTER: '/register',
   CATEGORY: '/categories',
+  SETTING_PAGE: '/setting-page',
   COURSE : '/courses'
 };
 

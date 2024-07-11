@@ -4,7 +4,7 @@ import LayoutRoute from '../layout/LayoutRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoute from './PrivateRoute';
-import { ROLES , PATHS } from '../utils/commonImports';
+import { ROLES, PATHS } from '../utils/commonImports';
 
 // Public Pages and Components
 const AnotherPage = lazy(() => import('../pages/AnotherPage'));
@@ -13,6 +13,7 @@ const Login = lazy(() => import('../pages/Login'));
 const Logout = lazy(() => import('../components/Logout'));
 const Register = lazy(() => import('../pages/Register'));
 const Category = lazy(() => import('../pages/Category'));
+const SettingPage = lazy(() => import('../pages/SettingPage'));
 const Course = lazy(() => import('../pages/Instructor/CreateCourse'));
 
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
@@ -25,13 +26,14 @@ const AppRouter: React.FC = () => {
             <Suspense>
                 <Routes>
                     {/* Routes with MainLayout */}
-                    <Route element={<LayoutRoute />}>      
+                    <Route element={<LayoutRoute />}>
                         <Route path={PATHS.HOME} element={<HomePage />} />
                         <Route path={PATHS.LOGOUT} element={<Logout />} />
                         <Route path={PATHS.COURSE} element={<Course />} />
                         <Route path={PATHS.CATEGORY} element={<Category />} />
+                        <Route path={PATHS.SETTING_PAGE} element={<SettingPage />} />
                         <Route path={PATHS.ERROR500} element={<PrivateRoute element={PageError500} allowedRoles={[ROLES.STUDENT]} />} />
-                        
+
                     </Route>
 
                     {/* Routes without MainLayout */}

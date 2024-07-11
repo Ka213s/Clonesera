@@ -15,6 +15,15 @@ export const getCurrentLogin = async () => {
   return response.data;
 };
 
+export const getUserData = async (id: string) => {
+  const response = await axiosInstance.get(`/api/users/${id}`);
+  return response.data;
+};
+
+export const updateAccount = async (id: string, data: { name?: string; description?: string; phone_number?: string; avatar?: string; dob?: string }) => {
+  const response = await axiosInstance.put(`/api/users/${id}`, data);
+  return response.data;
+};
 
 export const getCategories = async (searchCondition: { keyword: string; category: string; status: string; is_deleted: boolean; }, pageNum: number, pageSize: number) => {
   const response = await axiosInstance.post('/api/category/search', { 
