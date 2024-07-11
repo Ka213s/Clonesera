@@ -11,7 +11,7 @@ interface MainLayoutProps {
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -25,9 +25,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     <div className="flex flex-col h-screen">
       <Header toggleMenu={toggleMenu} />
       <div className="flex flex-1 overflow-hidden pt-14">
-        <Sidebar showMenu={isMenuOpen} />
         <main className="flex-1 p-4 bg-white overflow-y-auto relative">
           <Loading isLoading={isLoading}>
+            <Sidebar showMenu={isMenuOpen} />
             {children}
           </Loading>
         </main>

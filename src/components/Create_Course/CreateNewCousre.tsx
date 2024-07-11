@@ -2,7 +2,7 @@ import React from 'react';
 import { Tabs, Layout } from 'antd';
 import BasicInformation from './Course/Course';
 import SessionComponent from './Session/Session';
-import LessonComponent from './Lesson';
+import LessonComponent from './Lession/Lesson';
 
 const { Content } = Layout;
 const CreateCourse: React.FC = () => {

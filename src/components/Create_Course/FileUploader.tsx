@@ -4,6 +4,7 @@ import { UploadOutlined } from '@ant-design/icons';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../../config/firebaseConfig';
 
+
 interface FileUploaderProps {
   type: 'image' | 'video';
   onUploadSuccess: (url: string) => void;

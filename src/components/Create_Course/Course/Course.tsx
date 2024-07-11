@@ -1,6 +1,6 @@
 import React from 'react';
 import CreateCourseButton from './CreateCourseButton';
-import CourseTable from './CourseTable';
+import DisplayCourse from './DisplayCourse';
 
 const Course: React.FC = () => {
   return (
@@ -11,7 +11,7 @@ const Course: React.FC = () => {
       <CreateCourseButton />
       
       {/* Thêm bảng hiển thị course */}
-      <CourseTable />
+      <DisplayCourse />
     </div>
   );
 };
