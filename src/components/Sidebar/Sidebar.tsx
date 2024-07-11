@@ -13,7 +13,7 @@ import {
   HistoryOutlined,
   SendOutlined,
 } from '@ant-design/icons';
-import { sidebarMenuItemsData } from '../../consts'; // Adjust the path as needed
+import { sidebarMenuItemsData } from '../../consts'; // Điều chỉnh đường dẫn nếu cần
 
 interface SidebarProps {
   showMenu: boolean;
@@ -54,7 +54,7 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
     );
 
   return (
-    <aside className={`fixed top-[16.5] left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-56' : 'w-0 overflow-hidden'}`}>
+    <aside className={`fixed top-16 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-56' : 'w-0 overflow-hidden'}`}>
       <Menu mode="inline" style={{ height: '100%', borderRight: 0 }}>
         {renderMenuItems(menuItems)}
       </Menu>
