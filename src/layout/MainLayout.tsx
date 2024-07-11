@@ -25,9 +25,9 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
     <div className="flex flex-col h-screen">
       <Header toggleMenu={toggleMenu} />
       <div className="flex flex-1 overflow-hidden pt-14">
-        <main className="flex-1 p-4 bg-white overflow-y-auto relative">
+        <Sidebar showMenu={isMenuOpen} />
+        <main className={`flex-1 p-4 bg-white overflow-y-auto relative transition-all duration-300 ${isMenuOpen ? 'ml-56' : 'ml-0'}`}>
           <Loading isLoading={isLoading}>
-            <Sidebar showMenu={isMenuOpen} />
             {children}
           </Loading>
         </main>

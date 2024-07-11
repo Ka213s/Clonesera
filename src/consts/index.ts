@@ -16,8 +16,8 @@ export const PATHS = {
   LOGIN: '/login',
   REGISTER: '/register',
   CATEGORY: '/categories',
-  SETTING_PAGE: '/setting-page',
-  COURSE : '/courses'
+  COURSE : '/courses',
+  VERIFY_EMAIL: '/verify-email'
 };
 
 export const sidebarMenuItemsData = {

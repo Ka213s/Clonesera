@@ -29,7 +29,16 @@ export const registerUserByGoogle = async (data: { google_id: string; role: stri
   return response.data;
 };
 
-export const getCurrentLogin = async () => {
+export const registerAccount = async (data: any) => {
+  const response = await axiosInstance.post("/api/auth", data);
+  if (response.data.token) {
+    localStorage.setItem('token', response.data.token);
+  }
+  toast.success("Account registered successfully");
+  return response.data;
+};
+
+ export const getCurrentLogin = async () => {
   const response = await axiosInstance.get("/api/auth");
   return response.data;
 };
@@ -112,3 +121,4 @@ export const getLessons = async (searchCondition: { keyword: string; course_id: 
   });
   return response.data;
 };
+
