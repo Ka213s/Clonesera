@@ -142,14 +142,14 @@ const CreateCourseButton: React.FC = () => {
             rules={[{ required: true, message: 'Please upload an image!' }]}
           >
             <FileUploader type="image" onUploadSuccess={setImageURL} />
-            {imageURL && <img src={imageURL} alt="Uploaded Image" style={{ marginTop: '10px', maxWidth: '100%' }} />}
+           
           </Form.Item>
           <Form.Item
             label="Upload Video"
             rules={[{ required: true, message: 'Please upload a video!' }]}
           >
             <FileUploader type="video" onUploadSuccess={setVideoURL} />
-            {videoURL && <video src={videoURL} controls style={{ marginTop: '10px', maxWidth: '100%' }} />}
+            
           </Form.Item>
           <Form.Item
             name="price"

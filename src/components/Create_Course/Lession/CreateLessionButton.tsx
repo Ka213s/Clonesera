@@ -33,6 +33,7 @@ const CreateLessonButton: React.FC = () => {
   const [videoURL, setVideoURL] = useState<string>('');
   const [imageURL, setImageURL] = useState<string>('');
   const [editorContent, setEditorContent] = useState<string>('');
+  const [lessonType, setLessonType] = useState<string>('video');
 
   const fetchSessions = async () => {
     try {
@@ -69,6 +70,9 @@ const CreateLessonButton: React.FC = () => {
         toast.success("Lesson created successfully");
         form.resetFields();
         setIsModalVisible(false);
+        setVideoURL('');
+        setImageURL('');
+        setEditorContent('');
       }
     } catch (error) {
       toast.error("Failed to create lesson");
@@ -115,9 +119,12 @@ const CreateLessonButton: React.FC = () => {
           <Form.Item
             name="lesson_type"
             label="Lesson Type"
-            rules={[{ required: true, message: 'Please input the lesson type!' }]}
+            rules={[{ required: true, message: 'Please select the lesson type!' }]}
           >
-            <Input />
+            <Select onChange={value => setLessonType(value)}>
+              <Option value="video">Video</Option>
+              <Option value="image">Image</Option>
+            </Select>
           </Form.Item>
           <Form.Item
             label="Description"
@@ -125,20 +132,24 @@ const CreateLessonButton: React.FC = () => {
           >
             <TinyMCEEditorComponent value={editorContent} onEditorChange={setEditorContent} />
           </Form.Item>
-          <Form.Item
-            label="Upload Image"
-            rules={[{ required: false, message: 'Please upload an image!' }]}
-          >
-            <FileUploader type="image" onUploadSuccess={setImageURL} />
-            {imageURL && <img src={imageURL} alt="Uploaded Image" style={{ marginTop: '10px', maxWidth: '100%' }} />}
-          </Form.Item>
-          <Form.Item
-            label="Upload Video"
-            rules={[{ required: true, message: 'Please upload a video!' }]}
-          >
-            <FileUploader type="video" onUploadSuccess={setVideoURL} />
-            {videoURL && <video src={videoURL} controls style={{ marginTop: '10px', maxWidth: '100%' }} />}
-          </Form.Item>
+          {lessonType === 'image' && (
+            <Form.Item
+              label="Upload Image"
+              rules={[{ required: true, message: 'Please upload an image!' }]}
+            >
+              <FileUploader type="image" onUploadSuccess={setImageURL} />
+              {imageURL && <img src={imageURL} alt="Uploaded Image" style={{ marginTop: '10px', maxWidth: '100%' }} />}
+            </Form.Item>
+          )}
+          {lessonType === 'video' && (
+            <Form.Item
+              label="Upload Video"
+              rules={[{ required: true, message: 'Please upload a video!' }]}
+            >
+              <FileUploader type="video" onUploadSuccess={setVideoURL} />
+              {videoURL && <video src={videoURL} controls style={{ marginTop: '10px', maxWidth: '100%' }} />}
+            </Form.Item>
+          )}
           <Form.Item
             name="full_time"
             label="Full Time (minutes)"
