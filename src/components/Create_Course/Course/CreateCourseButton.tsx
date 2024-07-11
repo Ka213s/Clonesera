@@ -1,16 +1,14 @@
-import { useEffect, useState } from 'react';
+import { createCourse, getCategories ,useEffect, useState } from '../../../utils/commonImports';
 import { Button, Modal, Form, Input, InputNumber, Select } from 'antd';
-import { createCourse, getCategories } from '../../../utils/commonImports';
-
-import FileUploader from '../FileUploader'; // Ensure correct path
-import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor'; // Ensure correct path
+import FileUploader from '../FileUploader'; 
+import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor'; 
 
 const { Option, OptGroup } = Select;
 
 type Category = {
   _id: string;
   name: string;
-  parent_category_id?: string; // Assuming parent_category_id is optional
+  parent_category_id?: string; 
 };
 
 const CreateCourseButton: React.FC = () => {
@@ -23,15 +21,11 @@ const CreateCourseButton: React.FC = () => {
   const [content, setContent] = useState<string>('');
 
   useEffect(() => {
-    // Fetch categories when the component mounts
     const fetchCategories = async () => {
       
         const data = await getCategories({ keyword: "", category: "", status: "", is_deleted: false }, 1, 100);
         const fetchedCategories: Category[] = data.pageData;
-
         const categoryTree: { [key: string]: Category[] } = {};
-
-        // Organize categories into a tree structure
         fetchedCategories.forEach(category => {
           if (!category.parent_category_id) {
             if (!categoryTree[category._id]) {
@@ -46,11 +40,7 @@ const CreateCourseButton: React.FC = () => {
         });
 
         setCategories(categoryTree);
-     
-    
-      
     };
-
     fetchCategories();
   }, []);
 
@@ -152,14 +142,14 @@ const CreateCourseButton: React.FC = () => {
             rules={[{ required: true, message: 'Please upload an image!' }]}
           >
             <FileUploader type="image" onUploadSuccess={setImageURL} />
-            {imageURL && <img src={imageURL} alt="Uploaded Image" style={{ marginTop: '10px', maxWidth: '100%' }} />}
+           
           </Form.Item>
           <Form.Item
             label="Upload Video"
             rules={[{ required: true, message: 'Please upload a video!' }]}
           >
             <FileUploader type="video" onUploadSuccess={setVideoURL} />
-            {videoURL && <video src={videoURL} controls style={{ marginTop: '10px', maxWidth: '100%' }} />}
+            
           </Form.Item>
           <Form.Item
             name="price"
