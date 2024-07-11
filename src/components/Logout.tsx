@@ -1,19 +1,21 @@
 import React, { useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../hook/useAuth';
 
 const Logout: React.FC = () => {
   const navigate = useNavigate();
-  const { logout } = useAuth();
 
-  const memoizedHandleLogout = useCallback(() => {
-    logout();
+  const handleLogout = useCallback(() => {
+    // Xóa token và userData khỏi localStorage
+    localStorage.removeItem('token');
+    localStorage.removeItem('userData');
+    
+    // Chuyển hướng về trang chủ
     navigate('/');
-  }, [logout, navigate]);
+  }, [navigate]);
 
   useEffect(() => {
-    memoizedHandleLogout();
-  }, [memoizedHandleLogout]);
+    handleLogout();
+  }, [handleLogout]);
 
   return null;
 };

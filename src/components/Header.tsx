@@ -1,10 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Badge, Dropdown, Avatar, Menu, Input } from 'antd';
-import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, MailOutlined, BellOutlined } from '@ant-design/icons';
+import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, MailOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
-import { UserMenu } from '../components/Menu/UserMenu';
-import useAuth from '../hook/useAuth'; 
 
 const { Search } = Input;
 
@@ -12,8 +10,43 @@ type HeaderProps = {
   toggleMenu: () => void;
 };
 
+const UserMenu: React.FC<{ onLogout: () => void }> = ({ onLogout }) => (
+  <Menu>
+    <Menu.Item key="profile">
+      <Link to="/profile">
+        <UserOutlined /> Profile
+      </Link>
+    </Menu.Item>
+    <Menu.Item key="logout" onClick={onLogout}>
+      <UserOutlined /> Logout
+    </Menu.Item>
+  </Menu>
+);
+
 const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
-  const { isAuthenticated, userData } = useAuth();
+  const [avatar, setAvatar] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+
+  useEffect(() => {
+    const storedUserData = localStorage.getItem('userData');
+    if (storedUserData) {
+      const userData = JSON.parse(storedUserData);
+      if (userData.avatar) {
+        setAvatar(userData.avatar);
+      }
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('userData');
+    setIsLoggedIn(false);
+    setAvatar(null);
+  };
+
+  console.log('User Avatar:', avatar);
 
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
@@ -32,7 +65,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       />
 
       <div className="flex items-center ml-auto space-x-8 pr-4">
-        {isAuthenticated ? (
+        {isLoggedIn ? (
           <>
             <Button type="primary" className="hidden md:block bg-[#9997F5] hover:bg-[#8886E5] border-none w-35 h-7 text-xs">
               Create New Course
@@ -60,10 +93,10 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               </Dropdown>
             </Badge>
 
-            <Dropdown overlay={<UserMenu />} trigger={['click']}>
+            <Dropdown overlay={<UserMenu onLogout={handleLogout} />} trigger={['click']}>
               <Avatar
                 size="large"
-                src={userData?.avatar}
+                src={avatar || 'default-avatar-path'} // Provide a default avatar path if avatar is null
                 className="border-2 border-purple-400 hover:border-purple-700 transition duration-300 ease-in-out"
               />
             </Dropdown>
@@ -72,9 +105,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
           <>
             <Link to="/login">
               <Button type="primary" className="bg-[#9997F5] hover:bg-[#8886E5] border-none">Login</Button>
-            </Link>
-            <Link to="/register">
-              <Button type="primary" className="bg-[#9997F5] hover:bg-[#8886E5] border-none">Register</Button>
             </Link>
           </>
         )}
