@@ -11,17 +11,9 @@ export const ERROR = {
   ERROR403: '/403',
   ERROR404: '/404',
 };
-export const ADMIN = {
-
-};
-
 export const INSTRUCTOR = {
   COURSE: '/courses',
 };
-export const STUDENT = {
-
-};
-
 export const PUBLIC = {
   HOME: '/',
   LOGOUT: '/logout',
