@@ -1,6 +1,5 @@
 import { React, useState, GoogleOAuthProvider, GoogleLogin, Link, loginAccount, getCurrentLogin, registerUserByGoogle, loginUserByGoogle, config, logo, Form, Input, Button, EyeOutlined, useNavigate, EyeInvisibleOutlined } from '../utils/commonImports';
 import { CredentialResponse } from '@react-oauth/google';
-import { Radio } from 'antd';
 
 const Login: React.FC = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
