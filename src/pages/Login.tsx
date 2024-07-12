@@ -9,6 +9,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLoginClick = () => { navigate('/register'); };
+  const handleForgotPasswordClick = () => { navigate('/forgot-password'); };
 
   const handleSubmit = async (values: { email: string; password: string }) => {
     setIsButtonDisabled(true);
@@ -47,7 +48,7 @@ const Login: React.FC = () => {
       }
     } catch (error) {
       console.error('Error logging in with Google:', error);
-  
+
       setGoogleId(response.credential);
       setIsRoleModalVisible(true);
     }
@@ -78,7 +79,7 @@ const Login: React.FC = () => {
           <div className="w-full md:w-1/2 px-4 md:px-20 py-10 flex flex-col justify-between">
             <div>
               <Link to={'/'}>
-              <img src={logo} alt="Logo" className="h-10 w-auto mb-8 relative z-10" />
+                <img src={logo} alt="Logo" className="h-10 w-auto mb-8 relative z-10" />
               </Link>
               <h3 className="text-3xl font-bold mb-1">Welcome Back</h3>
               <p className="text-sm text-gray-600 mb-6">Login to your account</p>
@@ -118,7 +119,7 @@ const Login: React.FC = () => {
                     <input type="checkbox" className="w-4 h-4 mr-2" />
                     <p className="text-sm">Remember Me</p>
                   </div>
-                  <Button type="link" className="text-sm font-medium text-gray-500 underline">
+                  <Button type="link" className="text-sm font-medium text-gray-500 underline" onClick={handleForgotPasswordClick}>
                     Forgot password?
                   </Button>
                 </div>
@@ -169,16 +170,16 @@ const Login: React.FC = () => {
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="role-modal-content bg-white p-6 rounded-lg shadow-lg">
             <h2 className="text-2xl mb-4">Select Your Role</h2>
-            <select 
-              onChange={(e) => setSelectedRole(e.target.value)} 
+            <select
+              onChange={(e) => setSelectedRole(e.target.value)}
               className="w-full p-2 border rounded-lg mb-4"
             >
               <option value="">Select Role</option>
               <option value="student">Student</option>
               <option value="instructor">Instructor</option>
             </select>
-            <button 
-              onClick={handleRoleSelection} 
+            <button
+              onClick={handleRoleSelection}
               className="w-full py-2 bg-blue-600 text-white rounded-lg"
             >
               Submit

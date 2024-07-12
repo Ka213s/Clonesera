@@ -37,34 +37,21 @@ export const registerUserByGoogle = async (data: { google_id: string; role: stri
   return response.data;
 };
 
-export const verifyEmail = async (token: string)  => {
+export const forgotPassword = async (data: { email: string }) => {
+  const response = await axiosInstance.put("/api/auth/forgot-password", data);
+  toast.success("Password reset link sent to your email");
+  return response.data;
+};
+
+export const verifyEmail = async (token: string) => {
   const response = await axiosInstance.post('/api/auth/verify-token', { token });
   toast.success("Email verification successful");
   return response.data;
 };
+
 export const resendVerifyEmail = async (data: { email: string }) => {
   const response = await axiosInstance.post('/api/auth/resend-token', data);
   toast.success("Verification email resent successfully");
-  return response.data;
-};
-
-export const verifyEmail = async (data: { token: string }) => {
-  const response = await axiosInstance.post("/api/auth/verify-token", data);
-  if (response.data.success) {
-    toast.success("Email verification successful");
-  } else {
-    toast.error("Email verification failed");
-  }
-  return response.data;
-};
-
-export const resendVerifyEmail = async (data: { email: string }) => {
-  const response = await axiosInstance.post("/api/auth/resend-token", data);
-  if (response.data.success) {
-    toast.success("Verification email resent successfully");
-  } else {
-    toast.error("Failed to resend verification email");
-  }
   return response.data;
 };
 
@@ -151,4 +138,3 @@ export const getLessons = async (searchCondition: { keyword: string; course_id: 
   });
   return response.data;
 };
-
