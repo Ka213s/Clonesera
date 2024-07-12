@@ -18,6 +18,7 @@ export const PATHS = {
   CATEGORY: '/categories',
   COURSE: '/courses',
   SETTING_PAGE: '/setting-page',
+  FORGOT_PASSWORD: '/forgot-password',
   VERIFY_EMAIL: '/verify-email/:token'
 };
 
