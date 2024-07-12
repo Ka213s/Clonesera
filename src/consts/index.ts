@@ -18,7 +18,7 @@ export const PATHS = {
   CATEGORY: '/categories',
   COURSE: '/courses',
   SETTING_PAGE: '/setting-page',
-  VERIFY_EMAIL: '/verify-email'
+  VERIFY_EMAIL: '/verify-email/:token'
 };
 
 export const sidebarMenuItemsData = {
