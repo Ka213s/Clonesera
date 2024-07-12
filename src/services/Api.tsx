@@ -37,6 +37,12 @@ export const registerUserByGoogle = async (data: { google_id: string; role: stri
   return response.data;
 };
 
+export const forgotPassword = async (data: { email: string }) => {
+  const response = await axiosInstance.put("/api/auth/forgot-password", data);
+  toast.success("Password reset link sent to your email");
+  return response.data;
+};
+
 export const verifyEmail = async (token: string)  => {
   const response = await axiosInstance.post('/api/auth/verify-token', { token });
   toast.success("Email verification successful");
