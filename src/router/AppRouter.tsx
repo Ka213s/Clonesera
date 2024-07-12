@@ -4,7 +4,8 @@ import LayoutRoute from '../layout/LayoutRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoute from './PrivateRoute';
-import { ROLES, PATHS, ERROR } from '../utils/commonImports';
+import { ROLES} from '../utils/commonImports';
+import { ERROR, INSTRUCTOR, PUBLIC } from '../consts';
 
 // Public Pages and Components
 const HomePage = lazy(() => import('../pages/HomePage'));
@@ -29,25 +30,24 @@ const AppRouter: React.FC = () => {
                 <Routes>
                     {/* Routes with MainLayout */}
                     <Route element={<LayoutRoute />}>
-                        <Route path={PATHS.HOME} element={<HomePage />} />
-                        <Route path={PATHS.LOGOUT} element={<Logout />} />
-                        <Route path={PATHS.COURSE} element={<Course />} />
-                        <Route path={PATHS.CATEGORY} element={<Category />} />
-                        <Route path={PATHS.SETTING_PAGE} element={<SettingPage />} />
-                        <Route path={PATHS.REQUEST_MANAGEMENT} element={<RequestManagement />} />
-                        <Route path={PATHS.ERROR500} element={<PrivateRoute element={PageError500} allowedRoles={[ROLES.STUDENT]} />} />
+                        <Route path={PUBLIC.HOME} element={<HomePage />} />
+                        <Route path={PUBLIC.LOGOUT} element={<Logout />} />
+                        <Route path={INSTRUCTOR.COURSE} element={<Course />} />
+                        <Route path={PUBLIC.CATEGORY} element={<Category />} />
+                        <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
+                        <Route path={ERROR.ERROR500} element={<PrivateRoute element={PageError500} allowedRoles={[ROLES.STUDENT]} />} />
 
                     </Route>
 
                     {/* Routes without MainLayout */}
                     {/* Public Routes */}
-                    <Route path={ERROR.ER403} element={<PageError403 />} />
-                    <Route path={ERROR.ER404} element={<PageError404 />} />
-                    <Route path={ERROR.ER500} element={<PageError500 />} />
-                    <Route path={PATHS.LOGIN} element={<Login />} />
-                    <Route path={PATHS.REGISTER} element={<Register />} />
-                    <Route path={PATHS.VERIFY_EMAIL} element={<VerifyEmail />} />
-                    <Route path={PATHS.FORGOT_PASSWORD} element={<ForgotPassword />} />
+                    <Route path={ERROR.ERROR403} element={<PageError403 />} />
+                    <Route path={ERROR.ERROR404} element={<PageError404 />} />
+                    <Route path={ERROR.ERROR500} element={<PageError500 />} />
+                    <Route path={PUBLIC.LOGIN} element={<Login />} />
+                    <Route path={PUBLIC.REGISTER} element={<Register />} />
+                    <Route path={PUBLIC.VERIFY_EMAIL} element={<VerifyEmail />} />
+                    <Route path={PUBLIC.FORGOT_PASSWORD} element={<ForgotPassword />} />
                 </Routes>
             </Suspense>
             <ToastContainer />

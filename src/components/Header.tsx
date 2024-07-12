@@ -106,6 +106,9 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             <Link to="/login">
               <Button type="primary" className="bg-[#9997F5] hover:bg-[#8886E5] border-none">Login</Button>
             </Link>
+            <Link to="/register">
+              <Button type="primary" className="bg-[#9997F5] hover:bg-[#8886E5] border-none">Register</Button>
+            </Link>
           </>
         )}
       </div>
