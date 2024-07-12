@@ -1,5 +1,6 @@
 import { React, useState, GoogleOAuthProvider, GoogleLogin, Link, loginAccount, getCurrentLogin, registerUserByGoogle, loginUserByGoogle, config, logo, Form, Input, Button, EyeOutlined, useNavigate, EyeInvisibleOutlined } from '../utils/commonImports';
 import { CredentialResponse } from '@react-oauth/google';
+import { Radio } from 'antd';
 
 const Login: React.FC = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -47,7 +48,7 @@ const Login: React.FC = () => {
       }
     } catch (error) {
       console.error('Error logging in with Google:', error);
-  
+
       setGoogleId(response.credential);
       setIsRoleModalVisible(true);
     }
@@ -78,7 +79,7 @@ const Login: React.FC = () => {
           <div className="w-full md:w-1/2 px-4 md:px-20 py-10 flex flex-col justify-between">
             <div>
               <Link to={'/'}>
-              <img src={logo} alt="Logo" className="h-10 w-auto mb-8 relative z-10" />
+                <img src={logo} alt="Logo" className="h-10 w-auto mb-8 relative z-10" />
               </Link>
               <h3 className="text-3xl font-bold mb-1">Welcome Back</h3>
               <p className="text-sm text-gray-600 mb-6">Login to your account</p>
@@ -166,23 +167,50 @@ const Login: React.FC = () => {
       </div>
 
       {isRoleModalVisible && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="role-modal-content bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl mb-4">Select Your Role</h2>
-            <select 
-              onChange={(e) => setSelectedRole(e.target.value)} 
-              className="w-full p-2 border rounded-lg mb-4"
-            >
-              <option value="">Select Role</option>
-              <option value="student">Student</option>
-              <option value="instructor">Instructor</option>
-            </select>
-            <button 
-              onClick={handleRoleSelection} 
-              className="w-full py-2 bg-blue-600 text-white rounded-lg"
-            >
-              Submit
-            </button>
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h2 className="text-2xl font-bold mb-4 text-center">Select Your Role</h2>
+            <div className="flex justify-between mb-4">
+              <Radio.Group
+                onChange={(e) => setSelectedRole(e.target.value)}
+                value={selectedRole}
+                className="flex flex-row"
+              >
+                <Radio value="student">
+                  <span className="text-base">Student</span>
+                </Radio>
+                <Radio value="instructor" className="ml-28">
+                  <span className="text-base">Instructor</span>
+                </Radio>
+              </Radio.Group>
+            </div>
+            <div className="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <p className="text-base font-semibold mb-2">Benefits of being a Student:</p>
+                <ul className="list-disc list-inside ml-4">
+                  <li className="mb-2">Access to exclusive student resources</li>
+                  <li className="mb-2">Join student communities and groups</li>
+                  <li className="mb-2">Get personalized study plans</li>
+                </ul>
+              </div>
+              <div>
+                <p className="text-base font-semibold mb-2">Benefits of being an Instructor:</p>
+                <ul className="list-disc list-inside ml-4">
+                  <li className="mb-2">Access to teaching tools and resources</li>
+                  <li className="mb-2">Join instructor communities and forums</li>
+                  <li className="mb-2">Get insights and analytics on student progress</li>
+                </ul>
+              </div>
+            </div>
+            <div className="flex justify-end mt-4">
+              <Button
+                onClick={handleRoleSelection}
+                className="w-full py-2 bg-blue-600 text-white rounded-lg"
+                disabled={!selectedRole}
+              >
+                Submit
+              </Button>
+            </div>
           </div>
         </div>
       )}
