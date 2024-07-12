@@ -38,7 +38,27 @@ export const registerAccount = async (data: any) => {
   return response.data;
 };
 
- export const getCurrentLogin = async () => {
+export const verifyEmail = async (data: { token: string }) => {
+  const response = await axiosInstance.post("/api/auth/verify-token", data);
+  if (response.data.success) {
+    toast.success("Email verification successful");
+  } else {
+    toast.error("Email verification failed");
+  }
+  return response.data;
+};
+
+export const resendVerifyEmail = async (data: { email: string }) => {
+  const response = await axiosInstance.post("/api/auth/resend-token", data);
+  if (response.data.success) {
+    toast.success("Verification email resent successfully");
+  } else {
+    toast.error("Failed to resend verification email");
+  }
+  return response.data;
+};
+
+export const getCurrentLogin = async () => {
   const response = await axiosInstance.get("/api/auth");
   return response.data;
 };

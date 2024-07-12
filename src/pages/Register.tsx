@@ -1,10 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Form, Input, Button, Radio, Upload } from 'antd';
+import { Form, Input, Button, Radio, Upload, notification } from 'antd';
 import { EyeInvisibleOutlined, EyeOutlined, UploadOutlined } from '@ant-design/icons';
 import { logo } from '../utils/commonImports';
-// import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-// import { storage } from "../utils/firebaseConfig";
 
 interface FormValues {
     fullName: string;
@@ -43,6 +41,12 @@ const Register: React.FC = () => {
 
         console.log('Data to submit:', dataToSubmit);
         // Perform API call or other actions here
+
+        notification.success({
+            message: 'Registration Successful',
+            description: 'An email verification has been sent to your email address.',
+            placement: 'topRight',
+        });
 
         form.resetFields();
         navigate('/verify-email', { state: { email: values.email } });
