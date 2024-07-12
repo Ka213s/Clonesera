@@ -6,6 +6,12 @@ export const ROLES = {
   INSTRUCTOR: "instructor",
 };
 
+export const ERROR = {
+  ER500: '/500',
+  ER403: '/403',
+  ER404: '/404',
+};
+
 export const PATHS = {
   HOME: '/',
   LOGOUT: '/logout',
