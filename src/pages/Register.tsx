@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Form, Input, Button, Radio, Upload, notification } from 'antd';
-import { EyeInvisibleOutlined, EyeOutlined, UploadOutlined } from '@ant-design/icons';
-import { logo } from '../utils/commonImports';
+import { Form, Input, Button, Radio, message } from 'antd';
+import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
+import { registerAccountInstructor, registerAccountStudent, logo } from '../utils/commonImports';
+import FileUploader from '../components/FileUploader';
+import type { RadioChangeEvent } from 'antd';
 
 interface FormValues {
     fullName: string;
@@ -10,9 +12,10 @@ interface FormValues {
     password: string;
     confirmPassword: string;
     role: 'student' | 'instructor';
+    phone_number?: string;
     description?: string;
-    video?: any;
-    avatar?: any;
+    videoUrl?: string;
+    avatarUrl?: string;
 }
 
 const Register: React.FC = () => {
@@ -21,39 +24,60 @@ const Register: React.FC = () => {
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [selectedRole, setSelectedRole] = useState<'student' | 'instructor'>('student');
 
-    const handleLoginClick = () => { navigate('/login') };
+    const handleLoginClick = () => {
+        navigate('/login');
+    };
 
     const handleSubmit = async (values: FormValues): Promise<void> => {
         setIsButtonDisabled(true);
 
-        const dataToSubmit: any = {
-            name: values.fullName,
-            password: values.password,
-            email: values.email,
-            role: values.role,
-        };
-
-        if (values.role === 'instructor') {
-            dataToSubmit.description = values.description;
-            dataToSubmit.video = values.video;
-            dataToSubmit.avatar = values.avatar;
+        try {
+            if (values.role === 'student') {
+                const studentData = {
+                    name: values.fullName,
+                    email: values.email,
+                    password: values.password,
+                    role: values.role,
+                };
+                console.log('Registering student:', studentData);
+                await registerAccountStudent(studentData);
+            } else if (values.role === 'instructor') {
+                const instructorData = {
+                    name: values.fullName,
+                    email: values.email,
+                    password: values.password,
+                    role: values.role,
+                    phone_number: values.phone_number!,
+                    description: values.description!,
+                    video: values.videoUrl!,
+                    avatar: values.avatarUrl!,
+                    status : false
+                };
+                console.log('Registering instructor:', instructorData);
+                await registerAccountInstructor(instructorData);
+            }
+            message.success('Registration successful. A verification email has been sent, please check your email.');
+        } catch (error) {
+            message.error('Registration failed');
+        } finally {
+            setIsButtonDisabled(false);
         }
 
-        console.log('Data to submit:', dataToSubmit);
-        // Perform API call or other actions here
-
-        notification.success({
-            message: 'Registration Successful',
-            description: 'An email verification has been sent to your email address.',
-            placement: 'topRight',
-        });
-
         form.resetFields();
-        navigate('/verify-email', { state: { email: values.email } });
     };
 
-    const handleRoleChange = (e: any) => {
-        setSelectedRole(e.target.value);
+    const handleRoleChange = (e: RadioChangeEvent) => {
+        setSelectedRole(e.target.value as 'student' | 'instructor');
+    };
+
+    const handleVideoUploadSuccess = (url: string) => {
+        form.setFieldsValue({ videoUrl: url });
+
+    };
+
+    const handleAvatarUploadSuccess = (url: string) => {
+        form.setFieldsValue({ avatarUrl: url });
+    
     };
 
     return (
@@ -133,6 +157,12 @@ const Register: React.FC = () => {
                         {selectedRole === 'instructor' && (
                             <>
                                 <Form.Item
+                                    name="phone_number"
+                                    rules={[{ required: true, message: 'Please input your phone number!' }]}
+                                >
+                                    <Input placeholder='Phone Number' size="large" />
+                                </Form.Item>
+                                <Form.Item
                                     name="description"
                                     rules={[{ required: true, message: 'Please input your description!' }]}
                                 >
@@ -140,24 +170,16 @@ const Register: React.FC = () => {
                                 </Form.Item>
                                 <div className="flex gap-4">
                                     <Form.Item
-                                        name="video"
+                                        name="videoUrl"
                                         rules={[{ required: true, message: 'Please upload a video!' }]}
-                                        valuePropName="fileList"
-                                        getValueFromEvent={(e) => e.fileList}
                                     >
-                                        <Upload beforeUpload={() => false} listType="picture">
-                                            <Button icon={<UploadOutlined />}>Upload Video</Button>
-                                        </Upload>
+                                        <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
                                     </Form.Item>
                                     <Form.Item
-                                        name="avatar"
+                                        name="avatarUrl"
                                         rules={[{ required: true, message: 'Please upload an avatar!' }]}
-                                        valuePropName="fileList"
-                                        getValueFromEvent={(e) => e.fileList}
                                     >
-                                        <Upload beforeUpload={() => false} listType="picture">
-                                            <Button icon={<UploadOutlined />}>Upload Avatar</Button>
-                                        </Upload>
+                                        <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
                                     </Form.Item>
                                 </div>
                             </>
