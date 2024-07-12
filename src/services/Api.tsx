@@ -65,6 +65,20 @@ export const getUserData = async (id: string) => {
   return response.data;
 };
 
+export const getUsers = async (searchCondition: { keyword: string; role: string; status: boolean; is_deleted: boolean; }, pageNum: number, pageSize: number) => {
+  const response = await axiosInstance.post('/api/users/search', {
+    searchCondition,
+    pageInfo: { pageNum, pageSize }
+  });
+  return response.data;
+};
+
+export const reviewProfileInstructor = async (data: { user_id: string, status: 'approve' | 'reject', comment?: string }) => {
+  const response = await axiosInstance.put("/api/users/review-profile-instructor", data);
+  toast.success("Profile review submitted successfully");
+  return response.data;
+};
+
 export const changePassword = async (data: { user_id: string; old_password: string; new_password: string }) => {
   const response = await axiosInstance.put("/api/users/change-password", data);
   toast.success("Password changed successfully");
