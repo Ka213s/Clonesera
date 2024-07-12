@@ -4,17 +4,16 @@ import LayoutRoute from '../layout/LayoutRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoute from './PrivateRoute';
-import { ROLES, PATHS } from '../utils/commonImports';
+import { ROLES, PATHS, ERROR } from '../utils/commonImports';
 
 // Public Pages and Components
-const AnotherPage = lazy(() => import('../pages/AnotherPage'));
 const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
 const Logout = lazy(() => import('../components/Logout'));
 const Register = lazy(() => import('../pages/Register'));
 const Category = lazy(() => import('../pages/Category'));
 const SettingPage = lazy(() => import('../pages/SettingPage'));
-const Course = lazy(() => import('../pages/Instructor/CreateCourse'));
+const Course = lazy(() => import('../pages/Instructor/ManagementCourse'));
 const VerifyEmail = lazy(() => import('../components/VerifyEmailDone'));
 const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
 
@@ -40,10 +39,9 @@ const AppRouter: React.FC = () => {
 
                     {/* Routes without MainLayout */}
                     {/* Public Routes */}
-                    <Route path={PATHS.ERROR403} element={<PageError403 />} />
-                    <Route path={PATHS.ERROR404} element={<PageError404 />} />
-                    <Route path={PATHS.ERROR500} element={<PageError500 />} />
-                    <Route path={PATHS.ANOTHER_PAGE} element={<AnotherPage />} />
+                    <Route path={ERROR.ER403} element={<PageError403 />} />
+                    <Route path={ERROR.ER404} element={<PageError404 />} />
+                    <Route path={ERROR.ER500} element={<PageError500 />} />
                     <Route path={PATHS.LOGIN} element={<Login />} />
                     <Route path={PATHS.REGISTER} element={<Register />} />
                     <Route path={PATHS.VERIFY_EMAIL} element={<VerifyEmail />} />
