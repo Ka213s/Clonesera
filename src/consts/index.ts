@@ -25,7 +25,8 @@ export const PATHS = {
   COURSE: '/courses',
   SETTING_PAGE: '/setting-page',
   FORGOT_PASSWORD: '/forgot-password',
-  VERIFY_EMAIL: '/verify-email/:token'
+  VERIFY_EMAIL: '/verify-email/:token',
+  REQUEST_MANAGEMENT: '/request-management'
 };
 
 export const sidebarMenuItemsData = {

@@ -16,6 +16,7 @@ const SettingPage = lazy(() => import('../pages/SettingPage'));
 const Course = lazy(() => import('../pages/Instructor/ManagementCourse'));
 const VerifyEmail = lazy(() => import('../components/VerifyEmailDone'));
 const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
+const RequestManagement = lazy(() => import('../pages/RequestManagement'));
 
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));
@@ -33,6 +34,7 @@ const AppRouter: React.FC = () => {
                         <Route path={PATHS.COURSE} element={<Course />} />
                         <Route path={PATHS.CATEGORY} element={<Category />} />
                         <Route path={PATHS.SETTING_PAGE} element={<SettingPage />} />
+                        <Route path={PATHS.REQUEST_MANAGEMENT} element={<RequestManagement />} />
                         <Route path={PATHS.ERROR500} element={<PrivateRoute element={PageError500} allowedRoles={[ROLES.STUDENT]} />} />
 
                     </Route>
