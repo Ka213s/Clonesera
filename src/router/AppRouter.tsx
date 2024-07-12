@@ -8,15 +8,15 @@ import { ROLES} from '../utils/commonImports';
 import { ERROR, INSTRUCTOR, PUBLIC } from '../consts';
 
 // Public Pages and Components
-const AnotherPage = lazy(() => import('../pages/AnotherPage'));
 const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
 const Logout = lazy(() => import('../components/Logout'));
 const Register = lazy(() => import('../pages/Register'));
 const Category = lazy(() => import('../pages/Category'));
 const SettingPage = lazy(() => import('../pages/SettingPage'));
-const Course = lazy(() => import('../pages/Instructor/CreateCourse'));
+const Course = lazy(() => import('../pages/Instructor/ManagementCourse'));
 const VerifyEmail = lazy(() => import('../components/VerifyEmailDone'));
+const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
 
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));
@@ -43,10 +43,10 @@ const AppRouter: React.FC = () => {
                     <Route path={ERROR.ERROR403} element={<PageError403 />} />
                     <Route path={ERROR.ERROR404} element={<PageError404 />} />
                     <Route path={ERROR.ERROR500} element={<PageError500 />} />
-                    <Route path={PUBLIC.ANOTHER_PAGE} element={<AnotherPage />} />
                     <Route path={PUBLIC.LOGIN} element={<Login />} />
                     <Route path={PUBLIC.REGISTER} element={<Register />} />
                     <Route path={PUBLIC.VERIFY_EMAIL} element={<VerifyEmail />} />
+                    <Route path={PUBLIC.FORGOT_PASSWORD} element={<ForgotPassword />} />
                 </Routes>
             </Suspense>
             <ToastContainer />
