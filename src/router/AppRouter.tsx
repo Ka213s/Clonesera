@@ -15,7 +15,7 @@ const Register = lazy(() => import('../pages/Register'));
 const Category = lazy(() => import('../pages/Category'));
 const SettingPage = lazy(() => import('../pages/SettingPage'));
 const Course = lazy(() => import('../pages/Instructor/CreateCourse'));
-const VerifyEmail = lazy(() => import('../pages/VerifyEmail'));
+const VerifyEmail = lazy(() => import('../components/VerifyEmailDone'));
 
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));

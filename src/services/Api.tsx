@@ -1,6 +1,14 @@
 import axiosInstance from './axiosInstance';
 import { toast } from 'react-toastify';
 
+export const registerAccountStudent = async (data: { name: string; email: string; password: string; role: string; }) => {
+  const response = await axiosInstance.post("/api/users", data);
+  return response.data;
+};
+export const registerAccountInstructor = async (data: { name: string; email: string; password: string; role: string; phone_number: string; description: string; video: string; avatar: string; }) => {
+  const response = await axiosInstance.post("/api/users", data);
+  return response.data;
+};
 
 export const loginAccount = async (data: { email: string; password: string }) => {
   const response = await axiosInstance.post("/api/auth", data);
@@ -29,12 +37,14 @@ export const registerUserByGoogle = async (data: { google_id: string; role: stri
   return response.data;
 };
 
-export const registerAccount = async (data: any) => {
-  const response = await axiosInstance.post("/api/auth", data);
-  if (response.data.token) {
-    localStorage.setItem('token', response.data.token);
-  }
-  toast.success("Account registered successfully");
+export const verifyEmail = async (token: string)  => {
+  const response = await axiosInstance.post('/api/auth/verify-token', { token });
+  toast.success("Email verification successful");
+  return response.data;
+};
+export const resendVerifyEmail = async (data: { email: string }) => {
+  const response = await axiosInstance.post('/api/auth/resend-token', data);
+  toast.success("Verification email resent successfully");
   return response.data;
 };
 
