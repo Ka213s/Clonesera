@@ -37,7 +37,7 @@ const iconComponents: { [key: string]: JSX.Element } = {
   SendOutlined: <SendOutlined />
 };
 
-const SidebarIntructor: React.FC<SidebarProps> = ({ showMenu }) => {
+const SidebarInstructor: React.FC<SidebarProps> = ({ showMenu }) => {
   const { insSidebarItem } = SidebarIntructorData;
 
   const renderMenuItems = (items: typeof insSidebarItem) =>
@@ -56,4 +56,4 @@ const SidebarIntructor: React.FC<SidebarProps> = ({ showMenu }) => {
   );
 };
 
-export default SidebarIntructor;
+export default SidebarInstructor;

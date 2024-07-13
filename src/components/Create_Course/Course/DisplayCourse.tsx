@@ -2,9 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Table, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { getCourses } from '../../../utils/commonImports';
+import EditButton from './EditCourse';
+import DeleteButton from './DeleteCourse';
+import SendToAdminButton from './SendToAdminButton';
 
 interface Course {
-  id: number;
+  _id: number;
   name: string;
   category_name: string;
   user_name: string;
@@ -21,7 +24,7 @@ const CourseTable: React.FC = () => {
         const searchCondition = {
           keyword: '',
           category: '',
-          status: 'new',
+          status: '',
           is_deleted: false,
         };
         const pageNum = 1;
@@ -62,6 +65,17 @@ const CourseTable: React.FC = () => {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (_, record) => (
+        <>
+          <EditButton courseId={record._id} />
+          <DeleteButton courseId={record._id} />
+          <SendToAdminButton courseId={record._id} />
+        </>
+      ),
     },
   ];
 

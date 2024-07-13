@@ -65,6 +65,20 @@ export const getUserData = async (id: string) => {
   return response.data;
 };
 
+export const getUsers = async (searchCondition: { keyword: string; role: string; status: boolean; is_deleted: boolean; }, pageNum: number, pageSize: number) => {
+  const response = await axiosInstance.post('/api/users/search', {
+    searchCondition,
+    pageInfo: { pageNum, pageSize }
+  });
+  return response.data;
+};
+
+export const reviewProfileInstructor = async (data: { user_id: string, status: 'approve' | 'reject', comment?: string }) => {
+  const response = await axiosInstance.put("/api/users/review-profile-instructor", data);
+  toast.success("Profile review submitted successfully");
+  return response.data;
+};
+
 export const changePassword = async (data: { user_id: string; old_password: string; new_password: string }) => {
   const response = await axiosInstance.put("/api/users/change-password", data);
   toast.success("Password changed successfully");
@@ -138,3 +152,51 @@ export const getLessons = async (searchCondition: { keyword: string; course_id: 
   });
   return response.data;
 };
+export const getCourseById = async (id: string) => {
+  const response = await axiosInstance.get(`/api/course/${id}`);
+  return response.data;
+};
+export const updateCourse = async (id: string, data: { name: string; category_id: string; description: string; video_url: string; image_url: string; price: number; discount: number; }) => {
+  const response = await axiosInstance.put(`/api/course/${id}`, data);
+  toast.success("Course updated successfully");
+  return response.data;
+};
+export const deleteCourse = async (id: string) => {
+  const response = await axiosInstance.delete(`/api/course/${id}`);
+  toast.success("Course deleted successfully");
+  return response.data;
+};
+export const changeCourseStatus = async (data: { course_id: string; new_status: string; comment?: string }) => {
+  const response = await axiosInstance.put('/api/course/change-status', data);
+  toast.success("Course status updated successfully");
+  return response.data;
+};
+export const getSessionById = async (id: string) => {
+  const response = await axiosInstance.get(`/api/session/${id}`);
+  return response.data;
+};
+export const updateSession = async (id: string, data: { name: string; course_id: string; description?: string; position_order: number; }) => {
+  const response = await axiosInstance.put(`/api/session/${id}`, data);
+  toast.success("Session updated successfully");
+  return response.data;
+};
+export const deleteSession = async (id: string) => {
+  const response = await axiosInstance.delete(`/api/session/${id}`);
+  toast.success("Session deleted successfully");
+  return response.data;
+};
+export const getLessonById = async (id: string) => {
+  const response = await axiosInstance.get(`/api/lesson/${id}`);
+  return response.data;
+};
+export const updateLesson = async (id: string, data: { name: string; course_id: string; session_id: string; user_id: string; lesson_type: string; description?: string; video_url?: string; image_url?: string; full_time: number; position_order: number }) => {
+  const response = await axiosInstance.put(`/api/lesson/${id}`, data);
+  toast.success("Lesson updated successfully");
+  return response.data;
+};
+export const deleteLesson = async (id: string) => {
+  const response = await axiosInstance.delete(`/api/lesson/${id}`);
+  toast.success("Lesson deleted successfully");
+  return response.data;
+};
+

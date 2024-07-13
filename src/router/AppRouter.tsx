@@ -4,7 +4,7 @@ import LayoutRoute from '../layout/LayoutRoute';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoute from './PrivateRoute';
-import { ROLES} from '../utils/commonImports';
+import { ROLES } from '../utils/commonImports';
 import { ERROR, INSTRUCTOR, PUBLIC } from '../consts';
 
 // Public Pages and Components
@@ -17,6 +17,7 @@ const SettingPage = lazy(() => import('../pages/SettingPage'));
 const Course = lazy(() => import('../pages/Instructor/ManagementCourse'));
 const VerifyEmail = lazy(() => import('../components/VerifyEmailDone'));
 const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
+const RequestManagement = lazy(() => import('../pages/RequestManagement'));
 
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));
@@ -34,6 +35,7 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.COURSE} element={<Course />} />
                         <Route path={PUBLIC.CATEGORY} element={<Category />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
+                        <Route path={PUBLIC.REQUEST_MANAGEMENT} element={<RequestManagement />} />
                         <Route path={ERROR.ERROR500} element={<PrivateRoute element={PageError500} allowedRoles={[ROLES.STUDENT]} />} />
 
                     </Route>

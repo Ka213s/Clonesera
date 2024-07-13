@@ -46,8 +46,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     setAvatar(null);
   };
 
-  console.log('User Avatar:', avatar);
-
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
       <div className="flex items-center space-x-4">

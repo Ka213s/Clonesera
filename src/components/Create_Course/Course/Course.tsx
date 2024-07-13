@@ -1,5 +1,5 @@
 import React from 'react';
-import CreateCourseButton from './CreateCourseButton';
+import CreateCourseButton from './CreateCourse';
 import DisplayCourse from './DisplayCourse';
 
 const Course: React.FC = () => {

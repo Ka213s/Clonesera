@@ -1,5 +1,5 @@
 import React from 'react';
-import CreateLessionButton from './CreateLessionButton';
+import CreateLessionButton from './CreateLession';
 import DisplayLeesion from './DisplayLeesion';
 
 const LessonComponent: React.FC = () => {

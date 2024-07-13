@@ -23,7 +23,8 @@ export const PUBLIC = {
   CATEGORY: '/categories',
   SETTING_PAGE: '/setting-page',
   VERIFY_EMAIL: '/verify-email/:token',
-  FORGOT_PASSWORD: '/forgot-password'
+  FORGOT_PASSWORD: '/forgot-password',
+  REQUEST_MANAGEMENT: '/request-management'
 };
 
 export const sidebarMenuItemsData = {

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Table } from 'antd';
+import { Table, TableColumnsType } from 'antd';
 import { getLessons } from '../../../utils/commonImports';
-
+import UpdateLesson from './EditLesson';
+import DeleteLesson from './DeleteLesson';
 
 interface Lesson {
+  _id: string;
   name: string;
   description: string;
   course_id: string;
@@ -19,34 +21,34 @@ interface SearchCondition {
   is_deleted: boolean;
 }
 
-const DisplayLeesion: React.FC = () => {
+const DisplayLesson: React.FC = () => {
   const [lessons, setLessons] = useState<Lesson[]>([]);
 
-  useEffect(() => {
-    const fetchLessons = async () => {
+  const fetchLessons = async () => {
+    try {
       const searchCondition: SearchCondition = {
         keyword: '',
         course_id: '',
         session_id: '',
         lesson_type: '',
         is_position_order: false,
-        is_deleted: false
+        is_deleted: false,
       };
       const pageNum = 1;
       const pageSize = 10;
 
-      try {
-        const data = await getLessons(searchCondition, pageNum, pageSize);
-        setLessons(data.pageData); // Assuming the response has a lessons array
-      } catch (error) {
-        console.error('Error fetching lessons:', error);
-      }
-    };
+      const data = await getLessons(searchCondition, pageNum, pageSize);
+      setLessons(data.pageData); // Assuming the response has a lessons array
+    } catch (error) {
+      console.error('Error fetching lessons:', error);
+    }
+  };
 
+  useEffect(() => {
     fetchLessons();
   }, []);
 
-  const columns = [
+  const columns: TableColumnsType<Lesson> = [
     {
       title: 'Name',
       dataIndex: 'name',
@@ -66,15 +68,27 @@ const DisplayLeesion: React.FC = () => {
       title: 'Deleted',
       dataIndex: 'is_deleted',
       key: 'is_deleted',
-      render: (text: boolean) => (text ? 'Yes' : 'No'),
+      render: (is_deleted: boolean) => (is_deleted ? 'Yes' : 'No'),
+    },
+    {
+      title: 'Actions',
+      key: 'actions',
+      render: (_, record: Lesson) => (
+        <>
+          <UpdateLesson lesson_id={record._id} />
+          <DeleteLesson lesson_id={record._id} />
+        </>
+      ),
     },
   ];
 
   return (
-    <div>
-      <Table dataSource={lessons} columns={columns} rowKey="course_id" />
-    </div>
+    <Table
+      dataSource={lessons}
+      columns={columns}
+      rowKey="lesson_id"
+    />
   );
 };
 
-export default DisplayLeesion;
+export default DisplayLesson;
