@@ -40,6 +40,7 @@ const Register: React.FC = () => {
                     email: values.email,
                     password: values.password,
                     role: values.role,
+                  
                 };
                 console.log('Registering student:', studentData);
                 await registerAccountStudent(studentData);
@@ -53,7 +54,6 @@ const Register: React.FC = () => {
                     description: values.description!,
                     video: values.videoUrl!,
                     avatar: values.avatarUrl!,
-                    status: false
                 };
                 console.log('Registering instructor:', instructorData);
                 await registerAccountInstructor(instructorData);

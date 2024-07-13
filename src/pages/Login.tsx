@@ -1,10 +1,15 @@
 import { React, useState, GoogleOAuthProvider, GoogleLogin, Link, loginAccount, getCurrentLogin, registerUserByGoogle, loginUserByGoogle, config, logo, Form, Input, Button, EyeOutlined, useNavigate, EyeInvisibleOutlined } from '../utils/commonImports';
 import { CredentialResponse } from '@react-oauth/google';
+import FileUploader from '../components/FileUploader'; // Import the FileUploader component
 
 const Login: React.FC = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [googleId, setGoogleId] = useState<string | null>(null);
   const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [description, setDescription] = useState<string>('');
+  const [video, setVideo] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
+  const [avatar, setAvatar] = useState<string>('');
   const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);
   const navigate = useNavigate();
 
@@ -55,14 +60,20 @@ const Login: React.FC = () => {
   };
 
   const handleRoleSelection = async () => {
-    if (!googleId || !selectedRole) return;
+    if (!googleId || !selectedRole || !avatar || !description || !video || !phoneNumber) return;
 
     try {
-      const response = await registerUserByGoogle({ google_id: googleId, role: selectedRole });
-      const token = response.data.token;
+      const response = await registerUserByGoogle({
+        google_id: googleId,
+        role: selectedRole,
+        description: description,
+        video: video,
+        phone_number: phoneNumber,
+      });
+      const token = response.token;
       localStorage.setItem('token', token);
       setIsRoleModalVisible(false);
-      navigate('/home');
+     
     } catch (error) {
       console.error('Error registering with Google:', error);
     }
@@ -70,6 +81,14 @@ const Login: React.FC = () => {
 
   const handleGoogleLoginError = () => {
     console.error('Error logging in with Google');
+  };
+
+  const handleAvatarUploadSuccess = (url: string) => {
+    setAvatar(url);
+  };
+
+  const handleVideoUploadSuccess = (url: string) => {
+    setVideo(url);
   };
 
   return (
@@ -178,6 +197,22 @@ const Login: React.FC = () => {
               <option value="student">Student</option>
               <option value="instructor">Instructor</option>
             </select>
+            <input
+              type="text"
+              placeholder="Description"
+              className="w-full p-2 border rounded-lg mb-4"
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+            <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
+            <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
+            <input
+              type="text"
+              placeholder="Phone Number"
+              className="w-full p-2 border rounded-lg mb-4"
+              value={phoneNumber}
+              onChange={(e) => setPhoneNumber(e.target.value)}
+            />
             <button
               onClick={handleRoleSelection}
               className="w-full py-2 bg-blue-600 text-white rounded-lg"

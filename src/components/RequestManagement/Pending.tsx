@@ -12,6 +12,7 @@ interface User {
     description: string;
     avatar: string;
     status: boolean;
+    is_verified: boolean;
 }
 
 const Pending: React.FC = () => {
@@ -29,11 +30,13 @@ const Pending: React.FC = () => {
             setLoading(true);
             try {
                 const data = await getUsers(
-                    { keyword: '', role: 'instructor', status: false, is_deleted: false },
+                    { keyword: '', role: 'instructor', status: true, is_deleted: false },
                     page,
                     pageSize
                 );
-                setUsers(data.pageData);
+                const filteredData = data.pageData.filter((user: User) => !user.is_verified);
+                console.log('filteredData:', filteredData);
+                setUsers(filteredData);
                 setTotalItems(data.pageInfo.totalItems);
             } catch (error) {
                 toast.error('Failed to fetch users');
@@ -53,7 +56,7 @@ const Pending: React.FC = () => {
             await reviewProfileInstructor({ user_id: userId, status: 'approve', comment: '' });
             fetchUsers(pageNum, pageSize);
         } catch (error) {
-            toast.error(`Failed to approve user`);
+            toast.error('Failed to approve user');
         }
     };
 
@@ -70,7 +73,7 @@ const Pending: React.FC = () => {
             setIsModalVisible(false);
             fetchUsers(pageNum, pageSize);
         } catch (error) {
-            toast.error(`Failed to reject user`);
+            toast.error('Failed to reject user');
         } finally {
             setCurrentUserId(null);
             setComment('');
