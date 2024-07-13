@@ -43,7 +43,7 @@ export const forgotPassword = async (data: { email: string }) => {
   return response.data;
 };
 
-export const verifyEmail = async (token: string)  => {
+export const verifyEmail = async (token: string) => {
   const response = await axiosInstance.post('/api/auth/verify-token', { token });
   toast.success("Email verification successful");
   return response.data;
@@ -197,6 +197,29 @@ export const updateLesson = async (id: string, data: { name: string; course_id: 
 export const deleteLesson = async (id: string) => {
   const response = await axiosInstance.delete(`/api/lesson/${id}`);
   toast.success("Lesson deleted successfully");
+  return response.data;
+};
+
+//Subscriptions API methods
+
+export const getSubscribeds = async (searchCondition: { keyword: string; is_delete: boolean; }, pageNum: number, pageSize: number) => {
+  const response = await axiosInstance.post('/api/subscription/search-for-subscriber', {
+    searchCondition,
+    pageInfo: { pageNum, pageSize }
+  });
+  return response.data;
+};
+
+export const getSubscribers = async (searchCondition: { keyword: string; is_delete: boolean; }, pageNum: number, pageSize: number) => {
+  const response = await axiosInstance.post('/api/subscription/search-for-instructor', {
+    searchCondition,
+    pageInfo: { pageNum, pageSize }
+  });
+  return response.data;
+};
+
+export const updateSubscribed = async (instructor_id: string) => {
+  const response = await axiosInstance.post('/api/subscription', { instructor_id });
   return response.data;
 };
 
