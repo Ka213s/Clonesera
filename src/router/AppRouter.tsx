@@ -37,7 +37,7 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.COURSE} element={<Course />} />
                         <Route path={PUBLIC.CATEGORY} element={<Category />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
-                        <Route path={PUBLIC.REQUEST_MANAGEMENT} element={<RequestManagement />} />
+                        <Route path={ADMIN.REQUEST_MANAGEMENT} element={<RequestManagement />} />
                         <Route path={PUBLIC.LIST_SUBSCRIBED} element={<ListSubscribed />} />
                         <Route path={INSTRUCTOR.LIST_SUBSCRIPTION} element={<ListSubscription />} />
                         <Route path={ERROR.ERROR500} element={<PrivateRoute element={PageError500} allowedRoles={[ROLES.STUDENT]} />} />
