@@ -43,7 +43,7 @@ export const forgotPassword = async (data: { email: string }) => {
   return response.data;
 };
 
-export const verifyEmail = async (token: string) => {
+export const verifyEmail = async (token: string)  => {
   const response = await axiosInstance.post('/api/auth/verify-token', { token });
   toast.success("Email verification successful");
   return response.data;

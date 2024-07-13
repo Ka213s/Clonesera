@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Form, Input, Button, Radio, message } from 'antd';
+import { Form, Input, Button, Radio } from 'antd';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import { registerAccountInstructor, registerAccountStudent, logo } from '../utils/commonImports';
 import FileUploader from '../components/FileUploader';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import type { RadioChangeEvent } from 'antd';
 
 interface FormValues {
@@ -51,14 +53,18 @@ const Register: React.FC = () => {
                     description: values.description!,
                     video: values.videoUrl!,
                     avatar: values.avatarUrl!,
-                    status : false
+                    status: false
                 };
                 console.log('Registering instructor:', instructorData);
                 await registerAccountInstructor(instructorData);
             }
-            message.success('Registration successful. A verification email has been sent, please check your email.');
+            toast.success('Đăng ký thành công. Vui lòng kiểm tra email của bạn.');
+            
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000); // Đợi 2 giây trước khi chuyển hướng
         } catch (error) {
-            message.error('Registration failed');
+            toast.error('Đăng ký thất bại');
         } finally {
             setIsButtonDisabled(false);
         }
@@ -72,16 +78,15 @@ const Register: React.FC = () => {
 
     const handleVideoUploadSuccess = (url: string) => {
         form.setFieldsValue({ videoUrl: url });
-
     };
 
     const handleAvatarUploadSuccess = (url: string) => {
         form.setFieldsValue({ avatarUrl: url });
-    
     };
 
     return (
         <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-purple-300 to-blue-200 relative">
+            <ToastContainer />
             <div className="flex w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10">
                 <div className="w-full md:w-1/2 px-6 py-8 flex flex-col justify-center overflow-y-auto">
                     <Link to="/">

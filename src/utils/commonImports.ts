@@ -6,6 +6,7 @@ export { verifyEmail ,resendVerifyEmail,registerAccountStudent,registerAccountIn
 export { setGlobalLoadingHandler } from '../services/axiosInstance';
 export { default as config } from '../config/config';
 export { default as logo } from '../assets/Logo-2.png';
-export { EyeOutlined, EyeInvisibleOutlined, EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined, ReadOutlined } from '@ant-design/icons';
-export { Form, Input, Button, Table, Pagination, Modal, Select, notification, message, Typography } from 'antd';
-export { ROLES, PATHS, ERROR } from '../consts/index';
+// export { default as Artwork } from '../assets/Artwork.jpg';
+export { EyeOutlined, EyeInvisibleOutlined, EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+export { Form, Input, Button, Table, Pagination, Modal, Select, notification } from 'antd';
+export { ROLES } from '../consts/index';
