@@ -33,6 +33,7 @@ const Pending: React.FC = () => {
                     page,
                     pageSize
                 );
+                console.log('data:', data);
                 setUsers(data.pageData);
                 setTotalItems(data.pageInfo.totalItems);
             } catch (error) {

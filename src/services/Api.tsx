@@ -28,7 +28,7 @@ export const loginUserByGoogle = async (data: { google_id: string; }) => {
   return response.data;
 };
 
-export const registerUserByGoogle = async (data: { google_id: string; role: string; }) => {
+export const registerUserByGoogle = async (data: { google_id: string; role: string; description: string; video: string; phone_number: string; }) => {
   const response = await axiosInstance.post("/api/users/google", data);
   if (response.data.token) {
     localStorage.setItem('token', response.data.token);
