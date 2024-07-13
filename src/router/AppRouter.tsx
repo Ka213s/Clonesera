@@ -5,7 +5,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoute from './PrivateRoute';
 import { ROLES } from '../utils/commonImports';
-import { ERROR, INSTRUCTOR, PUBLIC } from '../consts';
+import { ADMIN, ERROR, INSTRUCTOR, PUBLIC } from '../consts';
 
 // Public Pages and Components
 const HomePage = lazy(() => import('../pages/HomePage'));
@@ -35,7 +35,7 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.COURSE} element={<Course />} />
                         <Route path={PUBLIC.CATEGORY} element={<Category />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
-                        <Route path={PUBLIC.REQUEST_MANAGEMENT} element={<RequestManagement />} />
+                        <Route path={ADMIN.REQUEST_MANAGEMENT} element={<RequestManagement />} />
                         <Route path={ERROR.ERROR500} element={<PrivateRoute element={PageError500} allowedRoles={[ROLES.STUDENT]} />} />
 
                     </Route>

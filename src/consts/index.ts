@@ -11,6 +11,9 @@ export const ERROR = {
   ERROR403: '/403',
   ERROR404: '/404',
 };
+export const ADMIN = {
+  REQUEST_MANAGEMENT: '/request-management'
+}
 export const INSTRUCTOR = {
   COURSE: '/courses',
 };
@@ -24,7 +27,6 @@ export const PUBLIC = {
   SETTING_PAGE: '/setting-page',
   VERIFY_EMAIL: '/verify-email/:token',
   FORGOT_PASSWORD: '/forgot-password',
-  REQUEST_MANAGEMENT: '/request-management'
 };
 
 export const sidebarMenuItemsData = {
