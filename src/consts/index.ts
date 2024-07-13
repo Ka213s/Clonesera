@@ -11,6 +11,9 @@ export const ERROR = {
   ERROR403: '/403',
   ERROR404: '/404',
 };
+export const ADMIN = {
+  REQUEST_MANAGEMENT: '/request-management',
+}
 export const INSTRUCTOR = {
   COURSE: '/courses',
   LIST_SUBSCRIPTION: '/list-subscription'
@@ -117,7 +120,7 @@ export const SidebarAdminData = {
       "label": "Dashboard"
     },
     {
-      "key": "/admin/requestManagement",
+      "key": "/admin/request-management",
       "icon": "DashboardOutlined",
       "label": "Request Management"
     },
@@ -132,7 +135,7 @@ export const SidebarAdminData = {
     },
     {
       "key": "Categories",
-      "icon": "DashboardOutlined", // Changed to an available icon
+      "icon": "DashboardOutlined",
       "label": "Categories",
       "children": [
         { "key": "/admin/category-management", "label": "Category Management" }
