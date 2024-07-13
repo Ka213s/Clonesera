@@ -54,7 +54,6 @@ const Register: React.FC = () => {
                     description: values.description!,
                     video: values.videoUrl!,
                     avatar: values.avatarUrl!,
-                    
                 };
                 console.log('Registering instructor:', instructorData);
                 await registerAccountInstructor(instructorData);
