@@ -23,7 +23,11 @@ const Login: React.FC = () => {
       console.log('Login response:', response);
       const currentLogin = await getCurrentLogin();
       localStorage.setItem('userData', JSON.stringify(currentLogin));
-      navigate('/');
+      if (currentLogin.role === 'admin') {
+        navigate('/request-management');
+      } else {
+        navigate('/');
+      }
     } catch (error) {
       console.error('Error logging in:', error);
     } finally {
@@ -46,14 +50,17 @@ const Login: React.FC = () => {
         const userResponse = await getCurrentLogin();
         const dataUser = JSON.stringify(userResponse);
         localStorage.setItem('userData', dataUser);
-        navigate('/');
+        if (userResponse.role === 'admin') {
+          navigate('/dashboard');
+        } else {
+          navigate('/');
+        }
       } else {
         setGoogleId(response.credential);
         setIsRoleModalVisible(true);
       }
     } catch (error) {
       console.error('Error logging in with Google:', error);
-
       setGoogleId(response.credential);
       setIsRoleModalVisible(true);
     }
@@ -73,7 +80,7 @@ const Login: React.FC = () => {
       const token = response.token;
       localStorage.setItem('token', token);
       setIsRoleModalVisible(false);
-     
+      navigate('/');
     } catch (error) {
       console.error('Error registering with Google:', error);
     }
@@ -186,39 +193,65 @@ const Login: React.FC = () => {
       </div>
 
       {isRoleModalVisible && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="role-modal-content bg-white p-6 rounded-lg shadow-lg">
-            <h2 className="text-2xl mb-4">Select Your Role</h2>
-            <select
-              onChange={(e) => setSelectedRole(e.target.value)}
-              className="w-full p-2 border rounded-lg mb-4"
-            >
-              <option value="">Select Role</option>
-              <option value="student">Student</option>
-              <option value="instructor">Instructor</option>
-            </select>
-            <input
-              type="text"
-              placeholder="Description"
-              className="w-full p-2 border rounded-lg mb-4"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-            />
-            <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
-            <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
-            <input
-              type="text"
-              placeholder="Phone Number"
-              className="w-full p-2 border rounded-lg mb-4"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-            />
-            <button
-              onClick={handleRoleSelection}
-              className="w-full py-2 bg-blue-600 text-white rounded-lg"
-            >
-              Submit
-            </button>
+        <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+          <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-4xl">
+            <h2 className="text-3xl font-semibold text-gray-800 mb-6">Đăng kí bằng Google</h2>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="col-span-2">
+                <select
+                  onChange={(e) => setSelectedRole(e.target.value)}
+                  className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Select Role</option>
+                  <option value="student">Student</option>
+                  <option value="instructor">Instructor</option>
+                </select>
+              </div>
+              <div className="col-span-2">
+                <input
+                  type="text"
+                  placeholder="Description"
+                  className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </div>
+              <div>
+                <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
+                {avatar && (
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-600">Image selected:</p>
+                    <img src={avatar} alt="Selected avatar" className="w-full h-32 object-cover rounded-lg" />
+                  </div>
+                )}
+              </div>
+              <div>
+                <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
+                {video && (
+                  <div className="mt-2">
+                    <p className="text-sm text-gray-600">Video selected:</p>
+                    <video src={video} controls className="w-full h-32 object-cover rounded-lg" />
+                  </div>
+                )}
+              </div>
+              <div className="col-span-2">
+                <input
+                  type="text"
+                  placeholder="Phone Number"
+                  className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                />
+              </div>
+              <div className="col-span-2">
+                <button
+                  onClick={handleRoleSelection}
+                  className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
+                >
+                  Submit
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       )}
