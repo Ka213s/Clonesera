@@ -1,14 +1,16 @@
 // src/pages/Subscription.tsx
-import { React, useEffect, useState, useCallback, useMemo, Button, Table, Pagination  } from '../../utils/commonImports';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { Button, Table, Pagination } from 'antd';
 import { toast } from 'react-toastify';
+import { getSubscribeds, updateSubscribed } from '../../utils/commonImports';
 import { ColumnsType } from 'antd/es/table';
 import 'react-toastify/dist/ReactToastify.css';
-import { getSubscribeds, updateSubscribed } from '../../services/Api';
 
 interface Subscribed {
     _id: string;
     instructor_name: string;
     instructor_id: string;
+    subscribed: boolean;
 }
 
 const ListSubscribed: React.FC = () => {
@@ -25,11 +27,10 @@ const ListSubscribed: React.FC = () => {
                     page,
                     pageSize
                 );
-                setSubscriptions(data.pageData);
+                setSubscriptions(data.pageData.map((sub: Subscribed) => ({ ...sub, subscribed: true })));
                 setTotalItems(data.pageInfo.totalItems);
             } catch (error) {
                 toast.error('Failed to fetch subscriptions');
-            } finally {
             }
         },
         []
@@ -39,11 +40,17 @@ const ListSubscribed: React.FC = () => {
         fetchSubscriptions(pageNum, pageSize);
     }, [pageNum, pageSize, fetchSubscriptions]);
 
-    const handleSubscribe = async (instructor_id: string) => {
+    const handleSubscribeToggle = async (instructor_id: string, subscribed: boolean) => {
         try {
-            await updateSubscribed(instructor_id);
-            toast.success('Subscription updated successfully');
-            fetchSubscriptions(pageNum, pageSize);
+            await updateSubscribed(instructor_id); 
+            toast.success(subscribed ? 'Unsubscribed successfully' : 'Subscribed successfully');
+            setSubscriptions(prev => 
+                prev.map((sub: Subscribed) => 
+                    sub.instructor_id === instructor_id 
+                        ? { ...sub, subscribed: !subscribed } 
+                        : sub
+                )
+            );
         } catch (error) {
             toast.error('Failed to update subscription');
         }
@@ -63,16 +70,16 @@ const ListSubscribed: React.FC = () => {
                     <div className="flex space-x-2">
                         <Button
                             type="default"
-                            onClick={() => handleSubscribe(record.instructor_id)}
-                            className="text-blue-500 hover:text-blue-700"
+                            onClick={() => handleSubscribeToggle(record.instructor_id, record.subscribed)}
+                            className={record.subscribed ? 'text-red-500 hover:text-red-700' : 'text-blue-500 hover:text-blue-700'}
                         >
-                            Subscribe
+                            {record.subscribed ? 'Unsubscribe' : 'Subscribe'}
                         </Button>
                     </div>
                 ),
             },
         ],
-        [handleSubscribe]
+        [handleSubscribeToggle]
     );
 
     return (
