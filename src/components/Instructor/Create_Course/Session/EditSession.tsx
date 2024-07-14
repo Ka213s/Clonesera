@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { Button, Modal, Form, Input, InputNumber } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-import { getSessionById, updateSession } from '../../../utils/commonImports';
-import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor'; // Import TinyMCE Editor component
+import { getSessionById, updateSession } from '../../../../utils/commonImports';
+import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor'; // Import TinyMCE Editor component
 
 interface ButtonEditProps {
   _id: string;

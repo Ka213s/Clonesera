@@ -70,8 +70,6 @@ const AccountSettings: React.FC = () => {
 
     return (
         <div>
-            <h2 className="text-xl font-bold mb-2">Your Cursus Account</h2>
-            <p>This is your public presence on Cursus. You need an account to upload your paid courses, comment on courses, purchased by students, or earning...</p>
             <h2 className="text-xl font-bold mb-2 mt-10">Basic Profile</h2>
             <p>Add information about yourself</p>
             <div className="mt-6">

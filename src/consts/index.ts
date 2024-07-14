@@ -18,7 +18,8 @@ export const ADMIN = {
 }
 export const INSTRUCTOR = {
   COURSE: '/courses',
-  LIST_SUBSCRIPTION: '/list-subscription'
+  LIST_SUBSCRIPTION: '/list-subscription',
+  VIEW_ALL_COURSE: '/view-all-course',
 };
 export const PUBLIC = {
   HOME: '/',

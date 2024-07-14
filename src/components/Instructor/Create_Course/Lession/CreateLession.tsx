@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form, Input, Select } from 'antd';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { getSessions, createLesson } from '../../../utils/commonImports';
-import FileUploader from '../../FileUploader';
-import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor';
+import { getSessions, createLesson } from '../../../../utils/commonImports';
+import FileUploader from '../../../FileUploader';
+import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor';
 
 const { Option } = Select;
 

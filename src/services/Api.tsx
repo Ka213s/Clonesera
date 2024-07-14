@@ -149,7 +149,13 @@ export const createLesson = async (data: { name: string; course_id: string; sess
   toast.success("Lesson created successfully");
   return response.data;
 };
-
+export const getCourses = async (searchCondition: { keyword: string; category: string; status: string; is_deleted: boolean; }, pageNum: number, pageSize: number) => {
+  const response = await axiosInstance.post('/api/course/search', {
+    searchCondition,
+    pageInfo: { pageNum, pageSize }
+  });
+  return response.data;
+};
 export const getSessions = async (searchCondition: { keyword: string; course_id: string; is_position_order: boolean; is_deleted: boolean; }, pageNum: number, pageSize: number) => {
   const response = await axiosInstance.post('/api/session/search', {
     searchCondition,
@@ -158,13 +164,6 @@ export const getSessions = async (searchCondition: { keyword: string; course_id:
   return response.data;
 };
 
-export const getCourses = async (searchCondition: { keyword: string; category: string; status: string; is_deleted: boolean; }, pageNum: number, pageSize: number) => {
-  const response = await axiosInstance.post('/api/course/search', {
-    searchCondition,
-    pageInfo: { pageNum, pageSize }
-  });
-  return response.data;
-};
 export const getLessons = async (searchCondition: { keyword: string; course_id: string; session_id: string; lesson_type: string; is_position_order: boolean; is_deleted: boolean; }, pageNum: number, pageSize: number) => {
   const response = await axiosInstance.post('/api/lesson/search', {
     searchCondition,

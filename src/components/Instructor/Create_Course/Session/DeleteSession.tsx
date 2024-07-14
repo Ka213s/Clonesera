@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Modal } from 'antd';
 import { DeleteOutlined } from '@ant-design/icons';
-import { deleteSession } from '../../../utils/commonImports';
+import { deleteSession } from '../../../../utils/commonImports';
 
 interface ButtonDeleteProps {
   _id: string;

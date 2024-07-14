@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { EditOutlined } from '@ant-design/icons';
 import { Button, Modal, Form, Input, InputNumber, message, Select } from 'antd';
-import { getCourseById, updateCourse } from '../../../utils/commonImports';
-import FileUploader from '../../FileUploader';
-import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor';
-import useCategories from '../../useCategories';
+import { getCourseById, updateCourse } from '../../../../utils/commonImports';
+import FileUploader from '../../../FileUploader';
+import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor';
+import useCategories from '../../../useCategories';
 
 export interface Course {
   id: number;

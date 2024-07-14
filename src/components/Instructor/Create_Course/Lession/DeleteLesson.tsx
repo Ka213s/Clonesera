@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal, Button } from 'antd';
 import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { deleteLesson } from '../../../utils/commonImports';
+import { deleteLesson } from '../../../../utils/commonImports';
 const { confirm } = Modal;
 
 interface DeleteLessonProps {
