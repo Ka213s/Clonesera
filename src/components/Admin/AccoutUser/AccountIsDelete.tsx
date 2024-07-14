@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Avatar, PaginationProps, Tag } from 'antd';
-import { getUsers } from '../../utils/commonImports';
+import { getUsers } from '../../../utils/commonImports';
 
 interface User {
   _id: string;
@@ -9,7 +9,7 @@ interface User {
   email: string;
   role: string;
   status: boolean;
-  is_verified: boolean; 
+  is_verified: boolean; // Thêm thuộc tính is_verified vào giao diện User
 }
 
 interface Pagination {
@@ -31,11 +31,7 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
     try {
       const response = await getUsers({ keyword: '', role: 'all', status, is_deleted: isDeleted }, pageNum, pageSize);
       console.log('response', response.pageData);
-      
-      // Lọc ra các tài khoản có is_verified là false
-      const filteredData = response.pageData.filter((user: User) => !user.is_verified);
-
-      setData(filteredData);
+      setData(response.pageData);
 
       setPagination({
         current: response.pageNum,
@@ -88,12 +84,12 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
       ),
     },
     {
-      title: 'Verified',
-      dataIndex: 'is_verified',
-      key: 'is_verified',
+      title: 'Delete',
+      dataIndex: 'is_deleted',
+      key: 'is_deleted',
       render: (is_verified: boolean) => (
-        <Tag color={is_verified ? 'blue' : 'gray'}>
-          {is_verified ? 'Verified' : 'Not Verified'}
+        <Tag color={is_verified ? 'red' : 'green'}>
+          {is_verified ? 'Delete' : 'Not Delete'}
         </Tag>
       ),
     },

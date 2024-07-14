@@ -1,6 +1,6 @@
 // requestManagement.tsx
 import React, { useState } from 'react';
-import Pending from '../components/RequestManagement/Pending';
+import Pending from '../components/Admin/RequestManagement/Pending';
 
 
 const tabs = [

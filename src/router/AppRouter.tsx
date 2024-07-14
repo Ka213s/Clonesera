@@ -20,7 +20,7 @@ const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
 const RequestManagement = lazy(() => import('../pages/RequestManagement'));
 const ListSubscription = lazy(() => import('../pages/Instructor/ListSubscription'));
 const ListSubscribed = lazy(() => import('../pages/Student/ListSubscribed'));
-const DisplayAccount = lazy(() => import('../components/AccoutUser/ActiveTab'));
+const DisplayAccount = lazy(() => import('../components/Admin/AccoutUser//ActiveTab'));
 
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));

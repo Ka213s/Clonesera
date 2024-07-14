@@ -1,7 +1,7 @@
 import React from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
 import { Tooltip, Button } from 'antd';
-import { deleteUser } from '../../utils/commonImports';
+import { deleteUser } from '../../../utils/commonImports';
 
 interface DeleteButtonProps {
   userId: string;

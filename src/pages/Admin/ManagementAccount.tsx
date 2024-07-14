@@ -1,4 +1,4 @@
-import ActiveTab from "../../components/AccoutUser/ActiveTab"
+import ActiveTab from "../../components/Admin/AccoutUser/ActiveTab";
 
 const admin = () => {
   return (

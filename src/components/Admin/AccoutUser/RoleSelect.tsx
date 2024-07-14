@@ -1,6 +1,6 @@
 import React from 'react';
 import { Select } from 'antd';
-import { changeUserRole } from '../../utils/commonImports';
+import { changeUserRole } from '../../../utils/commonImports';
 const { Option } = Select;
 
 interface RoleSelectProps {

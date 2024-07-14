@@ -1,6 +1,6 @@
 import React from 'react';
 import { Switch } from 'antd';
-import { changeUserStatus } from '../../utils/commonImports';
+import { changeUserStatus } from '../../../utils/commonImports';
 
 
 interface StatusToggleProps {

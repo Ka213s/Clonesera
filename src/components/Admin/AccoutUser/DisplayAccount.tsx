@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Avatar, PaginationProps } from 'antd';
-import { getUsers } from '../../utils/commonImports';
+import { getUsers } from '../../../utils/commonImports';
 import EditDeleteIcons from './EditDeleteIcons';
 import DeleteButton from './DeleteButton';
 import StatusToggle from './StatusToggle';
