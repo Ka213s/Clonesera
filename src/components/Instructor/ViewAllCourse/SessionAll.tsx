@@ -1,4 +1,3 @@
-// Session.tsx
 import React, { useState } from 'react';
 import { Table, Button } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
@@ -7,25 +6,24 @@ import LessonAll from './LessonAll';
 
 interface SessionProps {
   sessions: Session[];
+  onBack: () => void;
 }
 
 interface Session {
   _id: string;
   name: string;
   course_id: string;
-  // Add other fields as needed
 }
 
 interface Lesson {
   _id: string;
   name: string;
   session_id: string;
-  // Add other fields as needed
 }
 
-const Session: React.FC<SessionProps> = ({ sessions }) => {
+const SessionAll: React.FC<SessionProps> = ({ sessions, onBack }) => {
   const [lessons, setLessons] = useState<Lesson[]>([]);
-  const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
+  const [view, setView] = useState<'sessions' | 'lessons'>('sessions');
 
   const sessionColumns: ColumnsType<Session> = [
     { title: 'Session Name', dataIndex: 'name', key: 'name' },
@@ -39,20 +37,28 @@ const Session: React.FC<SessionProps> = ({ sessions }) => {
   ];
 
   const handleViewLessons = async (sessionId: string) => {
-    setSelectedSessionId(sessionId);
     const data = await getLessons({ keyword: '', course_id: '', session_id: sessionId, lesson_type: '', is_position_order: false, is_deleted: false }, 1, 10);
     setLessons(data.pageData);
+    setView('lessons');
+  };
+
+  const handleBackToSessions = () => {
+    setView('sessions');
   };
 
   return (
     <div>
-      <h2>Sessions</h2>
-      <Table columns={sessionColumns} dataSource={sessions} rowKey="_id" />
-      {selectedSessionId && (
-        <LessonAll lessons={lessons} />
+      {view === 'sessions' && (
+        <>
+          <Button onClick={onBack}>Back to Courses</Button>
+          <Table columns={sessionColumns} dataSource={sessions} rowKey="_id" />
+        </>
+      )}
+      {view === 'lessons' && (
+        <LessonAll lessons={lessons} onBack={handleBackToSessions} />
       )}
     </div>
   );
 };
 
-export default Session;
+export default SessionAll;

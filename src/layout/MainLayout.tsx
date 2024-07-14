@@ -70,7 +70,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         <div className="flex flex-1">
           {renderSidebar}
           <div className={`flex flex-col flex-1 transition-all duration-300 ${showMenu ? 'ml-56' : 'ml-0'}`}>
-            <div className="flex-1 pt-16 p-4 overflow-auto">
+            <div className="flex-1 pt-16 p-5 mt-3 overflow-auto">
               {children}
             </div>
             <Footer />
