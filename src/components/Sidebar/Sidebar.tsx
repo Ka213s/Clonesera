@@ -13,7 +13,7 @@ import {
   HistoryOutlined,
   SendOutlined,
 } from '@ant-design/icons';
-import { sidebarMenuItemsData } from '../../consts'; // Điều chỉnh đường dẫn nếu cần
+import { sidebarMenuItemsData } from '../../consts'; 
 
 interface SidebarProps {
   showMenu: boolean;

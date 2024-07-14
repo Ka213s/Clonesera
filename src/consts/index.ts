@@ -118,34 +118,11 @@ export const SidebarStudentData = {
 
 export const SidebarAdminData = {
   menuItems: [
-    {
-      "key": "instructor",
-      "icon": "TeamOutlined",
-      "label": "User",
-      "children": [
-        { "key": "/display-account", "label": "Manager User" },
-        { "key": "/create-account", "label": "Create User" },
-        { "key": "/request-management", "label": "Request Management" }
-
-      ]
-    },
-    {
-      "key": "Categories",
-      "icon": "DashboardOutlined",
-      "label": "Categories",
-      "children": [
-        { "key": "/categories", "label": "Category Management" }
-      ]
-    },
-    {
-      "key": "courses",
-      "icon": "BookOutlined",
-      "label": "Courses",
-      "children": [
-        { "key": "/admin/courses", "label": "All Courses" },
-        { "key": "/admin/pending_courses", "label": "Pending Courses" },
-        { "key": "/admin/reviews", "label": "Reviews" }
-      ]
-    }
+    { "key": "/display-account", "label": "Manager User", "icon": "TeamOutlined" },
+    { "key": "/request-management", "label": "Request Management", "icon": "TeamOutlined" },
+    { "key": "/categories", "label": "Category Management", "icon": "DashboardOutlined" },
+    { "key": "/admin/courses", "label": "All Courses", "icon": "BookOutlined" },
+    { "key": "/admin/pending_courses", "label": "Pending Courses", "icon": "BookOutlined" },
+    { "key": "/admin/reviews", "label": "Reviews", "icon": "BookOutlined" }
   ]
 };

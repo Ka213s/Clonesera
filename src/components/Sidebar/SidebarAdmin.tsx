@@ -17,7 +17,6 @@ interface MenuItem {
   key: string;
   label: string;
   icon?: string;
-  children?: MenuItem[];
 }
 
 const iconComponents: { [key: string]: JSX.Element } = {
@@ -29,15 +28,9 @@ const iconComponents: { [key: string]: JSX.Element } = {
 
 const renderMenuItems = (items: MenuItem[], navigate: (path: string) => void) => 
   items.map((item) => (
-    item.children ? (
-      <Menu.SubMenu key={item.key} icon={iconComponents[item.icon || '']} title={item.label}>
-        {renderMenuItems(item.children, navigate)}
-      </Menu.SubMenu>
-    ) : (
-      <Menu.Item key={item.key} icon={iconComponents[item.icon || '']} onClick={() => navigate(item.key)}>
-        {item.label}
-      </Menu.Item>
-    )
+    <Menu.Item key={item.key} icon={iconComponents[item.icon || '']} onClick={() => navigate(item.key)}>
+      {item.label}
+    </Menu.Item>
   ));
 
 const SidebarAdmin: React.FC<SidebarProps> = ({ showMenu }) => {
