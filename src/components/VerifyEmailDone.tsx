@@ -69,7 +69,7 @@ function VerifyEmailDone() {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-300 to-blue-200 relative">
-      <div className="flex flex-col items-center p-20 md:p-34 bg-white rounded-3xl shadow-2xl space-y-6 md:space-y-8 transition-all duration-500 ease-in-out transform hover:scale-105">
+      <div className="flex flex-col items-center p-20 md:p-34 bg-white rounded-3xl shadow-2xl space-y-6 md:space-y-8 transition-all duration-500 ease-in-out transform hover:scale-105 z-10 mb-20">
         <ReadOutlined className="text-7xl text-blue-600 mb-6" />
         {!isTokenExpired ? (
           <>
@@ -117,23 +117,10 @@ function VerifyEmailDone() {
           </>
         )}
       </div>
-      <svg
-        className="absolute inset-x-0 bottom-0 w-full h-max pointer-events-none"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 1440 250"
-      >
-        <path
-          fill="url(#gradient2)"
-          fillOpacity="1"
-          d="M0,128L48,154.7C96,181,192,235,288,234.7C384,235,480,181,576,170.7C672,160,768,192,864,197.3C960,203,1056,181,1152,170.7C1248,160,1344,160,1392,154.7L1440,149.3L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"
-        ></path>
-        <defs>
-          <linearGradient id="gradient2" x1="0" x2="1" y1="1" y2="1">
-            <stop offset="0%" stopColor="#ed64a6" />
-            <stop offset="100%" stopColor="#6b46c1" />
-          </linearGradient>
-        </defs>
-      </svg>
+      <div className="ocean">
+        <div className="wave"></div>
+        <div className="wave"></div>
+      </div>
     </div>
   );
 }

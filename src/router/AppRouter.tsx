@@ -23,6 +23,7 @@ const ListSubscribed = lazy(() => import('../pages/Student/ListSubscribed'));
 const DisplayAccount = lazy(() => import('../components/Admin/AccoutUser/ActiveTab'));
 const CreateAccount = lazy(() => import('../components/Admin/CreateAccount/CreateAccount'));
 const ViewAllCourse = lazy(() => import('../pages/Instructor/ViewAllCourse'));
+const ViewProfile = lazy(() => import('../pages/Instructor/ViewProfile'));
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));
 const PageError403 = lazy(() => import('../pages/Error/PageError403'));
@@ -39,6 +40,7 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.COURSE} element={<Course />} />
                         <Route path={PUBLIC.CATEGORY} element={<Category />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
+                        <Route path={INSTRUCTOR.VIEW_PROFILE} element={<ViewProfile />} />
                         <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />
                         <Route path={INSTRUCTOR.LIST_SUBSCRIPTION} element={<PrivateRoute element={ListSubscription} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.VIEW_ALL_COURSE} element={<PrivateRoute element={ViewAllCourse} allowedRoles={[ROLES.INSTRUCTOR]} />} />

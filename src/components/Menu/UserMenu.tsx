@@ -6,7 +6,7 @@ import { UserOutlined } from '@ant-design/icons';
 export const UserMenu: React.FC = () => (
   <Menu>
     <Menu.Item key="profile">
-      <Link to="/profile">
+      <Link to="/view-profile">
         <UserOutlined /> Profile
       </Link>
     </Menu.Item>
