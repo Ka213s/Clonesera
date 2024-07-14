@@ -1,14 +1,11 @@
 // requestManagement.tsx
 import React, { useState } from 'react';
-import Approved from '../components/RequestManagement/Approved';
-import Rejected from '../components/RequestManagement/Rejected';
-import Pending from '../components/RequestManagement/Pending';
+import Pending from '../components/Admin/RequestManagement/Pending';
 
 
 const tabs = [
     { name: 'Pending', key: 'pending' },
-    { name: 'Approved', key: 'approved' },
-    { name: 'Rejected', key: 'rejected' },
+   
 ];
 
 const RequestManagement: React.FC = () => {
@@ -18,10 +15,7 @@ const RequestManagement: React.FC = () => {
         switch (activeTab) {
             case 'pending':
                 return <Pending />;
-            case 'approved':
-                return <Approved />;
-            case 'rejected':
-                return <Rejected />;
+         
             default:
                 return null;
         }

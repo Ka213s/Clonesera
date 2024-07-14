@@ -1,4 +1,3 @@
-// src/pages/Subscription.tsx
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import { Button, Table, Pagination } from 'antd';
 import { toast } from 'react-toastify';
@@ -10,7 +9,7 @@ interface Subscribed {
     _id: string;
     instructor_name: string;
     instructor_id: string;
-    subscribed: boolean;
+    is_subscribed: boolean;
 }
 
 const ListSubscribed: React.FC = () => {
@@ -27,7 +26,8 @@ const ListSubscribed: React.FC = () => {
                     page,
                     pageSize
                 );
-                setSubscriptions(data.pageData.map((sub: Subscribed) => ({ ...sub, subscribed: true })));
+                const filteredData = data.pageData.filter((item: Subscribed) => item.is_subscribed);
+                setSubscriptions(filteredData);
                 setTotalItems(data.pageInfo.totalItems);
             } catch (error) {
                 toast.error('Failed to fetch subscriptions');
@@ -40,14 +40,14 @@ const ListSubscribed: React.FC = () => {
         fetchSubscriptions(pageNum, pageSize);
     }, [pageNum, pageSize, fetchSubscriptions]);
 
-    const handleSubscribeToggle = async (instructor_id: string, subscribed: boolean) => {
+    const handleSubscribeToggle = async (instructor_id: string, is_subscribed: boolean) => {
         try {
-            await updateSubscribed(instructor_id); 
-            toast.success(subscribed ? 'Unsubscribed successfully' : 'Subscribed successfully');
+            await updateSubscribed(instructor_id);
+            toast.success(is_subscribed ? 'Unsubscribed successfully' : 'Subscribed successfully');
             setSubscriptions(prev => 
                 prev.map((sub: Subscribed) => 
                     sub.instructor_id === instructor_id 
-                        ? { ...sub, subscribed: !subscribed } 
+                        ? { ...sub, is_subscribed: !is_subscribed } 
                         : sub
                 )
             );
@@ -70,10 +70,10 @@ const ListSubscribed: React.FC = () => {
                     <div className="flex space-x-2">
                         <Button
                             type="default"
-                            onClick={() => handleSubscribeToggle(record.instructor_id, record.subscribed)}
-                            className={record.subscribed ? 'text-red-500 hover:text-red-700' : 'text-blue-500 hover:text-blue-700'}
+                            onClick={() => handleSubscribeToggle(record.instructor_id, record.is_subscribed)}
+                            className={record.is_subscribed ? 'text-red-500 hover:text-red-700' : 'text-blue-500 hover:text-blue-700'}
                         >
-                            {record.subscribed ? 'Unsubscribe' : 'Subscribe'}
+                            {record.is_subscribed ? 'Unsubscribe' : 'Subscribe'}
                         </Button>
                     </div>
                 ),

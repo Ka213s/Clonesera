@@ -1,6 +1,6 @@
-import { React, useEffect, useState, useCallback, useMemo, Button, Table, Pagination, Modal, Input } from '../../utils/commonImports';
+import { React, useEffect, useState, useCallback, useMemo, Button, Table, Pagination, Modal, Input } from '../../../utils/commonImports';
 import { toast } from 'react-toastify';
-import { getUsers, reviewProfileInstructor } from '../../services/Api';
+import { getUsers, reviewProfileInstructor } from '../../../services/Api';
 import { ColumnsType } from 'antd/es/table';
 import 'react-toastify/dist/ReactToastify.css';
 

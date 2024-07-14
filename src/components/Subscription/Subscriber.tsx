@@ -1,12 +1,14 @@
-// src/pages/Subscriber.tsx
-import { React, useEffect, useState, useCallback, useMemo, getSubscribers, Table, Pagination } from '../../utils/commonImports';
-import { toast } from 'react-toastify';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { Table, Pagination } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import { toast } from 'react-toastify';
+import { getSubscribers } from '../../utils/commonImports';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface Subscriber {
     _id: string;
     subscriber_name: string;
+    is_subscribed: boolean;
 }
 
 const Subscriber: React.FC = () => {
@@ -23,7 +25,8 @@ const Subscriber: React.FC = () => {
                     page,
                     pageSize
                 );
-                setSubscribers(data.pageData);
+                const filteredData = data.pageData.filter((sub: Subscriber) => sub.is_subscribed);
+                setSubscribers(filteredData);
                 setTotalItems(data.pageInfo.totalItems);
             } catch (error) {
                 toast.error('Failed to fetch subscribers');

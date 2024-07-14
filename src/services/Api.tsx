@@ -72,7 +72,27 @@ export const getUsers = async (searchCondition: { keyword: string; role: string;
   });
   return response.data;
 };
+export const createUser = async (data: { name: string; email: string; password: string; role: string; description?: string; phone_number?: string; avatar?: string; video?: string; }) => {
+  const response = await axiosInstance.post('/api/users/create', data);
+  toast.success("User created successfully");
+  return response.data;
+};
 
+export const changeUserRole = async (data: { user_id: string; role: string }) => {
+  const response = await axiosInstance.put('/api/users/change-role', data);
+  toast.success("User role changed successfully");
+  return response.data;
+};
+export const changeUserStatus = async (data: { user_id: string; status: boolean }) => {
+  const response = await axiosInstance.put('/api/users/change-status', data);
+  toast.success("User status changed successfully");
+  return response.data;
+};
+export const deleteUser = async (id: string) => {
+  const response = await axiosInstance.delete(`/api/users/${id}`);
+  toast.success("User deleted successfully");
+  return response.data;
+};
 export const reviewProfileInstructor = async (data: { user_id: string, status: 'approve' | 'reject', comment?: string }) => {
   const response = await axiosInstance.put("/api/users/review-profile-instructor", data);
   toast.success("Profile review submitted successfully");
