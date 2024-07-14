@@ -52,7 +52,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     {
       key: 'profile',
       label: (
-        <Link to="/profile">
+        <Link to="/view-profile">
           <UserOutlined /> Profile
         </Link>
       ),
