@@ -27,7 +27,7 @@ const ForgotPassword: React.FC = () => {
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-300 to-blue-200 relative">
-            <div className="bg-gray-100 p-8 rounded-2xl shadow-lg max-w-md w-full">
+            <div className="bg-gray-100 p-8 rounded-2xl shadow-lg max-w-md w-full z-10">
                 <h2 className="text-3xl font-bold text-[#6C6EDD] mb-4">Forgot Password</h2>
                 <p className="text-base text-[#4A4DC3] mb-6">Enter your email to reset your password</p>
 
@@ -69,6 +69,10 @@ const ForgotPassword: React.FC = () => {
                     </Button>
                 </div>
                 <ToastContainer />
+            </div>
+            <div className="ocean">
+                <div className="wave"></div>
+                <div className="wave"></div>
             </div>
         </div>
     );
