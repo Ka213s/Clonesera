@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import {
   UserOutlined,
   DashboardOutlined,
@@ -12,6 +13,13 @@ interface SidebarProps {
   showMenu: boolean;
 }
 
+interface MenuItem {
+  key: string;
+  label: string;
+  icon?: string;
+  children?: MenuItem[];
+}
+
 const iconComponents: { [key: string]: JSX.Element } = {
   UserOutlined: <UserOutlined />,
   DashboardOutlined: <DashboardOutlined />,
@@ -19,29 +27,30 @@ const iconComponents: { [key: string]: JSX.Element } = {
   TeamOutlined: <TeamOutlined />
 };
 
-const renderMenuItems = (items: any[]) => 
+const renderMenuItems = (items: MenuItem[], navigate: (path: string) => void) => 
   items.map((item) => (
-    item.items ? (
+    item.children ? (
       <Menu.SubMenu key={item.key} icon={iconComponents[item.icon || '']} title={item.label}>
-        {renderMenuItems(item.items)}
+        {renderMenuItems(item.children, navigate)}
       </Menu.SubMenu>
     ) : (
-      <Menu.Item key={item.key} icon={iconComponents[item.icon || '']}>
+      <Menu.Item key={item.key} icon={iconComponents[item.icon || '']} onClick={() => navigate(item.key)}>
         {item.label}
       </Menu.Item>
     )
   ));
 
 const SidebarAdmin: React.FC<SidebarProps> = ({ showMenu }) => {
-    const { menuItems } = SidebarAdminData;
-  
-    return (
-      <aside className={`fixed top-16 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-56' : 'w-0 overflow-hidden'}`}>
-        <Menu mode="inline" style={{ height: '100%', borderRight: 0 }}>
-          {renderMenuItems(menuItems)}
-        </Menu>
-      </aside>
-    );
-  };
+  const navigate = useNavigate();
+  const { menuItems } = SidebarAdminData;
+
+  return (
+    <aside className={`fixed top-16 left-0 h-full bg-white shadow-md transition-all duration-300 ${showMenu ? 'w-56' : 'w-0 overflow-hidden'}`}>
+      <Menu mode="inline" style={{ height: '100%', borderRight: 0 }}>
+        {renderMenuItems(menuItems, navigate)}
+      </Menu>
+    </aside>
+  );
+};
 
 export default SidebarAdmin;

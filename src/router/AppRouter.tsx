@@ -38,7 +38,7 @@ const AppRouter: React.FC = () => {
                         <Route path={PUBLIC.HOME} element={<HomePage />} />
                         <Route path={PUBLIC.LOGOUT} element={<Logout />} />
                         <Route path={INSTRUCTOR.COURSE} element={<Course />} />
-                        <Route path={PUBLIC.CATEGORY} element={<Category />} />
+
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
                         <Route path={INSTRUCTOR.VIEW_PROFILE} element={<ViewProfile />} />
                         <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />
@@ -47,6 +47,7 @@ const AppRouter: React.FC = () => {
                         <Route path={ADMIN.REQUEST_MANAGEMENT} element={<PrivateRoute element={RequestManagement} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={ADMIN.DISPLAY_ACCOUNT} element={<PrivateRoute element={DisplayAccount} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={ADMIN.CREATE_ACCOUNT} element={<PrivateRoute element={CreateAccount} allowedRoles={[ROLES.ADMIN]} />} />
+                        <Route path={ADMIN.CATEGORY} element={<PrivateRoute element={Category} allowedRoles={[ROLES.ADMIN]} />} />
                         
                     </Route>
 

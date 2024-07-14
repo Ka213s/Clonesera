@@ -15,6 +15,7 @@ export const ADMIN = {
   REQUEST_MANAGEMENT: '/request-management',
   DISPLAY_ACCOUNT: '/display-account',
   CREATE_ACCOUNT: '/create-account',
+  CATEGORY: '/categories'
 }
 export const INSTRUCTOR = {
   COURSE: '/courses',
@@ -28,7 +29,6 @@ export const PUBLIC = {
   ANOTHER_PAGE: '/another-page',
   LOGIN: '/login',
   REGISTER: '/register',
-  CATEGORY: '/categories',
   SETTING_PAGE: '/setting-page',
   VERIFY_EMAIL: '/verify-email/:token',
   FORGOT_PASSWORD: '/forgot-password',
@@ -119,22 +119,14 @@ export const SidebarStudentData = {
 export const SidebarAdminData = {
   menuItems: [
     {
-      "key": "/admin/dashboard",
-      "icon": "DashboardOutlined",
-      "label": "Dashboard"
-    },
-    {
-      "key": "/admin/request-management",
-      "icon": "DashboardOutlined",
-      "label": "Request Management"
-    },
-    {
       "key": "instructor",
       "icon": "TeamOutlined",
       "label": "User",
       "children": [
-        { "key": "/admin/allUser", "label": "All User" },
-        { "key": "/admin/addUser", "label": "Add User" }
+        { "key": "/display-account", "label": "Manager User" },
+        { "key": "/create-account", "label": "Create User" },
+        { "key": "/request-management", "label": "Request Management" }
+
       ]
     },
     {
@@ -142,7 +134,7 @@ export const SidebarAdminData = {
       "icon": "DashboardOutlined",
       "label": "Categories",
       "children": [
-        { "key": "/admin/category-management", "label": "Category Management" }
+        { "key": "/categories", "label": "Category Management" }
       ]
     },
     {
