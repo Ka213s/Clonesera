@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Form, Input, Select, Button, Card, Row, Col, Typography, Divider } from 'antd';
+import { Form, Input, Select, Button, Row, Col } from 'antd';
 import { createUser } from '../../../utils/commonImports';
-import { toast } from 'react-toastify'; // Đảm bảo bạn đã cài đặt và cấu hình react-toastify
-import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor'; // Đảm bảo đường dẫn đúng
-import FileUploader from '../../FileUploader'; // Đảm bảo đường dẫn đúng
+import { toast } from 'react-toastify'; // Ensure you have installed and configured react-toastify
+import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor'; // Ensure the path is correct
+import FileUploader from '../../FileUploader'; // Ensure the path is correct
 
 const { Option } = Select;
-const { Title } = Typography;
+
 
 interface FormValues {
   name: string;
@@ -64,53 +64,50 @@ const CreateAccount: React.FC = () => {
   };
 
   return (
-    <Row justify="center" style={{ padding: '20px' }}>
+    <Row justify="center" style={{ padding: '10px' }}>
       <Col span={16}>
-        <Card style={{ maxHeight: '80vh', overflowY: 'auto' }}>
-          <Title level={2} style={{ textAlign: 'center', marginBottom: '20px' }}>Create New Account</Title>
-          <Divider />
-          <Form form={form} layout="vertical" onFinish={onFinish}>
-            <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}>
-              <Input />
+        
+        <Form form={form} layout="vertical" onFinish={onFinish}>
+          <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Please input the email!' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please input the password!' }]}>
+            <Input.Password />
+          </Form.Item>
+          <Form.Item name="role" label="Role" rules={[{ required: true, message: 'Please select a role!' }]}>
+            <Select onChange={handleRoleChange}>
+              <Option value="admin">Admin</Option>
+              <Option value="student">Student</Option>
+              <Option value="instructor">Instructor</Option>
+            </Select>
+          </Form.Item>
+          {role !== 'student' && role !== 'admin' && (
+            <Form.Item name="description" label="Description">
+              <TinyMCEEditorComponent value={description} onEditorChange={setDescription} />
             </Form.Item>
-            <Form.Item name="email" label="Email" rules={[{ required: true, message: 'Please input the email!' }]}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="password" label="Password" rules={[{ required: true, message: 'Please input the password!' }]}>
-              <Input.Password />
-            </Form.Item>
-            <Form.Item name="role" label="Role" rules={[{ required: true, message: 'Please select a role!' }]}>
-              <Select onChange={handleRoleChange}>
-                <Option value="admin">Admin</Option>
-                <Option value="student">Student</Option>
-                <Option value="instructor">Instructor</Option>
-              </Select>
-            </Form.Item>
-            {role !== 'student' && role !== 'admin' && (
-              <Form.Item name="description" label="Description">
-                <TinyMCEEditorComponent value={description} onEditorChange={setDescription} />
+          )}
+          <Form.Item name="phone_number" label="Phone Number">
+            <Input />
+          </Form.Item>
+          {role !== 'student' && (
+            <>
+              <Form.Item name="avatar" label="Avatar">
+                <FileUploader type="image" onUploadSuccess={setAvatarUrl} />
               </Form.Item>
-            )}
-            <Form.Item name="phone_number" label="Phone Number">
-              <Input />
-            </Form.Item>
-            {role !== 'student' && (
-              <>
-                <Form.Item name="avatar" label="Avatar">
-                  <FileUploader type="image" onUploadSuccess={setAvatarUrl} />
-                </Form.Item>
-                <Form.Item name="video" label="Video">
-                  <FileUploader type="video" onUploadSuccess={setVideoUrl} />
-                </Form.Item>
-              </>
-            )}
-            <Form.Item>
-              <Button type="primary" htmlType="submit" block>
-                Create Account
-              </Button>
-            </Form.Item>
-          </Form>
-        </Card>
+              <Form.Item name="video" label="Video">
+                <FileUploader type="video" onUploadSuccess={setVideoUrl} />
+              </Form.Item>
+            </>
+          )}
+          <Form.Item>
+            <Button type="primary" htmlType="submit" block>
+              Create Account
+            </Button>
+          </Form.Item>
+        </Form>
       </Col>
     </Row>
   );
