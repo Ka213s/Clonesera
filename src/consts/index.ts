@@ -121,7 +121,7 @@ export const SidebarAdminData = {
     { "key": "/display-account", "label": "Manager User", "icon": "TeamOutlined" },
     { "key": "/request-management", "label": "Request Management", "icon": "TeamOutlined" },
     { "key": "/categories", "label": "Category Management", "icon": "DashboardOutlined" },
-    { "key": "/admin/courses", "label": "All Courses", "icon": "BookOutlined" },
+    { "key": "/view-all-course", "label": "All Courses", "icon": "BookOutlined" },
     { "key": "/admin/pending_courses", "label": "Pending Courses", "icon": "BookOutlined" },
     { "key": "/admin/reviews", "label": "Reviews", "icon": "BookOutlined" }
   ]
