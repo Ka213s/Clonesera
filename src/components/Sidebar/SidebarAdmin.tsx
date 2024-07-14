@@ -11,6 +11,7 @@ import { SidebarAdminData } from '../../consts';
 interface SidebarProps {
   showMenu: boolean;
 }
+
 const iconComponents: { [key: string]: JSX.Element } = {
   UserOutlined: <UserOutlined />,
   DashboardOutlined: <DashboardOutlined />,
@@ -20,9 +21,9 @@ const iconComponents: { [key: string]: JSX.Element } = {
 
 const renderMenuItems = (items: any[]) => 
   items.map((item) => (
-    item.children ? (
+    item.items ? (
       <Menu.SubMenu key={item.key} icon={iconComponents[item.icon || '']} title={item.label}>
-        {renderMenuItems(item.children)}
+        {renderMenuItems(item.items)}
       </Menu.SubMenu>
     ) : (
       <Menu.Item key={item.key} icon={iconComponents[item.icon || '']}>

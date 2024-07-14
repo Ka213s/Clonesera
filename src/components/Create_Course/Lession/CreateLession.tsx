@@ -87,8 +87,8 @@ const CreateLessonButton: React.FC = () => {
       </Button>
       <Modal
         title="Create Lesson"
-        visible={isModalVisible}
-        onCancel={() => setIsModalVisible(false)}
+        open={isModalVisible}
+        onClose={() => setIsModalVisible(false)}
         onOk={() => form.submit()}
       >
         <Form
