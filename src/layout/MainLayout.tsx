@@ -1,72 +1,83 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
+import Sidebar from '../components/Sidebar/Sidebar';
 import SidebarStudent from '../components/Sidebar/SidebarStudent';
 import SidebarInstructor from '../components/Sidebar/SidebarInstructor';
-import Sidebar from '../components/Sidebar/Sidebar';
-import Loading from '../components/Loading';
-import { setGlobalLoadingHandler } from '../services/axiosInstance';
+import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
+import { Layout } from 'antd';
 
-type UserRole = 'admin' | 'student' | 'instructor';
-
-interface MainLayoutProps {
-  children: React.ReactNode;
-}
-
-const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [role, setRole] = useState<UserRole | null>(null); 
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [showMenu, setShowMenu] = useState(true);
+  const [role, setRole] = useState<string | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    setGlobalLoadingHandler(setIsLoading);
-
-    const userData = localStorage.getItem('data');
+    const userData = localStorage.getItem('userData'); // Corrected key name
     if (userData) {
       const parsedData = JSON.parse(userData);
       setRole(parsedData.role);
     }
   }, []);
 
-  let renderSidebar = null;
+  useEffect(() => {
+    if (location.pathname === '/home' && role === 'admin') {
+      navigate('/admin/request-management');
+    }
+  }, [location.pathname, role, navigate]);
 
-  switch (role) {
-    case 'admin':
-      renderSidebar = <SidebarAdmin showMenu={isMenuOpen} />;
-      break;
-    case 'student':
-      renderSidebar = <SidebarStudent showMenu={isMenuOpen} />;
-      break;
-    case 'instructor':
-      renderSidebar = <SidebarInstructor showMenu={isMenuOpen} />;
-      break;
-    default:
-      renderSidebar = <Sidebar showMenu={isMenuOpen} />;
-      break;
-  }
+  const toggleMenu = () => {
+    setShowMenu(!showMenu);
+  };
+
+  const renderSidebar = useMemo(() => {
+    if (!role) {
+      return <Sidebar showMenu={showMenu} />;
+    }
+
+    if (location.pathname === '/home') {
+      switch (role) {
+        case 'student':
+          return <SidebarStudent showMenu={showMenu} />;
+        case 'instructor':
+          return <SidebarInstructor showMenu={showMenu} />;
+        case 'admin':
+          navigate('/admin/request-management');
+          return null;
+        default:
+          return null;
+      }
+    }
+
+    switch (role) {
+      case 'admin':
+        return <SidebarAdmin showMenu={showMenu} />;
+      case 'student':
+        return <SidebarStudent showMenu={showMenu} />;
+      case 'instructor':
+        return <SidebarInstructor showMenu={showMenu} />;
+      default:
+        return null;
+    }
+  }, [location.pathname, role, showMenu, navigate]);
 
   return (
-    <div className="flex flex-col h-screen">
-      <Header toggleMenu={toggleMenu} />
-      <div className="flex flex-1 overflow-hidden pt-14">
-        {renderSidebar && (
-          <aside className={`transition-all duration-300 ${isMenuOpen ? 'ml-0' : '-ml-56'} fixed left-0 top-14 bottom-0 z-50 overflow-y-auto bg-white w-56 border-r border-gray-200`}>
-            {renderSidebar}
-          </aside>
-        )}
-        <main className="flex-1 p-4 bg-white overflow-y-auto relative transition-all duration-300">
-          <Loading isLoading={isLoading}>
-            {children}
-          </Loading>
-        </main>
+    <Layout className="min-h-screen">
+      <div className="flex flex-col min-h-screen">
+        <Header toggleMenu={toggleMenu} />
+        <div className="flex flex-1">
+          {renderSidebar}
+          <div className={`flex flex-col flex-1 transition-all duration-300 ${showMenu ? 'ml-56' : 'ml-0'}`}>
+            <div className="flex-1 pt-16 p-4 overflow-auto">
+              {children}
+            </div>
+            <Footer />
+          </div>
+        </div>
       </div>
-      <Footer />
-    </div>
+    </Layout>
   );
 };
 
