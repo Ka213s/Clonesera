@@ -84,35 +84,35 @@ export const sidebarMenuItemsData = {
 
 export const SidebarIntructorData = {
   insSidebarItem: [
-    { text: "Dashboard", icon: "HomeOutlined", url: "/instructor/dashboard" },
-    { text: "Courses", icon: "BookOutlined", url: "/instructor/courses" },
-    { text: "My Lesson", icon: "BookOutlined", url: "/instructor/myLesson" },
-    { text: "Analysis", icon: "LineChartOutlined", url: "/instructor/analysis" },
-    { text: "Messages", icon: "MessageOutlined", url: "/instructor/messages" },
-    { text: "Notifications", icon: "BellOutlined", url: "/instructor/notifications" },
-    { text: "My Certificates", icon: "SafetyCertificateOutlined", url: "/instructor/myCertificates" },
-    { text: "Reviews", icon: "StarOutlined", url: "/instructor/reviews" },
-    { text: "Earning", icon: "DollarOutlined", url: "/instructor/earning" },
-    { text: "Payout", icon: "WalletOutlined", url: "/instructor/payout" },
-    { text: "Statements", icon: "FileTextOutlined", url: "/instructor/statements" },
-    { text: "Verification", icon: "CheckOutlined", url: "/instructor/verification" },
-    { text: "Setting", icon: "SettingOutlined", url: "/settings" },
-    { text: "Send Feedback", icon: "SendOutlined", url: "/feedback" }
+    { text: "My Profile", icon: "UserOutlined", url: "/view-profile" },
+    { text: "Manage Course", icon: "BookOutlined", url: "/courses" },
+    { text: "View All Course ", icon: "BookOutlined", url: "/view-all-course" },
+    { text: "Subscription", icon: "BellOutlined", url: "/list-subscription" },
+    // { text: "Messages", icon: "MessageOutlined", url: "/instructor/messages" },
+    // { text: "Notifications", icon: "BellOutlined", url: "/instructor/notifications" },
+    // { text: "My Certificates", icon: "SafetyCertificateOutlined", url: "/instructor/myCertificates" },
+    // { text: "Reviews", icon: "StarOutlined", url: "/instructor/reviews" },
+    // { text: "Earning", icon: "DollarOutlined", url: "/instructor/earning" },
+    // { text: "Payout", icon: "WalletOutlined", url: "/instructor/payout" },
+    // { text: "Statements", icon: "FileTextOutlined", url: "/instructor/statements" },
+    // { text: "Verification", icon: "CheckOutlined", url: "/instructor/verification" },
+    { text: "Setting", icon: "SettingOutlined", url: "/setting-page" },
+    // { text: "Send Feedback", icon: "SendOutlined", url: "/feedback" }
   ]
 };
 
 export const SidebarStudentData = {
   studentSidebarItem: [
-    { "text": "Dashboard", "icon": "FaHome", "url": "/student/dashboard" },
-    { "text": "Purchased Courses", "icon": "FaBook", "url": "/student/purchasedCourses" },
-    { "text": "Messages", "icon": "FaComments", "url": "/student/messages" },
-    { "text": "Notifications", "icon": "FaBell", "url": "/student/notifications" },
-    { "text": "My Certificates", "icon": "FaCertificate", "url": "/student/myCertificates" },
-    { "text": "Reviews", "icon": "FaStar", "url": "/student/reviews" },
-    { "text": "Credits", "icon": "FaCreditCard", "url": "/student/credits" },
-    { "text": "Statements", "icon": "FaFile", "url": "/student/statements" },
-    { "text": "Setting", "icon": "FaCogs", "url": "/settings" },
-    { "text": "Send Feedback", "icon": "FaPaperPlane", "url": "/feedback" }
+    { text: "Subscription", icon: "FaBell", url: "/list-subscribed" },
+    // { "text": "Purchased Courses", "icon": "FaBook", "url": "/student/purchasedCourses" },
+    // { "text": "Messages", "icon": "FaComments", "url": "/student/messages" },
+    // { "text": "Notifications", "icon": "FaBell", "url": "/student/notifications" },
+    // { "text": "My Certificates", "icon": "FaCertificate", "url": "/student/myCertificates" },
+    // { "text": "Reviews", "icon": "FaStar", "url": "/student/reviews" },
+    // { "text": "Credits", "icon": "FaCreditCard", "url": "/student/credits" },
+    // { "text": "Statements", "icon": "FaFile", "url": "/student/statements" },
+    { "text": "Setting", "icon": "FaCogs", "url": "/setting-page" },
+    // { "text": "Send Feedback", "icon": "FaPaperPlane", "url": "/feedback" }
   ]
 };
 
