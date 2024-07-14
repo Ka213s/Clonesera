@@ -194,7 +194,13 @@ const Login: React.FC = () => {
 
       {isRoleModalVisible && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-4xl">
+          <div className="bg-white p-10 rounded-lg shadow-lg w-full max-w-4xl relative">
+            <button
+              onClick={() => setIsRoleModalVisible(false)}
+              className="absolute top-3 right-7 text-gray-500 hover:text-gray-700 transition duration-300 text-3xl"
+            >
+              &times;
+            </button>
             <h2 className="text-3xl font-semibold text-gray-800 mb-6">Đăng kí bằng Google</h2>
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2">

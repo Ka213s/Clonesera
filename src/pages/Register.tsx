@@ -40,7 +40,6 @@ const Register: React.FC = () => {
                     email: values.email,
                     password: values.password,
                     role: values.role,
-                  
                 };
                 console.log('Registering student:', studentData);
                 await registerAccountStudent(studentData);
@@ -59,7 +58,7 @@ const Register: React.FC = () => {
                 await registerAccountInstructor(instructorData);
             }
             toast.success('Đăng ký thành công. Vui lòng kiểm tra email của bạn.');
-            
+
             setTimeout(() => {
                 navigate('/login');
             }, 2000); // Đợi 2 giây trước khi chuyển hướng
@@ -88,7 +87,7 @@ const Register: React.FC = () => {
         <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-purple-300 to-blue-200 relative">
             <ToastContainer />
             <div className="flex w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10">
-                <div className="w-full md:w-1/2 px-6 py-8 flex flex-col justify-center overflow-y-auto">
+                <div className="w-full md:w-1/2 px-6 py-8 flex flex-col justify-center overflow-y-auto max-h-screen">
                     <Link to="/">
                         <img src={logo} alt="Logo" className="h-10 w-auto mb-6 cursor-pointer" />
                     </Link>
