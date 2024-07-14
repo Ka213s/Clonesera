@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Avatar, PaginationProps } from 'antd';
+import { Table, Avatar, PaginationProps, Tag } from 'antd';
 import { getUsers } from '../../utils/commonImports';
-import EditDeleteIcons from './EditDeleteIcons';
-import DeleteButton from './DeleteButton';
-import StatusToggle from './StatusToggle';
-import RoleSelect from './RoleSelect';
 
 interface User {
   _id: string;
@@ -13,6 +9,7 @@ interface User {
   email: string;
   role: string;
   status: boolean;
+  is_verified: boolean; // Thêm thuộc tính is_verified vào giao diện User
 }
 
 interface Pagination {
@@ -33,8 +30,9 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
   const fetchUsers = async (pageNum: number, pageSize: number) => {
     try {
       const response = await getUsers({ keyword: '', role: 'all', status, is_deleted: isDeleted }, pageNum, pageSize);
-      console.log('response', response);
+      console.log('response', response.pageData);
       setData(response.pageData);
+
       setPagination({
         current: response.pageNum,
         pageSize: response.pageSize,
@@ -51,22 +49,6 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
 
   const handleTableChange = (pagination: PaginationProps) => {
     fetchUsers(pagination.current!, pagination.pageSize!);
-  };
-
-  const handleEdit = (_id: string) => {
-    console.log(`Edit user with _id: ${_id}`);
-  };
-
-  const handleDelete = (_id: string) => {
-    console.log(`Delete user with _id: ${_id}`);
-  };
-
-  const handleStatusChange = (_id: string, status: boolean) => {
-    console.log(`Toggle status for user with _id: ${_id}, new status: ${status}`);
-  };
-
-  const handleRoleChange = (_id: string, role: string) => {
-    console.log(`Change role for user with _id: ${_id}, new role: ${role}`);
   };
 
   const columns = [
@@ -90,30 +72,25 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
       title: 'Role',
       dataIndex: 'role',
       key: 'role',
-      render: (role: string, record: User) => (
-        <RoleSelect userId={record._id} role={role} onChange={handleRoleChange} />
-      ),
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: (status: boolean, record: User) => (
-        <StatusToggle userId={record._id} status={status} onChange={handleStatusChange} />
-      ),
-    },
-    {
-      title: 'Edit',
-      key: 'edit',
-      render: (record: User) => (
-        <EditDeleteIcons userId={record._id} onEdit={handleEdit} />
+      render: (status: boolean) => (
+        <Tag color={status ? 'green' : 'red'}>
+          {status ? 'Active' : 'Inactive'}
+        </Tag>
       ),
     },
     {
       title: 'Delete',
-      key: 'delete',
-      render: (record: User) => (
-        <DeleteButton userId={record._id} onDelete={handleDelete} />
+      dataIndex: 'is_deleted',
+      key: 'is_deleted',
+      render: (is_verified: boolean) => (
+        <Tag color={is_verified ? 'red' : 'green'}>
+          {is_verified ? 'Delete' : 'Not Delete'}
+        </Tag>
       ),
     },
   ];

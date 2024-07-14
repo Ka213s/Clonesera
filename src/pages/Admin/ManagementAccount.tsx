@@ -1,7 +1,10 @@
+import ActiveTab from "../../components/AccoutUser/ActiveTab"
 
 const admin = () => {
   return (
-    <div>admin</div>
+    <div>
+      <ActiveTab />
+    </div>
   )
 }
 
