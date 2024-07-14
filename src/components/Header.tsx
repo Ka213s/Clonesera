@@ -1,27 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Badge, Dropdown, Avatar, Menu, Input } from 'antd';
+import { Button, Badge, Dropdown, Avatar, MenuProps } from 'antd';
 import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, MailOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
 
-const { Search } = Input;
-
 type HeaderProps = {
   toggleMenu: () => void;
 };
-
-const UserMenu: React.FC<{ onLogout: () => void }> = ({ onLogout }) => (
-  <Menu>
-    <Menu.Item key="profile">
-      <Link to="/profile">
-        <UserOutlined /> Profile
-      </Link>
-    </Menu.Item>
-    <Menu.Item key="logout" onClick={onLogout}>
-      <UserOutlined /> Logout
-    </Menu.Item>
-  </Menu>
-);
 
 const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const [avatar, setAvatar] = useState<string | null>(null);
@@ -57,6 +42,31 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     }
   };
 
+  const notificationMenuItems: MenuProps['items'] = [
+    { key: '1', label: 'Notification 1' },
+    { key: '2', label: 'Notification 2' },
+    { key: '3', label: 'Notification 3' },
+  ];
+
+  const userMenuItems: MenuProps['items'] = [
+    {
+      key: 'profile',
+      label: (
+        <Link to="/profile">
+          <UserOutlined /> Profile
+        </Link>
+      ),
+    },
+    {
+      key: 'logout',
+      label: (
+        <span onClick={handleLogout}>
+          <UserOutlined /> Logout
+        </span>
+      ),
+    },
+  ];
+
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
       <div className="flex items-center space-x-4">
@@ -65,13 +75,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
           <img src={logo} alt="Logo" className="h-12 w-auto cursor-pointer" />
         </Link>
       </div>
-
-      <Search
-        placeholder="Search..."
-        onSearch={(value) => console.log(value)}
-        style={{ width: 350 }}
-        className="mx-4"
-      />
 
       <div className="flex items-center ml-auto space-x-8 pr-4">
         {isLoggedIn ? (
@@ -91,18 +94,18 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             </Badge>
 
             <Badge count={3}>
-              <Dropdown overlay={<Menu>{/* Notification Menu Items */}</Menu>} trigger={['click']}>
+              <Dropdown menu={{ items: notificationMenuItems }} trigger={['click']}>
                 <MailOutlined className="text-xl cursor-pointer" />
               </Dropdown>
             </Badge>
 
             <Badge count={5}>
-              <Dropdown overlay={<Menu>{/* Notification Menu Items */}</Menu>} trigger={['click']}>
+              <Dropdown menu={{ items: notificationMenuItems }} trigger={['click']}>
                 <BellOutlined className="text-xl cursor-pointer" />
               </Dropdown>
             </Badge>
 
-            <Dropdown overlay={<UserMenu onLogout={handleLogout} />} trigger={['click']}>
+            <Dropdown menu={{ items: userMenuItems }} trigger={['click']}>
               <Avatar
                 size="large"
                 src={avatar || 'default-avatar-path'} // Provide a default avatar path if avatar is null

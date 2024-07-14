@@ -7,7 +7,7 @@ import useCategories from '../../useCategories';
 const { Option } = Select;
 
 const CreateCourseButton: React.FC = () => {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isOpen, setIsOpen] = useState(false); // Use isOpen instead of isModalVisible
   const [form] = Form.useForm();
   const [imageURL, setImageURL] = useState<string | null>(null);
   const [videoURL, setVideoURL] = useState<string | null>(null);
@@ -17,7 +17,7 @@ const CreateCourseButton: React.FC = () => {
   const { categories, parents } = useCategories(); // Use the custom hook
 
   const showModal = () => {
-    setIsModalVisible(true);
+    setIsOpen(true); // Use setIsOpen instead of setIsModalVisible
   };
 
   const handleOk = async () => {
@@ -30,7 +30,7 @@ const CreateCourseButton: React.FC = () => {
       content,
     };
     await createCourse(courseData);
-    setIsModalVisible(false);
+    setIsOpen(false); // Use setIsOpen instead of setIsModalVisible
     form.resetFields();
     setImageURL(null);
     setVideoURL(null);
@@ -39,7 +39,7 @@ const CreateCourseButton: React.FC = () => {
   };
 
   const handleCancel = () => {
-    setIsModalVisible(false);
+    setIsOpen(false); // Use setIsOpen instead of setIsModalVisible
     form.resetFields();
     setImageURL(null);
     setVideoURL(null);
@@ -54,7 +54,7 @@ const CreateCourseButton: React.FC = () => {
       </Button>
       <Modal
         title="Create Course"
-        visible={isModalVisible}
+        open={isOpen} // Use open instead of visible
         onOk={handleOk}
         onCancel={handleCancel}
       >

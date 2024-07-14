@@ -115,45 +115,49 @@ const Register: React.FC = () => {
                         >
                             <Input placeholder='Email' size="large" />
                         </Form.Item>
-                        <Form.Item
-                            name="password"
-                            rules={[
-                                { required: true, message: 'Please input your password!' },
-                                { min: 6, message: 'Password must be at least 6 characters long!' }
-                            ]}
-                        >
-                            <Input.Password
-                                placeholder='Password'
-                                size="large"
-                                iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
-                            />
-                        </Form.Item>
-                        <Form.Item
-                            name="confirmPassword"
-                            dependencies={['password']}
-                            rules={[
-                                { required: true, message: 'Please confirm your password!' },
-                                ({ getFieldValue }) => ({
-                                    validator(_, value) {
-                                        if (!value || getFieldValue('password') === value) {
-                                            return Promise.resolve();
-                                        }
-                                        return Promise.reject(new Error('The two passwords that you entered do not match!'));
-                                    },
-                                }),
-                            ]}
-                        >
-                            <Input.Password
-                                placeholder='Confirm Password'
-                                size="large"
-                                iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
-                            />
-                        </Form.Item>
+                        <div className="flex gap-3">
+                            <Form.Item
+                                name="password"
+                                rules={[
+                                    { required: true, message: 'Please input your password!' },
+                                    { min: 6, message: 'Password must be at least 6 characters long!' }
+                                ]}
+                                className="w-1/2"
+                            >
+                                <Input.Password
+                                    placeholder='Password'
+                                    size="large"
+                                    iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                name="confirmPassword"
+                                dependencies={['password']}
+                                rules={[
+                                    { required: true, message: 'Please confirm your password!' },
+                                    ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                            if (!value || getFieldValue('password') === value) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                        },
+                                    }),
+                                ]}
+                                className="w-1/2"
+                            >
+                                <Input.Password
+                                    placeholder='Confirm Password'
+                                    size="large"
+                                    iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+                                />
+                            </Form.Item>
+                        </div>
                         <Form.Item
                             name="role"
                             rules={[{ required: true, message: 'Please select a role!' }]}
                         >
-                            <Radio.Group onChange={handleRoleChange}>
+                            <Radio.Group onChange={handleRoleChange} className="flex flex-col gap-2">
                                 <Radio value="student">Student</Radio>
                                 <Radio value="instructor">Instructor</Radio>
                             </Radio.Group>

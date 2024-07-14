@@ -21,7 +21,7 @@ const Pending: React.FC = () => {
     const [pageNum, setPageNum] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalItems, setTotalItems] = useState<number>(0);
-    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
     const [comment, setComment] = useState<string>('');
 
@@ -62,7 +62,7 @@ const Pending: React.FC = () => {
 
     const handleReject = (userId: string) => {
         setCurrentUserId(userId);
-        setIsModalVisible(true);
+        setIsModalOpen(true);
     };
 
     const handleConfirmReject = async () => {
@@ -70,7 +70,7 @@ const Pending: React.FC = () => {
 
         try {
             await reviewProfileInstructor({ user_id: currentUserId, status: 'reject', comment });
-            setIsModalVisible(false);
+            setIsModalOpen(false);
             fetchUsers(pageNum, pageSize);
         } catch (error) {
             toast.error('Failed to reject user');
@@ -159,9 +159,9 @@ const Pending: React.FC = () => {
             />
             <Modal
                 title="Reject Reason"
-                visible={isModalVisible}
+                open={isModalOpen}
                 onOk={handleConfirmReject}
-                onCancel={() => setIsModalVisible(false)}
+                onCancel={() => setIsModalOpen(false)}
             >
                 <Input.TextArea
                     value={comment}
