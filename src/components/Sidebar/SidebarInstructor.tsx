@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu } from 'antd';
+import { useNavigate } from 'react-router-dom';
 import {
   HomeOutlined,
   BookOutlined,
@@ -13,7 +14,8 @@ import {
   FileTextOutlined,
   CheckOutlined,
   SettingOutlined,
-  SendOutlined
+  SendOutlined,
+  UserOutlined
 } from '@ant-design/icons';
 import { SidebarIntructorData } from '../../consts';
 
@@ -34,15 +36,17 @@ const iconComponents: { [key: string]: JSX.Element } = {
   FileTextOutlined: <FileTextOutlined />,
   CheckOutlined: <CheckOutlined />,
   SettingOutlined: <SettingOutlined />,
-  SendOutlined: <SendOutlined />
+  SendOutlined: <SendOutlined />,
+  UserOutlined: <UserOutlined />
 };
 
 const SidebarInstructor: React.FC<SidebarProps> = ({ showMenu }) => {
+  const navigate = useNavigate();
   const { insSidebarItem } = SidebarIntructorData;
 
   const renderMenuItems = (items: typeof insSidebarItem) =>
     items.map((item) => (
-      <Menu.Item key={item.url} icon={iconComponents[item.icon || '']}>
+      <Menu.Item key={item.url} icon={iconComponents[item.icon || '']} onClick={() => navigate(item.url)}>
         {item.text}
       </Menu.Item>
     ));

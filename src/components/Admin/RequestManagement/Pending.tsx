@@ -35,7 +35,6 @@ const Pending: React.FC = () => {
                     pageSize
                 );
                 const filteredData = data.pageData.filter((user: User) => !user.is_verified);
-                console.log('filteredData:', filteredData);
                 setUsers(filteredData);
                 setTotalItems(data.pageInfo.totalItems);
             } catch (error) {

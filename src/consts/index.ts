@@ -15,6 +15,7 @@ export const ADMIN = {
   REQUEST_MANAGEMENT: '/request-management',
   DISPLAY_ACCOUNT: '/display-account',
   CREATE_ACCOUNT: '/create-account',
+  CATEGORY: '/categories'
 }
 export const INSTRUCTOR = {
   COURSE: '/courses',
@@ -28,7 +29,6 @@ export const PUBLIC = {
   ANOTHER_PAGE: '/another-page',
   LOGIN: '/login',
   REGISTER: '/register',
-  CATEGORY: '/categories',
   SETTING_PAGE: '/setting-page',
   VERIFY_EMAIL: '/verify-email/:token',
   FORGOT_PASSWORD: '/forgot-password',
@@ -84,76 +84,45 @@ export const sidebarMenuItemsData = {
 
 export const SidebarIntructorData = {
   insSidebarItem: [
-    { text: "Dashboard", icon: "HomeOutlined", url: "/instructor/dashboard" },
-    { text: "Courses", icon: "BookOutlined", url: "/instructor/courses" },
-    { text: "My Lesson", icon: "BookOutlined", url: "/instructor/myLesson" },
-    { text: "Analysis", icon: "LineChartOutlined", url: "/instructor/analysis" },
-    { text: "Messages", icon: "MessageOutlined", url: "/instructor/messages" },
-    { text: "Notifications", icon: "BellOutlined", url: "/instructor/notifications" },
-    { text: "My Certificates", icon: "SafetyCertificateOutlined", url: "/instructor/myCertificates" },
-    { text: "Reviews", icon: "StarOutlined", url: "/instructor/reviews" },
-    { text: "Earning", icon: "DollarOutlined", url: "/instructor/earning" },
-    { text: "Payout", icon: "WalletOutlined", url: "/instructor/payout" },
-    { text: "Statements", icon: "FileTextOutlined", url: "/instructor/statements" },
-    { text: "Verification", icon: "CheckOutlined", url: "/instructor/verification" },
-    { text: "Setting", icon: "SettingOutlined", url: "/settings" },
-    { text: "Send Feedback", icon: "SendOutlined", url: "/feedback" }
+    { text: "My Profile", icon: "UserOutlined", url: "/view-profile" },
+    { text: "Manage Course", icon: "BookOutlined", url: "/courses" },
+    { text: "View All Course ", icon: "BookOutlined", url: "/view-all-course" },
+    { text: "Subscription", icon: "BellOutlined", url: "/list-subscription" },
+    // { text: "Messages", icon: "MessageOutlined", url: "/instructor/messages" },
+    // { text: "Notifications", icon: "BellOutlined", url: "/instructor/notifications" },
+    // { text: "My Certificates", icon: "SafetyCertificateOutlined", url: "/instructor/myCertificates" },
+    // { text: "Reviews", icon: "StarOutlined", url: "/instructor/reviews" },
+    // { text: "Earning", icon: "DollarOutlined", url: "/instructor/earning" },
+    // { text: "Payout", icon: "WalletOutlined", url: "/instructor/payout" },
+    // { text: "Statements", icon: "FileTextOutlined", url: "/instructor/statements" },
+    // { text: "Verification", icon: "CheckOutlined", url: "/instructor/verification" },
+    { text: "Setting", icon: "SettingOutlined", url: "/setting-page" },
+    // { text: "Send Feedback", icon: "SendOutlined", url: "/feedback" }
   ]
 };
 
 export const SidebarStudentData = {
   studentSidebarItem: [
-    { "text": "Dashboard", "icon": "FaHome", "url": "/student/dashboard" },
-    { "text": "Purchased Courses", "icon": "FaBook", "url": "/student/purchasedCourses" },
-    { "text": "Messages", "icon": "FaComments", "url": "/student/messages" },
-    { "text": "Notifications", "icon": "FaBell", "url": "/student/notifications" },
-    { "text": "My Certificates", "icon": "FaCertificate", "url": "/student/myCertificates" },
-    { "text": "Reviews", "icon": "FaStar", "url": "/student/reviews" },
-    { "text": "Credits", "icon": "FaCreditCard", "url": "/student/credits" },
-    { "text": "Statements", "icon": "FaFile", "url": "/student/statements" },
-    { "text": "Setting", "icon": "FaCogs", "url": "/settings" },
-    { "text": "Send Feedback", "icon": "FaPaperPlane", "url": "/feedback" }
+    { text: "Subscription", icon: "FaBell", url: "/list-subscribed" },
+    // { "text": "Purchased Courses", "icon": "FaBook", "url": "/student/purchasedCourses" },
+    // { "text": "Messages", "icon": "FaComments", "url": "/student/messages" },
+    // { "text": "Notifications", "icon": "FaBell", "url": "/student/notifications" },
+    // { "text": "My Certificates", "icon": "FaCertificate", "url": "/student/myCertificates" },
+    // { "text": "Reviews", "icon": "FaStar", "url": "/student/reviews" },
+    // { "text": "Credits", "icon": "FaCreditCard", "url": "/student/credits" },
+    // { "text": "Statements", "icon": "FaFile", "url": "/student/statements" },
+    { "text": "Setting", "icon": "FaCogs", "url": "/setting-page" },
+    // { "text": "Send Feedback", "icon": "FaPaperPlane", "url": "/feedback" }
   ]
 };
 
 export const SidebarAdminData = {
   menuItems: [
-    {
-      "key": "/admin/dashboard",
-      "icon": "DashboardOutlined",
-      "label": "Dashboard"
-    },
-    {
-      "key": "/admin/request-management",
-      "icon": "DashboardOutlined",
-      "label": "Request Management"
-    },
-    {
-      "key": "instructor",
-      "icon": "TeamOutlined",
-      "label": "User",
-      "children": [
-        { "key": "/admin/allUser", "label": "All User" },
-        { "key": "/admin/addUser", "label": "Add User" }
-      ]
-    },
-    {
-      "key": "Categories",
-      "icon": "DashboardOutlined",
-      "label": "Categories",
-      "children": [
-        { "key": "/admin/category-management", "label": "Category Management" }
-      ]
-    },
-    {
-      "key": "courses",
-      "icon": "BookOutlined",
-      "label": "Courses",
-      "children": [
-        { "key": "/admin/courses", "label": "All Courses" },
-        { "key": "/admin/pending_courses", "label": "Pending Courses" },
-        { "key": "/admin/reviews", "label": "Reviews" }
-      ]
-    }
+    { "key": "/display-account", "label": "Manager User", "icon": "TeamOutlined" },
+    { "key": "/request-management", "label": "Request Management", "icon": "TeamOutlined" },
+    { "key": "/categories", "label": "Category Management", "icon": "DashboardOutlined" },
+    { "key": "/view-all-course", "label": "All Courses", "icon": "BookOutlined" },
+    { "key": "/admin/pending_courses", "label": "Pending Courses", "icon": "BookOutlined" },
+    { "key": "/admin/reviews", "label": "Reviews", "icon": "BookOutlined" }
   ]
 };
