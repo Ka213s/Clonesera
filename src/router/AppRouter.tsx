@@ -20,8 +20,8 @@ const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
 const RequestManagement = lazy(() => import('../pages/RequestManagement'));
 const ListSubscription = lazy(() => import('../pages/Instructor/ListSubscription'));
 const ListSubscribed = lazy(() => import('../pages/Student/ListSubscribed'));
-const DisplayAccount = lazy(() => import('../components/Admin/AccoutUser//ActiveTab'));
-
+const DisplayAccount = lazy(() => import('../components/Admin/AccoutUser/ActiveTab'));
+const CreateAccount = lazy(() => import('../components/Admin/CreateAccount/CreateAccount'));
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));
 const PageError403 = lazy(() => import('../pages/Error/PageError403'));
@@ -42,6 +42,7 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.LIST_SUBSCRIPTION} element={<PrivateRoute element={ListSubscription} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={ADMIN.REQUEST_MANAGEMENT} element={<PrivateRoute element={RequestManagement} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={ADMIN.DISPLAY_ACCOUNT} element={<PrivateRoute element={DisplayAccount} allowedRoles={[ROLES.ADMIN]} />} />
+                        <Route path={ADMIN.CREATE_ACCOUNT} element={<PrivateRoute element={CreateAccount} allowedRoles={[ROLES.ADMIN]} />} />
                         
                     </Route>
 

@@ -72,6 +72,12 @@ export const getUsers = async (searchCondition: { keyword: string; role: string;
   });
   return response.data;
 };
+export const createUser = async (data: { name: string; email: string; password: string; role: string; description?: string; phone_number?: string; avatar?: string; video?: string; }) => {
+  const response = await axiosInstance.post('/api/users/create', data);
+  toast.success("User created successfully");
+  return response.data;
+};
+
 export const changeUserRole = async (data: { user_id: string; role: string }) => {
   const response = await axiosInstance.put('/api/users/change-role', data);
   toast.success("User role changed successfully");

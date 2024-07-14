@@ -14,6 +14,7 @@ export const ERROR = {
 export const ADMIN = {
   REQUEST_MANAGEMENT: '/request-management',
   DISPLAY_ACCOUNT: '/display-account',
+  CREATE_ACCOUNT: '/create-account',
 }
 export const INSTRUCTOR = {
   COURSE: '/courses',
