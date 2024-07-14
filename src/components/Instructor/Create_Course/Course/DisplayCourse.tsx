@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from 'react';
-import { Table, message } from 'antd';
-import { ColumnsType } from 'antd/es/table';
-import { getCourses } from '../../../../utils/commonImports';
-import EditButton from './EditCourse';
-import DeleteButton from './DeleteCourse';
-import SendToAdminButton from './SendToAdminButton';
+import React, { useEffect, useState } from "react";
+import { Table, message, Select } from "antd";
+import { ColumnsType } from "antd/es/table";
+import {
+  getCourses,
+  changeCourseStatus,
+} from "../../../../utils/commonImports";
+import EditButton from "./EditCourse";
+import DeleteButton from "./DeleteCourse";
+import SendToAdminButton from "./SendToAdminButton";
+
+const { Option } = Select;
 
 interface Course {
   _id: number;
@@ -22,9 +27,9 @@ const CourseTable: React.FC = () => {
     const fetchCourses = async () => {
       try {
         const searchCondition = {
-          keyword: '',
-          category: '',
-          status: '',
+          keyword: "",
+          category: "",
+          status: "",
           is_deleted: false,
         };
         const pageNum = 1;
@@ -32,43 +37,70 @@ const CourseTable: React.FC = () => {
         const response = await getCourses(searchCondition, pageNum, pageSize);
         setCourses(response.pageData);
       } catch (error) {
-        message.error('Error fetching courses');
-        console.error('Error fetching courses:', error);
+        message.error("Error fetching courses");
+        console.error("Error fetching courses:", error);
       }
     };
 
     fetchCourses();
   }, []);
 
+  const handleChangeStatus = async (courseId: number, newStatus: string) => {
+    try {
+      await changeCourseStatus({
+        course_id: courseId.toString(),
+        new_status: newStatus,
+      });
+      message.success("Course status updated successfully");
+      setCourses((prevCourses) =>
+        prevCourses.map((course) =>
+          course._id === courseId ? { ...course, status: newStatus } : course
+        )
+      );
+    } catch (error) {
+      message.error("Error updating course status");
+      console.error("Error updating course status:", error);
+    }
+  };
+
   const columns: ColumnsType<Course> = [
     {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
+      title: "Name",
+      dataIndex: "name",
+      key: "name",
     },
     {
-      title: 'Category Name',
-      dataIndex: 'category_name',
-      key: 'category_name',
+      title: "Category Name",
+      dataIndex: "category_name",
+      key: "category_name",
     },
     {
-      title: 'User Name',
-      dataIndex: 'user_name',
-      key: 'user_name',
+      title: "User Name",
+      dataIndex: "user_name",
+      key: "user_name",
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (status, record) => (
+        <Select
+          value={status}
+          onChange={(newStatus) => handleChangeStatus(record._id, newStatus)}
+        >
+          <Option value="active">Active</Option>
+          <Option value="inactive">Inactive</Option>
+        </Select>
+      ),
     },
     {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
     },
     {
-      title: 'Actions',
-      key: 'actions',
+      title: "Actions",
+      key: "actions",
       render: (_, record) => (
         <>
           <EditButton courseId={record._id} />
@@ -79,7 +111,7 @@ const CourseTable: React.FC = () => {
     },
   ];
 
-  return <Table columns={columns} dataSource={courses} rowKey="id" />;
+  return <Table columns={columns} dataSource={courses} rowKey="_id" />;
 };
 
 export default CourseTable;
