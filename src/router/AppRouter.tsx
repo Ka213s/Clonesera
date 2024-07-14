@@ -12,7 +12,7 @@ const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
 const Logout = lazy(() => import('../components/Logout'));
 const Register = lazy(() => import('../pages/Register'));
-const Category = lazy(() => import('../pages/Category'));
+const Category = lazy(() => import('../pages/Admin/Category'));
 const SettingPage = lazy(() => import('../pages/SettingPage'));
 const Course = lazy(() => import('../pages/Instructor/ManagementCourse'));
 const VerifyEmail = lazy(() => import('../components/VerifyEmailDone'));
