@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableColumnsType } from 'antd';
-import { getSessions } from '../../../utils/commonImports';
+import { getSessions } from '../../../../utils/commonImports';
 import ButtonEdit from './EditSession';
 import ButtonDelete from './DeleteSession';
 

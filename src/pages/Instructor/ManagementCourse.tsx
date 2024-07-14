@@ -1,4 +1,4 @@
-import CreateNewCourse from "../../components/Create_Course/CreateNewCousre"
+import CreateNewCourse from "../../components/Instructor/Create_Course/CreateNewCousre"
 
 const CreateCourse = () => {
   return (

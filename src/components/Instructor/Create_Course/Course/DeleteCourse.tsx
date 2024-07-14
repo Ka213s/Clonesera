@@ -1,7 +1,7 @@
 import React from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
-import { deleteCourse } from '../../../utils/commonImports';
+import { deleteCourse } from '../../../../utils/commonImports';
 
 interface DeleteButtonProps {
   courseId: number;

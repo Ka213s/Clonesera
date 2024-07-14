@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Input, message } from 'antd';
-import { getLessonById, updateLesson } from '../../../utils/commonImports';
-import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor'; 
-import FileUploader from '../../FileUploader';
+import { getLessonById, updateLesson } from '../../../../utils/commonImports';
+import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor'; 
+import FileUploader from '../../../FileUploader';
 
 interface UpdateLessonProps {
   lesson_id: string;
