@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { getCourses } from '../../../utils/commonImports';
+import { getCourses } from '../../../../utils/commonImports';
 import EditButton from './EditCourse';
 import DeleteButton from './DeleteCourse';
 import SendToAdminButton from './SendToAdminButton';

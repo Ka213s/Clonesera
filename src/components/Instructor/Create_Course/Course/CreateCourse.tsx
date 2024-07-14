@@ -1,8 +1,8 @@
-import { createCourse, useState } from '../../../utils/commonImports';
+import { createCourse, useState } from '../../../../utils/commonImports';
 import { Button, Modal, Form, Input, InputNumber, Select } from 'antd';
-import FileUploader from '../../FileUploader';
-import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor';
-import useCategories from '../../useCategories';
+import FileUploader from '../../../FileUploader';
+import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor';
+import useCategories from '../../../useCategories';
 
 const { Option } = Select;
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { CheckOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
-import { changeCourseStatus } from '../../../utils/commonImports';
+import { changeCourseStatus } from '../../../../utils/commonImports';
 
 interface SendToAdminButtonProps {
   courseId: number;

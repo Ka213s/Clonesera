@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Input, Select, message } from 'antd';
-import { createSession, getCourses } from '../../../utils/commonImports'; // Import common functions
-import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor'; // Import TinyMCEEditorComponent
+import { createSession, getCourses } from '../../../../utils/commonImports'; // Import common functions
+import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor'; // Import TinyMCEEditorComponent
 
 const { Option } = Select;
 

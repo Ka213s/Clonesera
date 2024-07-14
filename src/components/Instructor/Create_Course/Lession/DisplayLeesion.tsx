@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableColumnsType } from 'antd';
-import { getLessons } from '../../../utils/commonImports';
+import { getLessons } from '../../../../utils/commonImports';
 import UpdateLesson from './EditLesson';
 import DeleteLesson from './DeleteLesson';
 
