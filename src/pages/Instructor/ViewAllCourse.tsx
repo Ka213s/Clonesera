@@ -1,8 +1,10 @@
-
+import ViewAllCourses from '../../components/Instructor/ViewAllCourse/CourseAll';
 
 const ViewAllCourse = () => {
   return (
-    <div>ViewAllCourse</div>
+    <div>
+      <ViewAllCourses />
+    </div>
   )
 }
 
