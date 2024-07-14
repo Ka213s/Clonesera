@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
 import { Table, Avatar, PaginationProps } from 'antd';
-import { getUsers } from '../../../utils/commonImports';
-import EditDeleteIcons from './EditDeleteIcons';
+import { React, useEffect, useState, getUsers } from '../../../utils/commonImports';
 import DeleteButton from './DeleteButton';
 import StatusToggle from './StatusToggle';
 import RoleSelect from './RoleSelect';
+import EditButton from './EditButton';
 
 interface User {
   _id: string;
@@ -13,6 +12,7 @@ interface User {
   email: string;
   role: string;
   status: boolean;
+  is_verified: boolean;
 }
 
 interface Pagination {
@@ -34,11 +34,12 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
     try {
       const response = await getUsers({ keyword: '', role: 'all', status, is_deleted: isDeleted }, pageNum, pageSize);
       console.log('response', response);
-      setData(response.pageData);
+      const verifiedUsers = response.pageData.filter((user: User) => user.is_verified); // Filter for verified users
+      setData(verifiedUsers);
       setPagination({
-        current: response.pageNum,
-        pageSize: response.pageSize,
-        total: response.total, 
+        current: response.pageInfo.pageNum,
+        pageSize: response.pageInfo.pageSize,
+        total: response.pageInfo.totalItems,
       });
     } catch (error) {
       console.error('Failed to fetch users:', error);
@@ -106,7 +107,7 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
       title: 'Edit',
       key: 'edit',
       render: (record: User) => (
-        <EditDeleteIcons userId={record._id} onEdit={handleEdit} />
+        <EditButton userId={record._id} onEdit={handleEdit} />
       ),
     },
     {

@@ -1,4 +1,4 @@
-import { React, Form, Input, Select, Modal, useEffect } from '../utils/commonImports';
+import { React, Form, Input, Select, Modal, useEffect } from '../../../utils/commonImports';
 
 interface Category {
     _id: string;
@@ -30,7 +30,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
     onSubmit,
     onCancel,
 }) => {
-    const [form] = Form.useForm(); 
+    const [form] = Form.useForm();
 
     useEffect(() => {
         if (isVisible) {
@@ -83,7 +83,7 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
                         name="parent_category_id"
                         label="Parent Category"
                     >
-                        <Select 
+                        <Select
                             placeholder="Select a parent category"
                             onChange={(value: string) => form.setFieldsValue({ parent_category_id: value })}
                         >
