@@ -56,13 +56,12 @@ const ViewProfile: React.FC = () => {
             <h3 className="text-2xl font-semibold mb-4">About Me</h3>
             {userData?.video && (
               <div className="mb-4">
-                <video className="max-w-full" width="20%" controls>
+                <video className="w-full max-h-96" controls>
                   <source src={userData.video} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
               </div>
             )}
-            
             <p className="text-gray-700">{userData?.description}</p>
           </div>
         );
@@ -118,7 +117,6 @@ const ViewProfile: React.FC = () => {
                 <LinkedinOutlined className="text-2xl text-blue-700" />
                 <YoutubeOutlined className="text-2xl text-red-600" />
                 <FacebookOutlined className="text-2xl text-blue-800" />
-             
               </div>
             </div>
           </div>
@@ -128,7 +126,7 @@ const ViewProfile: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-8 bg-white p-6 rounded-lg shadow-lg " style={{ maxHeight: '70vh' }}>
+      <div className="mt-8 bg-white p-6 rounded-lg shadow-lg" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
         <div className="flex space-x-6 border-b border-gray-200 pb-3">
           {['About', 'Course', 'Purchase', 'Community', 'Subscription'].map((tab) => (
             <button
