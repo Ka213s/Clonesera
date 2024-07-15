@@ -4,7 +4,7 @@ const { Footer: AntFooter } = Layout;
 
 const Footer = () => {
   return (
-    <AntFooter className="p-8 bg-gray-800 text-gray-300">
+    <AntFooter className="p-8 bg-gray-800 text-gray-300 w-full">
       <div className="container mx-auto">
         {/* Newsletter Section */}
         <div className="flex justify-between items-center py-6">
