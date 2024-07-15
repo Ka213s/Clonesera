@@ -189,8 +189,8 @@ const Category: React.FC = () => {
                     onKeyPress={handleSearch}
                     className="mr-2 w-60"
                 />
-                <Button type="primary" onClick={() => handleSearch()} icon={<SearchOutlined />} className="mr-2" />
-                <Button type="primary" onClick={handleAddCategory} icon={<PlusOutlined />} className="ml-auto">
+                <Button type="primary" onClick={() => handleSearch()} icon={<SearchOutlined />} className="mr-2 !bg-green-500 hover:scale-105" />
+                <Button type="primary" onClick={handleAddCategory} icon={<PlusOutlined />} className="custom-button ml-auto">
                     New Category
                 </Button>
             </div>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button } from 'antd';
+import { Table, Button, Select, message } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { getCourses, getSessions } from '../../../utils/commonImports';
+import { getCourses, getSessions, changeCourseStatus } from '../../../utils/commonImports';
 import SessionAll from './SessionAll';
+
+const { Option } = Select;
 
 interface Course {
   _id: string;
@@ -42,6 +44,16 @@ const CourseTable: React.FC = () => {
     setSessions(data.pageData);
   };
 
+  const handleChangeStatus = async (courseId: string, newStatus: string) => {
+    try {
+      await changeCourseStatus({ course_id: courseId, new_status: newStatus });
+      message.success('Course status updated successfully');
+      fetchCourses();
+    } catch (error) {
+      message.error('Failed to update course status');
+    }
+  };
+
   const courseColumns: ColumnsType<Course> = [
     { title: 'Course Name', dataIndex: 'name', key: 'name' },
     { title: 'Category Name', dataIndex: 'category_name', key: 'category_name' },
@@ -52,7 +64,18 @@ const CourseTable: React.FC = () => {
       title: 'Action',
       key: 'action',
       render: (_, record) => (
-        <Button onClick={() => handleViewSessions(record._id)}>View Sessions</Button>
+        <>
+          <Button onClick={() => handleViewSessions(record._id)}>View Sessions</Button>
+          <Select
+            defaultValue={record.status}
+            style={{ width: 120, marginLeft: 10 }}
+            onChange={(value) => handleChangeStatus(record._id, value)}
+          >
+            <Option value="approve">Approve</Option>
+            <Option value="active">Active</Option>
+            <Option value="inactive">Inactive</Option>
+          </Select>
+        </>
       ),
     },
   ];

@@ -100,7 +100,7 @@ const Login: React.FC = () => {
 
   return (
     <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
-      <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-purple-400 to-blue-300 relative">
+      <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-green-400 to-white-500 relative">
         <div className="flex flex-col w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10 md:flex-row">
           <div className="w-full md:w-1/2 px-4 md:px-20 py-10 flex flex-col justify-between">
             <div>
@@ -200,7 +200,7 @@ const Login: React.FC = () => {
             >
               &times;
             </button>
-            <h2 className="text-3xl font-semibold text-gray-800 mb-6">Đăng kí bằng Google</h2>
+            <h2 className="text-3xl font-semibold text-gray-800 mb-6">Sign up with google</h2>
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2">
                 <select
