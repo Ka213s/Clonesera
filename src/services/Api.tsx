@@ -254,3 +254,7 @@ export const getPublicCourses = async (data: { searchCondition: { keyword?: stri
   const response = await axiosInstance.post('/api/client/course/search', data);
   return response.data;
 };
+export const getCourseDetail = async (id: string) => {
+  const response = await axiosInstance.get(`/api/client/course/${id}`);
+  return response.data;
+};
