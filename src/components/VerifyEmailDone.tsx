@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { message, Typography, Input, Button, Form } from 'antd';
 import { verifyEmail, resendVerifyEmail } from '../utils/commonImports';
-import { CheckCircleOutlined } from '@ant-design/icons';
+import { ReadOutlined } from '@ant-design/icons';
 
 const { Paragraph } = Typography;
 
@@ -60,7 +60,7 @@ function VerifyEmailDone() {
   const handleResendVerificationEmail = async () => {
     try {
       await resendVerifyEmail({ email: resendEmail });
-     
+
     } catch (err) {
       message.error('Error resending verification email');
     }
