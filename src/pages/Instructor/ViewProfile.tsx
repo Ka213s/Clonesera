@@ -56,11 +56,10 @@ const ViewProfile: React.FC = () => {
             <h3 className="text-2xl font-semibold mb-4">About Me</h3>
             {userData?.video && (
               <div className="mb-4">
-                <video className="max-w-full" width="50%" controls>
+                <video className="max-w-full" width="20%" controls>
                   <source src={userData.video} type="video/mp4" />
                   Your browser does not support the video tag.
                 </video>
-
               </div>
             )}
             <p className="text-gray-700">{userData?.description}</p>
@@ -100,7 +99,7 @@ const ViewProfile: React.FC = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen overflow-y-auto"> {/* Add overflow-y-auto and min-h-screen here */}
+    <div className="p-8 bg-gray-100 min-h-screen overflow-y-auto">
       <div className="bg-white p-8 rounded-lg shadow-lg">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
