@@ -17,6 +17,7 @@ export const ADMIN = {
   CREATE_ACCOUNT: '/create-account',
   CATEGORY: '/categories',
   PENDING_COURSE: '/pending-courses',
+  LOG_COURSE: '/log-course',
 }
 export const INSTRUCTOR = {
   COURSE: '/courses',
@@ -123,6 +124,7 @@ export const SidebarAdminData = {
     { "key": "/categories", "label": "Category Management", "icon": "DashboardOutlined" },
     { "key": "/view-all-course", "label": "All Courses", "icon": "BookOutlined" },
     { "key": "/pending-courses", "label": "Pending Courses", "icon": "BookOutlined" },
-    { "key": "/admin/reviews", "label": "Reviews", "icon": "BookOutlined" }
+    { "key": "/log-course", "label": "Course Log", "icon": "BookOutlined" }
+
   ]
 };
