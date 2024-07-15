@@ -10,11 +10,13 @@ const Loading: React.FC<LoadingProps> = ({ isLoading, children }) => {
   return (
     <div className="relative">
       {isLoading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75">
+        <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 pointer-events-none">
           <Spin tip="Loading..." />
         </div>
       )}
-      <div className={isLoading ? 'opacity-50' : ''}>{children}</div>
+      <div className={isLoading ? 'opacity-50 pointer-events-none' : ''}>
+        {children}
+      </div>
     </div>
   );
 };

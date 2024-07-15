@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TwitterOutlined, LinkedinOutlined, YoutubeOutlined, FacebookOutlined, SettingOutlined } from '@ant-design/icons';
+import { TwitterOutlined, LinkedinOutlined, YoutubeOutlined, FacebookOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentLogin } from '../../services/Api';
 import { toast, ToastContainer } from 'react-toastify';
@@ -117,17 +117,17 @@ const ViewProfile: React.FC = () => {
                 <LinkedinOutlined className="text-2xl text-blue-700" />
                 <YoutubeOutlined className="text-2xl text-red-600" />
                 <FacebookOutlined className="text-2xl text-blue-800" />
-                <SettingOutlined className="text-2xl text-gray-600" />
+             
               </div>
             </div>
           </div>
           <div className="text-right">
-            <button className="bg-[#9997F5] text-white px-4 py-2 rounded-full" onClick={() => navigate('/edit-profile')}>Edit Profile</button>
+            <button className="bg-[#9997F5] text-white px-4 py-2 rounded-full" onClick={() => navigate('/setting-page')}>Edit Profile</button>
           </div>
         </div>
       </div>
 
-      <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
+      <div className="mt-8 bg-white p-6 rounded-lg shadow-lg " style={{ maxHeight: '70vh' }}>
         <div className="flex space-x-6 border-b border-gray-200 pb-3">
           {['About', 'Course', 'Purchase', 'Community', 'Subscription'].map((tab) => (
             <button

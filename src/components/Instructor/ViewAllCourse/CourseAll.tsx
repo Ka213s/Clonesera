@@ -7,12 +7,20 @@ import SessionAll from './SessionAll';
 interface Course {
   _id: string;
   name: string;
+  category_name: string;
+  status: string;
+  price: number;
+  created_at: string;
 }
 
 interface Session {
   _id: string;
   name: string;
   course_id: string;
+  course_name: string;
+  created_at: string;
+  description: string;
+  is_deleted: boolean;
 }
 
 const CourseTable: React.FC = () => {
@@ -36,6 +44,10 @@ const CourseTable: React.FC = () => {
 
   const courseColumns: ColumnsType<Course> = [
     { title: 'Course Name', dataIndex: 'name', key: 'name' },
+    { title: 'Category Name', dataIndex: 'category_name', key: 'category_name' },
+    { title: 'Status', dataIndex: 'status', key: 'status' },
+    { title: 'Price', dataIndex: 'price', key: 'price' },
+    { title: 'Created At', dataIndex: 'created_at', key: 'created_at' },
     {
       title: 'Action',
       key: 'action',

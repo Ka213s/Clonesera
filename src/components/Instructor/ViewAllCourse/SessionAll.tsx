@@ -13,12 +13,19 @@ interface Session {
   _id: string;
   name: string;
   course_id: string;
+  course_name: string;
+  created_at: string;
+  description: string;
 }
 
 interface Lesson {
   _id: string;
   name: string;
   session_id: string;
+  session_name: string;
+  lesson_type: string;
+  full_time: number;
+  created_at: string;
 }
 
 const SessionAll: React.FC<SessionProps> = ({ sessions, onBack }) => {
@@ -27,6 +34,9 @@ const SessionAll: React.FC<SessionProps> = ({ sessions, onBack }) => {
 
   const sessionColumns: ColumnsType<Session> = [
     { title: 'Session Name', dataIndex: 'name', key: 'name' },
+    { title: 'Course Name', dataIndex: 'course_name', key: 'course_name' },
+    { title: 'Created At', dataIndex: 'created_at', key: 'created_at' },
+    { title: 'Description', dataIndex: 'description', key: 'description' },
     {
       title: 'Action',
       key: 'action',
@@ -38,7 +48,13 @@ const SessionAll: React.FC<SessionProps> = ({ sessions, onBack }) => {
 
   const handleViewLessons = async (sessionId: string) => {
     const data = await getLessons({ keyword: '', course_id: '', session_id: sessionId, lesson_type: '', is_position_order: false, is_deleted: false }, 1, 10);
-    setLessons(data.pageData);
+    setLessons(data.pageData.map((lesson: any) => ({
+      ...lesson,
+      session_name: lesson.session_name,
+      lesson_type: lesson.lesson_type,
+      full_time: lesson.full_time,
+      created_at: lesson.created_at,
+    })));
     setView('lessons');
   };
 

@@ -15,7 +15,8 @@ export const ADMIN = {
   REQUEST_MANAGEMENT: '/request-management',
   DISPLAY_ACCOUNT: '/display-account',
   CREATE_ACCOUNT: '/create-account',
-  CATEGORY: '/categories'
+  CATEGORY: '/categories',
+  PENDING_COURSE: '/pending-courses',
 }
 export const INSTRUCTOR = {
   COURSE: '/courses',
@@ -121,7 +122,7 @@ export const SidebarAdminData = {
     { "key": "/request-management", "label": "Request Management", "icon": "TeamOutlined" },
     { "key": "/categories", "label": "Category Management", "icon": "DashboardOutlined" },
     { "key": "/view-all-course", "label": "All Courses", "icon": "BookOutlined" },
-    { "key": "/admin/pending_courses", "label": "Pending Courses", "icon": "BookOutlined" },
+    { "key": "/pending-courses", "label": "Pending Courses", "icon": "BookOutlined" },
     { "key": "/admin/reviews", "label": "Reviews", "icon": "BookOutlined" }
   ]
 };

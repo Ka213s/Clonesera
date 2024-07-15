@@ -26,10 +26,10 @@ const ForgotPassword: React.FC = () => {
     };
 
     return (
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-300 to-blue-200 relative">
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-purple-400 to-blue-300 relative">
             <div className="bg-gray-100 p-8 rounded-2xl shadow-lg max-w-md w-full z-10">
-                <h2 className="text-3xl font-bold text-[#6C6EDD] mb-4">Forgot Password</h2>
-                <p className="text-base text-[#4A4DC3] mb-6">Enter your email to reset your password</p>
+                <h2 className="text-3xl font-bold text-black mb-4">Forgot Password</h2>
+                <p className="text-base text-black mb-6">Enter your email to reset your password</p>
 
                 <Form
                     name="forgot-password"
@@ -54,7 +54,7 @@ const ForgotPassword: React.FC = () => {
                             type="primary"
                             htmlType="submit"
                             disabled={isButtonDisabled}
-                            className="p-3 rounded-2xl w-full bg-[#9997F5] border-none text-white hover:bg-[#8886E5] hover:scale-105 transition duration-300 font-bold"
+                            className="p-3 rounded-2xl w-full bg-blue-600 border-none text-white hover:scale-105 transition duration-300 font-bold"
                         >
                             {isButtonDisabled ? 'Please wait...' : 'Send Reset Email'}
                         </Button>
