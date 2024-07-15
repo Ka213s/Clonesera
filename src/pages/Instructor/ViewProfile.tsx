@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCurrentLogin } from '../../services/Api';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Editor } from '@tinymce/tinymce-react';
 
 interface UserData {
   _id: string;
@@ -52,7 +53,7 @@ const ViewProfile: React.FC = () => {
     switch (activeTab) {
       case 'About':
         return (
-          <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
+          <>
             <h3 className="text-2xl font-semibold mb-4">About Me</h3>
             {userData?.video && (
               <div className="mb-4">
@@ -62,8 +63,21 @@ const ViewProfile: React.FC = () => {
                 </video>
               </div>
             )}
-            <p className="text-gray-700">{userData?.description}</p>
-          </div>
+            <Editor
+              initialValue={userData?.description || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist autolink lists link image charmap print preview anchor',
+                  'searchreplace visualblocks code fullscreen',
+                  'insertdatetime media table paste code help wordcount'
+                ],
+                toolbar: false,
+                height: "auto"
+              }}
+              disabled={true}
+            />
+          </>
         );
       case 'Course':
         return (
@@ -111,9 +125,10 @@ const ViewProfile: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-8 bg-white p-6 rounded-lg shadow-lg" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+      {/* Main content wrapper */}
+      <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
         <div className="flex space-x-6 border-b border-gray-200 pb-3">
-          {['About', 'Course','Subscription'].map((tab) => (
+          {['About', 'Course', 'Subscription'].map((tab) => (
             <button
               key={tab}
               className={`text-gray-600 pb-2 ${activeTab === tab ? 'border-b-2 border-[#9997F5] font-semibold text-[#9997F5]' : ''}`}
@@ -123,6 +138,7 @@ const ViewProfile: React.FC = () => {
             </button>
           ))}
         </div>
+        {/* Render tab content inside the main content wrapper */}
         {renderTabContent()}
       </div>
       <ToastContainer />
