@@ -67,7 +67,7 @@ function VerifyEmailDone() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-400 to-blue-300 relative">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-green-400 to-white-500 relative">
       <div className="flex flex-col items-center p-20 md:p-34 bg-white rounded-3xl shadow-2xl space-y-6 md:space-y-8 transition-all duration-500 ease-in-out transform hover:scale-105 z-10 mb-20">
         <ReadOutlined className="text-7xl text-blue-600 mb-6" />
         {isTokenExpired ? (

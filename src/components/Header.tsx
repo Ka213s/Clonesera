@@ -75,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
       <div className="flex items-center space-x-4">
-        <Button icon={<MenuOutlined />} onClick={toggleMenu} shape="circle" className="bg-purple-600 text-white" />
+        <Button icon={<MenuOutlined />} onClick={toggleMenu} shape="circle" className="!bg-green-500 text-white" />
         <Link to="/" onClick={handleLogoClick}>
           <img src={logo} alt="Logo" className="h-12 w-auto cursor-pointer" />
         </Link>
@@ -84,7 +84,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       <div className="flex items-center ml-auto space-x-8 pr-4">
         {isLoggedIn ? (
           <>
-            <Button type="primary" className="hidden md:block bg-purple-600 hover:bg-purple-500 border-none w-35 h-7 text-xs">
+            <Button type="primary" className="custom-button">
               Create New Course
             </Button>
             <Button
@@ -121,10 +121,10 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         ) : (
           <>
             <Link to="/login">
-              <Button type="primary" className="bg-purple-600 hover:bg-purple-500 border-none">Login</Button>
+              <Button type="primary" className="custom-button">Login</Button>
             </Link>
             <Link to="/register">
-              <Button type="primary" className="bg-purple-600 hover:bg-purple-500 border-none">Register</Button>
+              <Button type="primary" className="custom-button">Register</Button>
             </Link>
           </>
         )}

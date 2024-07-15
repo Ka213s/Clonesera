@@ -28,6 +28,7 @@ const ActiveTab: React.FC = () => {
         type="primary"
         style={{ position: 'absolute', top: 0, right: 0, zIndex: 1000 }}
         onClick={showModal}
+        className='custom-button'
       >
         Add User
       </Button>
