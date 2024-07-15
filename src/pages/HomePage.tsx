@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { getPublicCourses } from '../utils/commonImports';
 
 interface Course {
@@ -13,14 +14,15 @@ interface Course {
 
 const HomePage: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
         const data = {
           searchCondition: {
-            keyword: '', // Add your keyword if needed
-            category_id: '', // Add your category_id if needed
+            keyword: '', 
+            category_id: '',
             is_deleted: false
           },
           pageInfo: {
@@ -39,9 +41,13 @@ const HomePage: React.FC = () => {
     fetchCourses();
   }, []);
 
+  const handleViewDetails = (courseId: number) => {
+    navigate(`/course-detail/${courseId}`);
+  };
+
   return (
     <div>
-      <h1>HomePagse</h1>
+      <h1>HomePage</h1>
       <div>
         {courses.map(course => (
           <div key={course._id} style={{ border: '1px solid black', margin: '10px', padding: '10px' }}>
@@ -51,6 +57,7 @@ const HomePage: React.FC = () => {
             <p><strong>Description:</strong> {course.description}</p>
             <img src={course.image_url} alt={course.name} style={{ width: '100px', height: '100px' }} />
             <p><strong>Price:</strong> ${course.price_paid}</p>
+            <button onClick={() => handleViewDetails(course._id)}>View Details</button>
           </div>
         ))}
       </div>

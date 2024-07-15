@@ -45,15 +45,13 @@ const CourseTable: React.FC = () => {
   const handleChangeStatus = async (courseId: number, newStatus: string) => {
     try {
       await changeCourseStatus({ course_id: courseId.toString(), new_status: newStatus });
-      message.success('Course status updated successfully');
-      // Update the courses data
       setCourses(prevCourses => 
         prevCourses.map(course => 
           course._id === courseId ? { ...course, status: newStatus } : course
         )
       );
     } catch (error) {
-      message.error('Failed to update course status');
+      
       console.error('Error updating course status:', error);
     }
   };
