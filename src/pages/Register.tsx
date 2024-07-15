@@ -84,7 +84,7 @@ const Register: React.FC = () => {
     };
 
     return (
-        <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-purple-400 to-blue-300 relative">
+        <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-green-400 to-white-500 relative">
             <ToastContainer />
             <div className="flex w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10">
                 <div className="w-full md:w-1/2 px-6 py-8 flex flex-col justify-center overflow-y-auto max-h-screen">
