@@ -1,5 +1,5 @@
 
-import Pending from "../../components/Admin/RequestManagement/Pending"
+import Pending from "../../components/Admin/PedingCourse/ChangeStatus"
 const PedingCourse = () => {
   return (
     <div>

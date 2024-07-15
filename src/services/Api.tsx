@@ -220,8 +220,6 @@ export const deleteLesson = async (id: string) => {
   return response.data;
 };
 
-//Subscriptions API methods
-
 export const getSubscribeds = async (searchCondition: { keyword: string; is_delete: boolean; }, pageNum: number, pageSize: number) => {
   const response = await axiosInstance.post('/api/subscription/search-for-subscriber', {
     searchCondition,
@@ -245,5 +243,14 @@ export const updateSubscribed = async (instructor_id: string) => {
 
 export const getCourseLogs = async (data: { searchCondition: { course_id: string; keyword?: string; old_status?: string; new_status?: string; is_deleted?: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
   const response = await axiosInstance.post('/api/course/log/search', data);
+  return response.data;
+};
+export const logoutUser = async () => {
+  const response = await axiosInstance.get('/api/auth/logout');
+  toast.success("Logout successful");
+  return response.data;
+};
+export const getPublicCourses = async (data: { searchCondition: { keyword?: string; category_id?: string; is_deleted?: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
+  const response = await axiosInstance.post('/api/client/course/search', data);
   return response.data;
 };
