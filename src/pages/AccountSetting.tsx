@@ -21,21 +21,13 @@ const AccountSettings: React.FC = () => {
     const [saving, setSaving] = useState(false);
     const [userData, setUserData] = useState<UserData | null>(null);
     const [imageURL, setImageURL] = useState<string | null>(null);
-
-    const fetchUserData = async (id: string) => {
-        try {
-            const { data } = await getUserData(id);
-            setUserData(data);
-            setImageURL(data.avatar || null); // Set the existing avatar URL
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-        }
-    };
-
+   
     useEffect(() => {
         const initialize = async () => {
             try {
-                const { data } = await getCurrentLogin();
+              
+                const  data  = await getCurrentLogin();
+                console.log('data:', data);
                 if (data && data._id) {
                     fetchUserData(data._id);
                 }
@@ -46,6 +38,18 @@ const AccountSettings: React.FC = () => {
 
         initialize();
     }, []);
+
+    const fetchUserData = async (id: string) => {
+        try {
+           console.log('id:', id);
+            const  data  = await getUserData(id);
+            setUserData(data);
+           
+            setImageURL(data.avatar || null); // Set the existing avatar URL
+        } catch (error) {
+            console.error('Error fetching user data:', error);
+        }
+    };
 
     const handleSaveChanges = async (values: Partial<UserData>) => {
         setSaving(true);
