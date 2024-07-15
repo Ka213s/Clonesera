@@ -13,7 +13,7 @@ const Footer = () => {
           </h3>
           <div className="flex items-center">
             <Input placeholder="Enter your email" className="mr-4" />
-            <Button type="primary" className="bg-purple-500 text-black text-white font-semibold">
+            <Button type="primary" className="custom-button">
               Subscribe
             </Button>
           </div>
