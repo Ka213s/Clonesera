@@ -10,7 +10,7 @@ const Logout: React.FC = () => {
     localStorage.removeItem('userData');
     
     // Chuyển hướng về trang chủ
-    navigate('/');
+    navigate('/login');
   }, [navigate]);
 
   useEffect(() => {

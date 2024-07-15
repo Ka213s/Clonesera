@@ -1,17 +1,25 @@
 import { useState, useEffect } from 'react';
-import { TwitterOutlined, LinkedinOutlined, YoutubeOutlined, FacebookOutlined, SettingOutlined } from '@ant-design/icons';
+import { TwitterOutlined, LinkedinOutlined, YoutubeOutlined, FacebookOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentLogin } from '../../services/Api';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface UserData {
-  description: string;
-  avatar: string;
+  _id: string;
   name: string;
   email: string;
+  google_id: string;
+  role: string;
+  status: boolean;
+  description: string;
   phone_number: string;
-  // Add any other properties that you expect to be in the user data
+  avatar: string;
+  video: string;
+  dob: Date;
+  created_at: Date;
+  updated_at: Date;
+  is_deleted: boolean;
 }
 
 const ViewProfile: React.FC = () => {
@@ -46,6 +54,14 @@ const ViewProfile: React.FC = () => {
         return (
           <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
             <h3 className="text-2xl font-semibold mb-4">About Me</h3>
+            {userData?.video && (
+              <div className="mb-4">
+                <video width="60%" controls>
+                  <source src={userData.video} type="video/mp4" />
+                  Your browser does not support the video tag.
+                </video>
+              </div>
+            )}
             <p className="text-gray-700">{userData?.description}</p>
           </div>
         );
@@ -57,7 +73,7 @@ const ViewProfile: React.FC = () => {
         );
       case 'Purchase':
         return (
-          <div className="overflow-y-scroll h-[60vh] mt-8">
+          <div className="mt-8">
             {/* Render purchased courses here */}
           </div>
         );
@@ -83,7 +99,7 @@ const ViewProfile: React.FC = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen">
+    <div className="min-h-screen bg-gray-100 p-8">
       <div className="bg-white p-8 rounded-lg shadow-lg">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
@@ -101,23 +117,22 @@ const ViewProfile: React.FC = () => {
                 <LinkedinOutlined className="text-2xl text-blue-700" />
                 <YoutubeOutlined className="text-2xl text-red-600" />
                 <FacebookOutlined className="text-2xl text-blue-800" />
-                <SettingOutlined className="text-2xl text-gray-600" />
+             
               </div>
             </div>
           </div>
           <div className="text-right">
-            <button className="bg-[#9997F5] text-white px-4 py-2 rounded-full" onClick={() => navigate('/edit-profile')}>Edit Profile</button>
+            <button className="bg-[#9997F5] text-white px-4 py-2 rounded-full" onClick={() => navigate('/setting-page')}>Edit Profile</button>
           </div>
         </div>
       </div>
 
-      <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
+      <div className="mt-8 bg-white p-6 rounded-lg shadow-lg " style={{ maxHeight: '70vh' }}>
         <div className="flex space-x-6 border-b border-gray-200 pb-3">
           {['About', 'Course', 'Purchase', 'Community', 'Subscription'].map((tab) => (
             <button
               key={tab}
-              className={`text-gray-600 pb-2 ${activeTab === tab ? 'border-b-2 border-[#9997F5] font-semibold text-[#9997F5]' : ''
-                }`}
+              className={`text-gray-600 pb-2 ${activeTab === tab ? 'border-b-2 border-[#9997F5] font-semibold text-[#9997F5]' : ''}`}
               onClick={() => setActiveTab(tab)}
             >
               {tab}

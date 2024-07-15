@@ -75,7 +75,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
       <div className="flex items-center space-x-4">
-        <Button icon={<MenuOutlined />} onClick={toggleMenu} shape="circle" className="bg-[#a256c9] text-[#ffffff]" />
+        <Button icon={<MenuOutlined />} onClick={toggleMenu} shape="circle" className="bg-purple-600 text-white" />
         <Link to="/" onClick={handleLogoClick}>
           <img src={logo} alt="Logo" className="h-12 w-auto cursor-pointer" />
         </Link>
@@ -84,29 +84,29 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       <div className="flex items-center ml-auto space-x-8 pr-4">
         {isLoggedIn ? (
           <>
-            <Button type="primary" className="hidden md:block bg-[#a256c9] hover:bg-[#833ea3] border-none w-35 h-7 text-xs">
+            <Button type="primary" className="hidden md:block bg-purple-600 hover:bg-purple-500 border-none w-35 h-7 text-xs">
               Create New Course
             </Button>
             <Button
               type="primary"
               shape="circle"
               icon={<PlusOutlined />}
-              className="block md:hidden bg-[#a256c9] border-none hover:!bg-[#833ea3]"
+              className="block md:hidden bg-purple-600 border-none hover:bg-purple-500"
             />
 
             <Badge count={2}>
-              <ShoppingCartOutlined className="text-xl cursor-pointer text-[#a256c9]" />
+              <ShoppingCartOutlined className="text-xl cursor-pointer text-purple-600" />
             </Badge>
 
             <Badge count={3}>
               <Dropdown overlay={<Menu items={notificationMenuItems} />} trigger={['click']}>
-                <MailOutlined className="text-xl cursor-pointer text-[#a256c9]" />
+                <MailOutlined className="text-xl cursor-pointer text-purple-600" />
               </Dropdown>
             </Badge>
 
             <Badge count={5}>
               <Dropdown overlay={<Menu items={notificationMenuItems} />} trigger={['click']}>
-                <BellOutlined className="text-xl cursor-pointer text-[#a256c9]" />
+                <BellOutlined className="text-xl cursor-pointer text-purple-600" />
               </Dropdown>
             </Badge>
 
@@ -114,17 +114,17 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               <Avatar
                 size="large"
                 src={avatar || 'default-avatar-path'} // Provide a default avatar path if avatar is null
-                className="border-2 border-[#a256c9] hover:border-[#833ea3] transition duration-300 ease-in-out"
+                className="border-2 border-purple-600 hover:border-purple-500 transition duration-300 ease-in-out"
               />
             </Dropdown>
           </>
         ) : (
           <>
             <Link to="/login">
-              <Button type="primary" className="bg-[#a256c9] hover:bg-[#833ea3] border-none">Login</Button>
+              <Button type="primary" className="bg-purple-600 hover:bg-purple-500 border-none">Login</Button>
             </Link>
             <Link to="/register">
-              <Button type="primary" className="bg-[#a256c9] hover:bg-[#833ea3] border-none">Register</Button>
+              <Button type="primary" className="bg-purple-600 hover:bg-purple-500 border-none">Register</Button>
             </Link>
           </>
         )}
