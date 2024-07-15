@@ -70,10 +70,17 @@ const ViewProfile: React.FC = () => {
                 plugins: [
                   'advlist autolink lists link image charmap print preview anchor',
                   'searchreplace visualblocks code fullscreen',
-                  'insertdatetime media table paste code help wordcount'
+                  'insertdatetime media table paste code help wordcount',
+                  'autoresize'
                 ],
                 toolbar: false,
-                height: "auto"
+                autoresize_bottom_margin: 20,
+                autoresize_overflow_padding: 10,
+                setup: (editor) => {
+                  editor.on('init', () => {
+                    editor.getContainer().style.overflow = 'hidden';
+                  });
+                }
               }}
               disabled={true}
             />
