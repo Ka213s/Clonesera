@@ -71,7 +71,7 @@ const ViewProfile: React.FC = () => {
                         <img
                             src={userData?.avatar || 'path/to/default/avatar.jpg'}
                             alt="Avatar"
-                            className=""
+                            className="w-32 h-32 rounded-full border-4 border-white -mt-16 mb-5 shadow-lg"
                         />
                         <div className="ml-8">
                             <h1 className="text-3xl font-bold">{userData?.name || 'Your Name'}</h1>
