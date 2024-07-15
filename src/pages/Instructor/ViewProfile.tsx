@@ -53,7 +53,7 @@ const ViewProfile: React.FC = () => {
     switch (activeTab) {
       case 'About':
         return (
-          <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
+          <>
             <h3 className="text-2xl font-semibold mb-4">About Me</h3>
             {userData?.video && (
               <div className="mb-4">
@@ -63,45 +63,33 @@ const ViewProfile: React.FC = () => {
                 </video>
               </div>
             )}
-           <Editor
-  initialValue={userData?.description || ''}
-  init={{
-    menubar: false,
-    plugins: [
-      'advlist autolink lists link image charmap print preview anchor',
-      'searchreplace visualblocks code fullscreen',
-      'insertdatetime media table paste code help wordcount',
-      'autosize'
-    ],
-    toolbar: false,
-    height: 'auto',
-    content_style: "body { min-height: 100px; }", // Minimum height for the editor
-    autoresize_bottom_margin: 20 // Optional: adds some margin to the bottom
-  }}
-  disabled={true}
-/>
-
-          </div>
+            <Editor
+              initialValue={userData?.description || ''}
+              init={{
+                menubar: false,
+                plugins: [
+                  'advlist autolink lists link image charmap print preview anchor',
+                  'searchreplace visualblocks code fullscreen',
+                  'insertdatetime media table paste code help wordcount',
+                  'autoresize'
+                ],
+                toolbar: false,
+                autoresize_bottom_margin: 20,
+                autoresize_overflow_padding: 10,
+                setup: (editor) => {
+                  editor.on('init', () => {
+                    editor.getContainer().style.overflow = 'hidden';
+                  });
+                }
+              }}
+              disabled={true}
+            />
+          </>
         );
       case 'Course':
         return (
           <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-8">
             {/* Render courses here */}
-          </div>
-        );
-      case 'Purchase':
-        return (
-          <div className="mt-8">
-            {/* Render purchased courses here */}
-          </div>
-        );
-      case 'Community':
-        return (
-          <div className="mt-8">
-            <div className="bg-white p-6 rounded-lg shadow-lg">
-              <h3 className="text-2xl font-semibold mb-4">Community Posts</h3>
-              {/* Render community posts here */}
-            </div>
           </div>
         );
       case 'Subscription':
@@ -144,9 +132,9 @@ const ViewProfile: React.FC = () => {
         </div>
       </div>
 
-      <div className="mt-8 bg-white p-6 rounded-lg shadow-lg" style={{ maxHeight: '70vh', overflowY: 'auto' }}>
+      <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
         <div className="flex space-x-6 border-b border-gray-200 pb-3">
-          {['About', 'Course', 'Purchase', 'Community', 'Subscription'].map((tab) => (
+          {['About', 'Course', 'Subscription'].map((tab) => (
             <button
               key={tab}
               className={`text-gray-600 pb-2 ${activeTab === tab ? 'border-b-2 border-[#9997F5] font-semibold text-[#9997F5]' : ''}`}
