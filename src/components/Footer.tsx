@@ -4,7 +4,7 @@ const { Footer: AntFooter } = Layout;
 
 const Footer = () => {
   return (
-    <AntFooter className="p-8 bg-gray-800 text-gray-300">
+    <AntFooter className="p-8 bg-gray-800 text-gray-300 w-full">
       <div className="container mx-auto">
         {/* Newsletter Section */}
         <div className="flex justify-between items-center py-6">
@@ -24,7 +24,7 @@ const Footer = () => {
           {/* Company Info */}
           <div className="w-1/4">
             <div className="flex items-center mb-4">
-              <div className="bg-green-500 h-8 w-8 rounded-full mr-2"></div>
+              <div className="bg-purple-500 h-8 w-8 rounded-full mr-2"></div>
               <span className="text-2xl font-bold text-white">Clonesera</span>
             </div>
             <p className="text-gray-400">We growing up your business with personal AI manager.</p>

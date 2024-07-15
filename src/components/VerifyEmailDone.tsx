@@ -60,7 +60,7 @@ function VerifyEmailDone() {
   const handleResendVerificationEmail = async () => {
     try {
       await resendVerifyEmail({ email: resendEmail });
-     
+
     } catch (err) {
       message.error('Error resending verification email');
     }

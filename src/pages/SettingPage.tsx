@@ -19,7 +19,7 @@ const SettingPage: React.FC = () => {
 
     return (
         <div>
-            <div className="container mx-auto p-4">
+            <div className="container mx-auto p-4 ">
                 <h1 className="text-2xl font-bold text-gray-700 mb-4">Settings</h1>
                 <div className="border-b border-gray-200">
                     <ul className="flex -mb-px">

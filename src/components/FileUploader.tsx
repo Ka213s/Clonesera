@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, Button, Image, message } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
@@ -8,6 +8,7 @@ import type { UploadFile, UploadProps } from 'antd';
 interface FileUploaderProps {
   type: 'image' | 'video';
   onUploadSuccess: (url: string) => void;
+  defaultImage?: string; // New prop for existing avatar
 }
 
 const getBase64 = (file: File): Promise<string> =>
@@ -18,11 +19,19 @@ const getBase64 = (file: File): Promise<string> =>
     reader.onerror = (error) => reject(error);
   });
 
-const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess }) => {
+const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defaultImage }) => {
   const [uploading, setUploading] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+
+  // Set default image if provided
+  useEffect(() => {
+    if (defaultImage) {
+      setFileList([{ uid: '-1', name: 'default_image', url: defaultImage, status: 'done' }]);
+      setPreviewImage(defaultImage);
+    }
+  }, [defaultImage]);
 
   const handlePreview = async (file: UploadFile) => {
     if (!file.url && !file.preview) {

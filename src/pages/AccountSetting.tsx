@@ -1,6 +1,8 @@
-import { React, useState, useEffect, Form, Input, Button, getUserData, updateAccount, getCurrentLogin } from '../utils/commonImports';
-import ResizableTextArea from "antd/lib/input";
+import React, { useState, useEffect } from 'react';
+import { Form, Input, Button } from 'antd';
+import ResizableTextArea from 'antd/lib/input/TextArea';
 import FileUploader from '../components/FileUploader';
+import { getUserData, updateAccount, getCurrentLogin } from '../utils/commonImports';
 
 interface UserData {
     _id: string;
@@ -22,8 +24,9 @@ const AccountSettings: React.FC = () => {
 
     const fetchUserData = async (id: string) => {
         try {
-            const userDetail = await getUserData(id);
-            setUserData(userDetail);
+            const { data } = await getUserData(id);
+            setUserData(data);
+            setImageURL(data.avatar || null); // Set the existing avatar URL
         } catch (error) {
             console.error('Error fetching user data:', error);
         }
@@ -32,9 +35,9 @@ const AccountSettings: React.FC = () => {
     useEffect(() => {
         const initialize = async () => {
             try {
-                const user = await getCurrentLogin();
-                if (user && user._id) {
-                    fetchUserData(user._id);
+                const { data } = await getCurrentLogin();
+                if (data && data._id) {
+                    fetchUserData(data._id);
                 }
             } catch (error) {
                 console.error('Error fetching current login:', error);
@@ -85,7 +88,11 @@ const AccountSettings: React.FC = () => {
                         label="Upload Image"
                         rules={[{ required: true, message: 'Please upload an image!' }]}
                     >
-                        <FileUploader type="image" onUploadSuccess={setImageURL} />
+                        <FileUploader
+                            type="image"
+                            onUploadSuccess={setImageURL}
+                            defaultImage={userData.avatar} 
+                        />
                     </Form.Item>
                     <Form.Item
                         label="Full Name"
@@ -114,17 +121,13 @@ const AccountSettings: React.FC = () => {
                     <Form.Item
                         label="Description"
                         name="description"
-                        rules={[{ required: true, message: 'Description is required' }]}
+                        rules={[{ required: false }]}
                     >
-                        <ResizableTextArea />
+                        <ResizableTextArea rows={4} />
                     </Form.Item>
                     <Form.Item>
-                        <Button
-                            type="primary"
-                            htmlType="submit"
-                            loading={saving}
-                        >
-                            {saving ? 'Saving...' : 'Save Changes'}
+                        <Button type="primary" htmlType="submit" loading={saving}>
+                            Save Changes
                         </Button>
                     </Form.Item>
                 </Form>

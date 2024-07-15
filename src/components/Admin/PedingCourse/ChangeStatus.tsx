@@ -30,8 +30,10 @@ const CourseTable: React.FC = () => {
   }, []);
 
   const fetchCourses = async () => {
+    console.log('fetchCourses');
     const data = await getCourses({ keyword: '', category: '', status: '', is_deleted: false }, 1, 10);
     setCourses(data.pageData);
+  
   };
 
   const fetchSessions = async (courseId: string) => {

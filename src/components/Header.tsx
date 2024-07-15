@@ -4,6 +4,7 @@ import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, MailOutlined, BellOut
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
 
+
 const { Text } = Typography;
 
 type HeaderProps = {
@@ -32,19 +33,15 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     }
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('userData');
-    setIsLoggedIn(false);
-    setAvatar(null);
-    setRole(null);
-    setUsername(null);
-  };
-
   const handleLogoClick = (e: React.MouseEvent) => {
     if (role === 'admin') {
       e.preventDefault();
-      navigate('/request-management'); // or the current admin page
+      navigate('/request-management'); 
     }
+  };
+
+  const handleCreateCourse = () => {
+    navigate('/courses'); 
   };
 
   const notificationMenuItems = [
@@ -65,7 +62,8 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         </Link>
       </Menu.Item>
       <Menu.Item key="logout">
-        <span onClick={handleLogout}>
+       
+        <span onClick={() => navigate('/logout')}>
           <UserOutlined /> Logout
         </span>
       </Menu.Item>
@@ -92,6 +90,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               shape="circle"
               icon={<PlusOutlined />}
               className="block md:hidden bg-purple-600 border-none hover:bg-purple-500"
+              onClick={handleCreateCourse}
             />
 
             <Badge count={2}>
@@ -113,7 +112,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             <Dropdown overlay={userMenu} trigger={['click']}>
               <Avatar
                 size="large"
-                src={avatar || 'default-avatar-path'} // Provide a default avatar path if avatar is null
+                src={avatar || 'default-avatar-path'} 
                 className="border-2 border-purple-600 hover:border-purple-500 transition duration-300 ease-in-out"
               />
             </Dropdown>
