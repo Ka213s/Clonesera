@@ -71,21 +71,21 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, [location.pathname, role, showMenu, navigate]);
 
   return (
-    <Layout className=" overflow-y-auto">
-      <div className="flex flex-col">
-        <Header toggleMenu={toggleMenu} />
-        <div className="flex flex-1">
-          {renderSidebar}
-          <Content className={`flex flex-col flex-1 transition-all duration-300 ${showMenu ? 'ml-56' : 'ml-0'}`}>
-            <div className="flex-1 pt-16 p-5 mt-3">
-              <Loading isLoading={isLoading}>
+    <Layout className="overflow-hidden h-screen flex flex-col">
+      <Header toggleMenu={toggleMenu} />
+      <Layout className="flex flex-1">
+        {renderSidebar}
+        <Content className={`transition-all duration-300 overflow-auto ${showMenu ? 'ml-56' : 'ml-0'}`}>
+          <div className="flex flex-col min-h-screen">
+            <Loading isLoading={isLoading}>
+              <div className="flex-1 pt-16 p-5 mt-3 overflow-auto">
                 {children}
-              </Loading>
-            </div>
-            <Footer />
-          </Content>
-        </div>
-      </div>
+              </div>
+            </Loading>
+            <Footer/>
+          </div>
+        </Content>
+      </Layout>
     </Layout>
   );
 };
