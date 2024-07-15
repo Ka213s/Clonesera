@@ -4,6 +4,7 @@ import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, MailOutlined, BellOut
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
 
+
 const { Text } = Typography;
 
 type HeaderProps = {
@@ -31,14 +32,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       setIsLoggedIn(false);
     }
   }, []);
-
-  const handleLogout = () => {
-    localStorage.removeItem('userData');
-    setIsLoggedIn(false);
-    setAvatar(null);
-    setRole(null);
-    setUsername(null);
-  };
 
   const handleLogoClick = (e: React.MouseEvent) => {
     if (role === 'admin') {
@@ -69,7 +62,8 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         </Link>
       </Menu.Item>
       <Menu.Item key="logout">
-        <span onClick={handleLogout}>
+       
+        <span onClick={() => navigate('/logout')}>
           <UserOutlined /> Logout
         </span>
       </Menu.Item>

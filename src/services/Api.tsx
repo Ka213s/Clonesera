@@ -247,3 +247,8 @@ export const getCourseLogs = async (data: { searchCondition: { course_id: string
   const response = await axiosInstance.post('/api/course/log/search', data);
   return response.data;
 };
+export const logoutUser = async () => {
+  const response = await axiosInstance.get('/api/auth/logout');
+  toast.success("Logout successful");
+  return response.data;
+};
