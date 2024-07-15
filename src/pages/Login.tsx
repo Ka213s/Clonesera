@@ -1,6 +1,6 @@
 import { React, useState, GoogleOAuthProvider, GoogleLogin, Link, loginAccount, getCurrentLogin, registerUserByGoogle, loginUserByGoogle, config, logo, Form, Input, Button, EyeOutlined, useNavigate, EyeInvisibleOutlined } from '../utils/commonImports';
 import { CredentialResponse } from '@react-oauth/google';
-import FileUploader from '../components/FileUploader'; // Import the FileUploader component
+import FileUploader from '../components/FileUploader'; 
 
 const Login: React.FC = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -100,7 +100,7 @@ const Login: React.FC = () => {
 
   return (
     <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
-      <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-purple-300 to-blue-200 relative">
+      <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-purple-400 to-blue-300 relative">
         <div className="flex flex-col w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10 md:flex-row">
           <div className="w-full md:w-1/2 px-4 md:px-20 py-10 flex flex-col justify-between">
             <div>
