@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { TwitterOutlined, LinkedinOutlined, YoutubeOutlined, FacebookOutlined, SettingOutlined } from '@ant-design/icons';
+import { TwitterOutlined, LinkedinOutlined, YoutubeOutlined, FacebookOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getCurrentLogin } from '../../services/Api';
 import { toast, ToastContainer } from 'react-toastify';
@@ -100,7 +100,7 @@ const ViewProfile: React.FC = () => {
   };
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen overflow-y-auto"> {/* Add overflow-y-auto and min-h-screen here */}
+    <div className="p-8 bg-gray-100 min-h-screen overflow-y-auto"> {/* Ensure the container is scrollable */}
       <div className="bg-white p-8 rounded-lg shadow-lg">
         <div className="flex justify-between items-center">
           <div className="flex items-center">
@@ -118,12 +118,12 @@ const ViewProfile: React.FC = () => {
                 <LinkedinOutlined className="text-2xl text-blue-700" />
                 <YoutubeOutlined className="text-2xl text-red-600" />
                 <FacebookOutlined className="text-2xl text-blue-800" />
-                <SettingOutlined className="text-2xl text-gray-600" />
+               
               </div>
             </div>
           </div>
           <div className="text-right">
-            <button className="bg-[#9997F5] text-white px-4 py-2 rounded-full" onClick={() => navigate('/edit-profile')}>Edit Profile</button>
+            <button className="bg-[#9997F5] text-white px-4 py-2 rounded-full" onClick={() => navigate('/setting-page')}>Edit Profile</button>
           </div>
         </div>
       </div>
