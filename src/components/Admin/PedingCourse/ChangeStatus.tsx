@@ -102,7 +102,7 @@ const CourseTable: React.FC = () => {
     {
       title: 'Action',
       key: 'action',
-      render: (record) => (
+      render: (_, record) => (
         <Button onClick={() => showChangeStatusModal(record._id)}>
           Change Status
         </Button>
