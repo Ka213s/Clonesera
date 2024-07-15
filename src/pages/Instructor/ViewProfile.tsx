@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { getCurrentLogin } from '../../services/Api';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Editor } from '@tinymce/tinymce-react';
 
 interface UserData {
   _id: string;
@@ -62,7 +63,24 @@ const ViewProfile: React.FC = () => {
                 </video>
               </div>
             )}
-            <p className="text-gray-700">{userData?.description}</p>
+           <Editor
+  initialValue={userData?.description || ''}
+  init={{
+    menubar: false,
+    plugins: [
+      'advlist autolink lists link image charmap print preview anchor',
+      'searchreplace visualblocks code fullscreen',
+      'insertdatetime media table paste code help wordcount',
+      'autosize'
+    ],
+    toolbar: false,
+    height: 'auto',
+    content_style: "body { min-height: 100px; }", // Minimum height for the editor
+    autoresize_bottom_margin: 20 // Optional: adds some margin to the bottom
+  }}
+  disabled={true}
+/>
+
           </div>
         );
       case 'Course':
