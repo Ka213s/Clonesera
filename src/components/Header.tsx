@@ -43,8 +43,12 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const handleLogoClick = (e: React.MouseEvent) => {
     if (role === 'admin') {
       e.preventDefault();
-      navigate('/request-management'); // or the current admin page
+      navigate('/request-management'); 
     }
+  };
+
+  const handleCreateCourse = () => {
+    navigate('/courses'); 
   };
 
   const notificationMenuItems = [
@@ -84,7 +88,11 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       <div className="flex items-center ml-auto space-x-8 pr-4">
         {isLoggedIn ? (
           <>
-            <Button type="primary" className="hidden md:block bg-purple-600 hover:bg-purple-500 border-none w-35 h-7 text-xs">
+            <Button
+              type="primary"
+              onClick={handleCreateCourse}
+              className="hidden md:block bg-purple-600 hover:bg-purple-500 border-none w-35 h-7 text-xs"
+            >
               Create New Course
             </Button>
             <Button
@@ -92,6 +100,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               shape="circle"
               icon={<PlusOutlined />}
               className="block md:hidden bg-purple-600 border-none hover:bg-purple-500"
+              onClick={handleCreateCourse}
             />
 
             <Badge count={2}>
@@ -113,7 +122,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             <Dropdown overlay={userMenu} trigger={['click']}>
               <Avatar
                 size="large"
-                src={avatar || 'default-avatar-path'} // Provide a default avatar path if avatar is null
+                src={avatar || 'default-avatar-path'} 
                 className="border-2 border-purple-600 hover:border-purple-500 transition duration-300 ease-in-out"
               />
             </Dropdown>
