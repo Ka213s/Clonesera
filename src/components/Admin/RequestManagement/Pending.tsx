@@ -34,7 +34,7 @@ const CourseTable: React.FC = () => {
   }, []);
 
   const fetchCourses = async () => {
-    const data = await getCourses({ keyword: '', category: '', status: 'waiting_approve', is_deleted: false }, 1, 10);
+    const data = await getCourses({ keyword: '', category: '', status: true, is_deleted: false }, 1, 10);
     setCourses(data.pageData);
   };
 
