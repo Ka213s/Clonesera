@@ -5,8 +5,7 @@ import DisplaySessions from './DisplaySessions';
 
 const SessionComponent: React.FC = () => {
   return (
-    <div>
-
+    <div> 
       <AddSession />
       <DisplaySessions />
     </div>

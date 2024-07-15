@@ -2,15 +2,17 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Loading from '../components/Loading';
 import Sidebar from '../components/Sidebar/Sidebar';
 import SidebarStudent from '../components/Sidebar/SidebarStudent';
 import SidebarInstructor from '../components/Sidebar/SidebarInstructor';
 import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
 import { Layout } from 'antd';
-
+import { setGlobalLoadingHandler } from '../services/axiosInstance';
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [showMenu, setShowMenu] = useState(true);
   const [role, setRole] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -23,6 +25,8 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    setGlobalLoadingHandler(setIsLoading);
+
     if (location.pathname === '/home' && role === 'admin') {
       navigate('/admin/request-management');
     }
@@ -71,7 +75,9 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
           {renderSidebar}
           <div className={`flex flex-col flex-1 transition-all duration-300 ${showMenu ? 'ml-56' : 'ml-0'}`}>
             <div className="flex-1 pt-16 p-5 mt-3 overflow-auto">
-              {children}
+              <Loading isLoading={isLoading}>
+                {children}
+              </Loading>
             </div>
             <Footer />
           </div>

@@ -1,40 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Select, Modal, Input } from 'antd';
+import { Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { changeCourseStatus, getCourses, getSessions, getLessons } from '../../../utils/commonImports';
+import { getCourses, getSessions, getLessons } from '../../../utils/commonImports';
+
 interface Course {
-    _id: string;
-    name: string;
-    sessions?: Session[];
-  }
-  
-  interface Session {
-    _id: string;
-    name: string;
-    course_id: string;
-    lessons?: Lesson[];
-  }
-  
-  interface Lesson {
-    _id: string;
-    name: string;
-    session_id: string;
-  }
-const { Option } = Select;
+  _id: string;
+  name: string;
+  sessions?: Session[];
+}
+
+interface Session {
+  _id: string;
+  name: string;
+  course_id: string;
+  lessons?: Lesson[];
+}
+
+interface Lesson {
+  _id: string;
+  name: string;
+  session_id: string;
+}
 
 const CourseTable: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
-  const [newStatus, setNewStatus] = useState('');
-  const [comment, setComment] = useState('');
 
   useEffect(() => {
     fetchCourses();
   }, []);
 
   const fetchCourses = async () => {
-    const data = await getCourses({ keyword: '', category: '', status: 'waiting_approve', is_deleted: false }, 1, 10);
+    const data = await getCourses({ keyword: '', category: '', status: '', is_deleted: false }, 1, 10);
     setCourses(data.pageData);
   };
 
@@ -77,29 +73,8 @@ const CourseTable: React.FC = () => {
     }
   };
 
-  const handleChangeStatus = async () => {
-    if (selectedCourse) {
-      await changeCourseStatus({ course_id: selectedCourse._id, new_status: newStatus, comment });
-      setIsModalVisible(false);
-      fetchCourses(); // Refresh courses after status change
-    }
-  };
-
-  const showStatusModal = (course: Course) => {
-    setSelectedCourse(course);
-    setIsModalVisible(true);
-  };
-
   const courseColumns: ColumnsType<Course> = [
     { title: 'Course Name', dataIndex: 'name', key: 'name' },
-    { title: 'Status', dataIndex: 'status', key: 'status' },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (_, course) => (
-        <Button onClick={() => showStatusModal(course)}>Change Status</Button>
-      ),
-    },
   ];
 
   const sessionColumns: ColumnsType<Session> = [
@@ -131,35 +106,12 @@ const CourseTable: React.FC = () => {
   );
 
   return (
-    <>
-      <Table
-        columns={courseColumns}
-        dataSource={courses}
-        rowKey="_id"
-        expandable={{ expandedRowRender, onExpand: handleExpand }}
-      />
-      <Modal
-        title="Change Course Status"
-        visible={isModalVisible}
-        onOk={handleChangeStatus}
-        onCancel={() => setIsModalVisible(false)}
-      >
-        <Select
-          placeholder="Select new status"
-          style={{ width: '100%', marginBottom: '1rem' }}
-          onChange={value => setNewStatus(value)}
-        >
-          <Option value="approve">Approve</Option>
-          <Option value="reject">Reject</Option>
-         
-        </Select>
-        <Input.TextArea
-          placeholder="Add a comment (optional)"
-          value={comment}
-          onChange={e => setComment(e.target.value)}
-        />
-      </Modal>
-    </>
+    <Table
+      columns={courseColumns}
+      dataSource={courses}
+      rowKey="_id"
+      expandable={{ expandedRowRender, onExpand: handleExpand }}
+    />
   );
 };
 
