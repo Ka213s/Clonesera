@@ -27,6 +27,7 @@ export const INSTRUCTOR = {
 };
 export const PUBLIC = {
   HOME: '/',
+  COURSE_DETAIL: '/course-detail/:id',
   LOGOUT: '/logout',
   ANOTHER_PAGE: '/another-page',
   LOGIN: '/login',

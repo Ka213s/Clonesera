@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Table, message } from 'antd';
+import { Table, message, Select } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { getCourses } from '../../../../utils/commonImports';
+import { getCourses, changeCourseStatus } from '../../../../utils/commonImports';
 import EditButton from './EditCourse';
 import DeleteButton from './DeleteCourse';
 import SendToAdminButton from './SendToAdminButton';
+
+const { Option } = Select;
 
 interface Course {
   _id: number;
@@ -40,6 +42,20 @@ const CourseTable: React.FC = () => {
     fetchCourses();
   }, []);
 
+  const handleChangeStatus = async (courseId: number, newStatus: string) => {
+    try {
+      await changeCourseStatus({ course_id: courseId.toString(), new_status: newStatus });
+      setCourses(prevCourses => 
+        prevCourses.map(course => 
+          course._id === courseId ? { ...course, status: newStatus } : course
+        )
+      );
+    } catch (error) {
+      
+      console.error('Error updating course status:', error);
+    }
+  };
+
   const columns: ColumnsType<Course> = [
     {
       title: 'Name',
@@ -74,12 +90,21 @@ const CourseTable: React.FC = () => {
           <EditButton courseId={record._id} />
           <DeleteButton courseId={record._id} />
           <SendToAdminButton courseId={record._id} />
+          <Select
+            defaultValue={record.status}
+            style={{ width: 120, marginLeft: 10 }}
+            onChange={(value) => handleChangeStatus(record._id, value)}
+          >
+            <Option value="approve">Approve</Option>
+            <Option value="active">Active</Option>
+            <Option value="inactive">Inactive</Option>
+          </Select>
         </>
       ),
     },
   ];
 
-  return <Table columns={columns} dataSource={courses} rowKey="id" />;
+  return <Table columns={columns} dataSource={courses} rowKey="_id" />;
 };
 
 export default CourseTable;
