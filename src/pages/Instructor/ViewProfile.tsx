@@ -62,6 +62,7 @@ const ViewProfile: React.FC = () => {
                 </video>
               </div>
             )}
+            
             <p className="text-gray-700">{userData?.description}</p>
           </div>
         );
@@ -122,7 +123,7 @@ const ViewProfile: React.FC = () => {
             </div>
           </div>
           <div className="text-right">
-            <button className="bg-[#9997F5] text-white px-4 py-2 rounded-full" onClick={() => navigate('/setting-page')}>Edit Profile</button>
+            <button className="bg-purple-600 text-white px-4 py-2 rounded-full" onClick={() => navigate('/setting-page')}>Edit Profile</button>
           </div>
         </div>
       </div>
