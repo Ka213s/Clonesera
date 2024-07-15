@@ -243,3 +243,7 @@ export const updateSubscribed = async (instructor_id: string) => {
   return response.data;
 };
 
+export const getCourseLogs = async (data: { searchCondition: { course_id: string; keyword?: string; old_status?: string; new_status?: string; is_deleted?: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
+  const response = await axiosInstance.post('/api/course/log/search', data);
+  return response.data;
+};
