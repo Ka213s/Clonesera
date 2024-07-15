@@ -123,7 +123,7 @@ const ViewProfile: React.FC = () => {
             </div>
           </div>
           <div className="text-right">
-            <button className="bg-purple-600 text-white px-4 py-2 rounded-full" onClick={() => navigate('/setting-page')}>Edit Profile</button>
+            <button className="custom-button" onClick={() => navigate('/setting-page')}>Edit Profile</button>
           </div>
         </div>
       </div>
