@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { message, Typography, Input, Button, Form } from 'antd';
 import { verifyEmail, resendVerifyEmail } from '../utils/commonImports';
-import { ReadOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined } from '@ant-design/icons';
 
 const { Paragraph } = Typography;
 
@@ -70,7 +70,7 @@ function VerifyEmailDone() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-r from-purple-300 to-blue-200 relative">
       <div className="flex flex-col items-center p-20 md:p-34 bg-white rounded-3xl shadow-2xl space-y-6 md:space-y-8 transition-all duration-500 ease-in-out transform hover:scale-105 z-10 mb-20">
-        <ReadOutlined className="text-7xl text-blue-600 mb-6" />
+        <CheckCircleOutlined className="text-7xl text-green-600 mb-3" />
         {!isTokenExpired ? (
           <>
             <Typography.Title level={2} className="text-4xl font-extrabold text-blue-600">
