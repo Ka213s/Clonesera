@@ -26,6 +26,7 @@ const CourseDetails = lazy(() => import('../pages/CourseDetails'));
 const LogCourse = lazy(() => import('../components/Admin/LogCourse/LogCourse'));
 const PedingCourse = lazy(() => import('../pages/Admin/PedingCourse'));
 const ViewAllCourse = lazy(() => import('../pages/Instructor/ViewAllCourse'));
+const ViewProfile = lazy(() => import('../components/ViewProfile/ViewProfile'));
 const ViewProfile = lazy(() => import('../pages/Instructor/ViewProfile'));
 const ViewCart = lazy(() => import('../pages/ViewCart'));
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
