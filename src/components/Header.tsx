@@ -44,11 +44,13 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     navigate('/courses'); 
   };
 
-  const notificationMenuItems = [
-    { key: '1', label: 'Notification 1' },
-    { key: '2', label: 'Notification 2' },
-    { key: '3', label: 'Notification 3' },
-  ];
+  const notificationMenuItems = (
+    <Menu>
+      <Menu.Item key="1">Notification 1</Menu.Item>
+      <Menu.Item key="2">Notification 2</Menu.Item>
+      <Menu.Item key="3">Notification 3</Menu.Item>
+    </Menu>
+  );
 
   const userMenu = (
     <Menu>
@@ -62,7 +64,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         </Link>
       </Menu.Item>
       <Menu.Item key="logout">
-       
         <span onClick={() => navigate('/logout')}>
           <UserOutlined /> Logout
         </span>
@@ -73,7 +74,12 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
       <div className="flex items-center space-x-4">
-        <Button icon={<MenuOutlined />} onClick={toggleMenu} shape="circle" className="!bg-green-500 text-white" />
+        <Button 
+          icon={<MenuOutlined />} 
+          onClick={toggleMenu} 
+          shape="circle" 
+          className="button-menu" 
+        />
         <Link to="/" onClick={handleLogoClick}>
           <img src={logo} alt="Logo" className="h-12 w-auto cursor-pointer" />
         </Link>
@@ -89,23 +95,23 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               type="primary"
               shape="circle"
               icon={<PlusOutlined />}
-              className="block md:hidden bg-purple-600 border-none hover:bg-purple-500"
+              className="block md:hidden bg-black border-none hover:bg-gray-800"
               onClick={handleCreateCourse}
             />
 
             <Badge count={2}>
-              <ShoppingCartOutlined className="text-xl cursor-pointer text-purple-600" />
+              <ShoppingCartOutlined className="text-2xl icon-size  cursor-pointer text-black" />
             </Badge>
 
             <Badge count={3}>
-              <Dropdown overlay={<Menu items={notificationMenuItems} />} trigger={['click']}>
-                <MailOutlined className="text-xl cursor-pointer text-purple-600" />
+              <Dropdown overlay={notificationMenuItems} trigger={['click']}>
+                <MailOutlined className="icon-size text-2xl  cursor-pointer text-black" />
               </Dropdown>
             </Badge>
 
             <Badge count={5}>
-              <Dropdown overlay={<Menu items={notificationMenuItems} />} trigger={['click']}>
-                <BellOutlined className="text-xl cursor-pointer text-purple-600" />
+              <Dropdown overlay={notificationMenuItems} trigger={['click']}>
+                <BellOutlined className="icon-size text-2xl  cursor-pointer text-black" />
               </Dropdown>
             </Badge>
 
@@ -113,7 +119,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               <Avatar
                 size="large"
                 src={avatar || 'default-avatar-path'} 
-                className="border-2 border-purple-600 hover:border-purple-500 transition duration-300 ease-in-out"
+                className="border-2 border-black hover:border-gray-800 transition duration-300 ease-in-out"
               />
             </Dropdown>
           </>

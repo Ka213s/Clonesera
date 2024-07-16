@@ -5,11 +5,8 @@ const Logout: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = useCallback(() => {
-    // Xóa token và userData khỏi localStorage
     localStorage.removeItem('token');
     localStorage.removeItem('userData');
-    
-    // Chuyển hướng về trang chủ
     navigate('/login');
   }, [navigate]);
 
