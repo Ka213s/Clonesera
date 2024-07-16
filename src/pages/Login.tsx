@@ -24,9 +24,9 @@ const Login: React.FC = () => {
       const currentLogin = await getCurrentLogin();
       localStorage.setItem('userData', JSON.stringify(currentLogin));
       if (currentLogin.role === 'admin') {
-        navigate('/request-management');
+        navigate('/display-account');
       } else {
-        navigate('/');
+        navigate('/homepage');
       }
     } catch (error) {
       console.error('Error logging in:', error);
@@ -50,11 +50,7 @@ const Login: React.FC = () => {
         const userResponse = await getCurrentLogin();
         const dataUser = JSON.stringify(userResponse);
         localStorage.setItem('userData', dataUser);
-        if (userResponse.role === 'admin') {
-          navigate('/dashboard');
-        } else {
-          navigate('/');
-        }
+        navigate('/homepage');
       } else {
         setGoogleId(response.credential);
         setIsRoleModalVisible(true);
@@ -80,7 +76,7 @@ const Login: React.FC = () => {
       const token = response.token;
       localStorage.setItem('token', token);
       setIsRoleModalVisible(false);
-      navigate('/');
+      navigate('/homepage');
     } catch (error) {
       console.error('Error registering with Google:', error);
     }

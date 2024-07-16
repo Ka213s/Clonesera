@@ -14,7 +14,7 @@ const InternalServerError: React.FC = () => {
                 Something went wrong on our end. Please try again later or contact support if the issue persists.
             </p>
             <button
-                onClick={() => navigate('/')}
+                onClick={() => navigate('/homepage')}
                 className="px-6 py-3 text-lg font-semibold text-white bg-red-600 rounded-md hover:bg-red-700"
             >
                 GO TO HOMEPAGE

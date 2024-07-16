@@ -14,7 +14,7 @@ const ForbiddenError: React.FC = () => {
         You do not have permission to view this page. Please check your credentials or contact the site administrator.
       </p>
       <button
-        onClick={() => navigate('/')}
+        onClick={() => navigate('/homepage')}
         className="px-6 py-3 text-lg font-semibold text-white bg-[#FF6B6B] rounded-md hover:bg-red-600"
       >
         GO TO HOMEPAGE

@@ -37,7 +37,7 @@ const AddSession: React.FC = () => {
 
   return (
     <div>
-      <Button type="primary" onClick={() => setIsOpen(true)}>Add Session</Button>
+      <Button type="primary" className='custom-button' onClick={() => setIsOpen(true)}>Add Session</Button>
       <Modal
         title="Add Session"
         visible={isOpen}

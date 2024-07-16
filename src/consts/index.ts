@@ -26,7 +26,7 @@ export const INSTRUCTOR = {
   VIEW_PROFILE: '/view-profile'
 };
 export const PUBLIC = {
-  HOME: '/',
+  HOME: '/homepage',
   COURSE_DETAIL: '/course-detail/:id',
   LOGOUT: '/logout',
   ANOTHER_PAGE: '/another-page',

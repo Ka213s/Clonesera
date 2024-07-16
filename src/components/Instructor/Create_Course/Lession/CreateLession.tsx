@@ -103,7 +103,7 @@ const CreateLessonButton: React.FC = () => {
 
   return (
     <div>
-      <Button type="primary" onClick={() => setIsModalVisible(true)}>
+      <Button type="primary" className='custom-button' onClick={() => setIsModalVisible(true)}>
         Create Lesson
       </Button>
       <Modal
