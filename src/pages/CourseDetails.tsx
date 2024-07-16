@@ -8,7 +8,7 @@ interface Course {
   name: string;
   category_name: string;
   instructor_name: string;
-  instructor_id: string; 
+  instructor_id: string;
   status: string;
   price: number;
   description: string;
@@ -33,7 +33,7 @@ const CourseDetails: React.FC = () => {
       try {
         const data = await getCourseDetail(id);
         setCourse(data);
-        setSubscribed(data.subscribed); // Giả sử API trả về trạng thái subscribed
+        setSubscribed(data.subscribed);
       } catch (error) {
         message.error('Error fetching course details');
         console.error('Error fetching course details:', error);
@@ -49,6 +49,7 @@ const CourseDetails: React.FC = () => {
     if (course) {
       try {
         await createCart({ course_id: course._id });
+        message.success('Course added to cart successfully');
       } catch (error) {
         message.error('Error adding course to cart');
         console.error('Error adding course to cart:', error);
@@ -80,23 +81,26 @@ const CourseDetails: React.FC = () => {
   }
 
   return (
-    <div>
-      <h1>{course.name}</h1>
-      <p><strong>Category:</strong> {course.category_name}</p>
-      <p><strong>Instructor:</strong> {course.instructor_name}</p>
-      <p><strong>Status:</strong> {course.status}</p>
-      <p><strong>Price:</strong> ${course.price}</p>
-      <p><strong>Description:</strong> {course.description}</p>
-      <img src={course.image_url} alt={course.name} style={{ width: '200px', height: '200px' }} />
-      <Button onClick={handleSubscribeToggle}>
-        {subscribed ? 'Unsubscribe' : 'Subscribe'}
-      </Button>
-      <Button
-        onClick={handleAddToCart}
-        className="border border-orange-500 bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-600"
-      >
-        Add to Cart
-      </Button>
+    <div className="container mx-auto p-4">
+      <div className="max-w-lg mx-auto bg-white rounded-lg shadow-lg overflow-hidden">
+        <img className="w-full h-64 object-cover object-center" src={course.image_url} alt={course.name} />
+        <div className="p-4">
+          <h1 className="text-2xl font-bold mb-2">{course.name}</h1>
+          <p className="text-gray-700"><strong>Category:</strong> {course.category_name}</p>
+          <p className="text-gray-700"><strong>Instructor:</strong> {course.instructor_name}</p>
+          <p className="text-gray-700"><strong>Status:</strong> {course.status}</p>
+          <p className="text-gray-700"><strong>Price:</strong> ${course.price}</p>
+          <p className="mt-4 text-gray-700"><strong>Description:</strong> {course.description}</p>
+          <div className="mt-4">
+            <Button onClick={handleSubscribeToggle} className="mr-2">
+              {subscribed ? 'Unsubscribe' : 'Subscribe'}
+            </Button>
+            <Button onClick={handleAddToCart} type="primary">
+              Add to Cart
+            </Button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
