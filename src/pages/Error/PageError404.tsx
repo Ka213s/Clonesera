@@ -14,7 +14,7 @@ const PageError: React.FC = () => {
         The page you are looking for might have been removed, had its name changed or is temporarily unavailable.
       </p>
       <button
-        onClick={() => navigate('/')}
+        onClick={() => navigate('/homepage')}
         className="px-6 py-3 text-lg font-semibold text-white bg-[#6C6EDD] rounded-md hover:bg-indigo-600"
       >
         GO TO HOMEPAGE

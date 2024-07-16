@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table } from 'antd';
+import { Table, Tag } from 'antd';
 import { getCourses, getCourseLogs } from '../../../utils/commonImports';
 
 interface Course {
@@ -20,6 +20,7 @@ interface Log {
 
 const LogCourse: React.FC = () => {
   const [logs, setLogs] = useState<Log[]>([]);
+  const [courses, setCourses] = useState<Course[]>([]);
 
   useEffect(() => {
     const fetchCoursesAndLogs = async () => {
@@ -33,6 +34,8 @@ const LogCourse: React.FC = () => {
         console.log('Courses Data:', coursesData);
 
         if (coursesData && coursesData.pageData) {
+          setCourses(coursesData.pageData);
+
           // Extract course IDs
           const courseIds: string[] = coursesData.pageData.map((course: Course) => course._id);
 
@@ -58,26 +61,57 @@ const LogCourse: React.FC = () => {
     fetchCoursesAndLogs();
   }, []);
 
+  const getStatusTag = (status: string) => {
+    let color;
+    switch (status) {
+      case 'new':
+        color = 'blue';
+        break;
+      case 'waiting_approve':
+        color = 'orange';
+        break;
+      case 'approve':
+        color = 'green';
+        break;
+      case 'reject':
+        color = 'red';
+        break;
+      case 'active':
+        color = 'green';
+        break;
+      case 'inactive':
+        color = 'gray';
+        break;
+      default:
+        color = 'blue';
+        break;
+    }
+    return <Tag color={color}>{status}</Tag>;
+  };
+
+  const getCourseName = (courseId: string) => {
+    const course = courses.find((course) => course._id === courseId);
+    return course ? course.name : 'Unknown';
+  };
+
   const columns = [
     {
-      title: 'Log ID',
-      dataIndex: '_id',
-      key: '_id',
-    },
-    {
-      title: 'Course ID',
+      title: 'Course Name',
       dataIndex: 'course_id',
       key: 'course_id',
+      render: (text: string) => getCourseName(text),
     },
     {
       title: 'Old Status',
       dataIndex: 'old_status',
       key: 'old_status',
+      render: (text: string) => getStatusTag(text),
     },
     {
       title: 'New Status',
       dataIndex: 'new_status',
       key: 'new_status',
+      render: (text: string) => getStatusTag(text),
     },
     {
       title: 'Comment',
@@ -88,7 +122,6 @@ const LogCourse: React.FC = () => {
 
   return (
     <div>
-
       <Table columns={columns} dataSource={logs} rowKey="_id" />
     </div>
   );

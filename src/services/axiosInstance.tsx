@@ -47,22 +47,14 @@ axiosInstance.interceptors.response.use(
     setLoading(false);
     const { response } = err;
     if (response) {
-      if (response.status === 403) {
-        handleTokenExpiration();
-      } else {
-        handleErrorByToast(err);
+      handleErrorByToast(err);
         handleHttpErrors(response.status);
-      }
     }
     return Promise.reject(err);
   }
 );
 
-const handleTokenExpiration = () => {
-  toast.error('Session expired. Please log in again.');
-  localStorage.removeItem('token'); // Optionally clear the token
-  window.location.href = '/login'; // Redirect to login page
-};
+
 
 const handleErrorByToast = (errors: AxiosError) => {
   const data = errors.response?.data as ErrorResponse | undefined;

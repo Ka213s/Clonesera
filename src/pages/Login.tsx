@@ -80,7 +80,7 @@ const Login: React.FC = () => {
       const token = response.token;
       localStorage.setItem('token', token);
       setIsRoleModalVisible(false);
-      navigate('/');
+      navigate('/homepage');
     } catch (error) {
       console.error('Error registering with Google:', error);
     }
