@@ -269,3 +269,15 @@ export const getCart = async (data: { searchCondition: { status: string; is_dele
   const response = await axiosInstance.post('/api/cart/search', data);
   return response.data;
 };
+
+export const deleteCart = async (id: string) => {
+  const response = await axiosInstance.delete(`/api/cart/${id}`);
+  toast.success("Course removed from cart successfully");
+  return response.data;
+};
+
+export const updateCart = async (data: { status: string; items: { _id: string; cart_no: string }[] }) => {
+  const response = await axiosInstance.put('/api/cart/update-status', data);
+  toast.success("Cart status updated successfully");
+  return response.data;
+};

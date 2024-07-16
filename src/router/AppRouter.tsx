@@ -27,8 +27,8 @@ const LogCourse = lazy(() => import('../components/Admin/LogCourse/LogCourse'));
 const PedingCourse = lazy(() => import('../pages/Admin/PedingCourse'));
 const ViewAllCourse = lazy(() => import('../pages/Instructor/ViewAllCourse'));
 const ViewProfile = lazy(() => import('../components/ViewProfile/ViewProfile'));
-const ViewProfile = lazy(() => import('../pages/Instructor/ViewProfile'));
 const ViewCart = lazy(() => import('../pages/ViewCart'));
+const Payment = lazy(() => import('../pages/Payment'));
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));
 const PageError403 = lazy(() => import('../pages/Error/PageError403'));
@@ -45,6 +45,7 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.COURSE} element={<Course />} />
                         <Route path={PUBLIC.COURSE_DETAIL} element={<CourseDetails />} />
                         <Route path={PUBLIC.VIEW_CART} element={<ViewCart />} />
+                        <Route path={PUBLIC.PAYMENT} element={<Payment />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
                         <Route path={INSTRUCTOR.VIEW_PROFILE} element={<ViewProfile />} />
                         <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />

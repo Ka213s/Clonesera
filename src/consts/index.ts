@@ -37,6 +37,7 @@ export const PUBLIC = {
   FORGOT_PASSWORD: '/forgot-password',
   LIST_SUBSCRIBED: '/list-subscribed',
   VIEW_CART: '/view-cart',
+  PAYMENT: '/payment'
 };
 
 export const sidebarMenuItemsData = {
