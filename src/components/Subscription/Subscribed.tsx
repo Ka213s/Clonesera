@@ -26,6 +26,7 @@ const Subscribed: React.FC = () => {
                     page,
                     pageSize
                 );
+                console.log(data);
                 const filteredData = data.pageData.filter((sub: Subscribed) => sub.is_subscribed);
                 setSubscriptions(filteredData);
                 setTotalItems(data.pageInfo.totalItems);

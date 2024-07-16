@@ -19,6 +19,7 @@ const VerifyEmail = lazy(() => import('../components/VerifyEmailDone'));
 const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
 const RequestManagement = lazy(() => import('../pages/RequestManagement'));
 const ListSubscription = lazy(() => import('../pages/Instructor/ListSubscription'));
+const Subcription = lazy(() => import('../pages/Subcription'));
 const ListSubscribed = lazy(() => import('../pages/Student/ListSubscribed'));
 const DisplayAccount = lazy(() => import('../components/Admin/AccoutUser/ActiveTab'));
 const CreateAccount = lazy(() => import('../components/Admin/CreateAccount/CreateAccount'));
@@ -43,6 +44,7 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.COURSE} element={<Course />} />
                         <Route path={PUBLIC.COURSE_DETAIL} element={<CourseDetails />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
+                        <Route path={PUBLIC.SUBCRIPTION} element={<Subcription />} />
                         <Route path={INSTRUCTOR.VIEW_PROFILE} element={<ViewProfile />} />
                         <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />
                         <Route path={INSTRUCTOR.LIST_SUBSCRIPTION} element={<PrivateRoute element={ListSubscription} allowedRoles={[ROLES.INSTRUCTOR]} />} />

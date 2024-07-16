@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getPublicCourses, getCurrentLogin } from '../utils/commonImports'; // Importing the getCurrentLogin function
+import { getPublicCourses, getCurrentLogin } from '../utils/commonImports'; 
 
 interface Course {
   _id: number;

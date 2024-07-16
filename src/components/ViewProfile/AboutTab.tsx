@@ -43,9 +43,6 @@ const AboutTab: React.FC<AboutTabProps> = ({ userData }) => {
         init={{
           menubar: false,
           plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table paste code help wordcount',
             'autoresize'
           ],
           toolbar: false,

@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Badge, Dropdown, Avatar, Menu, Typography } from 'antd';
+import { Button, Badge, Dropdown, Avatar, Menu, Typography, Divider } from 'antd';
 import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, MailOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
-
 
 const { Text } = Typography;
 
@@ -100,28 +99,30 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             />
 
             <Badge count={2}>
-              <ShoppingCartOutlined className="text-2xl icon-size  cursor-pointer text-black" />
+              <ShoppingCartOutlined className="icon-size text-2xl cursor-pointer text-black" />
             </Badge>
 
             <Badge count={3}>
               <Dropdown overlay={notificationMenuItems} trigger={['click']}>
-                <MailOutlined className="icon-size text-2xl  cursor-pointer text-black" />
+                <MailOutlined className="icon-size text-2xl cursor-pointer text-black" />
               </Dropdown>
             </Badge>
 
-            <Badge count={5}>
+            <Badge count={9}>
               <Dropdown overlay={notificationMenuItems} trigger={['click']}>
-                <BellOutlined className="icon-size text-2xl  cursor-pointer text-black" />
+                <BellOutlined className="icon-size text-2xl cursor-pointer text-black" />
               </Dropdown>
             </Badge>
-
-            <Dropdown overlay={userMenu} trigger={['click']}>
-              <Avatar
-                size="large"
-                src={avatar || 'default-avatar-path'} 
-                className="border-2 border-black hover:border-gray-800 transition duration-300 ease-in-out"
-              />
-            </Dropdown>
+            <Divider className="border-gray-400  h-9" type="vertical" />
+            <div className="">
+              <Dropdown overlay={userMenu} trigger={['click']}>
+                <Avatar
+                  size="large"
+                  src={avatar || 'default-avatar-path'} 
+                  className="border-2 hover:border-gray-800 transition duration-300 ease-in-out"
+                />
+              </Dropdown>
+            </div>
           </>
         ) : (
           <>
