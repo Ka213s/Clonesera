@@ -258,3 +258,14 @@ export const getCourseDetail = async (id: string) => {
   const response = await axiosInstance.get(`/api/client/course/${id}`);
   return response.data;
 };
+
+export const createCart = async (data: { course_id: string }) => {
+  const response = await axiosInstance.post('/api/cart', data);
+  toast.success("Course added to cart successfully");
+  return response.data;
+};
+
+export const getCart = async (data: { searchCondition: { status: string; is_deleted: boolean }; pageInfo: { pageNum: number; pageSize: number } }) => {
+  const response = await axiosInstance.post('/api/cart/search', data);
+  return response.data;
+};

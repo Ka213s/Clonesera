@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCourseDetail } from '../utils/commonImports';
 import { message } from 'antd';
+import { createCart } from '../services/Api';
 
 interface Course {
   _id: string;
@@ -42,6 +43,17 @@ const CourseDetails: React.FC = () => {
     fetchCourseDetail();
   }, [id, navigate]);
 
+  const handleAddToCart = async () => {
+    if (course) {
+      try {
+        await createCart({ course_id: course._id });
+      } catch (error) {
+        message.error('Error adding course to cart');
+        console.error('Error adding course to cart:', error);
+      }
+    }
+  };
+
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -59,6 +71,13 @@ const CourseDetails: React.FC = () => {
       <p><strong>Price:</strong> ${course.price}</p>
       <p><strong>Description:</strong> {course.description}</p>
       <img src={course.image_url} alt={course.name} style={{ width: '200px', height: '200px' }} />
+      <button
+        onClick={handleAddToCart}
+        className="border border-orange-500 bg-orange-500 text-white font-bold py-2 px-4 rounded hover:bg-orange-600"
+      >
+        Add to Cart
+      </button>
+
     </div>
   );
 };

@@ -36,12 +36,16 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const handleLogoClick = (e: React.MouseEvent) => {
     if (role === 'admin') {
       e.preventDefault();
-      navigate('/request-management'); 
+      navigate('/request-management');
     }
   };
 
   const handleCreateCourse = () => {
-    navigate('/courses'); 
+    navigate('/courses');
+  };
+
+  const handleViewCart = () => {
+    navigate('/view-cart');
   };
 
   const notificationMenuItems = [
@@ -62,7 +66,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         </Link>
       </Menu.Item>
       <Menu.Item key="logout">
-       
+
         <span onClick={() => navigate('/logout')}>
           <UserOutlined /> Logout
         </span>
@@ -94,7 +98,10 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             />
 
             <Badge count={2}>
-              <ShoppingCartOutlined className="text-xl cursor-pointer text-purple-600" />
+              <ShoppingCartOutlined
+                className="text-xl cursor-pointer text-purple-600"
+                onClick={handleViewCart}
+              />
             </Badge>
 
             <Badge count={3}>
@@ -112,7 +119,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
             <Dropdown overlay={userMenu} trigger={['click']}>
               <Avatar
                 size="large"
-                src={avatar || 'default-avatar-path'} 
+                src={avatar || 'default-avatar-path'}
                 className="border-2 border-purple-600 hover:border-purple-500 transition duration-300 ease-in-out"
               />
             </Dropdown>
