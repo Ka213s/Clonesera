@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { TwitterOutlined, LinkedinOutlined, YoutubeOutlined, FacebookOutlined } from '@ant-design/icons';
-import { useNavigate } from 'react-router-dom';
-import { getCurrentLogin } from '../../services/Api';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom'; // Assuming you are using React Router
+
+import { getCurrentLogin } from '../../utils/commonImports'; // Adjust the import path as needed
 import CourseTab from './CourseTab';
 import SubscriptionTab from './SubscriptionTab';
 import AboutTab from './AboutTab';
@@ -24,10 +22,10 @@ interface UserData {
     updated_at: Date;
     is_deleted: boolean;
 }
+
 const ViewProfile: React.FC = () => {
     const [activeTab, setActiveTab] = useState('About');
     const [userData, setUserData] = useState<UserData | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -36,20 +34,16 @@ const ViewProfile: React.FC = () => {
                 const data = await getCurrentLogin();
                 setUserData(data);
             } catch (error) {
-                toast.error('Error fetching user data');
-                console.error('Error:', error);
-            } finally {
-                setIsLoading(false);
+                console.error('Error fetching user data:', error);
+                // Handle error fetching user data
             }
         };
 
         fetchData();
-    }, []);
+    }, []); // Empty dependency array to run only once on mount
 
     const renderTabContent = () => {
-        if (isLoading) {
-            return <p>Loading...</p>;
-        }
+        if (!userData) return null; // Handle case where userData is null
 
         switch (activeTab) {
             case 'About':
@@ -69,7 +63,7 @@ const ViewProfile: React.FC = () => {
                 <div className="flex justify-between items-center">
                     <div className="flex items-center">
                         <img
-                            src={userData?.avatar || 'path/to/default/avatar.jpg'}
+                            src={userData?.avatar || '/default/avatar.jpg'}
                             alt="Avatar"
                             className="w-32 h-32 rounded-full border-4 border-white -mt-16 mb-5 shadow-lg"
                         />
@@ -77,19 +71,11 @@ const ViewProfile: React.FC = () => {
                             <h1 className="text-3xl font-bold">{userData?.name || 'Your Name'}</h1>
                             <p className="text-gray-600">@{userData?.email || 'username'}</p>
                             <p className="text-gray-600 mt-2">{userData?.phone_number || 'Location'}</p>
-                            <div className="flex space-x-4 mt-4">
-                                <TwitterOutlined className="text-2xl text-blue-500" />
-                                <LinkedinOutlined className="text-2xl text-blue-700" />
-                                <YoutubeOutlined className="text-2xl text-red-600" />
-                                <FacebookOutlined className="text-2xl text-blue-800" />
-                            </div>
                         </div>
                     </div>
-                    <div className="text-right">
                         <button className="custom-button" onClick={() => navigate('/setting-page')}>
                             Edit Profile
                         </button>
-                    </div>
                 </div>
             </div>
 
@@ -99,18 +85,15 @@ const ViewProfile: React.FC = () => {
                     {['About', 'Course', 'Subscription'].map((tab) => (
                         <button
                             key={tab}
-                            className={`text-gray-600 pb-2 ${activeTab === tab ? 'border-b-2 border-[#9997F5] font-semibold text-[#9997F5]' : ''
-                                }`}
+                            className={`text-gray-600 pb-2 focus:outline-none ${activeTab === tab ? 'border-b-2 border-[#9997F5] font-semibold text-[#9997F5]' : ''}`}
                             onClick={() => setActiveTab(tab)}
                         >
                             {tab}
                         </button>
                     ))}
                 </div>
-                {/* Render tab content inside the main content wrapper */}
                 {renderTabContent()}
             </div>
-            <ToastContainer />
         </div>
     );
 };

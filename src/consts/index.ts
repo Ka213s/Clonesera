@@ -92,6 +92,7 @@ export const SidebarIntructorData = {
     { text: "Manage Course", icon: "BookOutlined", url: "/courses" },
     { text: "View All Course ", icon: "BookOutlined", url: "/view-all-course" },
     { text: "Subscription", icon: "BellOutlined", url: "/list-subscription" },
+    { text: "Log Course", icon: "BookOutlined", url: "/log-course" },
     // { text: "Messages", icon: "MessageOutlined", url: "/instructor/messages" },
     // { text: "Notifications", icon: "BellOutlined", url: "/instructor/notifications" },
     // { text: "My Certificates", icon: "SafetyCertificateOutlined", url: "/instructor/myCertificates" },
