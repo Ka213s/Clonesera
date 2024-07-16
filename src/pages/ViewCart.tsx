@@ -10,7 +10,8 @@ interface CartItem {
     instructor_name: string;
     price: number;
     discount: number;
-    cart_no: string;  
+    cart_no: string;
+    status: string; // Ensure status is part of the CartItem interface
 }
 
 const ViewCart: React.FC = () => {
@@ -23,7 +24,7 @@ const ViewCart: React.FC = () => {
         const fetchCartItems = async () => {
             const data = {
                 searchCondition: {
-                    status: '',
+                    status: '', // Fetch all statuses
                     is_deleted: false,
                 },
                 pageInfo: {
@@ -34,7 +35,10 @@ const ViewCart: React.FC = () => {
 
             try {
                 const response = await getCart(data);
-                setCartItems(response.pageData);
+                const filteredItems = response.pageData.filter((item: CartItem) => 
+                    item.status === 'new' || item.status === 'cancel'
+                );
+                setCartItems(filteredItems);
             } catch (error) {
                 console.error('Error fetching cart items:', error);
                 message.error('Error fetching cart items');
@@ -72,7 +76,6 @@ const ViewCart: React.FC = () => {
 
         try {
             await updateCart(data);
-            message.success('Checkout successful');
             setCartItems(cartItems.filter(item => !selectedRowKeys.includes(item._id)));
             setSelectedRowKeys([]);
             navigate('/payment');
@@ -148,7 +151,7 @@ const ViewCart: React.FC = () => {
                 <Button
                     type="primary"
                     className="mt-4 w-full py-3 text-lg font-semibold"
-                    onClick={handleCheckout}  
+                    onClick={handleCheckout}
                 >
                     Checkout Now
                 </Button>

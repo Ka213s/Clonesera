@@ -24,7 +24,7 @@ const ListSubscription: React.FC = () => {
 
     return (
         <div className="p-6">
-            <nav className="flex justify-center space-x-4 border-b mb-4">
+            <nav className="flex space-x-4 border-b mb-4">
                 {tabs.map((tab) => (
                     <button
                         key={tab.key}

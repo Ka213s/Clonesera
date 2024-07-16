@@ -36,7 +36,9 @@ export const PUBLIC = {
   VERIFY_EMAIL: '/verify-email/:token',
   FORGOT_PASSWORD: '/forgot-password',
   LIST_SUBSCRIBED: '/list-subscribed',
-  SUBCRIPTION: '/subcription'
+  SUBCRIPTION: '/subcription',
+  VIEW_CART: '/view-cart',
+  PAYMENT: '/payment'
 };
 
 export const sidebarMenuItemsData = {
