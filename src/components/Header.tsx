@@ -35,7 +35,10 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const handleLogoClick = (e: React.MouseEvent) => {
     if (role === 'admin') {
       e.preventDefault();
-      navigate('/request-management'); 
+      navigate('/display-account'); 
+    }else {
+      e.preventDefault();
+      navigate('/homepage');
     }
   };
 

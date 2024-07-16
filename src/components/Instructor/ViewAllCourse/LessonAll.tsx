@@ -1,6 +1,7 @@
 import React from 'react';
 import { Table, Button } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
+import moment from 'moment';
 
 interface LessonProps {
   lessons: Lesson[];
@@ -15,6 +16,8 @@ interface Lesson {
   lesson_type: string;
   full_time: number;
   created_at: string;
+  video_url?: string;
+  image_url?: string;
 }
 
 const LessonAll: React.FC<LessonProps> = ({ lessons, onBack }) => {
@@ -23,7 +26,12 @@ const LessonAll: React.FC<LessonProps> = ({ lessons, onBack }) => {
     { title: 'Session Name', dataIndex: 'session_name', key: 'session_name' },
     { title: 'Lesson Type', dataIndex: 'lesson_type', key: 'lesson_type' },
     { title: 'Full Time', dataIndex: 'full_time', key: 'full_time' },
-    { title: 'Created At', dataIndex: 'created_at', key: 'created_at' },
+    { 
+      title: 'Created At', 
+      dataIndex: 'created_at', 
+      key: 'created_at', 
+      render: (date: string) => moment(date).format('DD-MM-YYYY') 
+    }
   ];
 
   return (

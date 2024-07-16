@@ -1,6 +1,8 @@
+// src/components/LogCourse.tsx
 import React, { useEffect, useState } from 'react';
-import { Table, Tag } from 'antd';
+import { Table } from 'antd';
 import { getCourses, getCourseLogs } from '../../../utils/commonImports';
+import { getStatusTag } from '../../../utils/statusTagUtils';
 
 interface Course {
   _id: string;
@@ -25,21 +27,15 @@ const LogCourse: React.FC = () => {
   useEffect(() => {
     const fetchCoursesAndLogs = async () => {
       try {
-        // Fetch courses
         const coursesData = await getCourses(
           { keyword: '', category: '', status: '', is_deleted: false },
           1,
           10
         );
-        console.log('Courses Data:', coursesData);
 
         if (coursesData && coursesData.pageData) {
           setCourses(coursesData.pageData);
-
-          // Extract course IDs
           const courseIds: string[] = coursesData.pageData.map((course: Course) => course._id);
-
-          // Fetch logs for each course ID
           const logsDataPromises = courseIds.map((courseId: string) =>
             getCourseLogs({
               searchCondition: { course_id: courseId },
@@ -48,8 +44,6 @@ const LogCourse: React.FC = () => {
           );
 
           const logsDataArray = await Promise.all(logsDataPromises);
-          console.log('Logs Data Array:', logsDataArray);
-
           const allLogs = logsDataArray.flatMap((logData) => logData.pageData);
           setLogs(allLogs);
         }
@@ -60,34 +54,6 @@ const LogCourse: React.FC = () => {
 
     fetchCoursesAndLogs();
   }, []);
-
-  const getStatusTag = (status: string) => {
-    let color;
-    switch (status) {
-      case 'new':
-        color = 'blue';
-        break;
-      case 'waiting_approve':
-        color = 'orange';
-        break;
-      case 'approve':
-        color = 'green';
-        break;
-      case 'reject':
-        color = 'red';
-        break;
-      case 'active':
-        color = 'green';
-        break;
-      case 'inactive':
-        color = 'gray';
-        break;
-      default:
-        color = 'blue';
-        break;
-    }
-    return <Tag color={color}>{status}</Tag>;
-  };
 
   const getCourseName = (courseId: string) => {
     const course = courses.find((course) => course._id === courseId);

@@ -1,8 +1,12 @@
+// src/components/CourseTable.tsx
 import React, { useState, useEffect } from 'react';
-import { Table, Button } from 'antd';
+import { Table } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
 import { getCourses, getSessions } from '../../../utils/commonImports';
+import { getStatusTag } from '../../../utils/statusTagUtils';
 import SessionAll from './SessionAll';
+import { EyeOutlined } from '@ant-design/icons';
+import moment from 'moment';
 
 interface Course {
   _id: string;
@@ -39,20 +43,31 @@ const CourseTable: React.FC = () => {
 
   const fetchSessions = async (courseId: string) => {
     const data = await getSessions({ keyword: '', course_id: courseId, is_position_order: false, is_deleted: false }, 1, 10);
+    console.log('API responseSSS:', data);
     setSessions(data.pageData);
   };
 
   const courseColumns: ColumnsType<Course> = [
     { title: 'Course Name', dataIndex: 'name', key: 'name' },
     { title: 'Category Name', dataIndex: 'category_name', key: 'category_name' },
-    { title: 'Status', dataIndex: 'status', key: 'status' },
+    { 
+      title: 'Status', 
+      dataIndex: 'status', 
+      key: 'status',
+      render: (status: string) => getStatusTag(status) 
+    },
     { title: 'Price', dataIndex: 'price', key: 'price' },
-    { title: 'Created At', dataIndex: 'created_at', key: 'created_at' },
+    { 
+      title: 'Created At', 
+      dataIndex: 'created_at', 
+      key: 'created_at',
+      render: (created_at: string) => moment(created_at).format('YYYY-MM-DD HH:mm:ss')
+    },
     {
-      title: 'Action',
+      title: 'View Session',
       key: 'action',
       render: (_, record) => (
-        <Button onClick={() => handleViewSessions(record._id)}>View Sessions</Button>
+        <EyeOutlined onClick={() => handleViewSessions(record._id)} style={{ cursor: 'pointer' }} />
       ),
     },
   ];
