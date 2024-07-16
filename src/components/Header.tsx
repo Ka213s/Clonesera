@@ -3,6 +3,7 @@ import { Button, Badge, Dropdown, Avatar, Menu, Typography, Divider } from 'antd
 import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, MailOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
+import { getCart } from '../services/Api';
 
 const { Text } = Typography;
 
@@ -15,6 +16,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
+  const [cartCount, setCartCount] = useState<number>(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -32,6 +34,35 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     }
   }, []);
 
+  useEffect(() => {
+    if (isLoggedIn) {
+      fetchCartCount();
+    }
+  }, [isLoggedIn]);
+
+  const fetchCartCount = async () => {
+    const data = {
+      searchCondition: {
+        status: '',
+        is_deleted: false,
+      },
+      pageInfo: {
+        pageNum: 1,
+        pageSize: 100,
+      },
+    };
+
+    try {
+      const response = await getCart(data);
+      const filteredItems = response.pageData.filter(
+        (item: { status: string }) => item.status === 'new' || item.status === 'cancel'
+      );
+      setCartCount(filteredItems.length);
+    } catch (error) {
+      console.error('Failed to fetch cart count:', error);
+    }
+  };
+
   const handleLogoClick = (e: React.MouseEvent) => {
     if (role === 'admin') {
       e.preventDefault();
@@ -43,7 +74,11 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   };
 
   const handleCreateCourse = () => {
-    navigate('/courses'); 
+    navigate('/courses');
+  };
+
+  const handleViewCart = () => {
+    navigate('/view-cart');
   };
 
   const notificationMenuItems = (
@@ -76,11 +111,11 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
       <div className="flex items-center space-x-4">
-        <Button 
-          icon={<MenuOutlined />} 
-          onClick={toggleMenu} 
-          shape="circle" 
-          className="button-menu" 
+        <Button
+          icon={<MenuOutlined />}
+          onClick={toggleMenu}
+          shape="circle"
+          className="button-menu"
         />
         <Link to="/" onClick={handleLogoClick}>
           <img src={logo} alt="Logo" className="h-12 w-auto cursor-pointer" />
@@ -101,8 +136,11 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               onClick={handleCreateCourse}
             />
 
-            <Badge count={2}>
-              <ShoppingCartOutlined className="icon-size text-2xl cursor-pointer text-black" />
+            <Badge count={cartCount}>
+              <ShoppingCartOutlined
+                className="icon-size text-2xl cursor-pointer text-black"
+                onClick={handleViewCart}
+              />
             </Badge>
 
             <Badge count={3}>
@@ -121,7 +159,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               <Dropdown overlay={userMenu} trigger={['click']}>
                 <Avatar
                   size="large"
-                  src={avatar || 'default-avatar-path'} 
+                  src={avatar || 'default-avatar-path'}
                   className="border-2 hover:border-gray-800 transition duration-300 ease-in-out"
                 />
               </Dropdown>
