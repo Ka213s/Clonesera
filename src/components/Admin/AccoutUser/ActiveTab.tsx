@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Tabs, Button, Modal } from 'antd';
 import DisplayAccount from './DisplayAccount';
-import AccountIsDelete from './AccountIsDelete';
+
 import AccountIsVerify from './AccountIsVerify';
 import CreateAccount from '../CreateAccount/CreateAccount'; // Ensure the path is correct
 
@@ -39,9 +39,7 @@ const ActiveTab: React.FC = () => {
         <TabPane tab="DisplayAccount chưa verify" key="2">
           <AccountIsVerify status={true} isDeleted={false} />
         </TabPane>
-        <TabPane tab="Account Delete" key="3">
-          <AccountIsDelete status={true} isDeleted={true} />
-        </TabPane>
+        
       </Tabs>
       <Modal 
         title="Create New Account" 
