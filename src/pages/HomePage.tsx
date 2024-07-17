@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPublicCourses, getCurrentLogin } from '../utils/commonImports';
-import { Tag } from 'antd';
+import { Tag, Button } from 'antd'; // Import Button from Ant Design
 import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
+import defaultAvatar from '../assets/Avatar01.jpg';
+import PopularInstructors from './PopularInstructors';
 
 interface Course {
   _id: number;
@@ -12,13 +14,6 @@ interface Course {
   description: string;
   image_url: string;
   price_paid: number;
-}
-
-interface Instructor {
-  id: number;
-  name: string;
-  avatar: string;
-  coursesTaught: number;
 }
 
 interface User {
@@ -76,7 +71,7 @@ const HomePage: React.FC = () => {
     navigate(`/course-detail/${courseId}`);
   };
 
-  const popularInstructors: Instructor[] = [
+  const popularInstructors = [
     {
       id: 1,
       name: "John Doe",
@@ -127,13 +122,23 @@ const HomePage: React.FC = () => {
         <div className="space-y-8">
           <div className="bg-white rounded-lg shadow-lg p-6">
             <h2 className="text-2xl font-bold mb-4">Statistic</h2>
-            {user && (
+            {user ? (
               <div className="flex flex-col items-center mb-4">
                 <div className="relative">
                   <img src={user.avatar} alt="Avatar" className="w-24 h-24 rounded-full" />
                 </div>
                 <div className="mt-4 text-center">
                   <h3 className="text-xl font-bold">Good Morning, {user.name} <span className="text-red-500">🔥</span></h3>
+                  <p className="text-sm text-gray-600">Continue your learning to achieve your target!</p>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center mb-4">
+                <div className="relative">
+                  <img src={defaultAvatar} alt="Default Avatar" className="w-24 h-24 rounded-full" />
+                </div>
+                <div className="mt-4 text-center">
+                  <h3 className="text-xl font-bold">Good Morning, User <span className="text-red-500">🔥</span></h3>
                   <p className="text-sm text-gray-600">Continue your learning to achieve your target!</p>
                 </div>
               </div>
@@ -152,9 +157,9 @@ const HomePage: React.FC = () => {
 
           <div>
             <h2 className="text-2xl font-bold mb-4">Popular Courses</h2>
-            <div className="flex space-x-4 overflow-x-scroll pb-4">
-              {courses.map((course) => (
-                <div key={course._id} className="bg-white rounded-lg shadow-lg overflow-hidden w-80 flex-shrink-0 flex flex-col">
+            <div className="grid grid-cols-3 gap-4 pb-4">
+              {courses.slice(0, 3).map((course) => (
+                <div key={course._id} className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
                   <img src={course.image_url} alt={course.name} className="w-full h-48 object-cover" />
                   <div className="p-4 flex flex-col flex-grow">
                     <h2 className="text-xl font-semibold mb-2 h-16 overflow-hidden overflow-ellipsis">{course.name}</h2>
@@ -177,29 +182,21 @@ const HomePage: React.FC = () => {
                 </div>
               ))}
             </div>
+
+            {/* Conditionally render buttons based on the number of courses */}
+            {courses.length > 4 && (
+              <div className="flex justify-between mt-4">
+                <Button type="primary" icon={<InfoCircleOutlined />} size="large">
+                  Button 1
+                </Button>
+                <Button type="primary" icon={<CheckCircleOutlined />} size="large">
+                  Button 2
+                </Button>
+              </div>
+            )}
           </div>
 
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Popular Instructors</h2>
-            <div className="flex space-x-4 overflow-x-scroll pb-4">
-              {popularInstructors.map((instructor) => (
-                <div key={instructor.id} className="bg-white rounded-lg shadow-lg overflow-hidden w-80 flex-shrink-0 flex flex-col">
-                  <img src={instructor.avatar} alt={instructor.name} className="w-full h-48 object-cover" />
-                  <div className="p-4 flex flex-col flex-grow">
-                    <h2 className="text-xl font-semibold mb-2">{instructor.name}</h2>
-                    <p className="text-sm text-gray-600 mb-2">
-                      <strong>Courses Taught:</strong> {instructor.coursesTaught}
-                    </p>
-                    <button
-                      className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300 mt-auto"
-                    >
-                      View Profile
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
+          <PopularInstructors instructors={popularInstructors} />
 
           {/* New Sections */}
           <div className="grid grid-cols-3 gap-6 mt-8">
