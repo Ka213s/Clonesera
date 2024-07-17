@@ -1,6 +1,11 @@
-import { React, useState, GoogleOAuthProvider, GoogleLogin, Link, loginAccount, getCurrentLogin, registerUserByGoogle, loginUserByGoogle, config, logo, Form, Input, Button, EyeOutlined, useNavigate, EyeInvisibleOutlined } from '../utils/commonImports';
+import React, { useState } from 'react';
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+import { Link, useNavigate } from 'react-router-dom';
 import { CredentialResponse } from '@react-oauth/google';
-import FileUploader from '../components/FileUploader'; 
+import { Form, Input, Button } from 'antd';
+import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
+import FileUploader from '../components/FileUploader';
+import { loginAccount, getCurrentLogin, registerUserByGoogle, loginUserByGoogle, config, logo } from '../utils/commonImports';
 
 const Login: React.FC = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -10,7 +15,7 @@ const Login: React.FC = () => {
   const [video, setVideo] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [avatar, setAvatar] = useState<string>('');
-  const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);
+  const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);  
   const navigate = useNavigate();
 
   const handleLoginClick = () => { navigate('/register'); };
@@ -48,8 +53,7 @@ const Login: React.FC = () => {
         const token = googleResponse.token;
         localStorage.setItem('token', token);
         const userResponse = await getCurrentLogin();
-        const dataUser = JSON.stringify(userResponse);
-        localStorage.setItem('userData', dataUser);
+        localStorage.setItem('userData', JSON.stringify(userResponse));
         navigate('/homepage');
       } else {
         setGoogleId(response.credential);
@@ -63,20 +67,25 @@ const Login: React.FC = () => {
   };
 
   const handleRoleSelection = async () => {
-    if (!googleId || !selectedRole || !avatar || !description || !video || !phoneNumber) return;
+    if (!googleId || !selectedRole || !description || !phoneNumber) return;
+    if (selectedRole === 'instructor' && (!avatar || !video)) {
+      console.error('Instructor role requires avatar and video');
+      return;
+    }
 
-    try {
-      const response = await registerUserByGoogle({
-        google_id: googleId,
-        role: selectedRole,
-        description: description,
-        video: video,
-        phone_number: phoneNumber,
-      });
-      const token = response.token;
-      localStorage.setItem('token', token);
+    const payload = {
+      google_id: googleId,
+      role: selectedRole,
+      description: description,
+      video: video,
+      phone_number: phoneNumber,
+      avatar: avatar,
+    };
+
+    try {  
+       await registerUserByGoogle(payload);      
       setIsRoleModalVisible(false);
-      navigate('/homepage');
+      navigate('/login');
     } catch (error) {
       console.error('Error registering with Google:', error);
     }
@@ -196,7 +205,7 @@ const Login: React.FC = () => {
             >
               &times;
             </button>
-            <h2 className="text-3xl font-semibold text-gray-800 mb-6">Sign up with google</h2>
+            <h2 className="text-3xl font-semibold text-gray-800 mb-6">Sign up with Google</h2>
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2">
                 <select
