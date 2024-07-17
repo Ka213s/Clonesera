@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getCourseDetail, updateSubscribed } from "../utils/commonImports";
+import { getCourseDetail, updateSubscribed, createCart } from "../utils/commonImports";
 import { message, Button, Card, Tag, Divider, Tooltip, List } from "antd";
 import { PlayCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import "tailwindcss/tailwind.css";
@@ -84,6 +84,18 @@ const CourseDetails: React.FC = () => {
     }
   };
 
+  const handleAddToCart = async () => {
+    if (course) {
+      try {
+        await createCart({ course_id: course._id });
+      } catch (error) {
+        message.error('Error adding course to cart');
+        console.error('Error adding course to cart:', error);
+      }
+    }
+  };
+
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -138,13 +150,22 @@ const CourseDetails: React.FC = () => {
               <strong>Description:</strong>{" "}
               {course.description.replace(/<\/?p>/g, "")}
             </p>
-            <Button
-              type="primary"
-              onClick={handleSubscribeToggle}
-              className={`mb-4 text-lg custom-button`}
-            >
-              {subscribed ? "Unsubscribe" : "Subscribe"}
-            </Button>
+            <div className="flex space-x-4">
+              <Button
+                type="primary"
+                onClick={handleSubscribeToggle}
+                className={`mb-4 text-lg custom-button`}
+              >
+                {subscribed ? "Unsubscribe" : "Subscribe"}
+              </Button>
+              <Button
+                type="default"
+                onClick={handleAddToCart}
+                className="mb-4 text-lg custom-button"
+              >
+                Add to Cart
+              </Button>
+            </div>
           </div>
         </div>
         <Divider />
