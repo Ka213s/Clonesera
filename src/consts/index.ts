@@ -23,7 +23,8 @@ export const INSTRUCTOR = {
   COURSE: '/courses',
   LIST_SUBSCRIPTION: '/list-subscription',
   VIEW_ALL_COURSE: '/view-all-course',
-  VIEW_PROFILE: '/view-profile'
+  VIEW_PROFILE: '/view-profile',
+  PURCHASE: '/purchase',
 };
 export const PUBLIC = {
   HOME: '/homepage',
@@ -94,6 +95,7 @@ export const SidebarIntructorData = {
     { text: "View All Course ", icon: "BookOutlined", url: "/view-all-course" },
     { text: "Subscription", icon: "BellOutlined", url: "/list-subscription" },
     { text: "Log Course", icon: "BookOutlined", url: "/log-course" },
+    { text: "Purchased Courses", icon: "ShoppingCartOutlined", url: "/purchase" },
     // { text: "Messages", icon: "MessageOutlined", url: "/instructor/messages" },
     // { text: "Notifications", icon: "BellOutlined", url: "/instructor/notifications" },
     // { text: "My Certificates", icon: "SafetyCertificateOutlined", url: "/instructor/myCertificates" },

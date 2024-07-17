@@ -216,7 +216,7 @@ const HomePage: React.FC = () => {
               <p className="text-gray-600 text-center">when an unknown printer took a galley of type and scrambled it</p>
             </div>
           </div>
-          {/* End of New Sections */}
+          
         </div>
       </div>
     </div>
