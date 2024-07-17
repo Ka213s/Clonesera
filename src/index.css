@@ -16,7 +16,7 @@
 .custom-button {
   
   border-radius: 50px;
-  background-color: rgb(4, 254, 4) !important; 
+  background-color: #22c55e !important; 
   color: #000000 !important; 
   font-weight: 500;
 }
@@ -28,14 +28,15 @@
 }
 
 .button-menu {
-  background-color: rgb(4, 254, 4); 
+  background-color: #22c55e; 
   color: rgb(0, 0, 0);
   transition: background-color 0.3s ease-in-out;
 }
 
 .button-menu:hover {
-  background-color: rgb(4, 254, 4) !important; 
+  background-color: rgb(61, 198, 111) !important; 
   color: white  !important;
+  border-radius: none !important;
 }
 .blob {
   position: absolute;
