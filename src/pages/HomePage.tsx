@@ -57,16 +57,19 @@ const HomePage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userData = await getCurrentLogin();
-        setUser(userData);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
+    const token = localStorage.getItem('token');
+    if (token) {
+      const fetchUser = async () => {
+        try {
+          const userData = await getCurrentLogin();
+          setUser(userData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
 
-    fetchUser();
+      fetchUser();
+    }
   }, []);
 
   const handleViewDetails = (courseId: number) => {
