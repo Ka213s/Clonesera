@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getCourseDetail, updateSubscribed } from "../utils/commonImports";
-import { message, Button, Card, Tag, Divider, Tooltip, List } from "antd";
+import { message, Button, Card, Tag, Divider, Tooltip, List, Modal } from "antd";
 import { PlayCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import "tailwindcss/tailwind.css";
 
@@ -40,6 +40,7 @@ const CourseDetails: React.FC = () => {
   const [course, setCourse] = useState<Course | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [subscribed, setSubscribed] = useState<boolean>(false);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
     const fetchCourseDetail = async () => {
@@ -82,6 +83,14 @@ const CourseDetails: React.FC = () => {
         error
       );
     }
+  };
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
   };
 
   if (loading) {
@@ -177,8 +186,7 @@ const CourseDetails: React.FC = () => {
             <Button
               type="default"
               icon={<PlayCircleOutlined />}
-              href={course.video_url}
-              target="_blank"
+              onClick={showModal}
               className="mr-4 text-lg custom-button"
             >
               Watch Introduction
@@ -186,6 +194,21 @@ const CourseDetails: React.FC = () => {
           </div>
         </div>
       </Card>
+      <Modal
+        title="Course Introduction"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <iframe
+          width="100%"
+          height="400px"
+          src={course.video_url}
+          title={course.name}
+          frameBorder="0"
+          allowFullScreen
+        ></iframe>
+      </Modal>
     </div>
   );
 };

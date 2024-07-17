@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Button, Modal, Input, Form, Select } from 'antd';
 import { ColumnsType } from 'antd/lib/table';
-import { getCourses, getSessions, getLessons, changeCourseStatus } from '../../../utils/commonImports';
+import { getCourses, getCourseDetail, changeCourseStatus } from '../../../utils/commonImports';
 
 const { Option } = Select;
 
@@ -14,14 +14,12 @@ interface Course {
 interface Session {
   _id: string;
   name: string;
-  course_id: string;
-  lessons?: Lesson[];
+  lesson_list?: Lesson[];
 }
 
 interface Lesson {
   _id: string;
   name: string;
-  session_id: string;
 }
 
 const CourseTable: React.FC = () => {
@@ -35,48 +33,17 @@ const CourseTable: React.FC = () => {
   }, []);
 
   const fetchCourses = async () => {
-    console.log('fetchCourses');
     const data = await getCourses({ keyword: '', category: '', status: '', is_deleted: false }, 1, 10);
-    setCourses(data.pageData);
+    const coursesWithDetails = await Promise.all(data.pageData.map(async (course: Course) => {
+      const courseDetail = await fetchCourseDetail(course._id);
+      return { ...course, sessions: courseDetail.session_list };
+    }));
+    setCourses(coursesWithDetails);
   };
 
-  const fetchSessions = async (courseId: string) => {
-    const data = await getSessions({ keyword: '', course_id: courseId, is_position_order: false, is_deleted: false }, 1, 10);
-    return data.pageData;
-  };
-
-  const fetchLessons = async (sessionId: string) => {
-    const data = await getLessons({ keyword: '', course_id: '', session_id: sessionId, lesson_type: '', is_position_order: false, is_deleted: false }, 1, 10);
-    return data.pageData;
-  };
-
-  const handleExpand = async (expanded: boolean, course: Course) => {
-    if (expanded && !course.sessions) {
-      const sessions = await fetchSessions(course._id);
-      setCourses(prevCourses =>
-        prevCourses.map(c =>
-          c._id === course._id ? { ...c, sessions } : c
-        )
-      );
-    }
-  };
-
-  const handleSessionExpand = async (expanded: boolean, session: Session, courseId: string) => {
-    if (expanded && !session.lessons) {
-      const lessons = await fetchLessons(session._id);
-      setCourses(prevCourses =>
-        prevCourses.map(course =>
-          course._id === courseId
-            ? {
-                ...course,
-                sessions: course.sessions?.map(s =>
-                  s._id === session._id ? { ...s, lessons } : s
-                ),
-              }
-            : course
-        )
-      );
-    }
+  const fetchCourseDetail = async (courseId: string) => {
+    const data = await getCourseDetail(courseId);
+    return data;
   };
 
   const showChangeStatusModal = (courseId: string) => {
@@ -89,7 +56,7 @@ const CourseTable: React.FC = () => {
     await changeCourseStatus({ course_id: selectedCourseId!, new_status: values.new_status, comment: values.comment });
     setIsModalVisible(false);
     form.resetFields();
-    fetchCourses(); // Refresh courses after status change
+    fetchCourses(); 
   };
 
   const handleCancel = () => {
@@ -127,12 +94,11 @@ const CourseTable: React.FC = () => {
         expandedRowRender: session => (
           <Table
             columns={lessonColumns}
-            dataSource={session.lessons}
+            dataSource={session.lesson_list}
             rowKey="_id"
             pagination={false}
           />
         ),
-        onExpand: (expanded, record) => handleSessionExpand(expanded, record, course._id),
       }}
       pagination={false}
     />
@@ -144,7 +110,7 @@ const CourseTable: React.FC = () => {
         columns={courseColumns}
         dataSource={courses}
         rowKey="_id"
-        expandable={{ expandedRowRender, onExpand: handleExpand }}
+        expandable={{ expandedRowRender }}
       />
       <Modal
         title="Change Course Status"
