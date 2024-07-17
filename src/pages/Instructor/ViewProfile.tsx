@@ -1,4 +1,4 @@
-import ViewProfile from "../../components/ViewProfile/ViewProfile"
+import ViewProfile from "../../components/ViewProfile/ViewMyProfile"
 
 export const ViewProfiles = () => {
   return (

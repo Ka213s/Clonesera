@@ -24,7 +24,8 @@ export const INSTRUCTOR = {
   COURSE: '/courses',
   LIST_SUBSCRIPTION: '/list-subscription',
   VIEW_ALL_COURSE: '/view-all-course',
-  VIEW_PROFILE: '/view-profile',
+  VIEW_MY_PROFILE: '/view-my-profile',
+  VIEW_PROFILE:'/view-profile/:id',
   PURCHASE: '/purchased-courses',
   COURSE_SOLD: '/courses-sold',
 };

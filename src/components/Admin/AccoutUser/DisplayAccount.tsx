@@ -32,14 +32,15 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
 
   const fetchUsers = async (pageNum: number, pageSize: number) => {
     try {
-      const response = await getUsers({ keyword: '', role: 'all', status, is_deleted: isDeleted }, pageNum, pageSize);
-      const verifiedUsers = response.pageData.filter((user: User) => user.is_verified); // Filter for verified users
-      setData(verifiedUsers);
+      const response = await getUsers({ keyword: '', role: 'all', status, is_deleted: isDeleted, is_verified : false }, pageNum, pageSize);
+      console.log('responsea:', response);
+      setData(response.pageData);
       setPagination({
         current: response.pageInfo.pageNum,
         pageSize: response.pageInfo.pageSize,
         total: response.pageInfo.totalItems,
       });
+      
     } catch (error) {
       console.error('Failed to fetch users:', error);
     }

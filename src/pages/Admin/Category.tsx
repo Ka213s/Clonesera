@@ -1,4 +1,4 @@
-import { Table, Pagination, Button, Modal, Select, Input, React, useEffect, useState, useCallback, useMemo, setGlobalLoadingHandler, getCategories, createCategory, editCategory, deleteCategory, EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '../../utils/commonImports';
+import { Table, Pagination, Button, Modal, Select, Input, React, useEffect, useState, useCallback, useMemo, getCategories, createCategory, editCategory, deleteCategory, EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '../../utils/commonImports';
 import { ColumnsType } from 'antd/es/table';
 import CategoryForm from '../../components/Admin/Category/CategoryForm';
 
@@ -18,7 +18,7 @@ interface FormValues {
 const Category: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [parentCategories, setParentCategories] = useState<Category[]>([]);
-    const [loading, setLoading] = useState(false);
+   
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
     const [totalItems, setTotalItems] = useState(0);
@@ -30,7 +30,7 @@ const Category: React.FC = () => {
 
     const fetchCategories = useCallback(
         async (page: number, pageSize: number, filterOption: string, keyword: string) => {
-            setLoading(true);
+          
             try {
                 const searchCondition = {
                     keyword,
@@ -55,16 +55,12 @@ const Category: React.FC = () => {
                 setParentCategories(parentData.pageData);
             } catch (error) {
                 console.error('Error fetching categories:', error);
-            } finally {
-                setLoading(false);
             }
         },
         []
     );
 
-    useEffect(() => {
-        setGlobalLoadingHandler(setLoading);
-    }, []);
+   
 
     useEffect(() => {
         fetchCategories(page, pageSize, filterOption, searchKeyword);
@@ -197,7 +193,7 @@ const Category: React.FC = () => {
             <Table
                 columns={columns}
                 dataSource={categories.map(category => ({ ...category, key: category._id }))}
-                loading={loading}
+              
                 pagination={false}
                 className="mb-4"
             />
