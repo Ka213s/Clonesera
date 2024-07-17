@@ -138,9 +138,7 @@ const CourseDetails: React.FC = () => {
             <p className="mb-2 text-lg">
               <strong>Instructor:</strong> {course.instructor_name}
             </p>
-            <p className="mb-2 text-lg">
-              <strong>Status:</strong> {course.status}
-            </p>
+           
             <p className="mb-2 text-lg">
               <strong>Price:</strong> ${course.price}
               {course.discount > 0 && (

@@ -284,3 +284,12 @@ export const getItemsByInstructor = async (data: { searchCondition: { purchase_n
   const response = await axiosInstance.post('/api/purchase/search-for-instructor', data);
   return response.data;
 };
+export const getItemsByStudent = async (data: { searchCondition: { purchase_no?: string; cart_no?: string; course_id?: string; status?: string; is_delete?: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
+  const response = await axiosInstance.post('/api/purchase/search-for-student', data);
+  return response.data;
+};
+export const getItemsAdmin = async (data: { searchCondition: { purchase_no?: string; cart_no?: string; course_id?: string; status?: string; is_delete?: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
+  const response = await axiosInstance.post('/api/purchase/search', data);
+  return response.data;
+};
+

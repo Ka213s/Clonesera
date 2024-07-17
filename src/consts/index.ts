@@ -18,13 +18,15 @@ export const ADMIN = {
   CATEGORY: '/categories',
   PENDING_COURSE: '/pending-courses',
   LOG_COURSE: '/log-course',
+  PURCHASE : '/purchase'
 }
 export const INSTRUCTOR = {
   COURSE: '/courses',
   LIST_SUBSCRIPTION: '/list-subscription',
   VIEW_ALL_COURSE: '/view-all-course',
   VIEW_PROFILE: '/view-profile',
-  PURCHASE: '/purchase',
+  PURCHASE: '/purchased-courses',
+  COURSE_SOLD: '/courses-sold',
 };
 export const PUBLIC = {
   HOME: '/homepage',
@@ -92,22 +94,15 @@ export const SidebarIntructorData = {
   insSidebarItem: [
     { text: "My Profile", icon: "UserOutlined", url: "/view-profile" },
     { text: "Manage Course", icon: "BookOutlined", url: "/courses" },
-    { text: "View All Course ", icon: "BookOutlined", url: "/view-all-course" },
+    { text: "View All Courses", icon: "BookOutlined", url: "/view-all-course" },
     { text: "Subscription", icon: "BellOutlined", url: "/list-subscription" },
     { text: "Log Course", icon: "BookOutlined", url: "/log-course" },
-    { text: "Purchased Courses", icon: "ShoppingCartOutlined", url: "/purchase" },
-    // { text: "Messages", icon: "MessageOutlined", url: "/instructor/messages" },
-    // { text: "Notifications", icon: "BellOutlined", url: "/instructor/notifications" },
-    // { text: "My Certificates", icon: "SafetyCertificateOutlined", url: "/instructor/myCertificates" },
-    // { text: "Reviews", icon: "StarOutlined", url: "/instructor/reviews" },
-    // { text: "Earning", icon: "DollarOutlined", url: "/instructor/earning" },
-    // { text: "Payout", icon: "WalletOutlined", url: "/instructor/payout" },
-    // { text: "Statements", icon: "FileTextOutlined", url: "/instructor/statements" },
-    // { text: "Verification", icon: "CheckOutlined", url: "/instructor/verification" },
+    { text: "Courses Sold", icon: "ShoppingCartOutlined", url: "/purchased-courses" }, // Courses others have bought from me
+    { text: "Purchased Courses", icon: "ShoppingCartOutlined", url: "/courses-sold" }, // Courses I have bought
     { text: "Setting", icon: "SettingOutlined", url: "/setting-page" },
-    // { text: "Send Feedback", icon: "SendOutlined", url: "/feedback" }
   ]
 };
+
 
 export const SidebarStudentData = {
   studentSidebarItem: [
@@ -131,7 +126,8 @@ export const SidebarAdminData = {
     { "key": "/categories", "label": "Category Management", "icon": "DashboardOutlined" },
     { "key": "/view-all-course", "label": "All Courses", "icon": "BookOutlined" },
     { "key": "/pending-courses", "label": "Pending Courses", "icon": "BookOutlined" },
-    { "key": "/log-course", "label": "Course Log", "icon": "BookOutlined" }
+    { "key": "/log-course", "label": "Course Log", "icon": "BookOutlined" },
+    { "key": "/purchase", "label": "Purchase", "icon": "ShoppingCartOutlined" }
 
   ]
 };
