@@ -30,6 +30,7 @@ const CourseDetails = lazy(() => import('../pages/CourseDetails'));
 const LogCourse = lazy(() => import('../components/Admin/LogCourse/LogCourse'));
 const PedingCourse = lazy(() => import('../pages/Admin/PedingCourse'));
 const ViewAllCourse = lazy(() => import('../pages/Instructor/ViewAllCourse'));
+const ViewMyProfile = lazy(() => import('../components/ViewProfile/ViewMyProfile'));
 const ViewProfile = lazy(() => import('../components/ViewProfile/ViewProfile'));
 const ViewCart = lazy(() => import('../pages/ViewCart'));
 const Payment = lazy(() => import('../pages/Payment'));
@@ -51,7 +52,7 @@ const AppRouter: React.FC = () => {
                         <Route path={PUBLIC.VIEW_CART} element={<ViewCart />} />
                         <Route path={PUBLIC.PAYMENT} element={<Payment />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
-               
+                        <Route path={INSTRUCTOR.VIEW_MY_PROFILE} element={<ViewMyProfile />} />
                         <Route path={INSTRUCTOR.VIEW_PROFILE} element={<ViewProfile />} />
                         <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />
                         <Route path={INSTRUCTOR.LIST_SUBSCRIPTION} element={<PrivateRoute element={ListSubscription} allowedRoles={[ROLES.INSTRUCTOR]} />} />

@@ -66,7 +66,7 @@ export const getUserData = async (id: string) => {
   return response.data;
 };
 
-export const getUsers = async (searchCondition: { keyword: string; role: string; status: boolean; is_deleted: boolean; }, pageNum: number, pageSize: number) => {
+export const getUsers = async (searchCondition: { keyword: string; role: string; status: boolean; is_deleted: boolean; is_verified: boolean; }, pageNum: number, pageSize: number) => {
   const response = await axiosInstance.post('/api/users/search', {
     searchCondition,
     pageInfo: { pageNum, pageSize }

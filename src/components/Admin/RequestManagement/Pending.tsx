@@ -2,7 +2,7 @@ import { React, useEffect, useState, useCallback, useMemo, Button, Table, Pagina
 import { toast } from 'react-toastify';
 import { getUsers, reviewProfileInstructor } from '../../../services/Api';
 import { ColumnsType } from 'antd/es/table';
-import 'react-toastify/dist/ReactToastify.css';
+
 
 interface User {
     _id: string;
@@ -30,7 +30,7 @@ const Pending: React.FC = () => {
             setLoading(true);
             try {
                 const data = await getUsers(
-                    { keyword: '', role: 'instructor', status: true, is_deleted: false },
+                    { keyword: '', role: 'instructor', status: true, is_deleted: false, is_verified: false },
                     page,
                     pageSize
                 );
