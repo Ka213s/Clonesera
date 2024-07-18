@@ -8,5 +8,5 @@ export { default as config } from '../config/config';
 export { default as logo } from '../assets/Logo-2.png';
 // export { default as Artwork } from '../assets/Artwork.jpg';
 export { EyeOutlined, EyeInvisibleOutlined, EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
-export { Form, Input, Button, Table, Pagination, Modal, Spin, Select, notification, message, Tooltip } from 'antd';
+export { Form, Input, Button, Table, Pagination, Modal, Spin, Select, notification, message, Tooltip, Checkbox } from 'antd';
 export { ROLES } from '../consts/index';
