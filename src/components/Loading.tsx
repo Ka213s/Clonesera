@@ -8,7 +8,7 @@ interface LoadingProps {
 
 const Loading: React.FC<LoadingProps> = ({ isLoading, children }) => {
   return (
-    <div className="relative">
+    <div className="relative overflow-auto">
       {isLoading && (
         <div className="absolute inset-0 flex items-center justify-center bg-white bg-opacity-75 pointer-events-none">
           <Spin tip="Loading..." />

@@ -1,13 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
-import { getItemsByInstructor } from '../../../utils/commonImports';
+import { getItemsByInstructor } from '../../utils/commonImports';
+import { getStatusTag } from '../../utils/statusTagUtils';
 
 interface PurchaseData {
   purchase_no: string;
   cart_no: string;
-  course_id: string;
+  course_name: string;
   status: string;
+  price_paid: number;
+  discount: number;
+  student_name: string;
+  instructor_name: string;
   // Add other fields as necessary
 }
 
@@ -67,14 +72,35 @@ const Purchase: React.FC = () => {
       key: 'cart_no',
     },
     {
-      title: 'Course ID',
-      dataIndex: 'course_id',
-      key: 'course_id',
+      title: 'Course Name',
+      dataIndex: 'course_name',
+      key: 'course_name',
     },
     {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      render: (status: string) => getStatusTag(status),
+    },
+    {
+      title: 'Price Paid',
+      dataIndex: 'price_paid',
+      key: 'price_paid',
+    },
+    {
+      title: 'Discount',
+      dataIndex: 'discount',
+      key: 'discount',
+    },
+    {
+      title: 'Student Name',
+      dataIndex: 'student_name',
+      key: 'student_name',
+    },
+    {
+      title: 'Instructor Name',
+      dataIndex: 'instructor_name',
+      key: 'instructor_name',
     },
     // Add other columns as needed
   ];

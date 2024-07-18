@@ -66,7 +66,7 @@ export const getUserData = async (id: string) => {
   return response.data;
 };
 
-export const getUsers = async (searchCondition: { keyword: string; role: string; status: boolean; is_deleted: boolean; }, pageNum: number, pageSize: number) => {
+export const getUsers = async (searchCondition: { keyword: string; role: string; status: boolean; is_deleted: boolean; is_verified: boolean; }, pageNum: number, pageSize: number) => {
   const response = await axiosInstance.post('/api/users/search', {
     searchCondition,
     pageInfo: { pageNum, pageSize }
@@ -285,3 +285,12 @@ export const getItemsByInstructor = async (data: { searchCondition: { purchase_n
   const response = await axiosInstance.post('/api/purchase/search-for-instructor', data);
   return response.data;
 };
+export const getItemsByStudent = async (data: { searchCondition: { purchase_no?: string; cart_no?: string; course_id?: string; status?: string; is_delete?: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
+  const response = await axiosInstance.post('/api/purchase/search-for-student', data);
+  return response.data;
+};
+export const getItemsAdmin = async (data: { searchCondition: { purchase_no?: string; cart_no?: string; course_id?: string; status?: string; is_delete?: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
+  const response = await axiosInstance.post('/api/purchase/search', data);
+  return response.data;
+};
+

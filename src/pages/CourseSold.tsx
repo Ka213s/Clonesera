@@ -1,4 +1,4 @@
-import Purchases from "../components/Instructor/Purchase/Purchase"
+import Purchases from "../components/Purchase/CourseSold"
 
 const Purchase = () => {
   return (
