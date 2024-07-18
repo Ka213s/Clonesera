@@ -73,11 +73,7 @@ const Category: React.FC = () => {
                 dataIndex: 'name',
                 key: 'name',
             },
-            {
-                title: 'Description',
-                dataIndex: 'description',
-                key: 'description',
-            },
+          
             {
                 title: 'Parent Category',
                 dataIndex: 'parent_category_id',

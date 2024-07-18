@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getPublicCourses, getCurrentLogin } from '../utils/commonImports';
 import { Tag, Button } from 'antd'; // Import Button from Ant Design
 import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
-import defaultAvatar from '../assets/Avatar01.jpg';
+import Statistic from './Statistic';
 import PopularInstructors from './PopularInstructors';
 
 interface Course {
@@ -120,30 +120,7 @@ const HomePage: React.FC = () => {
         </div>
 
         <div className="space-y-8">
-          <div className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl font-bold mb-4">Statistic</h2>
-            {user ? (
-              <div className="flex flex-col items-center mb-4">
-                <div className="relative">
-                  <img src={user.avatar} alt="Avatar" className="w-24 h-24 rounded-full" />
-                </div>
-                <div className="mt-4 text-center">
-                  <h3 className="text-xl font-bold">Good Morning, {user.name} <span className="text-red-500">🔥</span></h3>
-                  <p className="text-sm text-gray-600">Continue your learning to achieve your target!</p>
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col items-center mb-4">
-                <div className="relative">
-                  <img src={defaultAvatar} alt="Default Avatar" className="w-24 h-24 rounded-full" />
-                </div>
-                <div className="mt-4 text-center">
-                  <h3 className="text-xl font-bold">Good Morning, User <span className="text-red-500">🔥</span></h3>
-                  <p className="text-sm text-gray-600">Continue your learning to achieve your target!</p>
-                </div>
-              </div>
-            )}
-          </div>
+          <Statistic user={user} />
         </div>
 
         <div className="col-span-2">
