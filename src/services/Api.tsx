@@ -280,6 +280,7 @@ export const updateCart = async (data: { status: string; items: { _id: string; c
   const response = await axiosInstance.put('/api/cart/update-status', data);
   return response.data;
 };
+
 export const getItemsByInstructor = async (data: { searchCondition: { purchase_no?: string; cart_no?: string; course_id?: string; status?: string; is_delete?: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
   const response = await axiosInstance.post('/api/purchase/search-for-instructor', data);
   return response.data;

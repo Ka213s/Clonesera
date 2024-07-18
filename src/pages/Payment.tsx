@@ -1,3 +1,4 @@
+//Payment.tsx: page này để thực hiện thanh toán mua khóa học hoặc hủy thanh toán sẽ quay về cart
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCart, updateCart } from '../services/Api';
@@ -77,7 +78,7 @@ const Payment: React.FC = () => {
 
     return (
         <div className="lg:w-1/3 lg:ml-4 lg:mt-0 mt-8 p-8 bg-white rounded shadow-md">
-            <h2 className="text-2xl font-bold">Order Summary</h2>
+            <h2 className="flex justify-center text-2xl font-bold">ORDER SUMMARY</h2>
             {selectedItems.length > 0 ? (
                 <div className="mt-4 p-4 border-t border-gray-200">
                     {selectedItems.map(item => (
