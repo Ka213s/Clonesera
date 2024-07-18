@@ -18,14 +18,14 @@ export const ADMIN = {
   CATEGORY: '/categories',
   PENDING_COURSE: '/pending-courses',
   LOG_COURSE: '/log-course',
-  PURCHASE : '/purchase'
+  PURCHASE: '/purchase'
 }
 export const INSTRUCTOR = {
   COURSE: '/courses',
   LIST_SUBSCRIPTION: '/list-subscription',
   VIEW_ALL_COURSE: '/view-all-course',
   VIEW_MY_PROFILE: '/view-my-profile',
-  VIEW_PROFILE:'/view-profile/:id',
+  VIEW_PROFILE: '/view-profile/:id',
   PURCHASE: '/purchased-courses',
   COURSE_SOLD: '/courses-sold',
 };
@@ -99,12 +99,11 @@ export const SidebarIntructorData = {
     { text: "View All Courses", icon: "BookOutlined", url: "/view-all-course" },
     { text: "Subscription", icon: "BellOutlined", url: "/list-subscription" },
     { text: "Log Course", icon: "BookOutlined", url: "/log-course" },
-    { text: "Courses Sold", icon: "ShoppingCartOutlined", url: "/purchased-courses" }, // Courses others have bought from me
-    { text: "Purchased Courses", icon: "ShoppingCartOutlined", url: "/courses-sold" }, // Courses I have bought
+    { text: "Courses Sold", icon: "ShoppingCartOutlined", url: "/courses-sold" }, // Courses others have bought from me
+    { text: "Purchased Courses", icon: "ShoppingCartOutlined", url: "/purchased-courses" }, // Courses I have bought
     { text: "Setting", icon: "SettingOutlined", url: "/setting-page" },
   ]
 };
-
 
 export const SidebarStudentData = {
   studentSidebarItem: [
