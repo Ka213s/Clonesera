@@ -245,15 +245,18 @@ export const getCourseLogs = async (data: { searchCondition: { course_id: string
   const response = await axiosInstance.post('/api/course/log/search', data);
   return response.data;
 };
+
 export const logoutUser = async () => {
   const response = await axiosInstance.get('/api/auth/logout');
   toast.success("Logout successful");
   return response.data;
 };
+
 export const getPublicCourses = async (data: { searchCondition: { keyword?: string; category_id?: string; is_deleted?: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
   const response = await axiosInstance.post('/api/client/course/search', data);
   return response.data;
 };
+
 export const getCourseDetail = async (id: string) => {
   const response = await axiosInstance.get(`/api/client/course/${id}`);
   return response.data;

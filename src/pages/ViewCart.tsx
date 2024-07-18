@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCart, updateCart, message, Button, Checkbox, Input } from '../utils/commonImports';
+import { getCart, updateCart, message, Button, Checkbox, Input, getCourseDetail } from '../utils/commonImports';
 import DeleteCart from '../components/Cart/DeleteCart';
 
 interface CartItem {
     _id: string;
     course_name: string;
+    course_id: string;
     instructor_name: string;
     price: number;
     discount: number;
     cart_no: string;
     status: string;
-    image_url: string;
+    image_url: string; // New field for image_url
 }
 
 const ViewCart: React.FC = () => {
@@ -35,7 +36,26 @@ const ViewCart: React.FC = () => {
 
             try {
                 const response = await getCart(data);
-                const filteredItems = response.pageData.filter((item: CartItem) =>
+                const courseIds = response.pageData.map((item: CartItem) => item.course_id);
+
+                // Fetch course details for each course_id
+                const courseDetails = await Promise.all(courseIds.map(async (id: string) => {
+                    try {
+                        return await getCourseDetail(id);
+                    } catch (error) {
+                        console.error(`Error fetching course details for course_id ${id}:`, error);
+                        return null; // Handle error gracefully
+                    }
+                }));
+
+                // Update cart items with image_url
+                const updatedCartItems = response.pageData.map((item: CartItem, index: number) => ({
+                    ...item,
+                    image_url: courseDetails[index] ? courseDetails[index].image_url : ''
+                }));
+
+                // Filter and set cart items
+                const filteredItems = updatedCartItems.filter((item: CartItem) =>
                     item.status === 'new' || item.status === 'cancel'
                 );
                 setCartItems(filteredItems);
@@ -101,7 +121,7 @@ const ViewCart: React.FC = () => {
     return (
         <div className="p-4 lg:p-8 flex flex-col lg:flex-row gap-8">
             <div className="lg:w-2/3">
-                <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
+                <h1 className="text-2xl font-bold mb-6">My Cart</h1>
                 <div className="flex items-center mb-4">
                     <Checkbox
                         onChange={e => {
@@ -126,13 +146,15 @@ const ViewCart: React.FC = () => {
                                     handleSelectChange(newSelectedRowKeys);
                                 }}
                             />
-                            <img src={item.image_url} alt={item.course_name} className="w-20 h-20 object-cover rounded-lg" />
+                            <img src={item.image_url} alt={item.course_name} className="w-16 h-16 mr-4" />
                             <div className="flex flex-col w-full">
                                 <div className="flex justify-between items-center mb-2">
                                     <h2 className="text-lg font-semibold">{item.course_name}</h2>
                                     <DeleteCart cartId={item._id} onRemove={handleRemove} />
                                 </div>
-                                <p className="text-gray-600 mb-1">By {item.instructor_name}</p>
+                                <div className="flex items-center">
+                                    <p className="text-gray-600 mb-1">By {item.instructor_name}</p>
+                                </div>
                                 <div className="flex items-center justify-between">
                                     {item.discount > 0 ? (
                                         <>
