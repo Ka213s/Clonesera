@@ -34,6 +34,8 @@ interface Course {
       position_order: number;
     }[];
   }[];
+  is_in_cart: boolean;
+  is_purchased: boolean;
 }
 
 const CourseDetails: React.FC = () => {
@@ -67,6 +69,15 @@ const CourseDetails: React.FC = () => {
       try {
         await createCart({ course_id: course._id });
         message.success('Course added to cart successfully');
+        setCourse(prevCourse => {
+          if (prevCourse) {
+            return {
+              ...prevCourse,
+              is_in_cart: true
+            };
+          }
+          return prevCourse;
+        });
       } catch (error) {
         message.error('Error adding course to cart');
         console.error('Error adding course to cart:', error);
@@ -80,6 +91,12 @@ const CourseDetails: React.FC = () => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+  };
+
+  const handleLearnCourse = () => {
+    if (course) {
+      navigate(`/learn-course-detail/${course._id}`);
+    }
   };
 
   if (!course) {
@@ -129,13 +146,24 @@ const CourseDetails: React.FC = () => {
               {course.description.replace(/<\/?p>/g, "")}
             </p>
             <div className="flex space-x-4 mt-8">
-              <Button
-                type="default"
-                onClick={handleAddToCart}
-                className="mb-4 text-lg custom-button p-6"
-              >
-                Add to Cart
-              </Button>
+              {(!course.is_purchased) && (
+                <Button
+                  type="default"
+                  onClick={handleAddToCart}
+                  className="mb-4 text-lg custom-button p-6"
+                >
+                  Add to Cart
+                </Button>
+              )}
+              {(course.is_purchased) && (
+                <Button
+                  type="default"
+                  onClick={handleLearnCourse}
+                  className="mb-4 text-lg custom-button p-6"
+                >
+                  Learn Course
+                </Button>
+              )}
               <Button
                 type="default"
                 icon={<PlayCircleOutlined />}
@@ -205,4 +233,3 @@ const CourseDetails: React.FC = () => {
 };
 
 export default CourseDetails;
-

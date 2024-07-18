@@ -22,6 +22,7 @@ const VerifyEmail = lazy(() => import('../components/VerifyEmailDone'));
 const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
 const RequestManagement = lazy(() => import('../pages/RequestManagement'));
 const ListSubscription = lazy(() => import('../pages/Instructor/ListSubscription'));
+const LearnCourseDetail = lazy(() => import('../pages/LearnCourseDetail'));
 
 const ListSubscribed = lazy(() => import('../pages/Student/ListSubscribed'));
 const DisplayAccount = lazy(() => import('../components/Admin/AccoutUser/ActiveTab'));
@@ -80,6 +81,7 @@ const AppRouter: React.FC = () => {
                     <Route path={PUBLIC.REGISTER} element={<Register />} />
                     <Route path={PUBLIC.VERIFY_EMAIL} element={<VerifyEmail />} />
                     <Route path={PUBLIC.FORGOT_PASSWORD} element={<ForgotPassword />} />
+                    <Route path={PUBLIC.LEARN_COURSE} element={<LearnCourseDetail />} />
                 </Routes>
             </Suspense>
             <ToastContainer />
