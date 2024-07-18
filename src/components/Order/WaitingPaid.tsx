@@ -1,6 +1,6 @@
-//ViewCart.tsx: page này để view những khóa học đã bỏ vào giỏ hàng, item có status new hoặc cancel sẽ ở trong cart.
-import { React, useEffect, useState, useNavigate, getCart, updateCart, message, Button } from '../utils/commonImports';
-import DeleteCart from '../components/Cart/DeleteCart';
+// WaitingPaid.tsx: page này để view những khóa học đang chờ thanh toán, item có status waiting_paid sẽ ở trong page này.
+import { React, useEffect, useState, getCart, updateCart, Button, DeleteOutlined } from '../../utils/commonImports';
+import { toast } from 'react-toastify';
 
 interface CartItem {
     _id: string;
@@ -12,17 +12,15 @@ interface CartItem {
     status: string;
 }
 
-const ViewCart: React.FC = () => {
+const WaitingPaid: React.FC = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCartItems = async () => {
             const data = {
                 searchCondition: {
-                    status: '',
+                    status: 'waiting_paid',
                     is_deleted: false,
                 },
                 pageInfo: {
@@ -33,73 +31,70 @@ const ViewCart: React.FC = () => {
 
             try {
                 const response = await getCart(data);
-                const filteredItems = response.pageData.filter((item: CartItem) =>
-                    item.status === 'new' || item.status === 'cancel'
-                );
-                setCartItems(filteredItems);
+                setCartItems(response.pageData);
             } catch (error) {
                 console.error('Error fetching cart items:', error);
-                message.error('Error fetching cart items');
-            } finally {
-                setLoading(false);
+                toast.error('Error fetching cart items');
             }
         };
 
         fetchCartItems();
     }, []);
 
-    const handleRemove = (id: string) => {
-        setCartItems(cartItems.filter(item => item._id !== id));
-        setSelectedRowKeys(selectedRowKeys.filter(key => key !== id));
-    };
-
     const handleSelectChange = (selectedKeys: React.Key[]) => {
         setSelectedRowKeys(selectedKeys);
     };
 
-    const handleCheckout = async () => {
+    const handlePayNow = async () => {
         const selectedItems = cartItems.filter(item => selectedRowKeys.includes(item._id));
         if (selectedItems.length === 0) {
-            message.warning('Please select items to checkout');
+            toast.error('Please select items to pay');
             return;
         }
 
-        const data = {
-            status: 'waiting_paid',
-            items: selectedItems.map(item => ({
-                _id: item._id,
-                cart_no: item.cart_no
-            }))
-        };
-
         try {
-            await updateCart(data);
+            await updateCart({
+                status: 'completed',
+                items: selectedItems.map(item => ({
+                    _id: item._id,
+                    cart_no: item.cart_no
+                }))
+            });
             setCartItems(cartItems.filter(item => !selectedRowKeys.includes(item._id)));
             setSelectedRowKeys([]);
-            navigate('/payment');
+            toast.success('Payment successful');
         } catch (error) {
-            console.error('Error updating cart:', error);
-            message.error('Error during checkout');
+            console.error('Error during payment:', error);
+            toast.error('Error during payment');
         }
     };
 
+    const handleDelete = async (itemId: string, cartNo: string) => {
+        try {
+            await updateCart({
+                status: 'cancel',
+                items: [{ _id: itemId, cart_no: cartNo }]
+            });
+            setCartItems(cartItems.filter(item => item._id !== itemId));
+            toast.success('Item deleted successfully');
+        } catch (error) {
+            console.error('Error deleting item:', error);
+            toast.error('Error deleting item');
+        }
+    };
     const selectedItems = cartItems.filter(item => selectedRowKeys.includes(item._id));
     const totalPrice = selectedItems.reduce((acc, item) => acc + item.price, 0);
     const totalDiscount = selectedItems.reduce((acc, item) => acc + item.discount, 0);
     const totalBill = totalPrice - totalDiscount;
 
-    if (loading) {
-        return <div className="flex justify-center items-center h-screen">Loading...</div>;
-    }
-
     if (cartItems.length === 0) {
-        return <div className="flex justify-center items-center h-screen">No items in the cart</div>;
+        return <div className="flex justify-center items-center h-screen">No items waiting for payment</div>;
     }
 
     return (
         <div className="p-4 flex flex-col lg:flex-row">
             <div className="lg:w-2/3">
-                <h1 className="text-2xl font-bold mb-6">My Cart</h1>
+                <p className='text-gray-700 mb-6'>Let's complete your payment!</p>
                 <div className="flex flex-col gap-4">
                     {cartItems.map(item => (
                         <div key={item._id} className="bg-white p-4 rounded shadow-md">
@@ -117,7 +112,10 @@ const ViewCart: React.FC = () => {
                                 <div className="flex flex-col w-full">
                                     <div className="flex justify-between items-center mb-2">
                                         <h2 className="text-xl font-semibold">{item.course_name}</h2>
-                                        <DeleteCart cartId={item._id} onRemove={handleRemove} />
+                                        <DeleteOutlined
+                                            className="text-red-500 cursor-pointer"
+                                            onClick={() => handleDelete(item._id, item.cart_no)}
+                                        />
                                     </div>
                                     <p className="text-gray-600 mb-2">Instructor: {item.instructor_name}</p>
                                     <p className="text-red-500 text-lg font-bold mb-4">${item.price}</p>
@@ -149,13 +147,13 @@ const ViewCart: React.FC = () => {
                 <Button
                     type="primary"
                     className="mt-4 w-full py-3 text-lg font-semibold"
-                    onClick={handleCheckout}
+                    onClick={handlePayNow}
                 >
-                    Checkout
+                    Buy Now
                 </Button>
             </div>
         </div>
     );
 };
 
-export default ViewCart;
+export default WaitingPaid;

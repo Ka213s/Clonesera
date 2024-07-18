@@ -21,7 +21,7 @@ const DeleteCart: React.FC<DeleteCartProps> = ({ cartId, onRemove }) => {
     };
 
     return (
-        <Button onClick={handleDelete} type="link" icon={<DeleteOutlined />} />
+        <Button className='text-red-500 cursor-pointer' onClick={handleDelete} type="link" icon={<DeleteOutlined />} />
     );
 };
 
