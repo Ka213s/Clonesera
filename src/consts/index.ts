@@ -43,7 +43,8 @@ export const PUBLIC = {
   SUBCRIPTION: '/subcription',
   VIEW_CART: '/view-cart',
   PAYMENT: '/payment',
-  VIEW_ORDER: '/view-order'
+  VIEW_ORDER: '/view-order',
+  LEARN_COURSE: '/learn-course-detail/:id'
 };
 
 export const sidebarMenuItemsData = {

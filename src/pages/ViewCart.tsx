@@ -12,7 +12,7 @@ interface CartItem {
     discount: number;
     cart_no: string;
     status: string;
-    image_url: string; // New field for image_url
+    image_url: string; 
 }
 
 const ViewCart: React.FC = () => {

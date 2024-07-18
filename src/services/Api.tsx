@@ -209,6 +209,7 @@ export const getLessonById = async (id: string) => {
   const response = await axiosInstance.get(`/api/lesson/${id}`);
   return response.data;
 };
+
 export const updateLesson = async (id: string, data: { name: string; course_id: string; session_id: string; user_id: string; lesson_type: string; description?: string; video_url?: string; image_url?: string; full_time: number; position_order: number }) => {
   const response = await axiosInstance.put(`/api/lesson/${id}`, data);
   toast.success("Lesson updated successfully");
