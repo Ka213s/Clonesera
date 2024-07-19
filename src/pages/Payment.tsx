@@ -1,9 +1,11 @@
-//Payment.tsx: page này để thực hiện thanh toán mua khóa học hoặc hủy thanh toán sẽ quay về cart
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCart, updateCart } from '../services/Api';
-import { message, Button } from 'antd';
+import { message, Button, List, Typography, Card, Row, Col, Spin } from 'antd';
 import { toast } from 'react-toastify';
+import { DollarOutlined, TagOutlined, TagFilled } from '@ant-design/icons';
+
+const { Title, Text } = Typography;
 
 interface CartItem {
     _id: string;
@@ -69,50 +71,85 @@ const Payment: React.FC = () => {
     };
 
     if (loading) {
-        return <div className="flex justify-center items-center h-screen">Loading...</div>;
+        return (
+            <div className="flex justify-center items-center h-screen bg-gradient-to-r from-blue-400 to-purple-500">
+                <Spin size="large" />
+            </div>
+        );
     }
 
     if (cartItems.length === 0) {
-        return <div className="flex justify-center items-center h-screen">No items in the cart</div>;
+        return (
+            <div className="flex justify-center items-center h-screen bg-gradient-to-r from-blue-400 to-purple-500">
+                <Text className="text-white text-lg">No items in the cart</Text>
+            </div>
+        );
     }
 
     return (
-        <div className="lg:w-1/3 lg:ml-4 lg:mt-0 mt-8 p-8 bg-white rounded shadow-md">
-            <h2 className="flex justify-center text-2xl font-bold">ORDER SUMMARY</h2>
-            {selectedItems.length > 0 ? (
-                <div className="mt-4 p-4 border-t border-gray-200">
-                    {selectedItems.map(item => (
-                        <div key={item._id} className="flex flex-row justify-between items-center border-gray-200 py-2">
-                            <p className="text-gray-800">{item.course_name}</p>
-                            <p className="text-red-500 font-semibold">${item.price}</p>
+        <div className="container mx-auto p-6">
+            <Card className="w-full lg:w-1/2 mx-auto mt-12 p-6 bg-white rounded-lg shadow-xl transform transition-transform hover:scale-105 hover:shadow-2xl duration-300">
+                <div className="text-center">
+                    <Title level={2} className="text-blue-600">Order Summary</Title>
+                    <Text className="block text-gray-600 mb-4">Review your order and confirm your purchase</Text>
+                </div>
+                <div className="bg-gray-100 p-6 rounded-lg shadow-md">
+                    <List
+                        dataSource={selectedItems}
+                        renderItem={item => (
+                            <List.Item key={item._id} className="py-4 border-b border-gray-300">
+                                <Row className="w-full">
+                                    <Col span={16}>
+                                        <Text className="text-gray-800 text-lg font-medium">{item.course_name}</Text>
+                                    </Col>
+                                    <Col span={8} className="text-right">
+                                        <Text className="text-red-600 text-lg font-semibold">${item.price}</Text>
+                                    </Col>
+                                </Row>
+                            </List.Item>
+                        )}
+                    />
+                    <div className="border-t border-gray-300 mt-6 pt-4">
+                        <div className="flex justify-between items-center mb-4 p-4 bg-yellow-50 border-l-8 border-yellow-400 rounded-lg">
+                            <DollarOutlined className="text-yellow-500 text-2xl" />
+                            <div className="flex-1 ml-4">
+                                <Text className="text-gray-800 text-lg font-medium">Original Price:</Text>
+                                <Text className="text-gray-900 text-lg font-bold">${totalPrice}</Text>
+                            </div>
                         </div>
-                    ))}
-                    <div className="border-t border-gray-200 mt-4 pt-4">
-                        <p className="text-gray-800 mb-1">Original Price: ${totalPrice}</p>
-                        <p className="text-gray-800 mb-1">Total Discount: ${totalDiscount}</p>
-                        <p className="text-gray-600 text-xl font-semibold mb-2">Total Price: ${totalBill}</p>
+                        <div className="flex justify-between items-center mb-4 p-4 bg-green-50 border-l-8 border-green-400 rounded-lg">
+                            <TagFilled className="text-green-500 text-2xl" />
+                            <div className="flex-1 ml-4">
+                                <Text className="text-gray-800 text-lg font-medium">Total Discount:</Text>
+                                <Text className="text-green-700 text-lg font-bold">-${totalDiscount}</Text>
+                            </div>
+                        </div>
+                        <div className="flex justify-between items-center p-4 bg-blue-50 border-l-8 border-blue-400 rounded-lg">
+                            <TagOutlined className="text-blue-500 text-2xl" />
+                            <div className="flex-1 ml-4">
+                                <Text className="text-gray-800 text-xl font-semibold">Total Price:</Text>
+                                <Text className="text-blue-900 text-xl font-bold">${totalBill}</Text>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            ) : (
-                <p className="text-gray-600 mb-2">No items selected</p>
-            )}
-            <div className="flex gap-4 mt-4">
-                <Button
-                    type="primary"
-                    className="w-full py-3 text-lg font-semibold"
-                    onClick={() => handleUpdateCart('completed')}
-                >
-                    Confirm Checkout
-                </Button>
-                <Button
-                    type="default"
-                    className="w-full py-3 text-lg font-semibold"
-                    style={{ backgroundColor: 'orange', color: 'white' }}
-                    onClick={() => handleUpdateCart('cancel')}
-                >
-                    Cancel
-                </Button>
-            </div>
+                <div className="flex gap-4 mt-8">
+                    <Button
+                        type="primary"
+                        className="w-full py-3 text-lg font-semibold bg-green-500 border-none hover:bg-green-600 transition duration-300"
+                        onClick={() => handleUpdateCart('completed')}
+                    >
+                        Confirm Checkout
+                    </Button>
+                    <Button
+                        type="default"
+                        className="w-full py-3 text-lg font-semibold bg-red-500 border-none text-white hover:bg-red-600 transition duration-300"
+                        onClick={() => handleUpdateCart('cancel')}
+                    >
+                        Cancel
+                    </Button>
+                </div>
+            </Card>
         </div>
     );
 };
