@@ -156,14 +156,20 @@ const ViewCart: React.FC = () => {
                                     <p className="text-gray-600 mb-1">By {item.instructor_name}</p>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    {item.discount > 0 ? (
-                                        <>
-                                            <span className="text-gray-500 line-through">${item.price.toFixed(2)}</span>
-                                            <span className="text-lg font-bold text-red-500">${(item.price - item.discount).toFixed(2)}</span>
-                                        </>
-                                    ) : (
-                                        <span className="text-lg font-bold text-black">${item.price.toFixed(2)}</span>
-                                    )}
+                                    <div className="flex items-center">
+                                        {item.discount > 0 && (
+                                            <>
+                                                <span className="text-gray-500 line-through">${item.price.toFixed(2)}</span>
+                                                <span className="ml-2 flex items-center">
+                                                    <i className="fas fa-tag text-green-500"></i>
+                                                    <span className="text-green-500 ml-1">Discount: ${item.discount.toFixed(2)}</span>
+                                                </span>
+                                            </>
+                                        )}
+                                    </div>
+                                    <span className={`text-lg font-bold ${item.discount > 0 ? 'text-red-500' : 'text-black'}`}>
+                                        ${(item.price - item.discount).toFixed(2)}
+                                    </span>
                                 </div>
                             </div>
                         </div>
