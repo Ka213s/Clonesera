@@ -28,6 +28,7 @@ export const INSTRUCTOR = {
   VIEW_PROFILE: '/view-profile/:id',
   PURCHASE: '/purchased-courses',
   COURSE_SOLD: '/courses-sold',
+  REVIEW: '/review',  
 };
 export const PUBLIC = {
   HOME: '/homepage',
@@ -102,7 +103,9 @@ export const SidebarIntructorData = {
     { text: "Log Course", icon: "BookOutlined", url: "/log-course" },
     { text: "Courses Sold", icon: "ShoppingCartOutlined", url: "/courses-sold" }, // Courses others have bought from me
     { text: "Purchased Courses", icon: "ShoppingCartOutlined", url: "/purchased-courses" }, // Courses I have bought
-    { text: "Setting", icon: "SettingOutlined", url: "/setting-page" },
+    { text: "Review", icon: "StarOutlined", url: "/review" },
+    { text: "Setting", icon: "SettingOutlined", url: "/setting-page" }
+    
   ]
 };
 

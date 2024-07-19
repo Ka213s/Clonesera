@@ -4,6 +4,7 @@ import { getCourseDetail, createCart } from "../utils/commonImports";
 import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse } from "antd";
 import { PlayCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import "tailwindcss/tailwind.css";
+import ReviewSection from "./ReviewSection";
 
 const { Panel } = Collapse;
 
@@ -211,6 +212,7 @@ const CourseDetails: React.FC = () => {
             ))}
           </Collapse>
           <Divider />
+          <ReviewSection courseId={course._id} />
         </div>
       </Card>
       <Modal

@@ -298,3 +298,20 @@ export const getItemsAdmin = async (data: { searchCondition: { purchase_no?: str
   return response.data;
 };
 
+export const createReview = async (data: { course_id: string; comment: string; rating: number }) => {
+  const response = await tokenAxiosInstance.post('/api/review', data);
+  return response.data;
+};
+export const getReviews = async (data: { searchCondition: { course_id?: string; rating?: number; is_instructor?: boolean; is_rating_order?: boolean; is_deleted?: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
+  const response = await tokenAxiosInstance.post('/api/review/search', data);
+  return response.data;
+};
+export const updateReview = async (id: string, data: { course_id: string; comment: string; rating: number }) => {
+  const response = await tokenAxiosInstance.put(`/api/review/${id}`, data);
+  return response.data;
+};
+
+export const getReviewById = async (id: string) => {
+  const response = await tokenAxiosInstance.get(`/api/review/${id}`);
+  return response.data;
+};
