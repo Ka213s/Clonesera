@@ -42,7 +42,8 @@ export const PUBLIC = {
   LIST_SUBSCRIBED: '/list-subscribed',
   SUBCRIPTION: '/subcription',
   VIEW_CART: '/view-cart',
-  PAYMENT: '/payment'
+  PAYMENT: '/payment',
+  VIEW_ORDER: '/view-order'
 };
 
 export const sidebarMenuItemsData = {
@@ -108,14 +109,14 @@ export const SidebarIntructorData = {
 export const SidebarStudentData = {
   studentSidebarItem: [
     { text: "Subscription", icon: "FaBell", url: "/list-subscribed" },
-    // { "text": "Purchased Courses", "icon": "FaBook", "url": "/student/purchasedCourses" },
+    { "text": "Setting", icon: "FaCogs", url: "/setting-page" },
+    { "text": "Order", icon: "FaBill", url: "/view-order" },
     // { "text": "Messages", "icon": "FaComments", "url": "/student/messages" },
     // { "text": "Notifications", "icon": "FaBell", "url": "/student/notifications" },
     // { "text": "My Certificates", "icon": "FaCertificate", "url": "/student/myCertificates" },
     // { "text": "Reviews", "icon": "FaStar", "url": "/student/reviews" },
     // { "text": "Credits", "icon": "FaCreditCard", "url": "/student/credits" },
     // { "text": "Statements", "icon": "FaFile", "url": "/student/statements" },
-    { "text": "Setting", "icon": "FaCogs", "url": "/setting-page" },
     // { "text": "Send Feedback", "icon": "FaPaperPlane", "url": "/feedback" }
   ]
 };

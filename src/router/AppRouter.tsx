@@ -33,6 +33,7 @@ const ViewAllCourse = lazy(() => import('../pages/Instructor/ViewAllCourse'));
 const ViewMyProfile = lazy(() => import('../components/ViewProfile/ViewMyProfile'));
 const ViewProfile = lazy(() => import('../components/ViewProfile/ViewProfile'));
 const ViewCart = lazy(() => import('../pages/ViewCart'));
+const ViewOrder = lazy(() => import('../pages/ViewOrder'));
 const Payment = lazy(() => import('../pages/Payment'));
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));
@@ -50,6 +51,7 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.COURSE} element={<Course />} />
                         <Route path={PUBLIC.COURSE_DETAIL} element={<CourseDetails />} />
                         <Route path={PUBLIC.VIEW_CART} element={<ViewCart />} />
+                        <Route path={PUBLIC.VIEW_ORDER} element={<ViewOrder />} />
                         <Route path={PUBLIC.PAYMENT} element={<Payment />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
                         <Route path={INSTRUCTOR.VIEW_MY_PROFILE} element={<ViewMyProfile />} />
@@ -65,8 +67,8 @@ const AppRouter: React.FC = () => {
                         <Route path={ADMIN.CREATE_ACCOUNT} element={<PrivateRoute element={CreateAccount} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={ADMIN.CATEGORY} element={<PrivateRoute element={Category} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={ADMIN.PENDING_COURSE} element={<PrivateRoute element={PedingCourse} allowedRoles={[ROLES.ADMIN]} />} />
-                        <Route path={ADMIN.LOG_COURSE} element={<PrivateRoute element={LogCourse} allowedRoles={[ROLES.ADMIN , ROLES.INSTRUCTOR]} />} />
-                        
+                        <Route path={ADMIN.LOG_COURSE} element={<PrivateRoute element={LogCourse} allowedRoles={[ROLES.ADMIN, ROLES.INSTRUCTOR]} />} />
+
                     </Route>
 
                     {/* Routes without MainLayout */}

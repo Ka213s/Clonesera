@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCart, updateCart } from '../services/Api';
-import { message, Button } from 'antd';
+import { getCart, updateCart, message, Button, Checkbox, Input } from '../utils/commonImports';
 import DeleteCart from '../components/Cart/DeleteCart';
 
 interface CartItem {
@@ -11,7 +10,8 @@ interface CartItem {
     price: number;
     discount: number;
     cart_no: string;
-    status: string; // Ensure status is part of the CartItem interface
+    status: string;
+    image_url: string;
 }
 
 const ViewCart: React.FC = () => {
@@ -24,7 +24,7 @@ const ViewCart: React.FC = () => {
         const fetchCartItems = async () => {
             const data = {
                 searchCondition: {
-                    status: '', // Fetch all statuses
+                    status: '',
                     is_deleted: false,
                 },
                 pageInfo: {
@@ -35,7 +35,7 @@ const ViewCart: React.FC = () => {
 
             try {
                 const response = await getCart(data);
-                const filteredItems = response.pageData.filter((item: CartItem) => 
+                const filteredItems = response.pageData.filter((item: CartItem) =>
                     item.status === 'new' || item.status === 'cancel'
                 );
                 setCartItems(filteredItems);
@@ -99,62 +99,83 @@ const ViewCart: React.FC = () => {
     }
 
     return (
-        <div className="p-4 flex flex-col lg:flex-row">
+        <div className="p-4 lg:p-8 flex flex-col lg:flex-row gap-8">
             <div className="lg:w-2/3">
-                <h1 className="text-2xl font-bold mb-6">My Cart</h1>
+                <h1 className="text-2xl font-bold mb-6">Shopping Cart</h1>
+                <div className="flex items-center mb-4">
+                    <Checkbox
+                        onChange={e => {
+                            const checked = e.target.checked;
+                            setSelectedRowKeys(checked ? cartItems.map(item => item._id) : []);
+                        }}
+                        checked={selectedRowKeys.length === cartItems.length}
+                    >
+                        Select all
+                    </Checkbox>
+                    <span className="ml-auto text-blue-500">{cartItems.length} Courses in Cart</span>
+                </div>
                 <div className="flex flex-col gap-4">
                     {cartItems.map(item => (
-                        <div key={item._id} className="bg-white p-4 rounded shadow-md">
-                            <div className="flex items-start gap-4 mb-4">
-                                <input
-                                    type="checkbox"
-                                    checked={selectedRowKeys.includes(item._id)}
-                                    onChange={() => {
-                                        const newSelectedRowKeys = selectedRowKeys.includes(item._id)
-                                            ? selectedRowKeys.filter(key => key !== item._id)
-                                            : [...selectedRowKeys, item._id];
-                                        handleSelectChange(newSelectedRowKeys);
-                                    }}
-                                />
-                                <div className="flex flex-col w-full">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <h2 className="text-xl font-semibold">{item.course_name}</h2>
-                                        <DeleteCart cartId={item._id} onRemove={handleRemove} />
-                                    </div>
-                                    <p className="text-gray-600 mb-2">Instructor: {item.instructor_name}</p>
-                                    <p className="text-red-500 text-lg font-bold mb-4">${item.price}</p>
+                        <div key={item._id} className="bg-white p-4 rounded-lg shadow-md flex items-start gap-4">
+                            <Checkbox
+                                checked={selectedRowKeys.includes(item._id)}
+                                onChange={() => {
+                                    const newSelectedRowKeys = selectedRowKeys.includes(item._id)
+                                        ? selectedRowKeys.filter(key => key !== item._id)
+                                        : [...selectedRowKeys, item._id];
+                                    handleSelectChange(newSelectedRowKeys);
+                                }}
+                            />
+                            <img src={item.image_url} alt={item.course_name} className="w-20 h-20 object-cover rounded-lg" />
+                            <div className="flex flex-col w-full">
+                                <div className="flex justify-between items-center mb-2">
+                                    <h2 className="text-lg font-semibold">{item.course_name}</h2>
+                                    <DeleteCart cartId={item._id} onRemove={handleRemove} />
+                                </div>
+                                <p className="text-gray-600 mb-1">By {item.instructor_name}</p>
+                                <div className="flex items-center justify-between">
+                                    {item.discount > 0 ? (
+                                        <>
+                                            <span className="text-gray-500 line-through">${item.price.toFixed(2)}</span>
+                                            <span className="text-lg font-bold text-red-500">${(item.price - item.discount).toFixed(2)}</span>
+                                        </>
+                                    ) : (
+                                        <span className="text-lg font-bold text-black">${item.price.toFixed(2)}</span>
+                                    )}
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
-            <div className="lg:w-1/3 lg:ml-4 lg:mt-0 mt-8 p-8 bg-white rounded shadow-md">
-                <h2 className="text-2xl font-bold">Total</h2>
-                {selectedItems.length > 0 ? (
-                    <div className="mt-4 p-4 border-t border-gray-200">
-                        {selectedItems.map(item => (
-                            <div key={item._id} className="flex flex-row justify-between items-center border-gray-200 py-2">
-                                <p className="text-gray-800">{item.course_name}</p>
-                                <p className="text-red-500 font-semibold">${item.price}</p>
-                            </div>
-                        ))}
-                        <div className="border-t border-gray-200 mt-4 pt-4">
-                            <p className="text-gray-800 mb-1">Original Price: ${totalPrice}</p>
-                            <p className="text-gray-800 mb-1">Total Discount: ${totalDiscount}</p>
-                            <p className="text-gray-600 text-xl font-semibold mb-2">Total Price: ${totalBill}</p>
-                        </div>
-                    </div>
-                ) : (
-                    <p className="text-gray-600 mb-2">No items selected</p>
-                )}
-                <Button
-                    type="primary"
-                    className="mt-4 w-full py-3 text-lg font-semibold"
-                    onClick={handleCheckout}
-                >
+            <div className="lg:w-1/3 p-8 bg-white rounded-lg shadow-md">
+                <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+                <div className="flex justify-between mb-2">
+                    <span>Subtotal</span>
+                    <span className="text-lg font-bold">${totalPrice.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between mb-2">
+                    <span>Total Discount</span>
+                    <span className="text-lg font-bold">-${totalDiscount.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between mb-4">
+                    <span className="text-xl font-semibold">Total</span>
+                    <span className="text-xl font-semibold">${totalBill.toFixed(2)}</span>
+                </div>
+                <Button type="primary" className="w-full py-3 text-lg font-semibold" onClick={handleCheckout}>
                     Checkout Now
                 </Button>
+                <div className="mt-4">
+                    <h3 className="text-lg font-semibold">Promotions</h3>
+                    <Input
+                        placeholder="Coupon code"
+                        className="mt-2"
+                        suffix={<Button type="link">Apply</Button>}
+                    />
+                    <p className="text-gray-500 mt-2">
+                        Buy now, pay later for order of $52.50 and over with leterpay.
+                    </p>
+                </div>
             </div>
         </div>
     );
