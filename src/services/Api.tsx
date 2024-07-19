@@ -209,6 +209,7 @@ export const getLessonById = async (id: string) => {
   const response = await tokenAxiosInstance.get(`/api/lesson/${id}`);
   return response.data;
 };
+
 export const updateLesson = async (id: string, data: { name: string; course_id: string; session_id: string; user_id: string; lesson_type: string; description?: string; video_url?: string; image_url?: string; full_time: number; position_order: number }) => {
   const response = await tokenAxiosInstance.put(`/api/lesson/${id}`, data);
   toast.success("Lesson updated successfully");
@@ -245,15 +246,18 @@ export const getCourseLogs = async (data: { searchCondition: { course_id: string
   const response = await tokenAxiosInstance.post('/api/course/log/search', data);
   return response.data;
 };
+
 export const logoutUser = async () => {
   const response = await tokenAxiosInstance.get('/api/auth/logout');
   toast.success("Logout successful");
   return response.data;
 };
+
 export const getPublicCourses = async (data: { searchCondition: { keyword?: string; category_id?: string; is_deleted?: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
   const response = await tokenAxiosInstance.post('/api/client/course/search', data);
   return response.data;
 };
+
 export const getCourseDetail = async (id: string) => {
   const response = await tokenAxiosInstance.get(`/api/client/course/${id}`);
   return response.data;

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { getCourseDetail, updateSubscribed, createCart } from "../utils/commonImports";
-import { message, Button, Card, Tag, Divider, Tooltip, List, Modal } from "antd";
+import { getCourseDetail, createCart } from "../utils/commonImports";
+import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse } from "antd";
 import { PlayCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import "tailwindcss/tailwind.css";
+
+const { Panel } = Collapse;
 
 interface Course {
   _id: string;
@@ -32,14 +34,14 @@ interface Course {
       position_order: number;
     }[];
   }[];
+  is_in_cart: boolean;
+  is_purchased: boolean;
 }
 
 const CourseDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [course, setCourse] = useState<Course | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [subscribed, setSubscribed] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -53,43 +55,29 @@ const CourseDetails: React.FC = () => {
       try {
         const data = await getCourseDetail(id);
         setCourse(data);
-        setSubscribed(data.subscribed); // Assuming the API returns the subscribed status
       } catch (error) {
         message.error("Error fetching course details");
         console.error("Error fetching course details:", error);
-      } finally {
-        setLoading(false);
       }
     };
 
     fetchCourseDetail();
   }, [id, navigate]);
 
-  const handleSubscribeToggle = async () => {
-    if (!course) {
-      return;
-    }
-
-    try {
-      await updateSubscribed(course.instructor_id);
-      setSubscribed(!subscribed);
-      message.success(
-        `Successfully ${subscribed ? "unsubscribed" : "subscribed"}`
-      );
-    } catch (error) {
-      message.error(`Error ${subscribed ? "unsubscribing" : "subscribing"}`);
-      console.error(
-        `Error ${subscribed ? "unsubscribing" : "subscribing"}:`,
-        error
-      );
-    }
-  };
-
   const handleAddToCart = async () => {
     if (course) {
       try {
         await createCart({ course_id: course._id });
         message.success('Course added to cart successfully');
+        setCourse(prevCourse => {
+          if (prevCourse) {
+            return {
+              ...prevCourse,
+              is_in_cart: true
+            };
+          }
+          return prevCourse;
+        });
       } catch (error) {
         message.error('Error adding course to cart');
         console.error('Error adding course to cart:', error);
@@ -105,13 +93,11 @@ const CourseDetails: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen">
-        Loading...
-      </div>
-    );
-  }
+  const handleLearnCourse = () => {
+    if (course) {
+      navigate(`/learn-course-detail/${course._id}`);
+    }
+  };
 
   if (!course) {
     return (
@@ -128,7 +114,7 @@ const CourseDetails: React.FC = () => {
           <img
             src={course.image_url || "https://via.placeholder.com/400"}
             alt={course.name}
-            className="w-full md:w-1/2 object-cover rounded-lg mb-4 md:mb-0"
+            className="w-full md:w-1/3 object-cover rounded-lg mb-4 md:mb-0"
           />
           <div className="md:ml-4 flex-1">
             <h1 className="text-4xl font-bold mb-4">{course.name}</h1>
@@ -138,17 +124,19 @@ const CourseDetails: React.FC = () => {
             <p className="mb-2 text-lg">
               <strong>Instructor:</strong> {course.instructor_name}
             </p>
-           
-            <p className="mb-2 text-lg">
-              <strong>Price:</strong> ${course.price}
+            <p className="mb-2 text-lg flex items-center">
+              <strong className="mr-2">Price:</strong>
+              <span className="line-through text-gray-500">
+                ${course.price}
+              </span>
+              <span className="ml-2 text-red-500 font-semibold">
+                ${course.price_paid}
+              </span>
               {course.discount > 0 && (
-                <span className="ml-2 text-red-500">
-                  (Discount: {course.discount}%)
-                </span>
+                <Tag color="red" className="ml-2">
+                  - {course.discount}%
+                </Tag>
               )}
-            </p>
-            <p className="mb-2 text-lg">
-              <strong>Price Paid:</strong> ${course.price_paid}
             </p>
             <p className="mb-2 text-lg">
               <strong>Full Time:</strong> {course.full_time} minutes
@@ -157,60 +145,72 @@ const CourseDetails: React.FC = () => {
               <strong>Description:</strong>{" "}
               {course.description.replace(/<\/?p>/g, "")}
             </p>
-            <div className="flex space-x-4">
-              <Button
-                type="primary"
-                onClick={handleSubscribeToggle}
-                className={`mb-4 text-lg custom-button`}
-              >
-                {subscribed ? "Unsubscribe" : "Subscribe"}
-              </Button>
+            <div className="flex space-x-4 mt-8">
+              {(!course.is_purchased) && (
+                <Button
+                  type="default"
+                  onClick={handleAddToCart}
+                  className="mb-4 text-lg custom-button p-6"
+                >
+                  Add to Cart
+                </Button>
+              )}
+              {(course.is_purchased) && (
+                <Button
+                  type="default"
+                  onClick={handleLearnCourse}
+                  className="mb-4 text-lg custom-button p-6"
+                >
+                  Learn Course
+                </Button>
+              )}
               <Button
                 type="default"
-                onClick={handleAddToCart}
-                className="mb-4 text-lg custom-button"
+                icon={<PlayCircleOutlined />}
+                onClick={showModal}
+                className="mb-4 text-lg custom-button p-6"
               >
-                Add to Cart
+                Watch Introduction
               </Button>
             </div>
           </div>
         </div>
         <Divider />
         <div className="p-4">
-          <h2 className="text-3xl font-bold mb-4">Sessions</h2>
-          {course.session_list.map((session) => (
-            <Card
-              key={session._id}
-              className="mb-4 hover:shadow-xl transition-shadow duration-300"
-            >
-              <h3 className="text-2xl font-semibold">{session.name}</h3>
-              <p className="mb-2 text-lg">
-                <strong>Full Time:</strong> {session.full_time} minutes
-              </p>
-              <List
-                dataSource={session.lesson_list}
-                renderItem={(lesson) => (
-                  <List.Item className="text-lg">
-                    <Tooltip title={lesson.lesson_type}>
-                      <InfoCircleOutlined className="mr-2" />
-                    </Tooltip>
-                    {lesson.name} - {lesson.full_time} minutes
-                  </List.Item>
-                )}
-              />
-            </Card>
-          ))}
+          <h2 className="text-3xl font-bold mb-4">Course Content</h2>
+          <Collapse accordion>
+            {course.session_list.map((session) => (
+              <Panel
+                header={
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-2xl font-semibold">{session.name}</h3>
+                    <p className="text-lg">
+                      {session.lesson_list.length} lessons • {session.full_time} minutes
+                    </p>
+                  </div>
+                }
+                key={session._id}
+              >
+                <List
+                  dataSource={session.lesson_list}
+                  renderItem={(lesson) => (
+                    <List.Item className="text-lg flex justify-between items-center">
+                      <div>
+                        <Tooltip title={lesson.lesson_type}>
+                          <InfoCircleOutlined className="mr-2" />
+                        </Tooltip>
+                        {lesson.name}
+                      </div>
+                      <div>
+                        {lesson.full_time} minutes
+                      </div>
+                    </List.Item>
+                  )}
+                />
+              </Panel>
+            ))}
+          </Collapse>
           <Divider />
-          <div className="flex items-center">
-            <Button
-              type="default"
-              icon={<PlayCircleOutlined />}
-              onClick={showModal}
-              className="mr-4 text-lg custom-button"
-            >
-              Watch Introduction
-            </Button>
-          </div>
         </div>
       </Card>
       <Modal
