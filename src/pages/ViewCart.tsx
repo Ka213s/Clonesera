@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCart, updateCart, message, Button, Checkbox, Input, getCourseDetail } from '../utils/commonImports';
+import { getCart, updateCart, message, Button, Checkbox, getCourseDetail } from '../utils/commonImports';
 import DeleteCart from '../components/Cart/DeleteCart';
 
 interface CartItem {
@@ -12,7 +12,7 @@ interface CartItem {
     discount: number;
     cart_no: string;
     status: string;
-    image_url: string; 
+    image_url: string;
 }
 
 const ViewCart: React.FC = () => {
@@ -187,17 +187,6 @@ const ViewCart: React.FC = () => {
                 <Button type="primary" className="w-full py-3 text-lg font-semibold" onClick={handleCheckout}>
                     Checkout Now
                 </Button>
-                <div className="mt-4">
-                    <h3 className="text-lg font-semibold">Promotions</h3>
-                    <Input
-                        placeholder="Coupon code"
-                        className="mt-2"
-                        suffix={<Button type="link">Apply</Button>}
-                    />
-                    <p className="text-gray-500 mt-2">
-                        Buy now, pay later for order of $52.50 and over with leterpay.
-                    </p>
-                </div>
             </div>
         </div>
     );
