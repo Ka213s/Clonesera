@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPublicCourses, getCurrentLogin } from '../utils/commonImports';
-import { Tag, Button } from 'antd'; 
-import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { Button } from 'antd'; 
+import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
 import Statistic from './Statistic';
 import PopularInstructors from './PopularInstructors';
+import PopularCourses from './PopularCourses';
 
 interface Course {
   _id: number;
   name: string;
   category_name: string;
   instructor_name: string;
+  avatar: string;
   description: string;
   image_url: string;
   price_paid: number;
@@ -44,7 +46,13 @@ const HomePage: React.FC = () => {
         };
         const response = await getPublicCourses(data);
         console.log('response:', response);
-        setCourses(response.pageData);
+        // Update the courses with avatar information
+        const updatedCourses = response.pageData.map((course: any) => ({
+          ...course,
+          avatar: course.instructor_avatar, // Assuming the API response includes instructor_avatar
+        }));
+        console.log('updatedCourses:', updatedCourses); // Kiểm tra dữ liệu courses
+        setCourses(updatedCourses);
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
@@ -114,6 +122,7 @@ const HomePage: React.FC = () => {
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <div className="max-w-7xl mx-auto grid grid-cols-3 gap-6">
+        {/* Main Content Block */}
         <div className="col-span-2 relative bg-green-600 text-white p-6 rounded-lg mb-8 overflow-hidden flex items-center">
           <div className="z-10">
             <h1 className="text-4xl font-bold mb-4">Sharpen Your Skills with Professional Online Courses</h1>
@@ -140,12 +149,14 @@ const HomePage: React.FC = () => {
             <div className="sparkle sparkle-3"></div>
           </div>
         </div>
-
+        
+        {/* User Statistic */}
         <div className="space-y-8">
           <Statistic user={user} />
         </div>
 
-        <div className="col-span-2">
+        {/* Popular Courses */}
+        <div className="col-span-3">
           <div className="flex space-x-4 mb-8">
             {uniqueCategories.map(category => (
               <button key={category} className="bg-white shadow-md rounded-full px-4 py-2">
@@ -153,86 +164,52 @@ const HomePage: React.FC = () => {
               </button>
             ))}
           </div>
-
-          <div>
-            <h2 className="text-2xl font-bold mb-4">Popular Courses</h2>
-            <div className="relative">
-              {currentIndex > 0 && (
-                <button
-                  onClick={handlePrevClick}
-                  className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-md"
-                >
-                  <LeftOutlined />
-                </button>
-              )}
-              <div className={`grid grid-cols-3 gap-4 pb-4 transition-transform duration-300 ${isAnimating ? 'transform -translate-x-full' : ''}`}>
-                {courses.slice(currentIndex, currentIndex + 3).map((course) => (
-                  <div key={course._id} className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
-                    <img src={course.image_url} alt={course.name} className="w-full h-48 object-cover" />
-                    <div className="p-4 flex flex-col flex-grow">
-                      <h2 className="text-xl font-semibold mb-2 h-16 overflow-hidden overflow-ellipsis">{course.name}</h2>
-                      <p className="text-sm text-gray-600 mb-2">
-                        <strong>Category:</strong> <Tag color="blue">{course.category_name || 'Default Category'}</Tag>
-                      </p>
-                      <p className="text-sm text-gray-600 mb-2">
-                        <strong>Instructor:</strong> {course.instructor_name}
-                      </p>
-                      <p className="text-lg font-semibold text-green-600 mb-4">
-                        <strong>Price:</strong> ${course.price_paid}
-                      </p>
-                      <button
-                        onClick={() => handleViewDetails(course._id)}
-                        className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300 mt-auto"
-                      >
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-              {currentIndex + 3 < courses.length && (
-                <button
-                  onClick={handleNextClick}
-                  className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-md"
-                >
-                  <RightOutlined />
-                </button>
-              )}
-            </div>
-            
-            {courses.length > 4 && (
-              <div className="flex justify-between mt-4">
-                <Button type="primary" icon={<InfoCircleOutlined />} size="large">
-                  Button 1
-                </Button>
-                <Button type="primary" icon={<CheckCircleOutlined />} size="large">
-                  Button 2
-                </Button>
-              </div>
-            )}
-          </div>
-
-          <PopularInstructors instructors={popularInstructors} />
-
-          <div className="grid grid-cols-3 gap-6 mt-8">
-            <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
-              <InfoCircleOutlined className="text-4xl text-blue-600 mb-4" />
-              <h2 className="text-2xl font-bold mb-4">About us</h2>
-              <p className="text-gray-600 text-center">when an unknown printer took a galley of type and scrambled it</p>
-            </div>
-            <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
-              <CheckCircleOutlined className="text-4xl text-green-600 mb-4" />
-              <h2 className="text-2xl font-bold mb-4">Certification</h2>
-              <p className="text-gray-600 text-center">when an unknown printer took a galley of type and scrambled it</p>
-            </div>
-            <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
-              <UserOutlined className="text-4xl text-gray-600 mb-4" />
-              <h2 className="text-2xl font-bold mb-4">Member</h2>
-              <p className="text-gray-600 text-center">when an unknown printer took a galley of type and scrambled it</p>
-            </div>
-          </div>
           
+          <PopularCourses
+            courses={courses}
+            currentIndex={currentIndex}
+            handlePrevClick={handlePrevClick}
+            handleNextClick={handleNextClick}
+            handleViewDetails={handleViewDetails}
+            isAnimating={isAnimating}
+          />
+
+          {courses.length > 4 && (
+            <div className="flex justify-between mt-4">
+              <Button type="primary" icon={<InfoCircleOutlined />} size="large">
+                Button 1
+              </Button>
+              <Button type="primary" icon={<CheckCircleOutlined />} size="large">
+                Button 2
+              </Button>
+            </div>
+          )}
         </div>
+
+        {/* Popular Instructors */}
+        <div className="col-span-3">
+          <PopularInstructors instructors={popularInstructors} />
+        </div>
+
+        {/* Info Blocks */}
+        <div className="col-span-3 grid grid-cols-3 gap-6 mt-8">
+          <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
+            <InfoCircleOutlined className="text-4xl text-blue-600 mb-4" />
+            <h2 className="text-2xl font-bold mb-4">About us</h2>
+            <p className="text-gray-600 text-center">when an unknown printer took a galley of type and scrambled it</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
+            <CheckCircleOutlined className="text-4xl text-green-600 mb-4" />
+            <h2 className="text-2xl font-bold mb-4">Certification</h2>
+            <p className="text-gray-600 text-center">when an unknown printer took a galley of type and scrambled it</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
+            <UserOutlined className="text-4xl text-gray-600 mb-4" />
+            <h2 className="text-2xl font-bold mb-4">Member</h2>
+            <p className="text-gray-600 text-center">when an unknown printer took a galley of type and scrambled it</p>
+          </div>
+        </div>
+        
       </div>
     </div>
   );
