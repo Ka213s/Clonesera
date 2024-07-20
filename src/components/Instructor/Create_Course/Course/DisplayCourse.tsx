@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, message, Select } from 'antd';
+import { Table, message, Select, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { getCourses, changeCourseStatus } from '../../../../utils/commonImports';
 import EditButton from './EditCourse';
@@ -12,7 +12,6 @@ interface Course {
   _id: number;
   name: string;
   category_name: string;
-  user_name: string;
   status: string;
   price: number;
 }
@@ -51,9 +50,26 @@ const CourseTable: React.FC = () => {
         )
       );
     } catch (error) {
-      
       console.error('Error updating course status:', error);
     }
+  };
+
+  const renderStatusTag = (status: string) => {
+    let color = '';
+    switch (status) {
+      case 'approve':
+        color = 'green';
+        break;
+      case 'active':
+        color = 'blue';
+        break;
+      case 'inactive':
+        color = 'red';
+        break;
+      default:
+        color = 'default';
+    }
+    return <Tag color={color}>{status.toUpperCase()}</Tag>;
   };
 
   const columns: ColumnsType<Course> = [
@@ -68,14 +84,10 @@ const CourseTable: React.FC = () => {
       key: 'category_name',
     },
     {
-      title: 'User Name',
-      dataIndex: 'user_name',
-      key: 'user_name',
-    },
-    {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      render: renderStatusTag,
     },
     {
       title: 'Price',

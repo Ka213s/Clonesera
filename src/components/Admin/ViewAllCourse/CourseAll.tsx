@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Table, message } from 'antd';
+import { Table, Tag, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { getCourses } from '../../../utils/commonImports';
 
@@ -7,7 +7,6 @@ interface Course {
   _id: number;
   name: string;
   category_name: string;
-  user_name: string;
   status: string;
   price: number;
 }
@@ -37,7 +36,23 @@ const CourseTable: React.FC = () => {
     fetchCourses();
   }, []);
 
-
+  const getStatusTag = (status: string) => {
+    let color;
+    switch (status) {
+      case 'active':
+        color = 'green';
+        break;
+      case 'inactive':
+        color = 'red';
+        break;
+      case 'approve':
+        color = 'blue';
+        break;
+      default:
+        color = 'default';
+    }
+    return <Tag color={color}>{status.toUpperCase()}</Tag>;
+  };
 
   const columns: ColumnsType<Course> = [
     {
@@ -51,21 +66,16 @@ const CourseTable: React.FC = () => {
       key: 'category_name',
     },
     {
-      title: 'User Name',
-      dataIndex: 'user_name',
-      key: 'user_name',
-    },
-    {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
+      render: (status: string) => getStatusTag(status),
     },
     {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
     }
-   
   ];
 
   return <Table columns={columns} dataSource={courses} rowKey="_id" />;

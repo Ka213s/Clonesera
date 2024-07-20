@@ -8,8 +8,6 @@ interface Session {
   _id: string;
   name: string;
   course_name: string;
-  user_name: string;
-  is_deleted: boolean;
 }
 
 const DisplaySessions: React.FC = () => {
@@ -47,17 +45,6 @@ const DisplaySessions: React.FC = () => {
       title: 'Course Name',
       dataIndex: 'course_name',
       key: 'course_name',
-    },
-    {
-      title: 'User Name',
-      dataIndex: 'user_name',
-      key: 'user_name',
-    },
-    {
-      title: 'Is Deleted',
-      dataIndex: 'is_deleted',
-      key: 'is_deleted',
-      render: (isDeleted: boolean) => (isDeleted ? 'Yes' : 'No'),
     },
     {
       title: 'Actions',
