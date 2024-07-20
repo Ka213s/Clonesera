@@ -12,8 +12,8 @@ interface Lesson {
     lesson_type: string;
     full_time: number;
     position_order: number;
-    video_url?: string; // Optional field
-    image_url?: string; // Optional field
+    video_url?: string;
+    image_url?: string;
     description?: string;
 }
 
