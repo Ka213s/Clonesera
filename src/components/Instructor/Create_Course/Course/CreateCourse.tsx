@@ -54,7 +54,7 @@ const CreateCourseButton: React.FC = () => {
       </Button>
       <Modal
         title="Create Course"
-        open={isOpen} // Use open instead of visible
+        open={isOpen} 
         onOk={handleOk}
         onCancel={handleCancel}
       >

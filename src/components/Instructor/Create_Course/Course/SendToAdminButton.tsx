@@ -1,33 +1,41 @@
 import React from 'react';
-import { CheckOutlined } from '@ant-design/icons';
 import { Button, Modal } from 'antd';
 import { changeCourseStatus } from '../../../../utils/commonImports';
+import { toast } from 'react-toastify';
 
 interface SendToAdminButtonProps {
-  courseId: number;
+  courseIds: number[];
 }
 
-const SendToAdminButton: React.FC<SendToAdminButtonProps> = ({ courseId }) => {
+const SendToAdminButton: React.FC<SendToAdminButtonProps> = ({ courseIds }) => {
   const handleClick = () => {
     Modal.confirm({
-      title: 'Xác nhận gửi',
-      content: 'Bạn có chắc chắn muốn gửi khóa học này lên admin để phê duyệt không?',
-      okText: 'Gửi',
-      cancelText: 'Hủy',
+      title: 'Confirm Send',
+      content: `Are you sure you want to send ${courseIds.length} course(s) to admin for approval?`,
+      okText: 'Send',
+      cancelText: 'Cancel',
       onOk: async () => {
-        console.log('Send course with id:', courseId, 'to admin for approval');
         try {
-          await changeCourseStatus({ course_id: courseId.toString(), new_status: 'waiting_approve' });
-          console.log('Course status changed to waiting_approve successfully');
+          // Sending each course to admin for approval
+          await Promise.all(
+            courseIds.map(courseId => 
+              changeCourseStatus({ course_id: courseId.toString(), new_status: 'waiting_approve' })
+            )
+          );
+          toast.success('Courses have been sent. Please wait for admin review!');
+          console.log('Courses status changed to waiting_approve successfully');
         } catch (error) {
-          console.error('Failed to change course status', error);
+          console.error('Failed to change course statuses', error);
+          toast.error('Failed to send courses to admin.');
         }
       },
     });
   };
 
   return (
-    <Button icon={<CheckOutlined />} onClick={handleClick} />
+    <Button type="primary" className='custom-button' onClick={handleClick} disabled={courseIds.length === 0}>
+      Send to Admin
+    </Button>
   );
 };
 

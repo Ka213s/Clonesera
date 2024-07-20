@@ -32,7 +32,12 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
       try {
         const lessonData: Lesson = await getLessonById(lesson_id);
         setLesson(lessonData);
-        form.setFieldsValue(lessonData);
+
+        // Format `full_time` for the form
+        const formattedFullTime = lessonData.full_time > 60
+          ? `${Math.floor(lessonData.full_time / 60)}h ${lessonData.full_time % 60}m`
+          : `${lessonData.full_time}m`;
+        form.setFieldsValue({ ...lessonData, full_time: formattedFullTime });
       } catch (error) {
         console.error('Error fetching lesson:', error);
       }
@@ -47,21 +52,25 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
     setIsModalVisible(true);
   };
 
-  const handleOk = async (values: Lesson): Promise<void> => {
+  const handleOk = async (values: any): Promise<void> => {
     try {
-      // Đảm bảo gửi "" nếu không có video_url hoặc image_url
+      // Parse `full_time` from the format "Xh Ym" or "Xm"
+      const fullTimeString = values.full_time as string;
+      const match = fullTimeString.match(/(\d+)h (\d+)m/) || [];
+      const hours = match[1] ? parseInt(match[1], 10) : 0;
+      const minutes = match[2] ? parseInt(match[2], 10) : parseInt(fullTimeString.replace('m', ''), 10);
+      const fullTimeInMinutes = hours * 60 + minutes;
+
       const updatedValues = {
         ...values,
+        full_time: fullTimeInMinutes,
         video_url: values.video_url || "",
         image_url: values.image_url || ""
       };
 
-      console.log('updatedValues:', updatedValues);
-      console.log('lesson_id:', lesson_id);
-
       await updateLesson(lesson_id, updatedValues);
       setIsModalVisible(false);
-      console.log('Lesson updated:', updatedValues);
+      message.success('Lesson updated successfully');
     } catch (error) {
       console.error('Error updating lesson:', error);
     }
@@ -108,7 +117,7 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
               />
             </Form.Item>
             <Form.Item name="full_time" label="Full Time" rules={[{ required: true, message: 'Please input the full time!' }]}>
-              <Input type="number" />
+              <Input />
             </Form.Item>
             <Form.Item name="position_order" label="Position Order" rules={[{ required: true, message: 'Please input the position order!' }]}>
               <Input type="number" />

@@ -8,6 +8,8 @@ interface Lesson {
   _id: string;
   name: string;
   course_id: string;
+  lesson_type: string;
+  full_time: number; // Updated to number
 }
 
 interface SearchCondition {
@@ -36,7 +38,7 @@ const DisplayLesson: React.FC = () => {
       const pageSize = 10;
 
       const data = await getLessons(searchCondition, pageNum, pageSize);
-      setLessons(data.pageData); // Assuming the response has a lessons array
+      setLessons(data.pageData); // Ensure `data.pageData` includes `full_time`
     } catch (error) {
       console.error('Error fetching lessons:', error);
     }
@@ -45,6 +47,15 @@ const DisplayLesson: React.FC = () => {
   useEffect(() => {
     fetchLessons();
   }, []);
+
+  const formatFullTime = (minutes: number) => {
+    if (minutes > 60) {
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+      return `${hours}h ${remainingMinutes}m`;
+    }
+    return `${minutes}m`;
+  };
 
   const columns: TableColumnsType<Lesson> = [
     {
@@ -56,6 +67,17 @@ const DisplayLesson: React.FC = () => {
       title: 'Course ID',
       dataIndex: 'course_id',
       key: 'course_id',
+    },
+    {
+      title: 'Type',
+      dataIndex: 'lesson_type',
+      key: 'lesson_type',
+    },
+    {
+      title: 'Full Time',
+      dataIndex: 'full_time',
+      key: 'full_time',
+      render: (value: number) => formatFullTime(value),
     },
     {
       title: 'Actions',
