@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getCart, updateCart, message, Button, Checkbox, Input, getCourseDetail } from '../utils/commonImports';
+import { getCart, updateCart, message, Button, Checkbox, getCourseDetail } from '../utils/commonImports';
 import DeleteCart from '../components/Cart/DeleteCart';
 
 interface CartItem {
@@ -12,7 +12,7 @@ interface CartItem {
     discount: number;
     cart_no: string;
     status: string;
-    image_url: string; 
+    image_url: string;
 }
 
 const ViewCart: React.FC = () => {
@@ -156,14 +156,20 @@ const ViewCart: React.FC = () => {
                                     <p className="text-gray-600 mb-1">By {item.instructor_name}</p>
                                 </div>
                                 <div className="flex items-center justify-between">
-                                    {item.discount > 0 ? (
-                                        <>
-                                            <span className="text-gray-500 line-through">${item.price.toFixed(2)}</span>
-                                            <span className="text-lg font-bold text-red-500">${(item.price - item.discount).toFixed(2)}</span>
-                                        </>
-                                    ) : (
-                                        <span className="text-lg font-bold text-black">${item.price.toFixed(2)}</span>
-                                    )}
+                                    <div className="flex items-center">
+                                        {item.discount > 0 && (
+                                            <>
+                                                <span className="text-gray-500 line-through">${item.price.toFixed(2)}</span>
+                                                <span className="ml-2 flex items-center">
+                                                    <i className="fas fa-tag text-green-500"></i>
+                                                    <span className="text-green-500 ml-1">Discount: ${item.discount.toFixed(2)}</span>
+                                                </span>
+                                            </>
+                                        )}
+                                    </div>
+                                    <span className={`text-lg font-bold ${item.discount > 0 ? 'text-red-500' : 'text-black'}`}>
+                                        ${(item.price - item.discount).toFixed(2)}
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -187,17 +193,6 @@ const ViewCart: React.FC = () => {
                 <Button type="primary" className="w-full py-3 text-lg font-semibold" onClick={handleCheckout}>
                     Checkout Now
                 </Button>
-                <div className="mt-4">
-                    <h3 className="text-lg font-semibold">Promotions</h3>
-                    <Input
-                        placeholder="Coupon code"
-                        className="mt-2"
-                        suffix={<Button type="link">Apply</Button>}
-                    />
-                    <p className="text-gray-500 mt-2">
-                        Buy now, pay later for order of $52.50 and over with leterpay.
-                    </p>
-                </div>
             </div>
         </div>
     );

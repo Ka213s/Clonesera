@@ -1,9 +1,9 @@
-import ViewAllCourses from '../../components/Instructor/ViewAllCourse/CourseAll';
+import ManagerView from '../../components/Admin/ViewAllCourse/ManagerView';
 
 const ViewAllCourse = () => {
   return (
     <div>
-      <ViewAllCourses />
+      <ManagerView />
     </div>
   )
 }

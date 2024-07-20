@@ -97,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="profile">
-        <Link to="/view-profile">
+        <Link to="/view-my-profile">
           <UserOutlined /> Profile
         </Link>
       </Menu.Item>

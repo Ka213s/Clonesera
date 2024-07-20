@@ -23,7 +23,7 @@ const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
 const RequestManagement = lazy(() => import('../pages/RequestManagement'));
 const ListSubscription = lazy(() => import('../pages/Instructor/ListSubscription'));
 const LearnCourseDetail = lazy(() => import('../pages/LearnCourseDetail'));
-
+const ReViewInstructor = lazy(() => import('../pages/Instructor/ViewReview'));
 const ListSubscribed = lazy(() => import('../pages/Student/ListSubscribed'));
 const DisplayAccount = lazy(() => import('../components/Admin/AccoutUser/ActiveTab'));
 const CreateAccount = lazy(() => import('../components/Admin/CreateAccount/CreateAccount'));
@@ -59,6 +59,7 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.VIEW_PROFILE} element={<ViewProfile />} />
                         <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />
                         <Route path={INSTRUCTOR.LIST_SUBSCRIPTION} element={<PrivateRoute element={ListSubscription} allowedRoles={[ROLES.INSTRUCTOR]} />} />
+                        <Route path={INSTRUCTOR.REVIEW} element={<PrivateRoute element={ReViewInstructor} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.COURSE_SOLD} element={<PrivateRoute element={CourseSold} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.PURCHASE} element={<PrivateRoute element={PurchasedCours} allowedRoles={[ROLES.STUDENT, ROLES.INSTRUCTOR]} />} />
                         <Route path={ADMIN.PURCHASE} element={<PrivateRoute element={Purchase} allowedRoles={[ROLES.ADMIN]} />} />
