@@ -6,7 +6,7 @@ import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined } from '@ant-desi
 import Statistic from './Statistic';
 import PopularInstructors from './PopularInstructors';
 import PopularCourses from './PopularCourses';
-import CustomCalendar from './CustomCalendar'; // Import CustomCalendar
+import CustomCalendar from './CustomCalendar';
 
 interface Course {
   _id: number;
@@ -47,12 +47,11 @@ const HomePage: React.FC = () => {
         };
         const response = await getPublicCourses(data);
         console.log('response:', response);
-        // Update the courses with avatar information
         const updatedCourses = response.pageData.map((course: any) => ({
           ...course,
-          avatar: course.instructor_avatar, // Assuming the API response includes instructor_avatar
+          avatar: course.instructor_avatar,
         }));
-        console.log('updatedCourses:', updatedCourses); // Kiểm tra dữ liệu courses
+        console.log('updatedCourses:', updatedCourses); 
         setCourses(updatedCourses);
       } catch (error) {
         console.error('Error fetching courses:', error);
@@ -95,7 +94,6 @@ const HomePage: React.FC = () => {
       avatar: "https://example.com/avatar2.jpg",
       coursesTaught: 8,
     },
-    // Add more instructors as needed
   ];
 
   const uniqueCategories = Array.from(new Set(courses.map(course => course.category_name)));
@@ -106,7 +104,7 @@ const HomePage: React.FC = () => {
       setTimeout(() => {
         setCurrentIndex(currentIndex - 3);
         setIsAnimating(false);
-      }, 300); // Thời gian hiệu ứng chuyển đổi là 300ms
+      }, 300);
     }
   };
 
@@ -116,7 +114,7 @@ const HomePage: React.FC = () => {
       setTimeout(() => {
         setCurrentIndex(currentIndex + 3);
         setIsAnimating(false);
-      }, 300); // Thời gian hiệu ứng chuyển đổi là 300ms
+      }, 300);
     }
   };
 
@@ -151,10 +149,9 @@ const HomePage: React.FC = () => {
           </div>
         </div>
         
-        {/* User Statistic */}
         <div className="space-y-8">
           <Statistic user={user} />
-          <CustomCalendar /> {/* Add CustomCalendar here */}
+          <CustomCalendar />
         </div>
 
         {/* Popular Courses */}
