@@ -102,14 +102,14 @@ const CourseDetails: React.FC = () => {
 
   if (!course) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
+      <div className="flex items-center justify-center min-h-screen text-sm">
         No course details available
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 text-sm">
       <Card className="shadow-lg rounded-lg overflow-hidden">
         <div className="flex flex-col md:flex-row items-start">
           <img
@@ -118,14 +118,14 @@ const CourseDetails: React.FC = () => {
             className="w-full md:w-1/3 object-cover rounded-lg mb-4 md:mb-0"
           />
           <div className="md:ml-4 flex-1">
-            <h1 className="text-4xl font-bold mb-4">{course.name}</h1>
-            <Tag color="blue" className="mb-4 text-lg">
+            <h1 className="text-2xl font-bold mb-4">{course.name}</h1>
+            <Tag color="blue" className="mb-4">
               {course.category_name}
             </Tag>
-            <p className="mb-2 text-lg">
+            <p className="mb-2">
               <strong>Instructor:</strong> {course.instructor_name}
             </p>
-            <p className="mb-2 text-lg flex items-center">
+            <p className="mb-2 flex items-center">
               <strong className="mr-2">Price:</strong>
               <span className="line-through text-gray-500">
                 ${course.price}
@@ -139,10 +139,10 @@ const CourseDetails: React.FC = () => {
                 </Tag>
               )}
             </p>
-            <p className="mb-2 text-lg">
+            <p className="mb-2">
               <strong>Full Time:</strong> {course.full_time} minutes
             </p>
-            <p className="mb-4 text-lg">
+            <p className="mb-4">
               <strong>Description:</strong>{" "}
               {course.description.replace(/<\/?p>/g, "")}
             </p>
@@ -151,7 +151,7 @@ const CourseDetails: React.FC = () => {
                 <Button
                   type="default"
                   onClick={handleAddToCart}
-                  className="mb-4 text-lg custom-button p-6"
+                  className="mb-4 custom-button p-4"
                 >
                   Add to Cart
                 </Button>
@@ -160,7 +160,7 @@ const CourseDetails: React.FC = () => {
                 <Button
                   type="default"
                   onClick={handleLearnCourse}
-                  className="mb-4 text-lg custom-button p-6"
+                  className="mb-4 custom-button p-4"
                 >
                   Learn Course
                 </Button>
@@ -169,7 +169,7 @@ const CourseDetails: React.FC = () => {
                 type="default"
                 icon={<PlayCircleOutlined />}
                 onClick={showModal}
-                className="mb-4 text-lg custom-button p-6"
+                className="mb-4 custom-button p-4"
               >
                 Watch Introduction
               </Button>
@@ -178,14 +178,14 @@ const CourseDetails: React.FC = () => {
         </div>
         <Divider />
         <div className="p-4">
-          <h2 className="text-3xl font-bold mb-4">Course Content</h2>
+          <h2 className="text-xl font-bold mb-4">Course Content</h2>
           <Collapse accordion>
             {course.session_list.map((session) => (
               <Panel
                 header={
                   <div className="flex justify-between items-center">
-                    <h3 className="text-2xl font-semibold">{session.name}</h3>
-                    <p className="text-lg">
+                    <h3 className="text-lg font-semibold">{session.name}</h3>
+                    <p>
                       {session.lesson_list.length} lessons • {session.full_time} minutes
                     </p>
                   </div>
@@ -195,7 +195,7 @@ const CourseDetails: React.FC = () => {
                 <List
                   dataSource={session.lesson_list}
                   renderItem={(lesson) => (
-                    <List.Item className="text-lg flex justify-between items-center">
+                    <List.Item className="flex justify-between items-center">
                       <div>
                         <Tooltip title={lesson.lesson_type}>
                           <InfoCircleOutlined className="mr-2" />
