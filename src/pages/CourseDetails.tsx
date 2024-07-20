@@ -212,7 +212,7 @@ const CourseDetails: React.FC = () => {
             ))}
           </Collapse>
           <Divider />
-          <ReviewSection courseId={course._id} />
+          {course.is_purchased && <ReviewSection courseId={course._id} />}
         </div>
       </Card>
       <Modal
