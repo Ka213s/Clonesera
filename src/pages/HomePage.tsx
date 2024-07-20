@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPublicCourses, getCurrentLogin } from '../utils/commonImports';
 import { Tag, Button } from 'antd'; 
-import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
+import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined, LeftOutlined, RightOutlined } from '@ant-design/icons';
 import Statistic from './Statistic';
 import PopularInstructors from './PopularInstructors';
 
@@ -24,6 +24,8 @@ interface User {
 const HomePage: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [user, setUser] = useState<User | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -89,6 +91,26 @@ const HomePage: React.FC = () => {
 
   const uniqueCategories = Array.from(new Set(courses.map(course => course.category_name)));
 
+  const handlePrevClick = () => {
+    if (currentIndex > 0 && !isAnimating) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentIndex(currentIndex - 3);
+        setIsAnimating(false);
+      }, 300); // Thời gian hiệu ứng chuyển đổi là 300ms
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentIndex + 3 < courses.length && !isAnimating) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentIndex(currentIndex + 3);
+        setIsAnimating(false);
+      }, 300); // Thời gian hiệu ứng chuyển đổi là 300ms
+    }
+  };
+
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <div className="max-w-7xl mx-auto grid grid-cols-3 gap-6">
@@ -134,33 +156,50 @@ const HomePage: React.FC = () => {
 
           <div>
             <h2 className="text-2xl font-bold mb-4">Popular Courses</h2>
-            <div className="grid grid-cols-3 gap-4 pb-4">
-              {courses.slice(0, 3).map((course) => (
-                <div key={course._id} className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
-                  <img src={course.image_url} alt={course.name} className="w-full h-48 object-cover" />
-                  <div className="p-4 flex flex-col flex-grow">
-                    <h2 className="text-xl font-semibold mb-2 h-16 overflow-hidden overflow-ellipsis">{course.name}</h2>
-                    <p className="text-sm text-gray-600 mb-2">
-                      <strong>Category:</strong> <Tag color="blue">{course.category_name || 'Default Category'}</Tag>
-                    </p>
-                    <p className="text-sm text-gray-600 mb-2">
-                      <strong>Instructor:</strong> {course.instructor_name}
-                    </p>
-                    <p className="text-lg font-semibold text-green-600 mb-4">
-                      <strong>Price:</strong> ${course.price_paid}
-                    </p>
-                    <button
-                      onClick={() => handleViewDetails(course._id)}
-                      className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300 mt-auto"
-                    >
-                      View Details
-                    </button>
+            <div className="relative">
+              {currentIndex > 0 && (
+                <button
+                  onClick={handlePrevClick}
+                  className="absolute left-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-md"
+                >
+                  <LeftOutlined />
+                </button>
+              )}
+              <div className={`grid grid-cols-3 gap-4 pb-4 transition-transform duration-300 ${isAnimating ? 'transform -translate-x-full' : ''}`}>
+                {courses.slice(currentIndex, currentIndex + 3).map((course) => (
+                  <div key={course._id} className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col">
+                    <img src={course.image_url} alt={course.name} className="w-full h-48 object-cover" />
+                    <div className="p-4 flex flex-col flex-grow">
+                      <h2 className="text-xl font-semibold mb-2 h-16 overflow-hidden overflow-ellipsis">{course.name}</h2>
+                      <p className="text-sm text-gray-600 mb-2">
+                        <strong>Category:</strong> <Tag color="blue">{course.category_name || 'Default Category'}</Tag>
+                      </p>
+                      <p className="text-sm text-gray-600 mb-2">
+                        <strong>Instructor:</strong> {course.instructor_name}
+                      </p>
+                      <p className="text-lg font-semibold text-green-600 mb-4">
+                        <strong>Price:</strong> ${course.price_paid}
+                      </p>
+                      <button
+                        onClick={() => handleViewDetails(course._id)}
+                        className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300 mt-auto"
+                      >
+                        View Details
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
+              </div>
+              {currentIndex + 3 < courses.length && (
+                <button
+                  onClick={handleNextClick}
+                  className="absolute right-0 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-md"
+                >
+                  <RightOutlined />
+                </button>
+              )}
             </div>
-
-            {/* Conditionally render buttons based on the number of courses */}
+            
             {courses.length > 4 && (
               <div className="flex justify-between mt-4">
                 <Button type="primary" icon={<InfoCircleOutlined />} size="large">
@@ -175,7 +214,6 @@ const HomePage: React.FC = () => {
 
           <PopularInstructors instructors={popularInstructors} />
 
-          {/* New Sections */}
           <div className="grid grid-cols-3 gap-6 mt-8">
             <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
               <InfoCircleOutlined className="text-4xl text-blue-600 mb-4" />
