@@ -119,10 +119,10 @@ const ViewCart: React.FC = () => {
     }
 
     return (
-        <div className="p-4 lg:p-8 flex flex-col lg:flex-row gap-8">
+        <div className="p-2 lg:p-4 flex flex-col lg:flex-row gap-4">
             <div className="lg:w-2/3">
-                <h1 className="text-2xl font-bold mb-6">My Cart</h1>
-                <div className="flex items-center mb-4">
+                <h1 className="text-xl font-bold mb-4">My Cart</h1>
+                <div className="flex items-center mb-2">
                     <Checkbox
                         onChange={e => {
                             const checked = e.target.checked;
@@ -134,9 +134,9 @@ const ViewCart: React.FC = () => {
                     </Checkbox>
                     <span className="ml-auto text-blue-500">{cartItems.length} Courses in Cart</span>
                 </div>
-                <div className="flex flex-col gap-4">
+                <div className="flex flex-col gap-2">
                     {cartItems.map(item => (
-                        <div key={item._id} className="bg-white p-4 rounded-lg shadow-md flex items-start gap-4">
+                        <div key={item._id} className="bg-white p-2 rounded-md shadow-sm flex items-start gap-2">
                             <Checkbox
                                 checked={selectedRowKeys.includes(item._id)}
                                 onChange={() => {
@@ -146,28 +146,28 @@ const ViewCart: React.FC = () => {
                                     handleSelectChange(newSelectedRowKeys);
                                 }}
                             />
-                            <img src={item.image_url} alt={item.course_name} className="w-16 h-16 mr-4" />
+                            <img src={item.image_url} alt={item.course_name} className="w-10 h-10 mr-2" />
                             <div className="flex flex-col w-full">
-                                <div className="flex justify-between items-center mb-2">
-                                    <h2 className="text-lg font-semibold">{item.course_name}</h2>
+                                <div className="flex justify-between items-center mb-1">
+                                    <h2 className="text-sm font-semibold">{item.course_name}</h2>
                                     <DeleteCart cartId={item._id} onRemove={handleRemove} />
                                 </div>
-                                <div className="flex items-center">
-                                    <p className="text-gray-600 mb-1">By {item.instructor_name}</p>
+                                <div className="flex items-center mb-1">
+                                    <p className="text-gray-600 text-xs">By {item.instructor_name}</p>
                                 </div>
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center">
                                         {item.discount > 0 && (
                                             <>
-                                                <span className="text-gray-500 line-through">${item.price.toFixed(2)}</span>
-                                                <span className="ml-2 flex items-center">
-                                                    <i className="fas fa-tag text-green-500"></i>
-                                                    <span className="text-green-500 ml-1">Discount: ${item.discount.toFixed(2)}</span>
+                                                <span className="text-gray-500 line-through text-xs">${item.price.toFixed(2)}</span>
+                                                <span className="ml-1 flex items-center">
+                                                    <i className="fas fa-tag text-green-500 text-xs"></i>
+                                                    <span className="text-green-500 text-xs ml-1">Discount: ${item.discount.toFixed(2)}</span>
                                                 </span>
                                             </>
                                         )}
                                     </div>
-                                    <span className={`text-lg font-bold ${item.discount > 0 ? 'text-red-500' : 'text-black'}`}>
+                                    <span className={`text-sm font-bold ${item.discount > 0 ? 'text-red-500' : 'text-black'}`}>
                                         ${(item.price - item.discount).toFixed(2)}
                                     </span>
                                 </div>
@@ -176,21 +176,21 @@ const ViewCart: React.FC = () => {
                     ))}
                 </div>
             </div>
-            <div className="lg:w-1/3 p-8 bg-white rounded-lg shadow-md">
-                <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-                <div className="flex justify-between mb-2">
+            <div className="lg:w-1/3 p-4 bg-white rounded-md shadow-sm">
+                <h2 className="text-lg font-bold mb-2">Order Summary</h2>
+                <div className="flex justify-between mb-1">
                     <span>Subtotal</span>
-                    <span className="text-lg font-bold">${totalPrice.toFixed(2)}</span>
+                    <span className="text-sm font-bold">${totalPrice.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between mb-1">
+                    <span>Total Discount</span>
+                    <span className="text-sm font-bold">-${totalDiscount.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between mb-2">
-                    <span>Total Discount</span>
-                    <span className="text-lg font-bold">-${totalDiscount.toFixed(2)}</span>
+                    <span className="text-lg font-semibold">Total</span>
+                    <span className="text-lg font-semibold">${totalBill.toFixed(2)}</span>
                 </div>
-                <div className="flex justify-between mb-4">
-                    <span className="text-xl font-semibold">Total</span>
-                    <span className="text-xl font-semibold">${totalBill.toFixed(2)}</span>
-                </div>
-                <Button type="primary" className="w-full py-3 text-lg font-semibold" onClick={handleCheckout}>
+                <Button type="primary" className="w-full py-2 text-sm font-semibold" onClick={handleCheckout}>
                     Checkout Now
                 </Button>
             </div>
