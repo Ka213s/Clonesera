@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPublicCourses, getCurrentLogin } from '../utils/commonImports';
-import { Button } from 'antd'; 
+import { Button } from 'antd';
 import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
 import Statistic from './Statistic';
 import PopularInstructors from './PopularInstructors';
@@ -51,7 +51,7 @@ const HomePage: React.FC = () => {
           ...course,
           avatar: course.instructor_avatar,
         }));
-        console.log('updatedCourses:', updatedCourses); 
+        console.log('updatedCourses:', updatedCourses);
         setCourses(updatedCourses);
       } catch (error) {
         console.error('Error fetching courses:', error);
@@ -122,9 +122,9 @@ const HomePage: React.FC = () => {
     <div className="bg-gray-100 min-h-screen p-6">
       <div className="max-w-7xl mx-auto grid grid-cols-3 gap-6">
         {/* Main Content Block */}
-        <div className="col-span-2 relative bg-green-600 text-white p-6 rounded-lg mb-8 overflow-hidden flex items-center">
+        <div className="col-span-2 relative bg-green-600 text-white p-4 rounded-lg mb-8 overflow-hidden flex items-center h-40">
           <div className="z-10">
-            <h1 className="text-4xl font-bold mb-4">Sharpen Your Skills with Professional Online Courses</h1>
+            <h1 className="text-2xl font-bold mb-4">Sharpen Your Skills with Professional Online Courses</h1>
             <button className="bg-black text-white px-6 py-2 rounded-full font-semibold inline-flex items-center">
               Join Now
               <svg
@@ -141,14 +141,13 @@ const HomePage: React.FC = () => {
               </svg>
             </button>
           </div>
-          <div className="absolute top-0 right-0 bottom-0 left-0 bg-green-700 opacity-20"></div>
           <div className="absolute top-0 right-0 bottom-0 left-0 overflow-hidden pointer-events-none">
             <div className="sparkle sparkle-1"></div>
             <div className="sparkle sparkle-2"></div>
             <div className="sparkle sparkle-3"></div>
           </div>
         </div>
-        
+
         <div className="space-y-8">
           <Statistic user={user} />
           <CustomCalendar />
@@ -163,7 +162,7 @@ const HomePage: React.FC = () => {
               </button>
             ))}
           </div>
-          
+
           <PopularCourses
             courses={courses}
             currentIndex={currentIndex}
@@ -208,7 +207,7 @@ const HomePage: React.FC = () => {
             <p className="text-gray-600 text-center">when an unknown printer took a galley of type and scrambled it</p>
           </div>
         </div>
-        
+
       </div>
     </div>
   );

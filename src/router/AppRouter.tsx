@@ -7,7 +7,6 @@ import PrivateRoute from './PrivateRoute';
 import { ROLES } from '../utils/commonImports';
 import { ADMIN, ERROR, INSTRUCTOR, PUBLIC } from '../consts';
 
-// Public Pages and Components
 const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
 const Logout = lazy(() => import('../components/Logout'));
