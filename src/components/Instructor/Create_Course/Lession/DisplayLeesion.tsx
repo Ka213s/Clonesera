@@ -7,9 +7,7 @@ import DeleteLesson from './DeleteLesson';
 interface Lesson {
   _id: string;
   name: string;
-  description: string;
   course_id: string;
-  is_deleted: boolean;
 }
 
 interface SearchCondition {
@@ -55,20 +53,9 @@ const DisplayLesson: React.FC = () => {
       key: 'name',
     },
     {
-      title: 'Description',
-      dataIndex: 'description',
-      key: 'description',
-    },
-    {
       title: 'Course ID',
       dataIndex: 'course_id',
       key: 'course_id',
-    },
-    {
-      title: 'Deleted',
-      dataIndex: 'is_deleted',
-      key: 'is_deleted',
-      render: (is_deleted: boolean) => (is_deleted ? 'Yes' : 'No'),
     },
     {
       title: 'Actions',
@@ -86,7 +73,7 @@ const DisplayLesson: React.FC = () => {
     <Table
       dataSource={lessons}
       columns={columns}
-      rowKey="lesson_id"
+      rowKey="_id"
     />
   );
 };

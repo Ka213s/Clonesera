@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getPublicCourses, getCurrentLogin } from '../utils/commonImports';
-import { Tag, Button } from 'antd'; // Import Button from Ant Design
+import { Tag, Button } from 'antd'; 
 import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
 import Statistic from './Statistic';
 import PopularInstructors from './PopularInstructors';

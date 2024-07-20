@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Input, message } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import { getLessonById, updateLesson } from '../../../../utils/commonImports';
-import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor'; 
+import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor';
 import FileUploader from '../../../FileUploader';
 
 interface UpdateLessonProps {
@@ -57,7 +58,7 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
 
       console.log('updatedValues:', updatedValues);
       console.log('lesson_id:', lesson_id);
-      
+
       await updateLesson(lesson_id, updatedValues);
       setIsModalVisible(false);
       console.log('Lesson updated:', updatedValues);
@@ -81,7 +82,7 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
 
   return (
     <>
-      <Button onClick={showModal}>Update</Button>
+      <Button icon={<EditOutlined />} onClick={showModal}>Edit</Button>
       <Modal title="Update Lesson" visible={isModalVisible} onCancel={handleCancel} footer={null}>
         {lesson && (
           <Form form={form} onFinish={handleOk} initialValues={lesson}>
@@ -101,9 +102,9 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
               <Input />
             </Form.Item>
             <Form.Item name="description" label="Description">
-              <TinyMCEEditorComponent 
-                value={lesson.description || ''} 
-                onEditorChange={(content) => form.setFieldsValue({ description: content })} 
+              <TinyMCEEditorComponent
+                value={lesson.description || ''}
+                onEditorChange={(content) => form.setFieldsValue({ description: content })}
               />
             </Form.Item>
             <Form.Item name="full_time" label="Full Time" rules={[{ required: true, message: 'Please input the full time!' }]}>
@@ -125,8 +126,8 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
                         Your browser does not support the video tag.
                       </video>
                     )}
-                    <FileUploader 
-                      type="video" 
+                    <FileUploader
+                      type="video"
                       onUploadSuccess={(url) => handleUploadSuccess(url, 'video')}
                     />
                   </>
@@ -138,8 +139,8 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
                     {getFieldValue('image_url') && (
                       <img src={getFieldValue('image_url')} alt="Lesson Image" style={{ width: '100%' }} />
                     )}
-                    <FileUploader 
-                      type="image" 
+                    <FileUploader
+                      type="image"
                       onUploadSuccess={(url) => handleUploadSuccess(url, 'image')}
                     />
                   </>
