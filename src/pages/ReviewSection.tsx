@@ -136,13 +136,8 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ courseId }) => {
         )}
       />
       <Form form={form} layout="vertical" onFinish={handleSubmit}>
-        <Form.Item
-          name="reviewer"
-          label="Your Name"
-          rules={[{ required: true, message: "Please enter your name" }]}
-        >
-          <Input placeholder="Enter your name" />
-        </Form.Item>
+     
+       
         <Form.Item
           name="rating"
           label="Your Rating"
