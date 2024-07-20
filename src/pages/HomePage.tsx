@@ -6,6 +6,7 @@ import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined } from '@ant-desi
 import Statistic from './Statistic';
 import PopularInstructors from './PopularInstructors';
 import PopularCourses from './PopularCourses';
+import CustomCalendar from './CustomCalendar'; // Import CustomCalendar
 
 interface Course {
   _id: number;
@@ -153,6 +154,7 @@ const HomePage: React.FC = () => {
         {/* User Statistic */}
         <div className="space-y-8">
           <Statistic user={user} />
+          <CustomCalendar /> {/* Add CustomCalendar here */}
         </div>
 
         {/* Popular Courses */}
