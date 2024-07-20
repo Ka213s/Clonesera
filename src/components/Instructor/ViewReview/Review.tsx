@@ -56,11 +56,7 @@ const Review: React.FC = () => {
   }, []);
 
   const columns = [
-    {
-      title: 'Reviewer Name',
-      dataIndex: 'reviewer_name',
-      key: 'reviewer_name',
-    },
+  
     {
       title: 'Course Name',
       dataIndex: 'course_name',
