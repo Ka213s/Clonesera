@@ -8,7 +8,6 @@ const CustomCalendar: React.FC = () => {
   const [value, setValue] = useState<CalendarValue>(new Date());
 
   const handleDateChange = (newValue: CalendarProps['value']) => {
-    // Convert the value to CalendarValue type
     if (Array.isArray(newValue) && newValue.length === 2) {
       setValue(newValue as [Date, Date]);
     } else {
