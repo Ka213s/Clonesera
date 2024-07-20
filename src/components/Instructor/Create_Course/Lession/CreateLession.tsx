@@ -89,7 +89,6 @@ const CreateLessonButton: React.FC = () => {
         position_order: parseInt(values.position_order.toString(), 10),
       };
       await createLesson(lessonData);
-      toast.success("Lesson created successfully");
       form.resetFields();
       setIsModalVisible(false);
       setVideoURL('');
