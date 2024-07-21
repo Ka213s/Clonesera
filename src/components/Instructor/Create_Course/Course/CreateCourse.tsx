@@ -49,7 +49,7 @@ const CreateCourseButton: React.FC = () => {
 
   return (
     <>
-      <Button type="primary" onClick={showModal} className='custom-button'>
+      <Button type="primary" onClick={showModal} className='custom-button mr-2'>
         Create Course
       </Button>
       <Modal

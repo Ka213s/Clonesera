@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Table, message, Select, Tag, Row, Col } from 'antd';
+import { Table, message, Select, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { getCourses, changeCourseStatus } from '../../../../utils/commonImports';
 import EditButton from './EditCourse';
 import DeleteButton from './DeleteCourse';
-import SendToAdminButton from './SendToAdminButton';
 
 const { Option } = Select;
 
@@ -16,7 +15,11 @@ interface Course {
   price: number;
 }
 
-const CourseTable: React.FC = () => {
+interface CourseTableProps {
+  setSelectedCourseIds: React.Dispatch<React.SetStateAction<number[]>>;
+}
+
+const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
 
@@ -33,6 +36,7 @@ const CourseTable: React.FC = () => {
         const pageSize = 10;
         const response = await getCourses(searchCondition, pageNum, pageSize);
         setCourses(response.pageData);
+        console.log('Fetched courses:', response.pageData);
       } catch (error) {
         message.error('Error fetching courses');
         console.error('Error fetching courses:', error);
@@ -42,6 +46,11 @@ const CourseTable: React.FC = () => {
     fetchCourses();
   }, []);
 
+  useEffect(() => {
+    setSelectedCourseIds(selectedRowKeys);
+    console.log('Selected Row Keys in CourseTable component:', selectedRowKeys);
+  }, [selectedRowKeys, setSelectedCourseIds]);
+
   const handleChangeStatus = async (courseId: number, newStatus: string) => {
     try {
       await changeCourseStatus({ course_id: courseId.toString(), new_status: newStatus });
@@ -50,6 +59,7 @@ const CourseTable: React.FC = () => {
           course._id === courseId ? { ...course, status: newStatus } : course
         )
       );
+      console.log('Changed status of course ID:', courseId, 'to:', newStatus);
     } catch (error) {
       console.error('Error updating course status:', error);
     }
@@ -137,19 +147,12 @@ const CourseTable: React.FC = () => {
   };
 
   return (
-    <>
-      <Row style={{ marginBottom: 16, marginTop: 16 }}>
-        <Col>
-          <SendToAdminButton courseIds={selectedRowKeys} />
-        </Col>
-      </Row>
-      <Table
-        rowSelection={rowSelection}
-        columns={columns}
-        dataSource={courses}
-        rowKey="_id"
-      />
-    </>
+    <Table
+      rowSelection={rowSelection}
+      columns={columns}
+      dataSource={courses}
+      rowKey="_id"
+    />
   );
 };
 

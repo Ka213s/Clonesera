@@ -1,30 +1,28 @@
-// src/utils/statusTagUtils.tsx
-
 import { Tag } from 'antd';
 
 export const getStatusTag = (status: string) => {
   let color;
   switch (status) {
     case 'new':
-      color = 'blue';
+      color = 'blue'; // Màu xanh lam cho trạng thái mới
       break;
     case 'waiting_approve':
-      color = 'orange';
+      color = 'gold'; // Màu vàng cho trạng thái chờ phê duyệt
       break;
     case 'approve':
-      color = 'green';
+      color = 'green'; // Màu xanh lá cho trạng thái phê duyệt
       break;
     case 'reject':
-      color = 'red';
+      color = 'volcano'; // Màu đỏ núi lửa cho trạng thái từ chối
       break;
     case 'active':
-      color = 'green';
+      color = 'geekblue'; // Màu xanh đậm cho trạng thái hoạt động
       break;
     case 'inactive':
-      color = 'gray';
+      color = 'gray'; // Màu xám cho trạng thái không hoạt động
       break;
     default:
-      color = 'blue';
+      color = 'blue'; // Màu xanh lam cho các trạng thái không xác định
       break;
   }
   return <Tag color={color}>{status.toUpperCase()}</Tag>;

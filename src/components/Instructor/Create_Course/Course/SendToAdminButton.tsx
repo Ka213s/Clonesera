@@ -9,6 +9,8 @@ interface SendToAdminButtonProps {
 
 const SendToAdminButton: React.FC<SendToAdminButtonProps> = ({ courseIds }) => {
   const handleClick = () => {
+    console.log('Sending to admin the following course IDs:', courseIds);
+
     Modal.confirm({
       title: 'Confirm Send',
       content: `Are you sure you want to send ${courseIds.length} course(s) to admin for approval?`,

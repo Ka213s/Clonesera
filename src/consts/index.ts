@@ -96,7 +96,7 @@ export const sidebarMenuItemsData = {
 
 export const SidebarIntructorData = {
   insSidebarItem: [
-    { text: "My Profile", icon: "UserOutlined", url: "/view-profile" },
+    { text: "My Profile", icon: "UserOutlined", url: "/view-my-profile" },
     { text: "Manage Course", icon: "BookOutlined", url: "/courses" },
     { text: "View All Courses", icon: "BookOutlined", url: "/view-all-course" },
     { text: "Subscription", icon: "BellOutlined", url: "/list-subscription" },
