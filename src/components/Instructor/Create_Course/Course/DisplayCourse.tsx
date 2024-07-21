@@ -70,13 +70,21 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
   };
 
   const renderActions = (record: Course) => {
-    const isWaitingApprove = record.status === 'approve';
+    const isWaitingApprove = ['new', 'waiting_approve'].includes(record.status);
 
     return (
       <>
         <EditButton courseId={record._id} />
         <DeleteButton courseId={record._id} />
         {isWaitingApprove ? (
+          <Button
+            type="primary"
+            style={{ marginLeft: 10 }}
+            onClick={() => message.info('Nhấn vào đây Send to admin để gửi tới admin duyệt')}
+          >
+            Chờ admin duyệt để kích hoạt
+          </Button>
+        ) : (
           <Select
             defaultValue={record.status}
             style={{ width: 120, marginLeft: 10 }}
@@ -85,15 +93,6 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
             <Option value="active">Active</Option>
             <Option value="inactive">Inactive</Option>
           </Select>
-        ) : (
-          <Button
-          className=''
-            type="primary"
-            style={{ marginLeft: 10 }}
-            onClick={() => message.info('Nhấn vào đây Send to admin để gửi tới admin duyệt')}
-          >
-            Chờ admin duyệt để kích hoạt
-          </Button>
         )}
       </>
     );
