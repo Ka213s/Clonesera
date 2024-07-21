@@ -31,7 +31,7 @@ const AboutTab: React.FC<AboutTabProps> = ({ userData }) => {
       <Title level={3}>About Me</Title>
       {userData?.video && (
         <Card className="mb-4" bordered={false}>
-          <video className="w-full max-h-96" controls>
+          <video className="w-full max-h-96 rounded-lg border-2 border-black" controls>
             <source src={userData.video} type="video/mp4" />
             Your browser does not support the video tag.
           </video>
