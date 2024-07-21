@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableColumnsType } from 'antd';
 import { getSessions } from '../../../utils/commonImports';
-
+import moment from 'moment';
 interface Session {
   _id: string;
   name: string;
@@ -38,11 +38,20 @@ const DisplaySessions: React.FC = () => {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+   
     },
     {
       title: 'Course Name',
       dataIndex: 'course_name',
       key: 'course_name',
+     
+    },
+    {
+      title: 'Created At',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (text: string) => moment(text).format('DD-MM-YYYY'),
+      
     }
   ];
 

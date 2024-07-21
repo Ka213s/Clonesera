@@ -54,6 +54,7 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
       console.log('Received values:', values);
       await updateCourse(courseId.toString(), { ...values, video_url: videoUrl, image_url: imageUrl });
       setIsModalVisible(false);
+   
     } catch (error) {
       message.error('Error updating course');
       console.error('Error updating course:', error);
@@ -68,9 +69,20 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
     setIsModalVisible(true);
   };
 
+  const handleUploadSuccess = (url: string, type: 'video' | 'image') => {
+    if (type === 'video') {
+      setVideoUrl(url);
+      form.setFieldsValue({ video_url: url });
+    } else if (type === 'image') {
+      setImageUrl(url);
+      form.setFieldsValue({ image_url: url });
+    }
+   
+  };
+
   return (
     <>
-      <Button icon={<EditOutlined />} onClick={handleClick} />
+      <Button className='mr-2' icon={<EditOutlined />} onClick={handleClick} />
       <Modal
         title="Edit Course"
         visible={isModalVisible}
@@ -121,10 +133,7 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
             {videoUrl ? <video src={videoUrl} controls style={{ width: '100%' }} /> : null}
             <FileUploader
               type="video"
-              onUploadSuccess={(url) => {
-                setVideoUrl(url);
-                form.setFieldsValue({ video_url: url });
-              }}
+              onUploadSuccess={(url) => handleUploadSuccess(url, 'video')}
             />
           </Form.Item>
           <Form.Item
@@ -134,10 +143,7 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
             {imageUrl ? <img src={imageUrl} alt="Course Image" style={{ width: '100%' }} /> : null}
             <FileUploader
               type="image"
-              onUploadSuccess={(url) => {
-                setImageUrl(url);
-                form.setFieldsValue({ image_url: url });
-              }}
+              onUploadSuccess={(url) => handleUploadSuccess(url, 'image')}
             />
           </Form.Item>
           <Form.Item

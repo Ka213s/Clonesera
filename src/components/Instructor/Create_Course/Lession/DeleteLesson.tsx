@@ -36,7 +36,7 @@ const DeleteLesson: React.FC<DeleteLessonProps> = ({ lesson_id }) => {
       onClick={showDeleteConfirm}
       danger
     >
-      Delete
+    
     </Button>
   );
 };

@@ -157,6 +157,7 @@ const CreateLessonButton: React.FC = () => {
             <Select onChange={value => setLessonType(value)}>
               <Option value="video">Video</Option>
               <Option value="image">Image</Option>
+              <Option value="text">Text</Option>
             </Select>
           </Form.Item>
           <Form.Item
@@ -181,6 +182,15 @@ const CreateLessonButton: React.FC = () => {
             >
               <FileUploader type="video" onUploadSuccess={setVideoURL} />
               {videoURL && <video src={videoURL} controls style={{ marginTop: '10px', maxWidth: '100%' }} />}
+            </Form.Item>
+          )}
+          {lessonType === 'text' && (
+            <Form.Item
+              label="Upload Image"
+              rules={[{ required: true, message: 'Please upload an image!' }]}
+            >
+              <FileUploader type="image" onUploadSuccess={setImageURL} />
+              {imageURL && <img src={imageURL} alt="Uploaded Image" style={{ marginTop: '10px', maxWidth: '100%' }} />}
             </Form.Item>
           )}
           <Form.Item

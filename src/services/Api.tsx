@@ -188,6 +188,7 @@ export const deleteCourse = async (id: string) => {
 };
 export const changeCourseStatus = async (data: { course_id: string; new_status: string; comment?: string }) => {
   const response = await tokenAxiosInstance.put('/api/course/change-status', data);
+  toast.success("Course status changed successfully");
   return response.data;
 };
 export const getSessionById = async (id: string) => {

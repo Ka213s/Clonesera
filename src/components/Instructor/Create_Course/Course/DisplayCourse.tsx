@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Table, message, Select, Tag } from 'antd';
+import { Table, message, Select, Button } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import moment from 'moment';
 import { getCourses, changeCourseStatus } from '../../../../utils/commonImports';
 import EditButton from './EditCourse';
 import DeleteButton from './DeleteCourse';
+import { getStatusTag } from '../../../../utils/statusTagUtils'; // Adjust the import path accordingly
 
 const { Option } = Select;
 
@@ -13,6 +15,8 @@ interface Course {
   category_name: string;
   status: string;
   price: number;
+  discount: number;
+  created_at: string;
 }
 
 interface CourseTableProps {
@@ -65,47 +69,32 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
     }
   };
 
-  const renderStatusTag = (status: string) => {
-    let color = '';
-    switch (status) {
-      case 'approve':
-        color = 'green';
-        break;
-      case 'active':
-        color = 'blue';
-        break;
-      case 'inactive':
-        color = 'red';
-        break;
-      case 'waiting_approve':
-        color = 'orange';
-        break;
-      default:
-        color = 'default';
-    }
-    return <Tag color={color}>{status.toUpperCase()}</Tag>;
-  };
-
   const renderActions = (record: Course) => {
-    const isWaitingApprove = record.status === 'waiting_approve';
+    const isWaitingApprove = record.status === 'approve';
 
     return (
       <>
         <EditButton courseId={record._id} />
         <DeleteButton courseId={record._id} />
-        <Select
-          defaultValue={record.status}
-          style={{ width: 120, marginLeft: 10 }}
-          onChange={(value) => handleChangeStatus(record._id, value)}
-          disabled={isWaitingApprove}
-        >
-          {!isWaitingApprove && (
-            <>
-              <Option value="active">Active</Option>
-              <Option value="inactive">Inactive</Option>
-            </>
-          )}
-        </Select>
+        {isWaitingApprove ? (
+          <Select
+            defaultValue={record.status}
+            style={{ width: 120, marginLeft: 10 }}
+            onChange={(value) => handleChangeStatus(record._id, value)}
+          >
+            <Option value="active">Active</Option>
+            <Option value="inactive">Inactive</Option>
+          </Select>
+        ) : (
+          <Button
+          className=''
+            type="primary"
+            style={{ marginLeft: 10 }}
+            onClick={() => message.info('Nhấn vào đây Send to admin để gửi tới admin duyệt')}
+          >
+            Chờ admin duyệt để kích hoạt
+          </Button>
+        )}
       </>
     );
   };
@@ -125,7 +114,7 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
       title: 'Status',
       dataIndex: 'status',
       key: 'status',
-      render: renderStatusTag,
+      render: getStatusTag,
     },
     {
       title: 'Price',
@@ -133,9 +122,21 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
       key: 'price',
     },
     {
+      title: 'Discount',
+      dataIndex: 'discount',
+      key: 'discount',
+    },
+    {
+      title: 'Created At',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (text: string) => moment(text).format('DD-MM-YYYY'),
+    },
+    {
       title: 'Actions',
       key: 'actions',
       render: (_, record) => renderActions(record),
+      align: 'center',
     },
   ];
 
