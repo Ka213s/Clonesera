@@ -30,7 +30,7 @@ const Pending: React.FC = () => {
             
             try {
                 const data = await getUsers(
-                    { keyword: '', role: 'instructor', status: true, is_deleted: false, is_verified: false },
+                    { keyword: '', role: 'instructor', status: true, is_deleted: false, is_verified: "false" },
                     page,
                     pageSize
                 );

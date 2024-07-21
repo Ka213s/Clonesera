@@ -5,6 +5,7 @@ import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined } from '@ant-desi
 import Statistic from './Statistic';
 import PopularCourses from './PopularCourses';
 import CustomCalendar from './CustomCalendar';
+import Blog from './Blog';
 import JoinAvatar from '../assets/Course.png';
 
 interface Course {
@@ -198,6 +199,9 @@ const HomePage: React.FC = () => {
             <h2 className="text-2xl font-bold mb-4">Member</h2>
             <p className="text-gray-600 text-center">When an unknown printer took a galley of type and scrambled it</p>
           </div>
+        </div>
+        <div className="mt-12">
+          <Blog />
         </div>
       </div>
     </div>

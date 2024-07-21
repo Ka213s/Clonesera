@@ -18,7 +18,8 @@ export const ADMIN = {
   CATEGORY: '/categories',
   PENDING_COURSE: '/pending-courses',
   LOG_COURSE: '/log-course',
-  PURCHASE: '/purchase'
+  PURCHASE: '/purchase',
+  BLOG: '/blog'
 }
 export const INSTRUCTOR = {
   COURSE: '/courses',
@@ -45,7 +46,8 @@ export const PUBLIC = {
   VIEW_CART: '/view-cart',
   PAYMENT: '/payment',
   VIEW_ORDER: '/view-order',
-  LEARN_COURSE: '/learn-course-detail/:id'
+  LEARN_COURSE: '/learn-course-detail/:id',
+  BLOG_DETAIL: '/blog-detail/:id'
 };
 
 export const sidebarMenuItemsData = {
@@ -132,7 +134,8 @@ export const SidebarAdminData = {
     { "key": "/view-all-course", "label": "All Courses", "icon": "BookOutlined" },
     { "key": "/pending-courses", "label": "Pending Courses", "icon": "BookOutlined" },
     { "key": "/log-course", "label": "Course Log", "icon": "BookOutlined" },
-    { "key": "/purchase", "label": "Purchase", "icon": "ShoppingCartOutlined" }
+    { "key": "/purchase", "label": "Purchase", "icon": "ShoppingCartOutlined" },
+    { "key": "/blog", "label": "Blog", "icon": "MessageOutlined" }
 
   ]
 };

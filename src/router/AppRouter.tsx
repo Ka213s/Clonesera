@@ -12,6 +12,8 @@ const Login = lazy(() => import('../pages/Login'));
 const Logout = lazy(() => import('../components/Logout'));
 const Register = lazy(() => import('../pages/Register'));
 const Category = lazy(() => import('../pages/Admin/Category'));
+const Blog = lazy(() => import('../pages/Admin/Blog'));
+const BlogDetail = lazy(() => import('../pages/BlogDetail'));
 const SettingPage = lazy(() => import('../pages/SettingPage'));
 const Course = lazy(() => import('../pages/Instructor/ManagementCourse'));
 const CourseSold = lazy(() => import('../pages/CourseSold'));
@@ -54,6 +56,7 @@ const AppRouter: React.FC = () => {
                         <Route path={PUBLIC.VIEW_ORDER} element={<ViewOrder />} />
                         <Route path={PUBLIC.PAYMENT} element={<Payment />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
+                        <Route path={PUBLIC.BLOG_DETAIL} element={<BlogDetail />} />
                         <Route path={INSTRUCTOR.VIEW_MY_PROFILE} element={<ViewMyProfile />} />
                         <Route path={INSTRUCTOR.VIEW_PROFILE} element={<ViewProfile />} />
                         <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />
@@ -69,6 +72,7 @@ const AppRouter: React.FC = () => {
                         <Route path={ADMIN.CATEGORY} element={<PrivateRoute element={Category} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={ADMIN.PENDING_COURSE} element={<PrivateRoute element={PedingCourse} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={ADMIN.LOG_COURSE} element={<PrivateRoute element={LogCourse} allowedRoles={[ROLES.ADMIN, ROLES.INSTRUCTOR]} />} />
+                        <Route path={ADMIN.BLOG} element={<PrivateRoute element={Blog} allowedRoles={[ROLES.ADMIN]} />} />
 
                     </Route>
 
