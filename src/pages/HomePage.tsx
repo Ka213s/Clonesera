@@ -106,7 +106,7 @@ const HomePage: React.FC = () => {
     { id: 2, name: "Jane Smith", avatar: "https://example.com/avatar2.jpg", coursesTaught: 8 },
   ];
 
-  const uniqueCategories = Array.from(new Set(courses.map(course => course.category_name)));
+  // const uniqueCategories = Array.from(new Set(courses.map(course => course.category_name)));
 
   const handlePrevClick = () => {
     if (currentIndex > 0 && !isAnimating) {
@@ -156,13 +156,13 @@ const HomePage: React.FC = () => {
 
         {/* Popular Courses */}
         <div className="col-span-3">
-          <div className="flex space-x-4 mb-8">
+          {/* <div className="flex space-x-4 mb-8">
             {uniqueCategories.map(category => (
               <button key={category} className="bg-white shadow-md rounded-full px-4 py-2">
                 {category}
               </button>
             ))}
-          </div>
+          </div> */}
 
           <PopularCourses
             courses={courses}
