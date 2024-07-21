@@ -37,44 +37,45 @@ const PopularCourses: React.FC<PopularCoursesProps> = ({
         {currentIndex > 0 && (
           <button
             onClick={handlePrevClick}
-            className="absolute left-4 top-1/2 transform -translate-y-1/2 bg-gray-200 p-3 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 z-10"
+            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 z-20"
+            style={{ zIndex: 20 }}
           >
-            <LeftOutlined className="text-xl" />
+            <LeftOutlined className="text-lg" />
           </button>
         )}
         <div
-          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-6 transition-transform duration-300 ${
+          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-6 transition-transform duration-300 ${
             isAnimating ? 'transform -translate-x-full' : ''
           }`}
         >
           {courses.slice(currentIndex, currentIndex + 3).map((course) => (
             <div
               key={course._id}
-              className="bg-white rounded-lg shadow-xl overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl"
+              className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl"
             >
               <img
                 src={course.image_url}
                 alt={course.name}
-                className="w-full h-60 object-cover"
+                className="w-full h-48 object-cover"
               />
-              <div className="p-6 flex flex-col flex-grow">
-                <h2 className="text-2xl font-semibold mb-3 h-20 overflow-hidden overflow-ellipsis">
+              <div className="p-4 flex flex-col flex-grow">
+                <h2 className="text-xl font-semibold mb-2 h-16 overflow-hidden overflow-ellipsis whitespace-nowrap">
                   {course.name}
                 </h2>
-                <p className="text-sm text-gray-600 mb-3">
+                <p className="text-sm text-gray-600 mb-2">
                   <Tag color="blue">
                     {course.category_name || 'Default Category'}
                   </Tag>
                 </p>
-                <div className="flex items-center mb-3">
+                <div className="flex items-center mb-2">
                   {course.avatar ? (
                     <img
                       src={course.avatar}
                       alt={course.instructor_name}
-                      className="w-10 h-10 rounded-full mr-3"
+                      className="w-8 h-8 rounded-full mr-2"
                     />
                   ) : (
-                    <div className="w-10 h-10 rounded-full bg-gray-300 mr-3 flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-gray-300 mr-2 flex items-center justify-center">
                       <span className="text-xs text-gray-600">No Avatar</span>
                     </div>
                   )}
@@ -82,14 +83,14 @@ const PopularCourses: React.FC<PopularCoursesProps> = ({
                     <strong>{course.instructor_name}</strong>
                   </p>
                 </div>
-                <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center justify-between mt-auto">
                   <div className="text-lg font-semibold text-green-600">
-                    <span className="text-3xl">${course.price_paid}.00</span>
+                    <span className="text-xl">${course.price_paid}.00</span>
                     <span className="text-sm text-gray-500 ml-2">/year</span>
                   </div>
                   <button
                     onClick={() => handleViewDetails(course._id)}
-                    className="bg-green-600 text-white py-2 px-5 rounded-md hover:bg-green-700 transition duration-300"
+                    className="bg-green-600 text-white py-1 px-3 rounded-md hover:bg-green-700 transition duration-300"
                   >
                     Join Now
                   </button>
@@ -101,9 +102,10 @@ const PopularCourses: React.FC<PopularCoursesProps> = ({
         {currentIndex + 3 < courses.length && (
           <button
             onClick={handleNextClick}
-            className="absolute right-4 top-1/2 transform -translate-y-1/2 bg-gray-200 p-3 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 z-10"
+            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 z-20"
+            style={{ zIndex: 20 }}
           >
-            <RightOutlined className="text-xl" />
+            <RightOutlined className="text-lg" />
           </button>
         )}
       </div>
