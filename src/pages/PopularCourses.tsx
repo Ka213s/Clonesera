@@ -32,7 +32,7 @@ const PopularCourses: React.FC<PopularCoursesProps> = ({
 }) => {
   return (
     <div className="relative">
-      <h2 className="text-3xl font-bold mb-6 text-center">Popular Courses</h2>
+      <h2 className="text-3xl font-bold mb-6 text-left">Popular Courses</h2>
       <div className="relative">
         {currentIndex > 0 && (
           <button
@@ -44,11 +44,11 @@ const PopularCourses: React.FC<PopularCoursesProps> = ({
           </button>
         )}
         <div
-          className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 pb-6 transition-transform duration-300 ${
+          className={`grid grid-cols-1 sm:grid-cols-2 gap-4 pb-6 transition-transform duration-300 ${
             isAnimating ? 'transform -translate-x-full' : ''
           }`}
         >
-          {courses.slice(currentIndex, currentIndex + 3).map((course) => (
+          {courses.slice(currentIndex, currentIndex + 2).map((course) => (
             <div
               key={course._id}
               className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl"
@@ -85,7 +85,7 @@ const PopularCourses: React.FC<PopularCoursesProps> = ({
                 </div>
                 <div className="flex items-center justify-between mt-auto">
                   <div className="text-lg font-semibold text-green-600">
-                    <span className="text-xl">${course.price_paid}.00</span>
+                    <span className="text-xl">${course.price_paid}</span>
                     <span className="text-sm text-gray-500 ml-2">/year</span>
                   </div>
                   <button
@@ -99,7 +99,7 @@ const PopularCourses: React.FC<PopularCoursesProps> = ({
             </div>
           ))}
         </div>
-        {currentIndex + 3 < courses.length && (
+        {currentIndex + 2 < courses.length && (
           <button
             onClick={handleNextClick}
             className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 z-20"
