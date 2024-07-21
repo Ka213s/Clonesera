@@ -54,7 +54,6 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
       console.log('Received values:', values);
       await updateCourse(courseId.toString(), { ...values, video_url: videoUrl, image_url: imageUrl });
       setIsModalVisible(false);
-   
     } catch (error) {
       message.error('Error updating course');
       console.error('Error updating course:', error);
@@ -77,7 +76,13 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
       setImageUrl(url);
       form.setFieldsValue({ image_url: url });
     }
-   
+  };
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    if (value.length <= 200) {
+      form.setFieldsValue({ description: value });
+    }
   };
 
   return (
@@ -120,10 +125,24 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
           <Form.Item
             name="description"
             label="Description"
+            rules={[{ required: true, message: 'Please input the description!' }]}
+          >
+            <Input.TextArea
+              value={form.getFieldValue('description')}
+              onChange={handleDescriptionChange}
+              maxLength={200}
+              showCount
+              autoSize={{ minRows: 3, maxRows: 5 }}
+            />
+          </Form.Item>
+          <Form.Item
+            name="content"
+            label="Content"
+            rules={[{ required: true, message: 'Please input the content!' }]}
           >
             <TinyMCEEditorComponent
-              value={form.getFieldValue('description')}
-              onEditorChange={(content) => form.setFieldsValue({ description: content })}
+              value={form.getFieldValue('content')}
+              onEditorChange={(content) => form.setFieldsValue({ content })}
             />
           </Form.Item>
           <Form.Item
@@ -157,7 +176,7 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
             name="discount"
             label="Discount"
           >
-            <InputNumber min={0} />
+            <InputNumber min={0} max={100} />
           </Form.Item>
         </Form>
       </Modal>

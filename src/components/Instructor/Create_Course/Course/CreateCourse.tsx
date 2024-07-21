@@ -7,17 +7,17 @@ import useCategories from '../../../useCategories';
 const { Option } = Select;
 
 const CreateCourseButton: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false); // Use isOpen instead of isModalVisible
+  const [isOpen, setIsOpen] = useState(false);
   const [form] = Form.useForm();
   const [imageURL, setImageURL] = useState<string | null>(null);
   const [videoURL, setVideoURL] = useState<string | null>(null);
   const [description, setDescription] = useState<string>('');
   const [content, setContent] = useState<string>('');
 
-  const { categories, parents } = useCategories(); // Use the custom hook
+  const { categories, parents } = useCategories();
 
   const showModal = () => {
-    setIsOpen(true); // Use setIsOpen instead of setIsModalVisible
+    setIsOpen(true);
   };
 
   const handleOk = async () => {
@@ -30,7 +30,7 @@ const CreateCourseButton: React.FC = () => {
       content,
     };
     await createCourse(courseData);
-    setIsOpen(false); // Use setIsOpen instead of setIsModalVisible
+    setIsOpen(false);
     form.resetFields();
     setImageURL(null);
     setVideoURL(null);
@@ -39,7 +39,7 @@ const CreateCourseButton: React.FC = () => {
   };
 
   const handleCancel = () => {
-    setIsOpen(false); // Use setIsOpen instead of setIsModalVisible
+    setIsOpen(false);
     form.resetFields();
     setImageURL(null);
     setVideoURL(null);
@@ -47,14 +47,22 @@ const CreateCourseButton: React.FC = () => {
     setContent('');
   };
 
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    if (value.length <= 200) {
+      setDescription(value);
+      form.setFieldsValue({ description: value });
+    }
+  };
+
   return (
     <>
-      <Button type="primary" onClick={showModal} className='custom-button mr-2'>
+      <Button type="primary" onClick={showModal} className="custom-button mr-2">
         Create Course
       </Button>
       <Modal
         title="Create Course"
-        open={isOpen} 
+        open={isOpen}
         onOk={handleOk}
         onCancel={handleCancel}
       >
@@ -88,12 +96,12 @@ const CreateCourseButton: React.FC = () => {
             label="Description"
             rules={[{ required: true, message: 'Please input the description!' }]}
           >
-            <TinyMCEEditorComponent
+            <Input.TextArea
               value={description}
-              onEditorChange={(content) => {
-                setDescription(content);
-                form.setFieldsValue({ description: content });
-              }}
+              onChange={handleDescriptionChange}
+              maxLength={200}
+              showCount
+              autoSize={{ minRows: 3, maxRows: 5 }}
             />
           </Form.Item>
           <Form.Item

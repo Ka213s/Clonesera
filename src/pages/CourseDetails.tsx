@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import { getCourseDetail, createCart } from "../utils/commonImports";
 import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse } from "antd";
 import { PlayCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
+import { Editor } from '@tinymce/tinymce-react';
 import "tailwindcss/tailwind.css";
 import ReviewSection from "./ReviewSection";
 
@@ -22,6 +23,7 @@ interface Course {
   discount: number;
   price_paid: number;
   full_time: number;
+  content: string; // Added content property here
   session_list: {
     _id: string;
     name: string;
@@ -123,7 +125,10 @@ const CourseDetails: React.FC = () => {
               {course.category_name}
             </Tag>
             <p className="mb-2">
-              <strong>Instructor:</strong> {course.instructor_name}
+              <strong>Instructor:</strong>
+              <Link to={`/view-profile/${course.instructor_id}`}>
+                <span className="text-green-600 font-semibold hover:underline ml-2">{course.instructor_name}</span>
+              </Link>
             </p>
             <p className="mb-2 flex items-center">
               <strong className="mr-2">Price:</strong>
@@ -151,7 +156,7 @@ const CourseDetails: React.FC = () => {
                 <Button
                   type="default"
                   onClick={handleAddToCart}
-                  className="mb-4 custom-button p-4"
+                  className="mb-4 custom-button p-4 bg-blue-500 text-white hover:bg-blue-600"
                 >
                   Add to Cart
                 </Button>
@@ -160,7 +165,7 @@ const CourseDetails: React.FC = () => {
                 <Button
                   type="default"
                   onClick={handleLearnCourse}
-                  className="mb-4 custom-button p-4"
+                  className="mb-4 custom-button p-4 bg-green-500 text-white hover:bg-green-600"
                 >
                   Learn Course
                 </Button>
@@ -169,7 +174,7 @@ const CourseDetails: React.FC = () => {
                 type="default"
                 icon={<PlayCircleOutlined />}
                 onClick={showModal}
-                className="mb-4 custom-button p-4"
+                className="mb-4 custom-button p-4 bg-yellow-500 text-white hover:bg-yellow-600"
               >
                 Watch Introduction
               </Button>
@@ -179,6 +184,26 @@ const CourseDetails: React.FC = () => {
         <Divider />
         <div className="p-4">
           <h2 className="text-xl font-bold mb-4">Course Content</h2>
+          <Editor
+            apiKey="2yifh7kylzpd5szlkd3irl90etvaxhqgknrd2zfbdz4sjeox" // Replace with your actual TinyMCE API key
+            initialValue={course.content || ''}
+            init={{
+              menubar: false,
+              plugins: ['autoresize'],
+              toolbar: false,
+              autoresize_bottom_margin: 20,
+              autoresize_overflow_padding: 10,
+              setup: (editor) => {
+                editor.on('init', () => {
+                  editor.getContainer().style.overflow = 'hidden';
+                  editor.getContainer().style.border = 'none'; // Remove the border
+                });
+              }
+            }}
+            disabled={true}
+          />
+
+          <h2 className="text-xl font-bold mb-4">Course Session</h2>
           <Collapse accordion>
             {course.session_list.map((session) => (
               <Panel
@@ -235,3 +260,4 @@ const CourseDetails: React.FC = () => {
 };
 
 export default CourseDetails;
+
