@@ -32,7 +32,7 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
 
   const fetchUsers = async (pageNum: number, pageSize: number) => {
     try {
-      const response = await getUsers({ keyword: '', role: 'all', status, is_deleted: isDeleted, is_verified : false }, pageNum, pageSize);
+      const response = await getUsers({ keyword: '', role: 'all', status, is_deleted: isDeleted, is_verified : "true" }, pageNum, pageSize);
       console.log('responsea:', response);
       setData(response.pageData);
       setPagination({

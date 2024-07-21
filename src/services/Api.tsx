@@ -66,7 +66,7 @@ export const getUserData = async (id: string) => {
   return response.data;
 };
 
-export const getUsers = async (searchCondition: { keyword: string; role: string; status: boolean; is_deleted: boolean; is_verified: boolean; }, pageNum: number, pageSize: number) => {
+export const getUsers = async (searchCondition: { keyword: string; role: string; status: boolean; is_deleted: boolean; is_verified: string; }, pageNum: number, pageSize: number) => {
   const response = await tokenAxiosInstance.post('/api/users/search', {
     searchCondition,
     pageInfo: { pageNum, pageSize }
@@ -283,6 +283,7 @@ export const deleteCart = async (id: string) => {
 
 export const updateCart = async (data: { status: string; items: { _id: string; cart_no: string }[] }) => {
   const response = await tokenAxiosInstance.put('/api/cart/update-status', data);
+  toast.success("Cart updated successfully");
   return response.data;
 };
 
@@ -301,6 +302,7 @@ export const getItemsAdmin = async (data: { searchCondition: { purchase_no?: str
 
 export const createReview = async (data: { course_id: string; comment: string; rating: number }) => {
   const response = await tokenAxiosInstance.post('/api/review', data);
+  toast.success("Review created successfully");
   return response.data;
 };
 export const getReviews = async (data: { searchCondition: { course_id?: string; rating?: number; is_instructor?: boolean; is_rating_order?: boolean; is_deleted?: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
@@ -309,10 +311,42 @@ export const getReviews = async (data: { searchCondition: { course_id?: string; 
 };
 export const updateReview = async (id: string, data: { course_id: string; comment: string; rating: number }) => {
   const response = await tokenAxiosInstance.put(`/api/review/${id}`, data);
+  toast.success("Review updated successfully");
   return response.data;
 };
 
 export const getReviewById = async (id: string) => {
   const response = await tokenAxiosInstance.get(`/api/review/${id}`);
+  return response.data;
+};
+export const createBlog = async (data: { name: string; category_id: string; image_url: string; description: string; content: string; }) => {
+  const response = await tokenAxiosInstance.post('/api/blog', data);
+  toast.success("Blog created successfully");
+  return response.data;
+};
+export const getBlogs = async (data: { searchCondition: { category_id: string; is_deleted: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
+  const response = await tokenAxiosInstance.post('/api/blog/search', data);
+  return response.data;
+};
+export const updateBlog = async (id: string, data: { name: string; user_id: string; category_id: string; description: string; image_url: string; content: string; }) => {
+  const response = await tokenAxiosInstance.put(`/api/blog/${id}`, data);
+  toast.success("Blog updated successfully");
+  return response.data;
+};
+export const getBlogById = async (id: string) => {
+  const response = await tokenAxiosInstance.get(`/api/blog/${id}`);
+  return response.data;
+};
+export const deleteBlog = async (id: string) => {
+  const response = await tokenAxiosInstance.delete(`/api/blog/${id}`);
+  toast.success("Blog deleted successfully");
+  return response.data;
+};
+export const getBlogsPublic = async (data: { searchCondition: { category_id: string; is_deleted: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
+  const response = await tokenAxiosInstance.post('/api/client/blog/search', data);
+  return response.data;
+};
+export const getBlogByIdPublic = async (id: string) => {
+  const response = await tokenAxiosInstance.get(`/api/client/blog/${id}`);
   return response.data;
 };
