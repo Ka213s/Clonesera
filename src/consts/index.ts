@@ -98,7 +98,7 @@ export const SidebarIntructorData = {
   insSidebarItem: [
     { text: "My Profile", icon: "UserOutlined", url: "/view-my-profile" },
     { text: "Manage Course", icon: "BookOutlined", url: "/courses" },
-    { text: "View All Courses", icon: "BookOutlined", url: "/view-all-course" },
+
     { text: "Subscription", icon: "BellOutlined", url: "/list-subscription" },
     { text: "Log Course", icon: "BookOutlined", url: "/log-course" },
     { text: "Courses Sold", icon: "ShoppingCartOutlined", url: "/courses-sold" }, // Courses others have bought from me

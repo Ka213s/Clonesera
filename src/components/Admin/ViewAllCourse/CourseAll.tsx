@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Tag, message } from 'antd';
+import { Table, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { getCourses } from '../../../utils/commonImports';
+import moment from 'moment';
+import { getStatusTag } from '../../../utils/statusTagUtils';
+
 
 interface Course {
   _id: number;
@@ -9,6 +12,8 @@ interface Course {
   category_name: string;
   status: string;
   price: number;
+  discount: number;
+  created_at: string;
 }
 
 const CourseTable: React.FC = () => {
@@ -36,46 +41,45 @@ const CourseTable: React.FC = () => {
     fetchCourses();
   }, []);
 
-  const getStatusTag = (status: string) => {
-    let color;
-    switch (status) {
-      case 'active':
-        color = 'green';
-        break;
-      case 'inactive':
-        color = 'red';
-        break;
-      case 'approve':
-        color = 'blue';
-        break;
-      default:
-        color = 'default';
-    }
-    return <Tag color={color}>{status.toUpperCase()}</Tag>;
-  };
-
   const columns: ColumnsType<Course> = [
     {
-      title: 'Name',
+      title: <div className="center-header">Name</div>,
       dataIndex: 'name',
       key: 'name',
+  
     },
     {
-      title: 'Category Name',
+      title: <div className="center-header">Category Name</div>,
       dataIndex: 'category_name',
       key: 'category_name',
+    
     },
     {
-      title: 'Status',
+      title: <div className="center-header">Status</div>,
       dataIndex: 'status',
       key: 'status',
-      render: (status: string) => getStatusTag(status),
+      render: getStatusTag,
+    
     },
     {
-      title: 'Price',
+      title: <div className="center-header">Price</div>,
       dataIndex: 'price',
       key: 'price',
-    }
+    
+    },
+    {
+      title: <div className="center-header">Discount</div>,
+      dataIndex: 'discount',
+      key: 'discount',
+      
+    },
+    {
+      title: <div className="center-header">Created At</div>,
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (text: string) => moment(text).format('DD-MM-YYYY'),
+    
+    },
   ];
 
   return <Table columns={columns} dataSource={courses} rowKey="_id" />;

@@ -52,16 +52,16 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
     setIsModalVisible(true);
   };
 
-  const handleOk = async (values: any): Promise<void> => {
+  const handleOk = async (values: Lesson): Promise<void> => {
     try {
       // Parse `full_time` from the format "Xh Ym" or "Xm"
-      const fullTimeString = values.full_time as string;
+      const fullTimeString = values.full_time as unknown as string;
       const match = fullTimeString.match(/(\d+)h (\d+)m/) || [];
       const hours = match[1] ? parseInt(match[1], 10) : 0;
       const minutes = match[2] ? parseInt(match[2], 10) : parseInt(fullTimeString.replace('m', ''), 10);
       const fullTimeInMinutes = hours * 60 + minutes;
 
-      const updatedValues = {
+      const updatedValues: Lesson = {
         ...values,
         full_time: fullTimeInMinutes,
         video_url: values.video_url || "",
@@ -73,6 +73,7 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
       message.success('Lesson updated successfully');
     } catch (error) {
       console.error('Error updating lesson:', error);
+      message.error('Failed to update lesson');
     }
   };
 
@@ -91,7 +92,7 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
 
   return (
     <>
-      <Button icon={<EditOutlined />} onClick={showModal}>Edit</Button>
+      <Button className='mr-2' icon={<EditOutlined />} onClick={showModal}></Button>
       <Modal title="Update Lesson" visible={isModalVisible} onCancel={handleCancel} footer={null}>
         {lesson && (
           <Form form={form} onFinish={handleOk} initialValues={lesson}>

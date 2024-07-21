@@ -1,9 +1,9 @@
 
-import Pending from "../../components/Admin/PedingCourse/ChangeStatus"
+import Manager from "../../components/Admin/PedingCourse/Manager"
 const PedingCourse = () => {
   return (
     <div>
-        <Pending />
+        <Manager />
     </div>
   )
 }

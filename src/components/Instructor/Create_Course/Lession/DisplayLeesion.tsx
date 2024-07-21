@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableColumnsType } from 'antd';
+import moment from 'moment';
 import { getLessons } from '../../../../utils/commonImports';
 import UpdateLesson from './EditLesson';
 import DeleteLesson from './DeleteLesson';
@@ -7,9 +8,12 @@ import DeleteLesson from './DeleteLesson';
 interface Lesson {
   _id: string;
   name: string;
-  course_id: string;
+  course_name: string;
   lesson_type: string;
-  full_time: number; // Updated to number
+  full_time: number;
+  created_at: string;
+  video_url?: string;
+  image_url?: string;
 }
 
 interface SearchCondition {
@@ -38,7 +42,7 @@ const DisplayLesson: React.FC = () => {
       const pageSize = 10;
 
       const data = await getLessons(searchCondition, pageNum, pageSize);
-      setLessons(data.pageData); // Ensure `data.pageData` includes `full_time`
+      setLessons(data.pageData); // Ensure `data.pageData` includes necessary fields
     } catch (error) {
       console.error('Error fetching lessons:', error);
     }
@@ -49,7 +53,7 @@ const DisplayLesson: React.FC = () => {
   }, []);
 
   const formatFullTime = (minutes: number) => {
-    if (minutes > 60) {
+    if (minutes >= 60) {
       const hours = Math.floor(minutes / 60);
       const remainingMinutes = minutes % 60;
       return `${hours}h ${remainingMinutes}m`;
@@ -57,27 +61,64 @@ const DisplayLesson: React.FC = () => {
     return `${minutes}m`;
   };
 
+  const renderMedia = (record: Lesson) => {
+    if (record.video_url) {
+      return (
+        <div className="flex justify-center items-center ">
+          <video width="200" controls className='rounded-md'>
+            <source src={record.video_url} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        </div>
+      );
+    } else if (record.image_url) {
+      return (
+        <div className="flex justify-center items-center ">
+          <img src={record.image_url} alt="lesson media" width="200" className='rounded-md'/>
+        </div>
+      );
+    }
+    return null;
+  };
+
   const columns: TableColumnsType<Lesson> = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+     
     },
     {
-      title: 'Course ID',
-      dataIndex: 'course_id',
-      key: 'course_id',
+      title: 'Course Name',
+      dataIndex: 'course_name',
+      key: 'course_name',
+   
     },
     {
       title: 'Type',
       dataIndex: 'lesson_type',
       key: 'lesson_type',
+    
     },
     {
       title: 'Full Time',
       dataIndex: 'full_time',
       key: 'full_time',
       render: (value: number) => formatFullTime(value),
+     
+    },
+    {
+      title: 'Created At',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (text: string) => moment(text).format('DD-MM-YYYY'),
+    
+    },
+    {
+      title: 'Media',
+      key: 'media',
+      render: (_, record: Lesson) => renderMedia(record),
+      align: 'center',
     },
     {
       title: 'Actions',
@@ -88,6 +129,7 @@ const DisplayLesson: React.FC = () => {
           <DeleteLesson lesson_id={record._id} />
         </>
       ),
+      align: 'center',
     },
   ];
 

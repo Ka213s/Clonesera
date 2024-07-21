@@ -1,8 +1,8 @@
 import React from 'react';
 import { Tabs, Layout } from 'antd';
 import Course from './CourseAll';
-import Session from './LessonAll';
-import Lesson from './SessionAll';
+import Session from './SessionAll';
+import Lesson from './LessonAll';
 
 const { Content } = Layout;
 const CreateCourse: React.FC = () => {
