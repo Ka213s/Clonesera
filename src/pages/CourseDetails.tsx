@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import { getCourseDetail, createCart } from "../utils/commonImports";
+import { NT_getCourseDetail, createCart } from "../utils/commonImports";
 import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse } from "antd";
 import { PlayCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { Editor } from '@tinymce/tinymce-react';
@@ -23,15 +23,15 @@ interface Course {
   discount: number;
   price_paid: number;
   full_time: number;
-  content: string; // Added content property here
+  content: string;
   session_list: {
     _id: string;
-    name: string;
+    session_name: string;
     position_order: number;
     full_time: number;
     lesson_list: {
       _id: string;
-      name: string;
+      lesson_name: string;
       lesson_type: string;
       full_time: number;
       position_order: number;
@@ -56,7 +56,7 @@ const CourseDetails: React.FC = () => {
       }
 
       try {
-        const data = await getCourseDetail(id);
+        const data = await NT_getCourseDetail(id);
         setCourse(data);
       } catch (error) {
         message.error("Error fetching course details");
@@ -209,7 +209,7 @@ const CourseDetails: React.FC = () => {
               <Panel
                 header={
                   <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-semibold">{session.name}</h3>
+                    <h3 className="text-lg font-semibold">{session.session_name}</h3>
                     <p>
                       {session.lesson_list.length} lessons • {session.full_time} minutes
                     </p>
@@ -225,7 +225,7 @@ const CourseDetails: React.FC = () => {
                         <Tooltip title={lesson.lesson_type}>
                           <InfoCircleOutlined className="mr-2" />
                         </Tooltip>
-                        {lesson.name}
+                        {lesson.lesson_name}
                       </div>
                       <div>
                         {lesson.full_time} minutes

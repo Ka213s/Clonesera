@@ -1,4 +1,4 @@
-import { tokenAxiosInstance } from './axiosInstance';
+import { tokenAxiosInstance, defaultAxiosInstance } from './axiosInstance';
 import { toast } from 'react-toastify';
 
 export const registerAccountStudent = async (data: { name: string; email: string; password: string; role: string; }) => {
@@ -258,12 +258,19 @@ export const getPublicCourses = async (data: { searchCondition: { keyword?: stri
   const response = await tokenAxiosInstance.post('/api/client/course/search', data);
   return response.data;
 };
+export const NT_getPublicCourses = async (data: { searchCondition: { keyword?: string; category_id?: string; is_deleted?: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
+  const response = await defaultAxiosInstance.post('/api/client/course/search', data);
+  return response.data;
+};
 
 export const getCourseDetail = async (id: string) => {
   const response = await tokenAxiosInstance.get(`/api/client/course/${id}`);
   return response.data;
 };
-
+export const NT_getCourseDetail = async (id: string) => {
+  const response = await defaultAxiosInstance.get(`/api/client/course/${id}`);
+  return response.data;
+};
 export const createCart = async (data: { course_id: string }) => {
   const response = await tokenAxiosInstance.post('/api/cart', data);
   toast.success("Course added to cart successfully");

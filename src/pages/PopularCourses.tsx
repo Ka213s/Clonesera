@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Tag, Skeleton, Rate } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { getPublicCourses } from '../utils/commonImports';
+import { NT_getPublicCourses } from '../utils/commonImports';
 import { useNavigate } from 'react-router-dom';
 
 interface Course {
@@ -13,27 +13,13 @@ interface Course {
   image_url: string;
   price_paid: number;
   lesson_count: number;
-  session_count : number;
-  full_time: number;
-  average_rating: number;
-}
-
-interface CourseResponse {
-  _id: number;
-  name: string;
-  category_name: string;
-  instructor_name: string;
-  description: string;
-  image_url: string;
-  price_paid: number;
-  lesson_count: number;
-  session_count : number;
+  session_count: number;
   full_time: number;
   average_rating: number;
 }
 
 interface ApiResponse {
-  pageData: CourseResponse[];
+  pageData: Course[];
 }
 
 const PopularCourses: React.FC = () => {
@@ -57,7 +43,7 @@ const PopularCourses: React.FC = () => {
             pageSize: 10,
           },
         };
-        const response: ApiResponse = await getPublicCourses(data);
+        const response: ApiResponse = await NT_getPublicCourses(data);
         setCourses(response.pageData);
         setLoading(false);
       } catch (error) {
@@ -127,13 +113,12 @@ const PopularCourses: React.FC = () => {
                   className="w-full h-40 object-cover" // Adjusted height for image
                 />
                 <div className="flex items-center mt-2 space-x-2 ml-2">
-                <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
+                  <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
                     <span className="text-gray-500 text-sm">{course.session_count} Session</span>
                   </div>
                   <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
                     <span className="text-gray-500 text-sm">{course.lesson_count} Lessons</span>
                   </div>
-                 
                   <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
                     <span className="text-gray-500 text-sm">
                       {course.full_time > 0
@@ -146,7 +131,6 @@ const PopularCourses: React.FC = () => {
                   <h2 className="text-lg font-semibold mt-1 h-10 overflow-hidden overflow-ellipsis whitespace-nowrap">
                     {course.name}
                   </h2>
-                 
                   <p className="text-sm text-gray-600 mb-2">
                     <Tag color="blue">
                       {course.category_name || 'Default Category'}
