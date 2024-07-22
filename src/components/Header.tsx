@@ -137,8 +137,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               />
             </Badge>
 
-          
-
+        
           
             <Divider className="border-gray-400  h-9" type="vertical" />
             <div className="">

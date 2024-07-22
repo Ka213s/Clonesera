@@ -52,18 +52,13 @@ const AppRouter: React.FC = () => {
                 <Routes>
                     {/* Public Routes with MainLayout */}
                     <Route element={<LayoutRoute />}>
-                        <Route path={PUBLIC.LOGOUT} element={<Logout />} />
                         <Route path={PUBLIC.COURSE_DETAIL} element={<CourseDetails />} />
                         <Route path={PUBLIC.VIEW_CART} element={<ViewCart />} />
                         <Route path={PUBLIC.VIEW_ORDER} element={<ViewOrder />} />
                         <Route path={PUBLIC.PAYMENT} element={<Payment />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
                         <Route path={PUBLIC.BLOG_DETAIL} element={<BlogDetail />} />
-                        <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />
-                        <Route path={PUBLIC.LOGIN} element={<Login />} />
-                        <Route path={PUBLIC.REGISTER} element={<Register />} />
-                        <Route path={PUBLIC.VERIFY_EMAIL} element={<VerifyEmail />} />
-                        <Route path={PUBLIC.FORGOT_PASSWORD} element={<ForgotPassword />} />
+                        <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />                       
                     </Route>
 
                     {/* Instructor Routes with MainLayout */}
@@ -100,6 +95,11 @@ const AppRouter: React.FC = () => {
                     </Route>
 
                     {/* Error Routes */}
+                    <Route path={PUBLIC.LOGIN} element={<Login />} />
+                    <Route path={PUBLIC.LOGOUT} element={<Logout />} />
+                    <Route path={PUBLIC.REGISTER} element={<Register />} />
+                    <Route path={PUBLIC.VERIFY_EMAIL} element={<VerifyEmail />} />
+                    <Route path={PUBLIC.FORGOT_PASSWORD} element={<ForgotPassword />} />
                     <Route path={ERROR.ERROR403} element={<PageError403 />} />
                     <Route path={ERROR.ERROR404} element={<PageError404 />} />
                     <Route path={ERROR.ERROR500} element={<PageError500 />} />

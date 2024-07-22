@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Badge, Dropdown, Avatar, Menu, Typography, Divider } from 'antd';
-import { PlusOutlined, ShoppingCartOutlined, MailOutlined, BellOutlined, UserOutlined } from '@ant-design/icons';
+import { PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
 import { getCart } from '../services/Api';
@@ -77,13 +77,7 @@ const HeaderNoMenu: React.FC = () => {
     navigate('/view-cart');
   };
 
-  const notificationMenuItems = (
-    <Menu>
-      <Menu.Item key="1">Notification 1</Menu.Item>
-      <Menu.Item key="2">Notification 2</Menu.Item>
-      <Menu.Item key="3">Notification 3</Menu.Item>
-    </Menu>
-  );
+
 
   const userMenu = (
     <Menu>
@@ -133,17 +127,7 @@ const HeaderNoMenu: React.FC = () => {
               />
             </Badge>
 
-            <Badge count={3}>
-              <Dropdown overlay={notificationMenuItems} trigger={['click']}>
-                <MailOutlined className="icon-size text-2xl cursor-pointer text-black" />
-              </Dropdown>
-            </Badge>
-
-            <Badge count={9}>
-              <Dropdown overlay={notificationMenuItems} trigger={['click']}>
-                <BellOutlined className="icon-size text-2xl cursor-pointer text-black" />
-              </Dropdown>
-            </Badge>
+         
             <Divider className="border-gray-400 h-9" type="vertical" />
             <div className="">
               <Dropdown overlay={userMenu} trigger={['click']}>
