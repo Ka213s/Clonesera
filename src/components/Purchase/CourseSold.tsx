@@ -1,20 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'antd';
-import { TablePaginationConfig } from 'antd/lib/table';
+import { TablePaginationConfig } from 'antd/es/table';
 import { getItemsByInstructor } from '../../utils/commonImports';
 import { getStatusTag } from '../../utils/statusTagUtils';
 import { createPayout } from '../../services/Api';
 import { toast } from 'react-toastify';
 
 interface PurchaseData {
-  _id: string; // Add the _id field
+  _id: string; // Use _id field
   purchase_no: string;
   cart_no: string;
   course_name: string;
   status: string;
   price_paid: number;
   student_name: string;
-  // Add other fields as necessary
 }
 
 interface ApiResponse {
@@ -29,6 +28,7 @@ const Purchase: React.FC = () => {
     pageSize: 10,
     total: 0,
   });
+  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
   useEffect(() => {
     fetchData({
@@ -61,11 +61,17 @@ const Purchase: React.FC = () => {
     });
   };
 
-  const handleCreatePayout = async (purchase: PurchaseData) => {
+  const handleSelectChange = (selectedKeys: React.Key[]) => {
+    setSelectedRowKeys(selectedKeys);
+  };
+
+  const handleCreatePayout = async () => {
     try {
-      const transactions = [{ purchase_id: purchase._id }]; // Use _id for transaction
+      const transactions = selectedRowKeys.map((id) => ({ purchase_id: id as string }));
       const response = await createPayout(transactions);
       console.log('Payout response:', response);
+      toast.success("Payout created successfully!");
+      setSelectedRowKeys([]); // Clear selection after creation
     } catch (error) {
       toast.error("Failed to create payout");
       console.error('Failed to create payout:', error);
@@ -104,16 +110,6 @@ const Purchase: React.FC = () => {
       dataIndex: 'student_name',
       key: 'student_name',
     },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (record: PurchaseData) => (
-        <Button type="primary" onClick={() => handleCreatePayout(record)}>
-          Create Payout
-        </Button>
-      ),
-    },
-    // Add other columns as needed
   ];
 
   return (
@@ -124,7 +120,19 @@ const Purchase: React.FC = () => {
       })}>
         Reload
       </Button>
+      <Button
+        type="primary"
+        onClick={handleCreatePayout}
+        disabled={selectedRowKeys.length === 0} // Disable if no rows are selected
+        style={{ marginLeft: 10 }}
+      >
+        Create Payout
+      </Button>
       <Table
+        rowSelection={{
+          selectedRowKeys,
+          onChange: handleSelectChange,
+        }}
         columns={columns}
         dataSource={data}
         pagination={pagination}
