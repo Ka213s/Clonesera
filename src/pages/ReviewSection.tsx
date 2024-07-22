@@ -33,6 +33,7 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ courseId }) => {
           },
           pageInfo: { pageNum: 1, pageSize: 10 },
         });
+        console.log(courseId);
         setReviews(data.pageData);
       } catch (error) {
         message.error("Error fetching reviews");
@@ -87,11 +88,8 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ courseId }) => {
             updated_at: new Date().toISOString(),
           },
         ]);
-
-        message.success("Review submitted successfully");
         form.resetFields();
       } catch (error) {
-        message.error("Error submitting review");
         console.error("Error submitting review:", error);
       }
     }

@@ -1,22 +1,19 @@
+// src/components/HeaderNoMenu.tsx
 import React, { useEffect, useState } from 'react';
 import { Button, Badge, Dropdown, Avatar, Menu, Typography, Divider } from 'antd';
-import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import { PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
-import { getCart } from '../services/Api';
+import { useCart } from '../consts/CartContext';
 
 const { Text } = Typography;
 
-type HeaderProps = {
-  toggleMenu: () => void;
-};
-
-const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
+const HeaderNoMenu: React.FC = () => {
   const [avatar, setAvatar] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  const [cartCount, setCartCount] = useState<number>(0);
+  const { cartCount } = useCart(); // Use cart count from context
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,38 +31,11 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      fetchCartCount();
-    }
-  }, [isLoggedIn]);
-
-  const fetchCartCount = async () => {
-    const data = {
-      searchCondition: {
-        status: 'new',
-        is_deleted: false,
-      },
-      pageInfo: {
-        pageNum: 1,
-        pageSize: 100,
-      },
-    };
-
-    try {
-      const response = await getCart(data);
-      setCartCount(response.pageData.length);
-    } catch (error) {
-      console.error('Failed to fetch cart count:', error);
-    }
-  };
-
   const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     if (role === 'admin') {
-      e.preventDefault();
       navigate('/display-account');
     } else {
-      e.preventDefault();
       navigate('/homepage');
     }
   };
@@ -100,12 +70,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
       <div className="flex items-center space-x-4">
-        <Button
-          icon={<MenuOutlined />}
-          onClick={toggleMenu}
-          shape="circle"
-          className="button-menu"
-        />
         <Link to="/" onClick={handleLogoClick}>
           <img src={logo} alt="Logo" className="h-12 w-auto cursor-pointer" />
         </Link>
@@ -158,4 +122,4 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   );
 };
 
-export default Header;
+export default HeaderNoMenu;

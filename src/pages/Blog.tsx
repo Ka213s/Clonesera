@@ -1,9 +1,8 @@
-// src/components/Blog.tsx
-
 import React, { useEffect, useState } from 'react';
-import { List, Spin, Typography } from 'antd';
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
-import { getBlogsPublic } from '../utils/commonImports'; // Ensure the path is correct
+import { Typography, Skeleton } from 'antd';
+import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { useNavigate } from 'react-router-dom';
+import { getBlogsPublic } from '../utils/commonImports';
 
 const { Title } = Typography;
 
@@ -20,7 +19,8 @@ interface Blog {
 const Blog: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -32,7 +32,7 @@ const Blog: React.FC = () => {
           },
           pageInfo: {
             pageNum: 1,
-            pageSize: 5, // Fetch a reasonable number of blogs, adjust as needed
+            pageSize: 100, // Fetch a large number to handle pagination client-side
           },
         };
         const response = await getBlogsPublic(data);
@@ -47,42 +47,71 @@ const Blog: React.FC = () => {
     fetchBlogs();
   }, []);
 
-  if (loading) {
-    return <Spin tip="Loading..." />;
-  }
-
   const handleClick = (id: string) => {
-    navigate(`/blog-detail/${id}`); // Navigate to the BlogDetail page
+    navigate(`/blog-detail/${id}`);
+  };
+
+  const blogsPerPage = 4;
+  const totalPages = Math.ceil(blogs.length / blogsPerPage);
+  const startIndex = (currentPage - 1) * blogsPerPage;
+  const currentBlogs = blogs.slice(startIndex, startIndex + blogsPerPage);
+
+  const handlePreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
   };
 
   return (
     <div className="bg-white p-6 rounded-lg shadow-lg">
       <Title level={2} className="mb-4">Latest Blog Posts</Title>
-      <List
-        itemLayout="vertical"
-        size="large"
-        dataSource={blogs}
-        renderItem={blog => (
-          <List.Item
-            key={blog._id}
-            extra={<img width={272} alt="blog" src={blog.image_url} />}
-            onClick={() => handleClick(blog._id)} // Handle click event
-            style={{ cursor: 'pointer' }} // Change cursor to pointer on hover
-          >
-            <List.Item.Meta
-              title={blog.title}
-              description={
-                <>
-                  <div><strong>Author:</strong> {blog.user_name}</div>
-                  <div><strong>Category:</strong> {blog.category_name}</div>
-                  <div><strong>Updated at:</strong> {new Date(blog.updated_at).toLocaleDateString()}</div>
-                </>
-              }
-            />
-            {blog.description}
-          </List.Item>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
+        {loading ? (
+          Array.from({ length: blogsPerPage }).map((_, index) => (
+            <Skeleton key={index} active className="p-4" />
+          ))
+        ) : (
+          currentBlogs.map(blog => (
+            <div
+              key={blog._id}
+              onClick={() => handleClick(blog._id)}
+              className="cursor-pointer hover:bg-gray-100 p-4 rounded-lg transition duration-300 shadow-md"
+            >
+              <img width={272} alt="blog" src={blog.image_url} className="rounded-lg mb-4" />
+              <div className="text-xl font-semibold mb-2">{blog.title}</div>
+              <div className="text-gray-500">
+                <div><strong>Author:</strong> {blog.user_name}</div>
+                <div><strong>Specialties:</strong> {blog.category_name}</div>
+                <div><strong>Update:</strong> {new Date(blog.updated_at).toLocaleDateString()}</div>
+              </div>
+              <p className="text-gray-700 mt-2">{blog.description}</p>
+            </div>
+          ))
         )}
-      />
+      </div>
+      <div className="flex justify-center mt-4">
+        {currentPage > 1 && (
+          <LeftOutlined
+            onClick={handlePreviousPage}
+            className="cursor-pointer text-lg mx-2 transform transition-transform duration-300 hover:scale-110"
+          />
+        )}
+        <span className="text-lg">
+          Page {currentPage}/{totalPages}
+        </span>
+        {currentPage < totalPages && (
+          <RightOutlined
+            onClick={handleNextPage}
+            className="cursor-pointer text-lg mx-2 transform transition-transform duration-300 hover:scale-110"
+          />
+        )}
+      </div>
     </div>
   );
 };

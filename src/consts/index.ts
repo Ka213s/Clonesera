@@ -19,7 +19,9 @@ export const ADMIN = {
   PENDING_COURSE: '/pending-courses',
   LOG_COURSE: '/log-course',
   PURCHASE: '/purchase',
-  BLOG: '/blog'
+  BLOG: '/blog',
+  PAYOUT_MANAGEMENT: '/payout-management',
+  FINANCE: '/finance'
 }
 export const INSTRUCTOR = {
   COURSE: '/courses',
@@ -29,7 +31,9 @@ export const INSTRUCTOR = {
   VIEW_PROFILE: '/view-profile/:id',
   PURCHASE: '/purchased-courses',
   COURSE_SOLD: '/courses-sold',
-  REVIEW: '/review',  
+  REVIEW: '/review',
+  PAYOUT: '/payout',
+  TRANSACTION_DETAIL: '/transaction/:id'
 };
 export const PUBLIC = {
   HOME: '/homepage',
@@ -104,10 +108,11 @@ export const SidebarIntructorData = {
     { text: "Subscription", icon: "BellOutlined", url: "/list-subscription" },
     { text: "Log Course", icon: "BookOutlined", url: "/log-course" },
     { text: "Courses Sold", icon: "ShoppingCartOutlined", url: "/courses-sold" }, // Courses others have bought from me
+    { text: "Payout", icon: "FileTextOutlined", url: "/payout" },
     { text: "Purchased Courses", icon: "ShoppingCartOutlined", url: "/purchased-courses" }, // Courses I have bought
     { text: "Review", icon: "StarOutlined", url: "/review" },
     { text: "Setting", icon: "SettingOutlined", url: "/setting-page" }
-    
+
   ]
 };
 
@@ -128,6 +133,7 @@ export const SidebarStudentData = {
 
 export const SidebarAdminData = {
   menuItems: [
+    { "key": "/finance", "label": "Finance", "icon": "MoneyCollectOutlined" },
     { "key": "/display-account", "label": "Manager User", "icon": "TeamOutlined" },
     { "key": "/request-management", "label": "Request Management", "icon": "TeamOutlined" },
     { "key": "/categories", "label": "Category Management", "icon": "DashboardOutlined" },
@@ -135,6 +141,7 @@ export const SidebarAdminData = {
     { "key": "/pending-courses", "label": "Pending Courses", "icon": "BookOutlined" },
     { "key": "/log-course", "label": "Course Log", "icon": "BookOutlined" },
     { "key": "/purchase", "label": "Purchase", "icon": "ShoppingCartOutlined" },
+    { "key": "/payout-management", "label": "Payout Management", "icon": "FileTextOutlined" },
     { "key": "/blog", "label": "Blog", "icon": "MessageOutlined" }
 
   ]
