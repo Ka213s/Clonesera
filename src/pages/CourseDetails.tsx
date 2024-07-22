@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
 import { NT_getCourseDetail, getCourseDetail, createCart } from "../utils/commonImports";
-import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse } from "antd";
+import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse, Skeleton } from "antd";
 import { PlayCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
 import { Editor } from '@tinymce/tinymce-react';
 import "tailwindcss/tailwind.css";
@@ -20,7 +20,7 @@ interface Course {
   description: string;
   image_url: string;
   video_url: string;
-  discount: number;
+  discount?: number;
   price_paid: number;
   full_time: number;
   content: string;
@@ -45,6 +45,7 @@ const CourseDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const [course, setCourse] = useState<Course | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   useEffect(() => {
@@ -67,6 +68,8 @@ const CourseDetails: React.FC = () => {
       } catch (error) {
         message.error("Error fetching course details");
         console.error("Error fetching course details:", error);
+      } finally {
+        setIsLoading(false);
       }
     };
 
@@ -108,94 +111,88 @@ const CourseDetails: React.FC = () => {
     }
   };
 
-  if (!course) {
-    return (
-      <div className="flex items-center justify-center min-h-screen text-sm">
-        No course details available
-      </div>
-    );
-  }
-
   return (
     <div className="container mx-auto p-4 text-sm">
       <Button onClick={() => navigate('/homepage')} className="mb-4 bg-blue-500 text-white hover:bg-blue-600">
         Back to Homepage
       </Button>
       <Card className="shadow-lg rounded-lg overflow-hidden">
-        <div className="flex flex-col md:flex-row items-start">
-          <img
-            src={course.image_url || "https://via.placeholder.com/400"}
-            alt={course.name}
-            className="w-full md:w-1/3 object-cover rounded-lg mb-4 md:mb-0"
-          />
-          <div className="md:ml-4 flex-1">
-            <h1 className="text-2xl font-bold mb-4">{course.name}</h1>
-            <Tag color="blue" className="mb-4">
-              {course.category_name}
-            </Tag>
-            <p className="mb-2">
-              <strong>Instructor:</strong>
-              <Link to={`/view-profile/${course.instructor_id}`}>
-                <span className="text-blue-600 font-semibold hover:underline ml-2">{course.instructor_name}</span>
-              </Link>
-            </p>
-            <p className="mb-2 flex items-center">
-              <strong className="mr-2">Price:</strong>
-              <span className="line-through text-gray-500">
-                ${course.price}
-              </span>
-              <span className="ml-2 text-red-500 font-semibold">
-                ${course.price_paid}
-              </span>
-              {course.discount > 0 && (
-                <Tag color="red" className="ml-2">
-                  - {course.discount}%
-                </Tag>
-              )}
-            </p>
-            <p className="mb-2">
-              <strong>Full Time:</strong> {course.full_time} minutes
-            </p>
-            <p className="mb-4">
-              <strong>Description:</strong>{" "}
-              {course.description.replace(/<\/?p>/g, "")}
-            </p>
-            <div className="flex space-x-4 mt-8">
-              {(!course.is_purchased) && (
+        <Skeleton loading={isLoading} active>
+          <div className="flex flex-col md:flex-row items-start">
+            <img
+              src={course?.image_url || "https://via.placeholder.com/400"}
+              alt={course?.name}
+              className="w-full md:w-1/3 object-cover rounded-lg mb-4 md:mb-0"
+            />
+            <div className="md:ml-4 flex-1">
+              <h1 className="text-2xl font-bold mb-4">{course?.name}</h1>
+              <Tag color="blue" className="mb-4">
+                {course?.category_name}
+              </Tag>
+              <p className="mb-2">
+                <strong>Instructor:</strong>
+                <Link to={`/view-profile/${course?.instructor_id}`}>
+                  <span className="text-blue-600 font-semibold hover:underline ml-2">{course?.instructor_name}</span>
+                </Link>
+              </p>
+              <p className="mb-2 flex items-center">
+                <strong className="mr-2">Price:</strong>
+                <span className="line-through text-gray-500">
+                  ${course?.price}
+                </span>
+                <span className="ml-2 text-red-500 font-semibold">
+                  ${course?.price_paid}
+                </span>
+                {course?.discount !== undefined && course.discount > 0 && (
+                  <Tag color="red" className="ml-2">
+                    - {course.discount}%
+                  </Tag>
+                )}
+              </p>
+              <p className="mb-2">
+                <strong>Full Time:</strong> {course?.full_time} minutes
+              </p>
+              <p className="mb-4">
+                <strong>Description:</strong>{" "}
+                {course?.description.replace(/<\/?p>/g, "")}
+              </p>
+              <div className="flex space-x-4 mt-8">
+                {(!course?.is_purchased) && (
+                  <Button
+                    type="default"
+                    onClick={handleAddToCart}
+                    className="mb-4 custom-button p-4 bg-blue-500 text-white hover:bg-blue-600"
+                  >
+                    Add to Cart
+                  </Button>
+                )}
+                {(course?.is_purchased) && (
+                  <Button
+                    type="default"
+                    onClick={handleLearnCourse}
+                    className="mb-4 custom-button p-4 bg-green-500 text-white hover:bg-green-600"
+                  >
+                    Learn Course
+                  </Button>
+                )}
                 <Button
                   type="default"
-                  onClick={handleAddToCart}
-                  className="mb-4 custom-button p-4 bg-blue-500 text-white hover:bg-blue-600"
+                  icon={<PlayCircleOutlined />}
+                  onClick={showModal}
+                  className="mb-4 custom-button p-4 bg-yellow-500 text-white hover:bg-yellow-600"
                 >
-                  Add to Cart
+                  Watch Introduction
                 </Button>
-              )}
-              {(course.is_purchased) && (
-                <Button
-                  type="default"
-                  onClick={handleLearnCourse}
-                  className="mb-4 custom-button p-4 bg-green-500 text-white hover:bg-green-600"
-                >
-                  Learn Course
-                </Button>
-              )}
-              <Button
-                type="default"
-                icon={<PlayCircleOutlined />}
-                onClick={showModal}
-                className="mb-4 custom-button p-4 bg-yellow-500 text-white hover:bg-yellow-600"
-              >
-                Watch Introduction
-              </Button>
+              </div>
             </div>
           </div>
-        </div>
+        </Skeleton>
         <Divider />
         <div className="p-4">
           <h2 className="text-xl font-bold mb-4">Course Content</h2>
           <Editor
             apiKey="2yifh7kylzpd5szlkd3irl90etvaxhqgknrd2zfbdz4sjeox" // Replace with your actual TinyMCE API key
-            initialValue={course.content || ''}
+            initialValue={course?.content || ''}
             init={{
               menubar: false,
               plugins: ['autoresize'],
@@ -214,7 +211,7 @@ const CourseDetails: React.FC = () => {
 
           <h2 className="text-xl font-bold mb-4">Course Session</h2>
           <Collapse accordion>
-            {course.session_list.map((session) => (
+            {course?.session_list.map((session) => (
               <Panel
                 header={
                   <div className="flex justify-between items-center">
@@ -246,7 +243,7 @@ const CourseDetails: React.FC = () => {
             ))}
           </Collapse>
           <Divider />
-          {course.is_purchased && <ReviewSection courseId={course._id} />}
+          {course?.is_purchased && <ReviewSection courseId={course._id} />}
         </div>
       </Card>
       <Modal
@@ -258,8 +255,8 @@ const CourseDetails: React.FC = () => {
         <iframe
           width="100%"
           height="400px"
-          src={course.video_url}
-          title={course.name}
+          src={course?.video_url}
+          title={course?.name}
           frameBorder="0"
           allowFullScreen
         ></iframe>
