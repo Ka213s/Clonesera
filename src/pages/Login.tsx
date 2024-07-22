@@ -227,12 +227,12 @@ const Login: React.FC = () => {
                 />
               </div>
               <div>
-                <h1>Upload Image</h1>
+                <label className="text-gray-600 mb-2">Upload Avatar</label>
                 <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
                
               </div>
               <div>
-              <h1>Upload Video</h1>
+                <label className="text-gray-600 mb-2">Upload Introduction Video</label>
                 <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
              
               </div>
