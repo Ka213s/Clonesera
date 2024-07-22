@@ -227,6 +227,7 @@ const Login: React.FC = () => {
                 />
               </div>
               <div>
+                <label className="text-gray-600 mb-2">Upload Avatar</label>
                 <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
                 {avatar && (
                   <div className="mt-2">
@@ -236,6 +237,7 @@ const Login: React.FC = () => {
                 )}
               </div>
               <div>
+                <label className="text-gray-600 mb-2">Upload Introduction Video</label>
                 <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
                 {video && (
                   <div className="mt-2">

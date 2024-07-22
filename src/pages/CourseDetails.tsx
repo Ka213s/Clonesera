@@ -130,7 +130,7 @@ const CourseDetails: React.FC = () => {
           />
           <div className="md:ml-4 flex-1">
             <h1 className="text-2xl font-bold mb-4">{course.name}</h1>
-            <Tag color="blue" className="mb-4">
+            <Tag color="green" className="mb-4">
               {course.category_name}
             </Tag>
             <p className="mb-2">

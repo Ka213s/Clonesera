@@ -157,7 +157,7 @@ const Register: React.FC = () => {
                             name="role"
                             rules={[{ required: true, message: 'Please select a role!' }]}
                         >
-                            <Radio.Group onChange={handleRoleChange} className="flex flex-col gap-2">
+                            <Radio.Group onChange={handleRoleChange} className="flex flex-row gap-2">
                                 <Radio value="student">Student</Radio>
                                 <Radio value="instructor">Instructor</Radio>
                             </Radio.Group>
@@ -180,12 +180,16 @@ const Register: React.FC = () => {
                                     <Form.Item
                                         name="videoUrl"
                                         rules={[{ required: true, message: 'Please upload a video!' }]}
+                                        label="Upload Video"
+                                        className="w-1/2"
                                     >
                                         <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
                                     </Form.Item>
                                     <Form.Item
                                         name="avatarUrl"
                                         rules={[{ required: true, message: 'Please upload an avatar!' }]}
+                                        label="Upload Avatar"
+                                        className="w-1/2"
                                     >
                                         <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
                                     </Form.Item>
