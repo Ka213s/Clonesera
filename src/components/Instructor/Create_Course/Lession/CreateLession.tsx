@@ -172,7 +172,7 @@ const CreateLessonButton: React.FC = () => {
               rules={[{ required: true, message: 'Please upload an image!' }]}
             >
               <FileUploader type="image" onUploadSuccess={setImageURL} />
-              {imageURL && <img src={imageURL} alt="Uploaded Image" style={{ marginTop: '10px', maxWidth: '100%' }} />}
+           
             </Form.Item>
           )}
           {lessonType === 'video' && (

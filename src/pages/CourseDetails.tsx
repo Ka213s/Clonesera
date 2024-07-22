@@ -1,13 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { NT_getCourseDetail, getCourseDetail, createCart } from "../utils/commonImports";
-import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse, Skeleton } from "antd";
-import { PlayCircleOutlined, InfoCircleOutlined } from "@ant-design/icons";
+// src/components/CourseDetails.tsx
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate, Link } from 'react-router-dom';
+import { NT_getCourseDetail, getCourseDetail, createCart } from '../services/Api';
+import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse, Skeleton } from 'antd';
+import { PlayCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
-import "tailwindcss/tailwind.css";
-import ReviewSection from "./ReviewSection";
+import 'tailwindcss/tailwind.css';
+import ReviewSection from './ReviewSection';
+import { useCart } from '../consts/CartContext';
 
 const { Panel } = Collapse;
+
+interface Lesson {
+  _id: string;
+  name: string;
+  lesson_type: string;
+  full_time: number;
+  position_order: number;
+}
+
+interface Session {
+  _id: string;
+  name: string;
+  position_order: number;
+  full_time: number;
+  lesson_list: Lesson[];
+}
 
 interface Course {
   _id: string;
@@ -24,19 +42,7 @@ interface Course {
   price_paid: number;
   full_time: number;
   content: string;
-  session_list: {
-    _id: string;
-    name: string;
-    position_order: number;
-    full_time: number;
-    lesson_list: {
-      _id: string;
-      name: string;
-      lesson_type: string;
-      full_time: number;
-      position_order: number;
-    }[];
-  }[];
+  session_list: Session[];
   is_in_cart: boolean;
   is_purchased: boolean;
 }
@@ -47,18 +53,19 @@ const CourseDetails: React.FC = () => {
   const [course, setCourse] = useState<Course | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const { updateCartCount } = useCart();
 
   useEffect(() => {
     const fetchCourseDetail = async () => {
       if (!id) {
-        message.error("Course ID is missing");
-        navigate("/");
+        message.error('Course ID is missing');
+        navigate('/');
         return;
       }
 
       try {
-        const token = localStorage.getItem("token");
-        let data;
+        const token = localStorage.getItem('token');
+        let data: Course;
         if (token) {
           data = await getCourseDetail(id);
         } else {
@@ -66,8 +73,8 @@ const CourseDetails: React.FC = () => {
         }
         setCourse(data);
       } catch (error) {
-        message.error("Error fetching course details");
-        console.error("Error fetching course details:", error);
+        message.error('Error fetching course details');
+        console.error('Error fetching course details:', error);
       } finally {
         setIsLoading(false);
       }
@@ -80,16 +87,16 @@ const CourseDetails: React.FC = () => {
     if (course) {
       try {
         await createCart({ course_id: course._id });
-        message.success('Course added to cart successfully');
         setCourse(prevCourse => {
           if (prevCourse) {
             return {
               ...prevCourse,
-              is_in_cart: true
+              is_in_cart: true,
             };
           }
           return prevCourse;
         });
+        updateCartCount(); // Fetch updated cart count
       } catch (error) {
         message.error('Error adding course to cart');
         console.error('Error adding course to cart:', error);
@@ -120,7 +127,7 @@ const CourseDetails: React.FC = () => {
         <Skeleton loading={isLoading} active>
           <div className="flex flex-col md:flex-row items-start">
             <img
-              src={course?.image_url || "https://via.placeholder.com/400"}
+              src={course?.image_url || 'https://via.placeholder.com/400'}
               alt={course?.name}
               className="w-full md:w-1/3 object-cover rounded-lg mb-4 md:mb-0"
             />
@@ -137,12 +144,8 @@ const CourseDetails: React.FC = () => {
               </p>
               <p className="mb-2 flex items-center">
                 <strong className="mr-2">Price:</strong>
-                <span className="line-through text-gray-500">
-                  ${course?.price}
-                </span>
-                <span className="ml-2 text-red-500 font-semibold">
-                  ${course?.price_paid}
-                </span>
+                <span className="line-through text-gray-500">${course?.price}</span>
+                <span className="ml-2 text-red-500 font-semibold">${course?.price_paid}</span>
                 {course?.discount !== undefined && course.discount > 0 && (
                   <Tag color="red" className="ml-2">
                     - {course.discount}%
@@ -153,11 +156,10 @@ const CourseDetails: React.FC = () => {
                 <strong>Full Time:</strong> {course?.full_time} minutes
               </p>
               <p className="mb-4">
-                <strong>Description:</strong>{" "}
-                {course?.description.replace(/<\/?p>/g, "")}
+                <strong>Description:</strong> {course?.description.replace(/<\/?p>/g, '')}
               </p>
               <div className="flex space-x-4 mt-8">
-                {(!course?.is_purchased) && (
+                {!course?.is_purchased && (
                   <Button
                     type="default"
                     onClick={handleAddToCart}
@@ -166,7 +168,7 @@ const CourseDetails: React.FC = () => {
                     Add to Cart
                   </Button>
                 )}
-                {(course?.is_purchased) && (
+                {course?.is_purchased && (
                   <Button
                     type="default"
                     onClick={handleLearnCourse}
@@ -204,7 +206,7 @@ const CourseDetails: React.FC = () => {
                   editor.getContainer().style.overflow = 'hidden';
                   editor.getContainer().style.border = 'none'; // Remove the border
                 });
-              }
+              },
             }}
             disabled={true}
           />
@@ -233,9 +235,7 @@ const CourseDetails: React.FC = () => {
                         </Tooltip>
                         {lesson.name}
                       </div>
-                      <div>
-                        {lesson.full_time} minutes
-                      </div>
+                      <div>{lesson.full_time} minutes</div>
                     </List.Item>
                   )}
                 />
@@ -246,12 +246,7 @@ const CourseDetails: React.FC = () => {
           {course?.is_purchased && <ReviewSection courseId={course._id} />}
         </div>
       </Card>
-      <Modal
-        title="Course Introduction"
-        visible={isModalVisible}
-        onCancel={handleCancel}
-        footer={null}
-      >
+      <Modal title="Course Introduction" visible={isModalVisible} onCancel={handleCancel} footer={null}>
         <iframe
           width="100%"
           height="400px"

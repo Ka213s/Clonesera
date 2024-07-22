@@ -3,7 +3,6 @@ import { Button, Modal, Form, Input, InputNumber, Select, Radio } from 'antd';
 import FileUploader from '../../../FileUploader';
 import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor';
 import useCategories from '../../../useCategories';
-
 const { Option } = Select;
 
 const CreateCourseButton: React.FC = () => {
