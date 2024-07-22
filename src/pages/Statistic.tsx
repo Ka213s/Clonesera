@@ -1,17 +1,43 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import defaultAvatar from '../assets/Avatar01.jpg';
+import { getCurrentLogin } from '../utils/commonImports';
+import { Skeleton } from 'antd';
 
 interface User {
   name: string;
   avatar: string;
 }
 
-interface StatisticProps {
-  user: User | null;
-}
+const Statistic: React.FC = () => {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
-const Statistic: React.FC<StatisticProps> = ({ user }) => {
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      const fetchUser = async () => {
+        try {
+          const userData = await getCurrentLogin();
+          setUser(userData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchUser();
+    } else {
+      setLoading(false);
+    }
+  }, []);
+
   return (
+    <div className="bg-white rounded-lg shadow-lg p-6">
+      <h2 className="text-2xl font-bold mb-4">Statistic</h2>
+      {loading ? (
+        <Skeleton active avatar paragraph={{ rows: 2 }} />
+      ) : user ? (
     <div className="bg-white rounded-lg shadow-lg p-4 sm:p-6 mx-2 sm:mx-auto max-w-md">
       <h2 className="text-xl sm:text-2xl font-bold mb-4">Statistic</h2>
       {user ? (

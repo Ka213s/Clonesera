@@ -1,5 +1,5 @@
 import { createCourse, useState } from '../../../../utils/commonImports';
-import { Button, Modal, Form, Input, InputNumber, Select } from 'antd';
+import { Button, Modal, Form, Input, InputNumber, Select, Radio } from 'antd';
 import FileUploader from '../../../FileUploader';
 import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor';
 import useCategories from '../../../useCategories';
@@ -13,6 +13,7 @@ const CreateCourseButton: React.FC = () => {
   const [videoURL, setVideoURL] = useState<string | null>(null);
   const [description, setDescription] = useState<string>('');
   const [content, setContent] = useState<string>('');
+  const [isFree, setIsFree] = useState<boolean>(true);  // Mặc định là Free
 
   const { categories, parents } = useCategories();
 
@@ -28,6 +29,8 @@ const CreateCourseButton: React.FC = () => {
       video_url: videoURL,
       description,
       content,
+      price: isFree ? 0 : values.price,
+      discount: isFree ? 0 : values.discount,
     };
     await createCourse(courseData);
     setIsOpen(false);
@@ -36,6 +39,7 @@ const CreateCourseButton: React.FC = () => {
     setVideoURL(null);
     setDescription('');
     setContent('');
+    setIsFree(true);
   };
 
   const handleCancel = () => {
@@ -45,6 +49,7 @@ const CreateCourseButton: React.FC = () => {
     setVideoURL(null);
     setDescription('');
     setContent('');
+    setIsFree(true);
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -130,18 +135,33 @@ const CreateCourseButton: React.FC = () => {
             <FileUploader type="video" onUploadSuccess={setVideoURL} />
           </Form.Item>
           <Form.Item
-            name="price"
-            label="Price"
-            rules={[{ required: true, message: 'Please input the price!' }]}
+            label="Course Type"
+            name="courseType"
+            initialValue="free"
+            rules={[{ required: true, message: 'Please select the course type!' }]}
           >
-            <InputNumber min={0} style={{ width: '100%' }} />
+            <Radio.Group onChange={(e) => setIsFree(e.target.value === 'free')}>
+              <Radio value="free">Free</Radio>
+              <Radio value="paid">Paid</Radio>
+            </Radio.Group>
           </Form.Item>
-          <Form.Item
-            name="discount"
-            label="Discount"
-          >
-            <InputNumber min={0} max={100} style={{ width: '100%' }} />
-          </Form.Item>
+          {!isFree && (
+            <>
+              <Form.Item
+                name="price"
+                label="Price"
+                rules={[{ required: true, message: 'Please input the price!' }]}
+              >
+                <InputNumber min={0} style={{ width: '100%' }} />
+              </Form.Item>
+              <Form.Item
+                name="discount"
+                label="Discount"
+              >
+                <InputNumber min={0} max={100} style={{ width: '100%' }} />
+              </Form.Item>
+            </>
+          )}
         </Form>
       </Modal>
     </>
