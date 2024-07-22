@@ -85,20 +85,29 @@ const Blog: React.FC = () => {
             <img width={272} alt="blog" src={blog.image_url} className="rounded-lg mb-4" />
             <div className="text-xl font-semibold mb-2">{blog.title}</div>
             <div className="text-gray-500">
-              <div><strong>Tác giả:</strong> {blog.user_name}</div>
-              <div><strong>Chuyên mục:</strong> {blog.category_name}</div>
-              <div><strong>Cập nhật:</strong> {new Date(blog.updated_at).toLocaleDateString()}</div>
+              <div><strong>Author:</strong> {blog.user_name}</div>
+              <div><strong>Specialties:</strong> {blog.category_name}</div>
+              <div><strong>Update:</strong> {new Date(blog.updated_at).toLocaleDateString()}</div>
             </div>
             <p className="text-gray-700 mt-2">{blog.description}</p>
           </div>
         ))}
       </div>
-      <div className="flex justify-between mt-4">
+      <div className="flex justify-center mt-4">
         {currentPage > 1 && (
-          <LeftOutlined onClick={handlePreviousPage} className="cursor-pointer" />
+          <LeftOutlined
+            onClick={handlePreviousPage}
+            className="cursor-pointer text-lg mx-2 transform transition-transform duration-300 hover:scale-110"
+          />
         )}
+        <span className="text-lg">
+          Page {currentPage}/{totalPages}
+        </span>
         {currentPage < totalPages && (
-          <RightOutlined onClick={handleNextPage} className="cursor-pointer" />
+          <RightOutlined
+            onClick={handleNextPage}
+            className="cursor-pointer text-lg mx-2 transform transition-transform duration-300 hover:scale-110"
+          />
         )}
       </div>
     </div>
