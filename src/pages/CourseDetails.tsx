@@ -1,4 +1,3 @@
-// src/components/CourseDetails.tsx
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { NT_getCourseDetail, getCourseDetail, createCart } from '../services/Api';
@@ -96,12 +95,16 @@ const CourseDetails: React.FC = () => {
           }
           return prevCourse;
         });
-        updateCartCount(); // Fetch updated cart count
+        updateCartCount();
       } catch (error) {
         message.error('Error adding course to cart');
         console.error('Error adding course to cart:', error);
       }
     }
+  };
+
+  const handleViewCart = () => {
+    navigate('/view-cart');
   };
 
   const showModal = () => {
@@ -116,6 +119,15 @@ const CourseDetails: React.FC = () => {
     if (course) {
       navigate(`/learn-course-detail/${course._id}`);
     }
+  };
+
+  const formatFullTime = (minutes: number) => {
+    if (minutes >= 60) {
+      const hours = Math.floor(minutes / 60);
+      const remainingMinutes = minutes % 60;
+      return `${hours}h ${remainingMinutes}m`;
+    }
+    return `${minutes}m`;
   };
 
   return (
@@ -153,7 +165,7 @@ const CourseDetails: React.FC = () => {
                 )}
               </p>
               <p className="mb-2">
-                <strong>Full Time:</strong> {course?.full_time} minutes
+                <strong>Full Time:</strong> {formatFullTime(course?.full_time || 0)}
               </p>
               <p className="mb-4">
                 <strong>Description:</strong> {course?.description.replace(/<\/?p>/g, '')}
@@ -162,10 +174,10 @@ const CourseDetails: React.FC = () => {
                 {!course?.is_purchased && (
                   <Button
                     type="default"
-                    onClick={handleAddToCart}
+                    onClick={course?.is_in_cart ? handleViewCart : handleAddToCart}
                     className="mb-4 custom-button p-4 bg-blue-500 text-white hover:bg-blue-600"
                   >
-                    Add to Cart
+                    {course?.is_in_cart ? 'View Cart' : 'Add to Cart'}
                   </Button>
                 )}
                 {course?.is_purchased && (
@@ -219,7 +231,7 @@ const CourseDetails: React.FC = () => {
                   <div className="flex justify-between items-center">
                     <h3 className="text-lg font-semibold">{session.name}</h3>
                     <p>
-                      {session.lesson_list.length} lessons • {session.full_time} minutes
+                      {session.lesson_list.length} lessons • {formatFullTime(session.full_time)}
                     </p>
                   </div>
                 }
@@ -235,7 +247,7 @@ const CourseDetails: React.FC = () => {
                         </Tooltip>
                         {lesson.name}
                       </div>
-                      <div>{lesson.full_time} minutes</div>
+                      <div>{formatFullTime(lesson.full_time)}</div>
                     </List.Item>
                   )}
                 />
