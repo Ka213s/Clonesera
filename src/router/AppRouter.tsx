@@ -56,6 +56,7 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.COURSE} element={<Course />} />
                         <Route path={PUBLIC.COURSE_DETAIL} element={<CourseDetails />} />
                         <Route path={PUBLIC.VIEW_CART} element={<ViewCart />} />
+                        <Route path={PUBLIC.LEARN_COURSE} element={<LearnCourseDetail />} />
                         <Route path={PUBLIC.VIEW_ORDER} element={<ViewOrder />} />
                         <Route path={PUBLIC.PAYMENT} element={<Payment />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
@@ -91,7 +92,7 @@ const AppRouter: React.FC = () => {
                     <Route path={PUBLIC.REGISTER} element={<Register />} />
                     <Route path={PUBLIC.VERIFY_EMAIL} element={<VerifyEmail />} />
                     <Route path={PUBLIC.FORGOT_PASSWORD} element={<ForgotPassword />} />
-                    <Route path={PUBLIC.LEARN_COURSE} element={<LearnCourseDetail />} />
+                 
                 </Routes>
             </Suspense>
             <ToastContainer />

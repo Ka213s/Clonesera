@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { message, Layout, Menu, Spin } from "antd";
+import { Breadcrumb, message, Layout, Menu, Spin } from "antd";
 import { getCourseDetail, getLessonById } from "../utils/commonImports";
 import "tailwindcss/tailwind.css";
 
-const { Sider, Content } = Layout;
+const { Sider, Content, Header } = Layout;
 
 interface Lesson {
     _id: string;
@@ -79,63 +79,75 @@ const LearnCourseDetail: React.FC = () => {
     }
 
     return (
-        <Layout className="min-h-screen">
-            <Sider width={300} className="bg-white p-4">
-                <Menu
-                    mode="inline"
-                    defaultOpenKeys={[course.session_list[0]?._id]}
-                    style={{ height: "100%" }}
-                >
-                    {course.session_list.map((session) => (
-                        <Menu.SubMenu key={session._id} title={session.name}>
-                            {session.lesson_list.map((lesson) => (
-                                <Menu.Item
-                                    key={lesson._id}
-                                    onClick={() => handleLessonClick(lesson)}
-                                >
-                                    {lesson.name}
-                                </Menu.Item>
-                            ))}
-                        </Menu.SubMenu>
-                    ))}
-                </Menu>
-            </Sider>
-            <Layout>
-                <Content className="p-6">
-                    {selectedLesson ? (
-                        <div>
-                            <h2 className="text-2xl font-bold mb-4">{selectedLesson.name}</h2>
-                            {selectedLesson.lesson_type === "video" && selectedLesson.video_url && (
-                                <div>
-                                    <iframe
-                                        width="100%"
-                                        height="400px"
-                                        src={selectedLesson.video_url}
-                                        title={selectedLesson.name}
-                                        frameBorder="0"
-                                        allowFullScreen
-                                    ></iframe>
-                                </div>
-                            )}
-                            {selectedLesson.lesson_type === "image" && selectedLesson.image_url && (
-                                <div>
-                                    <img
-                                        src={selectedLesson.image_url}
-                                        alt={selectedLesson.name}
-                                        className="max-w-full h-auto"
-                                    />
-                                </div>
-                            )}
-                            {selectedLesson.description && (
-                                <div className="mt-4">
-                                    <p className="text-lg">{selectedLesson.description}</p>
-                                </div>
-                            )}
-                        </div>
-                    ) : (
-                        <div>No lesson selected</div>
+        <Layout className="min-h-screen overflow-auto">
+            <Header className="bg-white shadow-md">
+                <Breadcrumb>
+                    <Breadcrumb.Item>Home</Breadcrumb.Item>
+                    <Breadcrumb.Item>{course.name}</Breadcrumb.Item>
+                    {selectedLesson && (
+                        <Breadcrumb.Item>{selectedLesson.name}</Breadcrumb.Item>
                     )}
-                </Content>
+                </Breadcrumb>
+            </Header>
+            <Layout>
+                <Sider width={300} className="bg-white shadow-md p-4 overflow-auto">
+                    <Menu
+                        mode="inline"
+                        defaultOpenKeys={[course.session_list[0]?._id]}
+                        style={{ height: "100%" }}
+                    >
+                        {course.session_list.map((session) => (
+                            <Menu.SubMenu key={session._id} title={session.name}>
+                                {session.lesson_list.map((lesson) => (
+                                    <Menu.Item
+                                        key={lesson._id}
+                                        onClick={() => handleLessonClick(lesson)}
+                                    >
+                                        {lesson.name}
+                                    </Menu.Item>
+                                ))}
+                            </Menu.SubMenu>
+                        ))}
+                    </Menu>
+                </Sider>
+                <Layout>
+                    <Content className="p-6 bg-gray-100">
+                        {selectedLesson ? (
+                            <div className="bg-white p-6 rounded-lg shadow-lg">
+                                <h2 className="text-3xl font-bold mb-4">{selectedLesson.name}</h2>
+                                {selectedLesson.lesson_type === "video" && selectedLesson.video_url && (
+                                    <div className="mb-4">
+                                        <iframe
+                                            width="100%"
+                                            height="400px"
+                                            src={selectedLesson.video_url}
+                                            title={selectedLesson.name}
+                                            frameBorder="0"
+                                            allowFullScreen
+                                            className="rounded-lg"
+                                        ></iframe>
+                                    </div>
+                                )}
+                                {selectedLesson.lesson_type === "image" && selectedLesson.image_url && (
+                                    <div className="mb-4">
+                                        <img
+                                            src={selectedLesson.image_url}
+                                            alt={selectedLesson.name}
+                                            className="max-w-full h-auto rounded-lg"
+                                        />
+                                    </div>
+                                )}
+                                {selectedLesson.description && (
+                                    <div className="mt-4">
+                                        <p className="text-lg">{selectedLesson.description}</p>
+                                    </div>
+                                )}
+                            </div>
+                        ) : (
+                            <div>No lesson selected</div>
+                        )}
+                    </Content>
+                </Layout>
             </Layout>
         </Layout>
     );
