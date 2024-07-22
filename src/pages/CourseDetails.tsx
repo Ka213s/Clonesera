@@ -127,7 +127,7 @@ const CourseDetails: React.FC = () => {
             <p className="mb-2">
               <strong>Instructor:</strong>
               <Link to={`/view-profile/${course.instructor_id}`}>
-                <span className="text-green-600 font-semibold hover:underline ml-2">{course.instructor_name}</span>
+                <span className="text-blue-600 font-semibold hover:underline ml-2">{course.instructor_name}</span>
               </Link>
             </p>
             <p className="mb-2 flex items-center">

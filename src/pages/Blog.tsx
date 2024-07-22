@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {  Typography, Skeleton } from 'antd';
+import { Typography, Skeleton } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getBlogsPublic } from '../utils/commonImports';
@@ -72,22 +72,28 @@ const Blog: React.FC = () => {
     <div className="bg-white p-6 rounded-lg shadow-lg">
       <Title level={2} className="mb-4">Latest Blog Posts</Title>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
-        {currentBlogs.map(blog => (
-          <div
-            key={blog._id}
-            onClick={() => handleClick(blog._id)}
-            className="cursor-pointer hover:bg-gray-100 p-4 rounded-lg transition duration-300 shadow-md"
-          >
-            <img width={272} alt="blog" src={blog.image_url} className="rounded-lg mb-4" />
-            <div className="text-xl font-semibold mb-2">{blog.title}</div>
-            <div className="text-gray-500">
-              <div><strong>Author:</strong> {blog.user_name}</div>
-              <div><strong>Specialties:</strong> {blog.category_name}</div>
-              <div><strong>Update:</strong> {new Date(blog.updated_at).toLocaleDateString()}</div>
+        {loading ? (
+          Array.from({ length: blogsPerPage }).map((_, index) => (
+            <Skeleton key={index} active className="p-4" />
+          ))
+        ) : (
+          currentBlogs.map(blog => (
+            <div
+              key={blog._id}
+              onClick={() => handleClick(blog._id)}
+              className="cursor-pointer hover:bg-gray-100 p-4 rounded-lg transition duration-300 shadow-md"
+            >
+              <img width={272} alt="blog" src={blog.image_url} className="rounded-lg mb-4" />
+              <div className="text-xl font-semibold mb-2">{blog.title}</div>
+              <div className="text-gray-500">
+                <div><strong>Author:</strong> {blog.user_name}</div>
+                <div><strong>Specialties:</strong> {blog.category_name}</div>
+                <div><strong>Update:</strong> {new Date(blog.updated_at).toLocaleDateString()}</div>
+              </div>
+              <p className="text-gray-700 mt-2">{blog.description}</p>
             </div>
-            <p className="text-gray-700 mt-2">{blog.description}</p>
-          </div>
-        ))}
+          ))
+        )}
       </div>
       <div className="flex justify-center mt-4">
         {currentPage > 1 && (

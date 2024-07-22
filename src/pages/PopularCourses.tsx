@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Tag, Skeleton } from 'antd';
+import { Tag, Skeleton, Rate } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { getUserData, getPublicCourses } from '../utils/commonImports';
+import { getPublicCourses } from '../utils/commonImports';
 import { useNavigate } from 'react-router-dom';
 
 interface Course {
@@ -9,12 +9,13 @@ interface Course {
   name: string;
   category_name: string;
   instructor_name: string;
-  avatar: string;
   description: string;
   image_url: string;
   price_paid: number;
   lesson_count: number;
-  total_duration: number;
+  session_count : number;
+  full_time: number;
+  average_rating: number;
 }
 
 interface CourseResponse {
@@ -22,13 +23,13 @@ interface CourseResponse {
   name: string;
   category_name: string;
   instructor_name: string;
-  instructor_avatar: string;
-  instructor_id: string;
   description: string;
   image_url: string;
   price_paid: number;
   lesson_count: number;
-  total_duration: number;
+  session_count : number;
+  full_time: number;
+  average_rating: number;
 }
 
 interface ApiResponse {
@@ -57,19 +58,7 @@ const PopularCourses: React.FC = () => {
           },
         };
         const response: ApiResponse = await getPublicCourses(data);
-
-        const coursePromises = response.pageData.map(async (course: CourseResponse) => {
-          try {
-            const userData = await getUserData(course.instructor_id);
-            return { ...course, avatar: userData.avatar || course.instructor_avatar };
-          } catch (error) {
-            console.error('Error fetching instructor data for course', course._id, ':', error);
-            return { ...course, avatar: course.instructor_avatar };
-          }
-        });
-
-        const updatedCourses = await Promise.all(coursePromises);
-        setCourses(updatedCourses);
+        setCourses(response.pageData);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching courses:', error);
@@ -138,13 +127,17 @@ const PopularCourses: React.FC = () => {
                   className="w-full h-40 object-cover" // Adjusted height for image
                 />
                 <div className="flex items-center mt-2 space-x-2 ml-2">
+                <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
+                    <span className="text-gray-500 text-sm">{course.session_count} Session</span>
+                  </div>
                   <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
                     <span className="text-gray-500 text-sm">{course.lesson_count} Lessons</span>
                   </div>
+                 
                   <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
                     <span className="text-gray-500 text-sm">
-                      {course.total_duration > 0
-                        ? `${Math.floor(course.total_duration / 60)}h ${course.total_duration % 60}m`
+                      {course.full_time > 0
+                        ? `${Math.floor(course.full_time / 60)}h ${course.full_time % 60}m`
                         : '0h 0m'}
                     </span>
                   </div>
@@ -153,31 +146,22 @@ const PopularCourses: React.FC = () => {
                   <h2 className="text-lg font-semibold mt-1 h-10 overflow-hidden overflow-ellipsis whitespace-nowrap">
                     {course.name}
                   </h2>
+                 
                   <p className="text-sm text-gray-600 mb-2">
                     <Tag color="blue">
                       {course.category_name || 'Default Category'}
                     </Tag>
                   </p>
                   <div className="flex items-center mb-2">
-                    {course.avatar ? (
-                      <img
-                        src={course.avatar}
-                        alt={course.instructor_name}
-                        className="w-6 h-6 rounded-full mr-2"
-                      />
-                    ) : (
-                      <div className="w-6 h-6 rounded-full bg-gray-300 mr-2 flex items-center justify-center">
-                        <span className="text-xs text-gray-600">No Avatar</span>
-                      </div>
-                    )}
                     <p className="text-sm text-gray-700">
                       <strong>{course.instructor_name}</strong>
                     </p>
                   </div>
+                  <Rate disabled defaultValue={course.average_rating} allowHalf style={{ fontSize: 16 }} />
                   <div className="flex items-center justify-between mt-auto mb-2">
                     <div className="text-lg font-semibold text-green-600">
                       <span className="text-xl">${course.price_paid}</span>
-                      <span className="text-sm text-gray-500 ml-2">/year</span>
+                      <span className="text-sm text-gray-500 ml-2"></span>
                     </div>
                     <button
                       onClick={() => handleViewDetails(course._id)}
