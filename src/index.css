@@ -186,3 +186,7 @@ html, body, #root {
 .icon-transition:active {
   transform: scale(0.9);
 }
+/* Thêm đoạn CSS này vào tập tin CSS của bạn */
+.no-scroll {
+  overflow: hidden;
+}
