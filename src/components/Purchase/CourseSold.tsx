@@ -3,16 +3,17 @@ import { Table, Button } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
 import { getItemsByInstructor } from '../../utils/commonImports';
 import { getStatusTag } from '../../utils/statusTagUtils';
+import { createPayout } from '../../services/Api';
+import { toast } from 'react-toastify';
 
 interface PurchaseData {
+  _id: string; // Add the _id field
   purchase_no: string;
   cart_no: string;
   course_name: string;
   status: string;
   price_paid: number;
-  discount: number;
   student_name: string;
-  instructor_name: string;
   // Add other fields as necessary
 }
 
@@ -60,6 +61,17 @@ const Purchase: React.FC = () => {
     });
   };
 
+  const handleCreatePayout = async (purchase: PurchaseData) => {
+    try {
+      const transactions = [{ purchase_id: purchase._id }]; // Use _id for transaction
+      const response = await createPayout(transactions);
+      console.log('Payout response:', response);
+    } catch (error) {
+      toast.error("Failed to create payout");
+      console.error('Failed to create payout:', error);
+    }
+  };
+
   const columns = [
     {
       title: 'Purchase No',
@@ -88,19 +100,18 @@ const Purchase: React.FC = () => {
       key: 'price_paid',
     },
     {
-      title: 'Discount',
-      dataIndex: 'discount',
-      key: 'discount',
-    },
-    {
       title: 'Student Name',
       dataIndex: 'student_name',
       key: 'student_name',
     },
     {
-      title: 'Instructor Name',
-      dataIndex: 'instructor_name',
-      key: 'instructor_name',
+      title: 'Action',
+      key: 'action',
+      render: (record: PurchaseData) => (
+        <Button type="primary" onClick={() => handleCreatePayout(record)}>
+          Create Payout
+        </Button>
+      ),
     },
     // Add other columns as needed
   ];
@@ -118,7 +129,7 @@ const Purchase: React.FC = () => {
         dataSource={data}
         pagination={pagination}
         onChange={handleTableChange}
-        rowKey="purchase_no"
+        rowKey="_id" // Use _id as the row key
       />
     </div>
   );

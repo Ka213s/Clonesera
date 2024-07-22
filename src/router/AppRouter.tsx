@@ -17,6 +17,7 @@ const BlogDetail = lazy(() => import('../pages/BlogDetail'));
 const SettingPage = lazy(() => import('../pages/SettingPage'));
 const Course = lazy(() => import('../pages/Instructor/ManagementCourse'));
 const CourseSold = lazy(() => import('../pages/CourseSold'));
+const Payout = lazy(() => import('../pages/Instructor/Payout'));
 const PurchasedCours = lazy(() => import('../pages/PurchasedCourses'));
 const Purchase = lazy(() => import('../pages/Admin/Purchase'));
 const VerifyEmail = lazy(() => import('../components/VerifyEmailDone'));
@@ -37,6 +38,8 @@ const ViewProfile = lazy(() => import('../components/ViewProfile/ViewProfile'));
 const ViewCart = lazy(() => import('../pages/ViewCart'));
 const ViewOrder = lazy(() => import('../pages/ViewOrder'));
 const Payment = lazy(() => import('../pages/Payment'));
+const PayoutManagement = lazy(() => import('../pages/Admin/PayoutManagement'));
+const Finance = lazy(() => import('../pages/Admin/Finance'));
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));
 const PageError403 = lazy(() => import('../pages/Error/PageError403'));
@@ -64,6 +67,7 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.LIST_SUBSCRIPTION} element={<PrivateRoute element={ListSubscription} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.REVIEW} element={<PrivateRoute element={ReViewInstructor} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.COURSE_SOLD} element={<PrivateRoute element={CourseSold} allowedRoles={[ROLES.INSTRUCTOR]} />} />
+                        <Route path={INSTRUCTOR.PAYOUT} element={<PrivateRoute element={Payout} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.PURCHASE} element={<PrivateRoute element={PurchasedCours} allowedRoles={[ROLES.STUDENT, ROLES.INSTRUCTOR]} />} />
                         <Route path={ADMIN.PURCHASE} element={<PrivateRoute element={Purchase} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={INSTRUCTOR.VIEW_ALL_COURSE} element={<PrivateRoute element={ViewAllCourse} allowedRoles={[ROLES.INSTRUCTOR, ROLES.ADMIN]} />} />
@@ -74,6 +78,8 @@ const AppRouter: React.FC = () => {
                         <Route path={ADMIN.PENDING_COURSE} element={<PrivateRoute element={PedingCourse} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={ADMIN.LOG_COURSE} element={<PrivateRoute element={LogCourse} allowedRoles={[ROLES.ADMIN, ROLES.INSTRUCTOR]} />} />
                         <Route path={ADMIN.BLOG} element={<PrivateRoute element={Blog} allowedRoles={[ROLES.ADMIN]} />} />
+                        <Route path={ADMIN.PAYOUT_MANAGEMENT} element={<PrivateRoute element={PayoutManagement} allowedRoles={[ROLES.ADMIN]} />} />
+                        <Route path={ADMIN.FINANCE} element={<PrivateRoute element={Finance} allowedRoles={[ROLES.ADMIN]} />} />
 
                     </Route>
 
