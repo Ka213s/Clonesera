@@ -65,7 +65,7 @@ const AppRouter: React.FC = () => {
                     {/* Instructor Routes with MainLayout */}
                     <Route element={<LayoutRoute />}>
                         <Route path={INSTRUCTOR.COURSE} element={<PrivateRoute element={Course} allowedRoles={[ROLES.INSTRUCTOR]} />} />
-                        <Route path={INSTRUCTOR.VIEW_MY_PROFILE} element={<PrivateRoute element={ViewMyProfile} allowedRoles={[ROLES.INSTRUCTOR]} />} />
+                        <Route path={INSTRUCTOR.VIEW_MY_PROFILE} element={<PrivateRoute element={ViewMyProfile} allowedRoles={[ROLES.INSTRUCTOR, ROLES.STUDENT]} />} />
                         <Route path={INSTRUCTOR.VIEW_PROFILE} element={<PrivateRoute element={ViewProfile} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.LIST_SUBSCRIPTION} element={<PrivateRoute element={ListSubscription} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.REVIEW} element={<PrivateRoute element={ReViewInstructor} allowedRoles={[ROLES.INSTRUCTOR]} />} />

@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderNoMenu from '../components/HeaderNoMenu';
 import Footer from '../components/Footer';
 import { Layout } from 'antd';
-import { CartProvider } from '../consts/CartContext'
+
 const { Content } = Layout;
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -27,7 +27,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <Layout className="overflow-hidden h-screen flex flex-col">
-      <CartProvider>
+     
       <HeaderNoMenu />
       <Content className="transition-all duration-300 overflow-auto ml-0">
         <div className="flex flex-col min-h-screen">
@@ -40,7 +40,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </div>
       
       </Content>
-      </CartProvider>
+     
     </Layout>
   );
 };
