@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Table, Alert } from 'antd';
 import moment from 'moment';
 import { getItemsByStudent } from '../../utils/commonImports';
-import { getStatusTag } from '../../utils/statusTagUtils';
 
 interface Course {
   _id: string;
@@ -82,12 +81,6 @@ const PurchasedCours: React.FC = () => {
       title: 'Purchase Number',
       dataIndex: 'purchase_no',
       key: 'purchase_no',
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: string) => getStatusTag(status),
     },
     {
       title: 'Price Paid',
