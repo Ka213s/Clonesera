@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Table, Alert } from 'antd';
 import moment from 'moment';
 import { getItemsByStudent } from '../../utils/commonImports';
-import { getStatusTag } from '../../utils/statusTagUtils';
 
 interface Course {
   _id: string;
