@@ -144,7 +144,9 @@ const PopularCourses: React.FC = () => {
                   <Rate disabled defaultValue={course.average_rating} allowHalf style={{ fontSize: 16 }} />
                   <div className="flex items-center justify-between mt-auto mb-2">
                     <div className="text-lg font-semibold text-green-600">
-                      <span className="text-xl">${course.price_paid}</span>
+                      <span className="text-xl">
+                        {course.price_paid === 0 ? 'Free' : `$${course.price_paid}`}
+                      </span>
                       <span className="text-sm text-gray-500 ml-2"></span>
                     </div>
                     <button

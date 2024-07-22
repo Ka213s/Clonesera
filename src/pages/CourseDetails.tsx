@@ -118,6 +118,9 @@ const CourseDetails: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 text-sm">
+      <Button onClick={() => navigate('/homepage')} className="mb-4 bg-blue-500 text-white hover:bg-blue-600">
+        Back to Homepage
+      </Button>
       <Card className="shadow-lg rounded-lg overflow-hidden">
         <div className="flex flex-col md:flex-row items-start">
           <img
