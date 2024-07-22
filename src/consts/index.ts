@@ -32,7 +32,8 @@ export const INSTRUCTOR = {
   PURCHASE: '/purchased-courses',
   COURSE_SOLD: '/courses-sold',
   REVIEW: '/review',
-  PAYOUT: '/payout'
+  PAYOUT: '/payout',
+  TRANSACTION_DETAIL: '/transaction/:id'
 };
 export const PUBLIC = {
   HOME: '/homepage',

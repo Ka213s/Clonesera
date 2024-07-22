@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button, Modal, Input } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
+import { Link } from 'react-router-dom';
 import { getPayouts, updatePayout } from '../../../services/Api';
 import { toast } from 'react-toastify';
 
@@ -63,13 +64,13 @@ const RequestPaid: React.FC = () => {
                 searchCondition: {
                     payout_no: '',
                     instructor_id: '',
-                    status: 'request_payout', 
+                    status: 'request_payout',
                     is_instructor: false,
                     is_delete: false,
                 },
                 pageInfo
             });
-        
+
             setData(result.pageData);
             setPagination({
                 ...pagination,
@@ -155,6 +156,13 @@ const RequestPaid: React.FC = () => {
             title: 'Balance Instructor Received',
             dataIndex: 'balance_instructor_received',
             key: 'balance_instructor_received',
+        },
+        {
+            title: 'Transaction',
+            key: 'transaction_id',
+            render: (record: PayoutData) => (
+                <Link to={`/transaction/${record._id}`}>View</Link>
+            ),
         },
         {
             title: 'Action',

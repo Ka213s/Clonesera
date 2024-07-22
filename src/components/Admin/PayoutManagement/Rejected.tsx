@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
+import { Link } from 'react-router-dom';
 import { getPayouts } from '../../../services/Api';
 
 interface Transaction {
@@ -107,6 +108,15 @@ const Rejected: React.FC = () => {
             title: 'Balance Instructor Received',
             dataIndex: 'balance_instructor_received',
             key: 'balance_instructor_received',
+        },
+        {
+            title: 'Transaction',
+            key: 'transaction_id',
+            render: (record: PayoutData) => (
+                <Link to={`/transaction/${record._id}`}>
+                    View
+                </Link>
+            ),
         },
     ];
 

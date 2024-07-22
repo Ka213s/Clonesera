@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
 import { Link } from 'react-router-dom';
-import { getPayouts } from '../../../services/Api';
+import { getPayouts, updatePayout } from '../../../services/Api';
+import { toast } from 'react-toastify';
 
 interface Transaction {
     _id: string; // Transaction ID
@@ -39,13 +40,14 @@ interface ApiResponse {
     };
 }
 
-const Completed: React.FC = () => {
+const RequestPayout: React.FC = () => {
     const [data, setData] = useState<PayoutData[]>([]);
     const [pagination, setPagination] = useState<TablePaginationConfig>({
         current: 1,
         pageSize: 10,
         total: 0,
     });
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
 
     useEffect(() => {
         fetchData({
@@ -60,13 +62,17 @@ const Completed: React.FC = () => {
                 searchCondition: {
                     payout_no: '',
                     instructor_id: '',
-                    status: 'completed', // Filter for completed status
+                    status: '',
                     is_instructor: false,
-                    is_delete: false,
+                    is_delete: false
                 },
                 pageInfo
             });
-            setData(result.pageData);
+            // Filter data to include only request_payout and rejected statuses
+            const filteredData = result.pageData.filter(payout =>
+                payout.status === 'new' || payout.status === 'rejected'
+            );
+            setData(filteredData);
             setPagination({
                 ...pagination,
                 total: result.pageInfo.totalItems,
@@ -83,6 +89,31 @@ const Completed: React.FC = () => {
         });
     };
 
+    const handleSelectChange = (selectedKeys: React.Key[]) => {
+        setSelectedRowKeys(selectedKeys);
+    };
+
+    const handleRequestPayout = async () => {
+        try {
+            const selectedPayouts = selectedRowKeys.map(key => key.toString());
+            for (const payoutId of selectedPayouts) {
+                await updatePayout(payoutId, {
+                    status: 'request_payout',
+                    comment: ''
+                });
+            }
+            toast.success('Payout request successfully. Please wait admin for approval!');
+            fetchData({
+                pageNum: pagination.current || 1,
+                pageSize: pagination.pageSize || 10,
+            });
+            setSelectedRowKeys([]); // Clear selection after request
+        } catch (error) {
+            toast.error('Failed to request payout');
+            console.error('Failed to request payout:', error);
+        }
+    };
+
     const columns = [
         {
             title: 'Payout No',
@@ -90,33 +121,23 @@ const Completed: React.FC = () => {
             key: 'payout_no',
         },
         {
-            title: 'Instructor Name',
-            dataIndex: 'instructor_name',
-            key: 'instructor_name',
+            title: 'Status',
+            dataIndex: 'status',
+            key: 'status',
         },
         {
-            title: 'Balance Origin',
-            dataIndex: 'balance_origin',
-            key: 'balance_origin',
-        },
-        {
-            title: 'Balance Instructor Paid',
-            dataIndex: 'balance_instructor_paid',
-            key: 'balance_instructor_paid',
-        },
-        {
-            title: 'Balance Instructor Received',
-            dataIndex: 'balance_instructor_received',
-            key: 'balance_instructor_received',
-        },
-        {
-            title: 'Transaction',
+            title: 'Transaction ID',
             key: 'transaction_id',
             render: (record: PayoutData) => (
                 <Link to={`/transaction/${record._id}`}>
                     View
                 </Link>
             ),
+        },
+        {
+            title: 'Price Paid',
+            key: 'price_paid',
+            render: (record: PayoutData) => record.transactions.reduce((total, transaction) => total + transaction.price_paid, 0),
         },
     ];
 
@@ -131,15 +152,27 @@ const Completed: React.FC = () => {
             >
                 Reload
             </Button>
+            <Button
+                type="primary"
+                onClick={handleRequestPayout}
+                disabled={selectedRowKeys.length === 0} // Disable if no rows are selected
+                style={{ marginLeft: 10 }}
+            >
+                Request Payout
+            </Button>
             <Table
+                rowSelection={{
+                    selectedRowKeys,
+                    onChange: handleSelectChange,
+                }}
                 columns={columns}
                 dataSource={data}
                 pagination={pagination}
                 onChange={handleTableChange}
-                rowKey="_id"
+                rowKey="_id" // Use _id as the row key
             />
         </div>
     );
 };
 
-export default Completed;
+export default RequestPayout;
