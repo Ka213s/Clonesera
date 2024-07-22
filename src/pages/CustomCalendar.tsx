@@ -23,7 +23,7 @@ const CustomCalendar: React.FC = () => {
 
   const wrapperStyle: React.CSSProperties = {
     width: '100%',
-    maxWidth: 345,
+    maxWidth: 400,
     border: `1px solid ${token.colorBorderSecondary}`,
     borderRadius: token.borderRadiusLG,
     background: token.colorBgContainer,

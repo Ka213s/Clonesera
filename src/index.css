@@ -177,3 +177,12 @@ html, body, #root {
   border-radius: 50%;
   object-fit: cover;
 }
+/* styles.css hoặc file CSS của bạn */
+
+.icon-transition {
+  transition: transform 0.3s ease;
+}
+
+.icon-transition:active {
+  transform: scale(0.9);
+}
