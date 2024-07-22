@@ -1,6 +1,8 @@
-import React from 'react';
-import { Tag } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Tag, Skeleton } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
+import { getUserData, getPublicCourses } from '../utils/commonImports';
+import { useNavigate } from 'react-router-dom';
 
 interface Course {
   _id: number;
@@ -13,23 +15,89 @@ interface Course {
   price_paid: number;
 }
 
-interface PopularCoursesProps {
-  courses: Course[];
-  currentIndex: number;
-  handlePrevClick: () => void;
-  handleNextClick: () => void;
-  handleViewDetails: (courseId: number) => void;
-  isAnimating: boolean;
+interface CourseResponse {
+  _id: number;
+  name: string;
+  category_name: string;
+  instructor_name: string;
+  instructor_avatar: string;
+  instructor_id: string;
+  description: string;
+  image_url: string;
+  price_paid: number;
 }
 
-const PopularCourses: React.FC<PopularCoursesProps> = ({
-  courses,
-  currentIndex,
-  handlePrevClick,
-  handleNextClick,
-  handleViewDetails,
-  isAnimating,
-}) => {
+interface ApiResponse {
+  pageData: CourseResponse[];
+}
+
+const PopularCourses: React.FC = () => {
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const data = {
+          searchCondition: {
+            keyword: '',
+            category_id: '',
+            is_deleted: false,
+          },
+          pageInfo: {
+            pageNum: 1,
+            pageSize: 10,
+          },
+        };
+        const response: ApiResponse = await getPublicCourses(data);
+
+        const coursePromises = response.pageData.map(async (course: CourseResponse) => {
+          try {
+            const userData = await getUserData(course.instructor_id);
+            return { ...course, avatar: userData.avatar || course.instructor_avatar };
+          } catch (error) {
+            console.error('Error fetching instructor data for course', course._id, ':', error);
+            return { ...course, avatar: course.instructor_avatar };
+          }
+        });
+
+        const updatedCourses = await Promise.all(coursePromises);
+        setCourses(updatedCourses);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching courses:', error);
+        setLoading(false); // Stop loading even if there's an error
+      }
+    };
+
+    fetchCourses();
+  }, []);
+
+  const handleViewDetails = (courseId: number) => navigate(`/course-detail/${courseId}`);
+
+  const handlePrevClick = () => {
+    if (currentIndex > 0 && !isAnimating) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentIndex(currentIndex - 2);
+        setIsAnimating(false);
+      }, 300);
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentIndex + 2 < courses.length && !isAnimating) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentIndex(currentIndex + 2);
+        setIsAnimating(false);
+      }, 300);
+    }
+  };
+
   return (
     <div className="relative">
       <h2 className="text-3xl font-bold mb-6 text-left">Popular Courses</h2>
@@ -48,56 +116,62 @@ const PopularCourses: React.FC<PopularCoursesProps> = ({
             isAnimating ? 'transform -translate-x-full' : ''
           }`}
         >
-          {courses.slice(currentIndex, currentIndex + 2).map((course) => (
-            <div
-              key={course._id}
-              className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl"
-            >
-              <img
-                src={course.image_url}
-                alt={course.name}
-                className="w-full h-48 object-cover"
-              />
-              <div className="p-4 flex flex-col flex-grow">
-                <h2 className="text-xl font-semibold mb-2 h-16 overflow-hidden overflow-ellipsis whitespace-nowrap">
-                  {course.name}
-                </h2>
-                <p className="text-sm text-gray-600 mb-2">
-                  <Tag color="blue">
-                    {course.category_name || 'Default Category'}
-                  </Tag>
-                </p>
-                <div className="flex items-center mb-2">
-                  {course.avatar ? (
-                    <img
-                      src={course.avatar}
-                      alt={course.instructor_name}
-                      className="w-8 h-8 rounded-full mr-2"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 rounded-full bg-gray-300 mr-2 flex items-center justify-center">
-                      <span className="text-xs text-gray-600">No Avatar</span>
-                    </div>
-                  )}
-                  <p className="text-sm text-gray-700">
-                    <strong>{course.instructor_name}</strong>
+          {loading ? (
+            Array.from({ length: 2 }).map((_, index) => (
+              <Skeleton key={index} active  paragraph={{ rows: 5 }} />
+            ))
+          ) : (
+            courses.slice(currentIndex, currentIndex + 2).map((course) => (
+              <div
+                key={course._id}
+                className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl"
+              >
+                <img
+                  src={course.image_url}
+                  alt={course.name}
+                  className="w-full h-48 object-cover"
+                />
+                <div className="p-4 flex flex-col flex-grow">
+                  <h2 className="text-xl font-semibold mb-2 h-16 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                    {course.name}
+                  </h2>
+                  <p className="text-sm text-gray-600 mb-2">
+                    <Tag color="blue">
+                      {course.category_name || 'Default Category'}
+                    </Tag>
                   </p>
-                </div>
-                <div className="flex items-center justify-between mt-auto">
-                  <div className="text-lg font-semibold text-green-600">
-                    <span className="text-xl">${course.price_paid}</span>
-                    <span className="text-sm text-gray-500 ml-2">/year</span>
+                  <div className="flex items-center mb-2">
+                    {course.avatar ? (
+                      <img
+                        src={course.avatar}
+                        alt={course.instructor_name}
+                        className="w-8 h-8 rounded-full mr-2"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-gray-300 mr-2 flex items-center justify-center">
+                        <span className="text-xs text-gray-600">No Avatar</span>
+                      </div>
+                    )}
+                    <p className="text-sm text-gray-700">
+                      <strong>{course.instructor_name}</strong>
+                    </p>
                   </div>
-                  <button
-                    onClick={() => handleViewDetails(course._id)}
-                    className="bg-green-600 text-white py-1 px-3 rounded-md hover:bg-green-700 transition duration-300"
-                  >
-                    Join Now
-                  </button>
+                  <div className="flex items-center justify-between mt-auto">
+                    <div className="text-lg font-semibold text-green-600">
+                      <span className="text-xl">${course.price_paid}</span>
+                      <span className="text-sm text-gray-500 ml-2">/year</span>
+                    </div>
+                    <button
+                      onClick={() => handleViewDetails(course._id)}
+                      className="bg-green-600 text-white py-1 px-3 rounded-md hover:bg-green-700 transition duration-300"
+                    >
+                      Join Now
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          )}
         </div>
         {currentIndex + 2 < courses.length && (
           <button
