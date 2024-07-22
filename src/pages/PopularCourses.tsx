@@ -13,6 +13,8 @@ interface Course {
   description: string;
   image_url: string;
   price_paid: number;
+  lesson_count: number;
+  total_duration: number;
 }
 
 interface CourseResponse {
@@ -25,6 +27,8 @@ interface CourseResponse {
   description: string;
   image_url: string;
   price_paid: number;
+  lesson_count: number;
+  total_duration: number;
 }
 
 interface ApiResponse {
@@ -100,39 +104,53 @@ const PopularCourses: React.FC = () => {
 
   return (
     <div className="relative">
-      <h2 className="text-3xl font-bold mb-6 text-left">Popular Courses</h2>
-      <div className="relative">
-        {currentIndex > 0 && (
-          <button
-            onClick={handlePrevClick}
-            className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 z-20"
-            style={{ zIndex: 20 }}
-          >
-            <LeftOutlined className="text-lg" />
-          </button>
-        )}
-        <div
-          className={`grid grid-cols-1 sm:grid-cols-2 gap-4 pb-6 transition-transform duration-300 ${
-            isAnimating ? 'transform -translate-x-full' : ''
-          }`}
+      <div className="flex justify-between items-center mb-6">
+        <button
+          onClick={handlePrevClick}
+          className={`bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 ${currentIndex === 0 ? 'invisible' : 'visible'}`}
         >
+          <LeftOutlined className="text-lg" />
+        </button>
+        <h2 className="text-3xl font-bold text-left">Popular Courses</h2>
+        <button
+          onClick={handleNextClick}
+          className={`bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 ${currentIndex + 2 >= courses.length ? 'invisible' : 'visible'}`}
+        >
+          <RightOutlined className="text-lg" />
+        </button>
+      </div>
+      <div className="relative">
+        <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 pb-6 transition-transform duration-300 ${isAnimating ? 'transform -translate-x-full' : ''}`}>
           {loading ? (
             Array.from({ length: 2 }).map((_, index) => (
-              <Skeleton key={index} active  paragraph={{ rows: 5 }} />
+              <Skeleton key={index} active paragraph={{ rows: 5 }} />
             ))
           ) : (
             courses.slice(currentIndex, currentIndex + 2).map((course) => (
               <div
                 key={course._id}
                 className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl"
+                style={{ height: '360px', width: '340px' }} // Updated dimensions
               >
                 <img
                   src={course.image_url}
                   alt={course.name}
-                  className="w-full h-48 object-cover"
+                  className="w-full h-40 object-cover" // Adjusted height for image
                 />
-                <div className="p-4 flex flex-col flex-grow">
-                  <h2 className="text-xl font-semibold mb-2 h-16 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                <div className="flex items-center mt-2 space-x-2 ml-2">
+                  <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
+                    <span className="text-gray-500 text-sm">{course.lesson_count} Lessons</span>
+                  </div>
+                  <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
+                    <span className="text-gray-500 text-sm">
+                      {course.total_duration > 0
+                        ? `${Math.floor(course.total_duration / 60)}h ${course.total_duration % 60}m`
+                        : '0h 0m'}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-2 flex flex-col flex-grow">
+                  <h2 className="text-lg font-semibold mt-1 h-10 overflow-hidden overflow-ellipsis whitespace-nowrap">
                     {course.name}
                   </h2>
                   <p className="text-sm text-gray-600 mb-2">
@@ -145,10 +163,10 @@ const PopularCourses: React.FC = () => {
                       <img
                         src={course.avatar}
                         alt={course.instructor_name}
-                        className="w-8 h-8 rounded-full mr-2"
+                        className="w-6 h-6 rounded-full mr-2"
                       />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-gray-300 mr-2 flex items-center justify-center">
+                      <div className="w-6 h-6 rounded-full bg-gray-300 mr-2 flex items-center justify-center">
                         <span className="text-xs text-gray-600">No Avatar</span>
                       </div>
                     )}
@@ -156,14 +174,14 @@ const PopularCourses: React.FC = () => {
                       <strong>{course.instructor_name}</strong>
                     </p>
                   </div>
-                  <div className="flex items-center justify-between mt-auto">
+                  <div className="flex items-center justify-between mt-auto mb-2">
                     <div className="text-lg font-semibold text-green-600">
                       <span className="text-xl">${course.price_paid}</span>
                       <span className="text-sm text-gray-500 ml-2">/year</span>
                     </div>
                     <button
                       onClick={() => handleViewDetails(course._id)}
-                      className="bg-green-600 text-white py-1 px-3 rounded-md hover:bg-green-700 transition duration-300"
+                      className="bg-green-600 text-white py-1 px-2 rounded-md hover:bg-green-700 transition duration-300"
                     >
                       Join Now
                     </button>
@@ -173,15 +191,6 @@ const PopularCourses: React.FC = () => {
             ))
           )}
         </div>
-        {currentIndex + 2 < courses.length && (
-          <button
-            onClick={handleNextClick}
-            className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 z-20"
-            style={{ zIndex: 20 }}
-          >
-            <RightOutlined className="text-lg" />
-          </button>
-        )}
       </div>
     </div>
   );
