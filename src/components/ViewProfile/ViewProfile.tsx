@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom'; // Assuming you are using React Router
-
-import { getCurrentLogin } from '../../utils/commonImports'; // Adjust the import path as needed
+import { useParams } from 'react-router-dom';
+import { getUserData, updateSubscribed } from '../../utils/commonImports'; // Adjust the import path as necessary
 import CourseTab from './CourseTab';
 import SubscriptionTab from './SubscriptionTab';
 import AboutTab from './AboutTab';
@@ -26,21 +25,38 @@ interface UserData {
 const ViewProfile: React.FC = () => {
     const [activeTab, setActiveTab] = useState('About');
     const [userData, setUserData] = useState<UserData | null>(null);
-    const navigate = useNavigate();
+    const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const data = await getCurrentLogin();
-                setUserData(data);
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-                // Handle error fetching user data
+            console.log('id:', id);
+            if (id) { // Check if id is defined
+                try {
+                    const data = await getUserData(id);
+                    setUserData(data);
+                } catch (error) {
+                    console.error('Error fetching user data:', error);
+                    // Handle error fetching user data
+                }
+            } else {
+                console.error('No user ID provided');
             }
         };
 
         fetchData();
-    }, []); // Empty dependency array to run only once on mount
+    }, [id]); // Dependency array to run when id changes
+
+    const handleSubscribe = async () => {
+        if (userData) {
+            try {
+                await updateSubscribed(userData._id);
+                alert('Subscribed successfully!');
+            } catch (error) {
+                console.error('Error subscribing:', error);
+                alert('Failed to subscribe.');
+            }
+        }
+    };
 
     const renderTabContent = () => {
         if (!userData) return null; // Handle case where userData is null
@@ -73,9 +89,12 @@ const ViewProfile: React.FC = () => {
                             <p className="text-gray-600 mt-2">{userData?.phone_number || 'Location'}</p>
                         </div>
                     </div>
-                        <button className="custom-button" onClick={() => navigate('/setting-page')}>
-                            Edit Profile
-                        </button>
+                    <button
+                        className="px-4 py-2 bg-green-600 text-white rounded-lg"
+                        onClick={handleSubscribe}
+                    >
+                        Subscribe
+                    </button>
                 </div>
             </div>
 

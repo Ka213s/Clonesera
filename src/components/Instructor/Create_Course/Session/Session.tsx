@@ -5,8 +5,10 @@ import DisplaySessions from './DisplaySessions';
 
 const SessionComponent: React.FC = () => {
   return (
-    <div> 
-      <AddSession />
+    <div>
+      <div className="flex justify-end mb-4">
+        <AddSession />
+      </div>
       <DisplaySessions />
     </div>
   );

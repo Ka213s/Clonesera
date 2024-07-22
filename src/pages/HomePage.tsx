@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getPublicCourses, getCurrentLogin } from '../utils/commonImports'; 
+import { getUserData, getPublicCourses, getCurrentLogin } from '../utils/commonImports';
+import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
+import Statistic from './Statistic';
+import PopularCourses from './PopularCourses';
+import CustomCalendar from './CustomCalendar';
+import Blog from './Blog';
+import JoinAvatar from '../assets/Course.png';
 
 interface Course {
   _id: number;
   name: string;
   category_name: string;
   instructor_name: string;
+  avatar: string;
   description: string;
   image_url: string;
   price_paid: number;
@@ -17,9 +24,27 @@ interface User {
   avatar: string;
 }
 
+interface CourseResponse {
+  _id: number;
+  name: string;
+  category_name: string;
+  instructor_name: string;
+  instructor_avatar: string;
+  instructor_id: string;
+  description: string;
+  image_url: string;
+  price_paid: number;
+}
+
+interface ApiResponse {
+  pageData: CourseResponse[];
+}
+
 const HomePage: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [user, setUser] = useState<User | null>(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAnimating, setIsAnimating] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -29,16 +54,27 @@ const HomePage: React.FC = () => {
           searchCondition: {
             keyword: '',
             category_id: '',
-            is_deleted: false
+            is_deleted: false,
           },
           pageInfo: {
             pageNum: 1,
-            pageSize: 10
-          }
+            pageSize: 10,
+          },
         };
-        const response = await getPublicCourses(data);
-        console.log('response:', response);
-        setCourses(response.pageData);
+        const response: ApiResponse = await getPublicCourses(data);
+
+        const coursePromises = response.pageData.map(async (course: CourseResponse) => {
+          try {
+            const userData = await getUserData(course.instructor_id);
+            return { ...course, avatar: userData.avatar || course.instructor_avatar };
+          } catch (error) {
+            console.error('Error fetching instructor data for course', course._id, ':', error);
+            return { ...course, avatar: course.instructor_avatar };
+          }
+        });
+
+        const updatedCourses = await Promise.all(coursePromises);
+        setCourses(updatedCourses);
       } catch (error) {
         console.error('Error fetching courses:', error);
       }
@@ -48,140 +84,125 @@ const HomePage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const userData = await getCurrentLogin();
-        setUser(userData);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
+    const token = localStorage.getItem('token');
+    if (token) {
+      const fetchUser = async () => {
+        try {
+          const userData = await getCurrentLogin();
+          setUser(userData);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      };
 
-    fetchUser();
+      fetchUser();
+    }
   }, []);
 
-  const handleViewDetails = (courseId: number) => {
-    navigate(`/course-detail/${courseId}`);
+  const handleViewDetails = (courseId: number) => navigate(`/course-detail/${courseId}`);
+
+  const handlePrevClick = () => {
+    if (currentIndex > 0 && !isAnimating) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentIndex(currentIndex - 2);
+        setIsAnimating(false);
+      }, 300);
+    }
   };
+
+  const handleNextClick = () => {
+    if (currentIndex + 2 < courses.length && !isAnimating) {
+      setIsAnimating(true);
+      setTimeout(() => {
+        setCurrentIndex(currentIndex + 2);
+        setIsAnimating(false);
+      }, 300);
+    }
+  };
+
+  // const uniqueCategories = Array.from(new Set(courses.map(course => course.category_name)));
 
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
-        {/* Banner */}
-        <div className="relative bg-green-500 text-white p-6 rounded-lg mb-8 overflow-hidden">
-          <h1 className="text-4xl font-bold mb-4">Sharpen Your Skills with Professional Online Courses</h1>
-          <button className="bg-black text-white px-6 py-2 rounded-full font-semibold inline-flex items-center">
-            Join Now
-            <svg className="ml-2 w-4 h-4" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-              <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1.707-9.707a1 1 0 00-1.414-1.414l-3 3a1 1 0 001.414 1.414l1.293-1.293V14a1 1 0 102 0V9.293l1.293 1.293a1 1 0 001.414-1.414l-3-3z" clipRule="evenodd" />
-            </svg>
-          </button>
-          <div className="absolute top-0 right-0 bottom-0 left-0 bg-purple-700 opacity-20"></div>
-          <div className="absolute top-0 right-0 bottom-0 left-0 overflow-hidden pointer-events-none">
-            <div className="sparkle sparkle-1"></div>
-            <div className="sparkle sparkle-2"></div>
-            <div className="sparkle sparkle-3"></div>
+        {/* Header Section */}
+        <div className="grid grid-cols-3 gap-6 mb-8">
+          <div className="col-span-2 relative bg-green-600 text-white p-4 rounded-lg overflow-hidden flex flex-col justify-between h-50">
+            <div className="z-10 relative">
+              <h1 className="text-2xl font-bold mb-4 text-black">Sharpen Your Skills with Professional Online Courses</h1>
+              <p className="text-lg mb-4 text-black">
+                Join our platform to access high-quality courses taught by industry experts and enhance your skills from anywhere at any time.
+              </p>
+              <button className="bg-black text-white px-6 py-2 rounded-full font-semibold inline-flex items-center">
+                Join Now
+              </button>
+            </div>
+            <div className="absolute top-0 right-0 bottom-0 flex items-center justify-end p-4">
+              <img
+                src={JoinAvatar}
+                alt="Online Learning"
+                className="object-cover h-auto opacity-50 ml-auto"
+                style={{ marginRight: '-50px' }}
+              />
+            </div>
+            <div className="absolute top-0 right-0 bottom-0 left-0 overflow-hidden pointer-events-none">
+              <div className="sparkle sparkle-1"></div>
+              <div className="sparkle sparkle-2"></div>
+              <div className="sparkle sparkle-3"></div>
+            </div>
+            {/* Category Buttons */}
+            {/* <div className="z-10 mt-4 flex space-x-4">
+              {uniqueCategories.map(category => (
+                <button key={category} className="bg-white text-green-600 shadow-md rounded-full px-4 py-2">
+                  {category}
+                </button>
+              ))}
+            </div> */}
+          </div>
+          <div className="flex flex-col space-y-8">
+            <Statistic user={user} />
           </div>
         </div>
 
-        <div className="lg:grid lg:grid-cols-3 lg:gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2">
-            {/* Category Tabs */}
-            <div className="flex space-x-4 mb-8">
-              <button className="bg-white shadow-md rounded-full px-4 py-2">2/8 watched UI/UX Design</button>
-              <button className="bg-white shadow-md rounded-full px-4 py-2">3/8 watched Branding</button>
-              <button className="bg-white shadow-md rounded-full px-4 py-2">6/12 watched Front End</button>
-            </div>
-
-            {/* Continue Watching */}
-            <div>
-              <h2 className="text-2xl font-bold mb-4">Continue Watching</h2>
-              <div className="flex space-x-4 overflow-x-scroll pb-4">
-                {courses.map(course => (
-                  <div key={course._id} className="bg-white rounded-lg shadow-lg overflow-hidden w-80 flex-shrink-0 flex flex-col">
-                    <img src={course.image_url} alt={course.name} className="w-full h-48 object-cover" />
-                    <div className="p-4 flex flex-col flex-grow">
-                      <h2 className="text-xl font-semibold mb-2 h-16 overflow-hidden overflow-ellipsis">{course.name}</h2>
-                      <p className="text-sm text-gray-600 mb-2"><strong>Category:</strong> {course.category_name}</p>
-                      <p className="text-sm text-gray-600 mb-2"><strong>Instructor:</strong> {course.instructor_name}</p>
-                      <p className="text-lg font-semibold text-green-600 mb-4"><strong>Price:</strong> ${course.price_paid}</p>
-                      <button 
-                        onClick={() => handleViewDetails(course._id)} 
-                        className="w-full bg-green-600 text-white py-2 rounded-md hover:bg-green-700 transition duration-300 mt-auto"
-                      >
-                        View Details
-                      </button>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+        {/* Popular Courses and Calendar Section */}
+        <div className="grid grid-cols-3 gap-6 mb-8">
+          <div className="col-span-2 flex flex-col space-y-8">
+            <PopularCourses
+              courses={courses}
+              currentIndex={currentIndex}
+              handlePrevClick={handlePrevClick}
+              handleNextClick={handleNextClick}
+              handleViewDetails={handleViewDetails}
+              isAnimating={isAnimating}
+            />
           </div>
-
-          {/* Sidebar */}
-          <div className="space-y-8">
-            {/* Statistic */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-bold mb-4">Statistic</h2>
-              {user && (
-                <div className="flex items-center mb-4">
-                  <img src={user.avatar} alt="Avatar" className="w-12 h-12 rounded-full mr-4" />
-                  <div>
-                    <h3 className="text-xl font-bold">Good Morning, {user.name}</h3>
-                    <p className="text-sm text-gray-600">Continue your learning to achieve your target!</p>
-                  </div>
-                </div>
-              )}
-              <div className="bg-green-100 rounded-lg p-4">
-                <p className="text-2xl font-bold text-green-600 mb-2">32%</p>
-                <div className="flex space-x-2">
-                  <div className="bg-green-600 h-2 rounded-lg w-1/3"></div>
-                  <div className="bg-green-600 h-2 rounded-lg w-1/4"></div>
-                  <div className="bg-green-600 h-2 rounded-lg w-1/5"></div>
-                </div>
-              </div>
-            </div>
-
-            {/* Your Mentor */}
-            <div className="bg-white rounded-lg shadow-lg p-6">
-              <h2 className="text-2xl font-bold mb-4">Your Mentor</h2>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <img src="/path/to/mentor1.jpg" alt="Mentor" className="w-12 h-12 rounded-full mr-4" />
-                    <div>
-                      <h3 className="text-xl font-bold">Padhang Satrio</h3>
-                      <p className="text-sm text-gray-600">Mentor</p>
-                    </div>
-                  </div>
-                  <button className="custom-button">Follow</button>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <img src="/path/to/mentor2.jpg" alt="Mentor" className="w-12 h-12 rounded-full mr-4" />
-                    <div>
-                      <h3 className="text-xl font-bold">Zakir Horizontal</h3>
-                      <p className="text-sm text-gray-600">Mentor</p>
-                    </div>
-                  </div>
-                  <button className="custom-button">Follow</button>
-                </div>
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <img src="/path/to/mentor3.jpg" alt="Mentor" className="w-12 h-12 rounded-full mr-4" />
-                    <div>
-                      <h3 className="text-xl font-bold">Leonardo Samsul</h3>
-                      <p className="text-sm text-gray-600">Mentor</p>
-                    </div>
-                  </div>
-                  <button className="custom-button">Follow</button>
-                </div>
-              </div>
-            </div>
+          <div>
+            <CustomCalendar />
           </div>
         </div>
 
+        {/* Info Blocks */}
+        <div className="grid grid-cols-3 gap-6 mt-8">
+          <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
+            <InfoCircleOutlined className="text-4xl text-blue-600 mb-4" />
+            <h2 className="text-2xl font-bold mb-4">About us</h2>
+            <p className="text-gray-600 text-center">When an unknown printer took a galley of type and scrambled it</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
+            <CheckCircleOutlined className="text-4xl text-green-600 mb-4" />
+            <h2 className="text-2xl font-bold mb-4">Certification</h2>
+            <p className="text-gray-600 text-center">When an unknown printer took a galley of type and scrambled it</p>
+          </div>
+          <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
+            <UserOutlined className="text-4xl text-gray-600 mb-4" />
+            <h2 className="text-2xl font-bold mb-4">Member</h2>
+            <p className="text-gray-600 text-center">When an unknown printer took a galley of type and scrambled it</p>
+          </div>
+        </div>
+        <div className="mt-12">
+          <Blog />
+        </div>
       </div>
     </div>
   );

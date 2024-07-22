@@ -13,10 +13,11 @@
     transform: scale(0.9) translate(-20px, 20px);
   }
 }
+
 .custom-button {
   
   border-radius: 50px;
-  background-color: rgb(4, 254, 4) !important; 
+  background-color: #22c55e !important; 
   color: #000000 !important; 
   font-weight: 500;
 }
@@ -28,14 +29,15 @@
 }
 
 .button-menu {
-  background-color: rgb(4, 254, 4); 
+  background-color: #22c55e; 
   color: rgb(0, 0, 0);
   transition: background-color 0.3s ease-in-out;
 }
 
 .button-menu:hover {
-  background-color: rgb(4, 254, 4) !important; 
+  background-color: rgb(61, 198, 111) !important; 
   color: white  !important;
+  border-radius: none !important;
 }
 .blob {
   position: absolute;
@@ -124,4 +126,54 @@ html, body, #root {
 
 .main-content.ml-56 {
   margin-left: 14rem; /* 14rem = 56px * 4 (vì 1rem = 16px) */
+}
+@keyframes sparkle {
+  0%, 100% { opacity: 0; transform: scale(0); }
+  50% { opacity: 1; transform: scale(1); }
+}
+
+.sparkle {
+  position: absolute;
+  width: 50px;
+  height: 50px;
+  background: radial-gradient(circle, white 40%, transparent 60%);
+  border-radius: 50%;
+  animation: sparkle 2s infinite;
+  clip-path: polygon(
+    50% 0%,
+    61% 35%,
+    98% 35%,
+    68% 57%,
+    79% 91%,
+    50% 70%,
+    21% 91%,
+    32% 57%,
+    2% 35%,
+    39% 35%
+  );
+}
+
+.sparkle-1 {
+  top: 20%;
+  left: 30%;
+  animation-delay: 0s;
+}
+
+.sparkle-2 {
+  top: 40%;
+  left: 70%;
+  animation-delay: 1s;
+}
+
+.sparkle-3 {
+  top: 70%;
+  left: 50%;
+  animation-delay: 2s;
+}
+/* styles.css */
+.avatar-img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
 }

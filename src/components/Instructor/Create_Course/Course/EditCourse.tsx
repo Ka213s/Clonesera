@@ -68,9 +68,26 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
     setIsModalVisible(true);
   };
 
+  const handleUploadSuccess = (url: string, type: 'video' | 'image') => {
+    if (type === 'video') {
+      setVideoUrl(url);
+      form.setFieldsValue({ video_url: url });
+    } else if (type === 'image') {
+      setImageUrl(url);
+      form.setFieldsValue({ image_url: url });
+    }
+  };
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    if (value.length <= 200) {
+      form.setFieldsValue({ description: value });
+    }
+  };
+
   return (
     <>
-      <Button icon={<EditOutlined />} onClick={handleClick} />
+      <Button className='mr-2' icon={<EditOutlined />} onClick={handleClick} />
       <Modal
         title="Edit Course"
         visible={isModalVisible}
@@ -108,10 +125,24 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
           <Form.Item
             name="description"
             label="Description"
+            rules={[{ required: true, message: 'Please input the description!' }]}
+          >
+            <Input.TextArea
+              value={form.getFieldValue('description')}
+              onChange={handleDescriptionChange}
+              maxLength={200}
+              showCount
+              autoSize={{ minRows: 3, maxRows: 5 }}
+            />
+          </Form.Item>
+          <Form.Item
+            name="content"
+            label="Content"
+            rules={[{ required: true, message: 'Please input the content!' }]}
           >
             <TinyMCEEditorComponent
-              value={form.getFieldValue('description')}
-              onEditorChange={(content) => form.setFieldsValue({ description: content })}
+              value={form.getFieldValue('content')}
+              onEditorChange={(content) => form.setFieldsValue({ content })}
             />
           </Form.Item>
           <Form.Item
@@ -121,10 +152,7 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
             {videoUrl ? <video src={videoUrl} controls style={{ width: '100%' }} /> : null}
             <FileUploader
               type="video"
-              onUploadSuccess={(url) => {
-                setVideoUrl(url);
-                form.setFieldsValue({ video_url: url });
-              }}
+              onUploadSuccess={(url) => handleUploadSuccess(url, 'video')}
             />
           </Form.Item>
           <Form.Item
@@ -134,10 +162,7 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
             {imageUrl ? <img src={imageUrl} alt="Course Image" style={{ width: '100%' }} /> : null}
             <FileUploader
               type="image"
-              onUploadSuccess={(url) => {
-                setImageUrl(url);
-                form.setFieldsValue({ image_url: url });
-              }}
+              onUploadSuccess={(url) => handleUploadSuccess(url, 'image')}
             />
           </Form.Item>
           <Form.Item
@@ -151,7 +176,7 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
             name="discount"
             label="Discount"
           >
-            <InputNumber min={0} />
+            <InputNumber min={0} max={100} />
           </Form.Item>
         </Form>
       </Modal>

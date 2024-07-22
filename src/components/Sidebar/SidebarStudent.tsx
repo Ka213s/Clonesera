@@ -31,6 +31,7 @@ const iconComponents: { [key: string]: JSX.Element } = {
   FaFile: <FileTextOutlined />,
   FaCogs: <SettingOutlined />,
   FaPaperPlane: <SendOutlined />,
+  FaBill: <FileTextOutlined />
 };
 
 const SidebarStudent: React.FC<SidebarProps> = ({ showMenu }) => {

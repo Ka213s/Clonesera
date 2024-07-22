@@ -1,5 +1,5 @@
 import { createCourse, useState } from '../../../../utils/commonImports';
-import { Button, Modal, Form, Input, InputNumber, Select } from 'antd';
+import { Button, Modal, Form, Input, InputNumber, Select, Radio } from 'antd';
 import FileUploader from '../../../FileUploader';
 import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor';
 import useCategories from '../../../useCategories';
@@ -7,17 +7,18 @@ import useCategories from '../../../useCategories';
 const { Option } = Select;
 
 const CreateCourseButton: React.FC = () => {
-  const [isOpen, setIsOpen] = useState(false); // Use isOpen instead of isModalVisible
+  const [isOpen, setIsOpen] = useState(false);
   const [form] = Form.useForm();
   const [imageURL, setImageURL] = useState<string | null>(null);
   const [videoURL, setVideoURL] = useState<string | null>(null);
   const [description, setDescription] = useState<string>('');
   const [content, setContent] = useState<string>('');
+  const [isFree, setIsFree] = useState<boolean>(true);  // Mặc định là Free
 
-  const { categories, parents } = useCategories(); // Use the custom hook
+  const { categories, parents } = useCategories();
 
   const showModal = () => {
-    setIsOpen(true); // Use setIsOpen instead of setIsModalVisible
+    setIsOpen(true);
   };
 
   const handleOk = async () => {
@@ -28,33 +29,45 @@ const CreateCourseButton: React.FC = () => {
       video_url: videoURL,
       description,
       content,
+      price: isFree ? 0 : values.price,
+      discount: isFree ? 0 : values.discount,
     };
     await createCourse(courseData);
-    setIsOpen(false); // Use setIsOpen instead of setIsModalVisible
+    setIsOpen(false);
     form.resetFields();
     setImageURL(null);
     setVideoURL(null);
     setDescription('');
     setContent('');
+    setIsFree(true);
   };
 
   const handleCancel = () => {
-    setIsOpen(false); // Use setIsOpen instead of setIsModalVisible
+    setIsOpen(false);
     form.resetFields();
     setImageURL(null);
     setVideoURL(null);
     setDescription('');
     setContent('');
+    setIsFree(true);
+  };
+
+  const handleDescriptionChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
+    if (value.length <= 200) {
+      setDescription(value);
+      form.setFieldsValue({ description: value });
+    }
   };
 
   return (
     <>
-      <Button type="primary" onClick={showModal} className='custom-button'>
+      <Button type="primary" onClick={showModal} className="custom-button mr-2">
         Create Course
       </Button>
       <Modal
         title="Create Course"
-        open={isOpen} // Use open instead of visible
+        open={isOpen}
         onOk={handleOk}
         onCancel={handleCancel}
       >
@@ -88,12 +101,12 @@ const CreateCourseButton: React.FC = () => {
             label="Description"
             rules={[{ required: true, message: 'Please input the description!' }]}
           >
-            <TinyMCEEditorComponent
+            <Input.TextArea
               value={description}
-              onEditorChange={(content) => {
-                setDescription(content);
-                form.setFieldsValue({ description: content });
-              }}
+              onChange={handleDescriptionChange}
+              maxLength={200}
+              showCount
+              autoSize={{ minRows: 3, maxRows: 5 }}
             />
           </Form.Item>
           <Form.Item
@@ -122,18 +135,33 @@ const CreateCourseButton: React.FC = () => {
             <FileUploader type="video" onUploadSuccess={setVideoURL} />
           </Form.Item>
           <Form.Item
-            name="price"
-            label="Price"
-            rules={[{ required: true, message: 'Please input the price!' }]}
+            label="Course Type"
+            name="courseType"
+            initialValue="free"
+            rules={[{ required: true, message: 'Please select the course type!' }]}
           >
-            <InputNumber min={0} style={{ width: '100%' }} />
+            <Radio.Group onChange={(e) => setIsFree(e.target.value === 'free')}>
+              <Radio value="free">Free</Radio>
+              <Radio value="paid">Paid</Radio>
+            </Radio.Group>
           </Form.Item>
-          <Form.Item
-            name="discount"
-            label="Discount"
-          >
-            <InputNumber min={0} max={100} style={{ width: '100%' }} />
-          </Form.Item>
+          {!isFree && (
+            <>
+              <Form.Item
+                name="price"
+                label="Price"
+                rules={[{ required: true, message: 'Please input the price!' }]}
+              >
+                <InputNumber min={0} style={{ width: '100%' }} />
+              </Form.Item>
+              <Form.Item
+                name="discount"
+                label="Discount"
+              >
+                <InputNumber min={0} max={100} style={{ width: '100%' }} />
+              </Form.Item>
+            </>
+          )}
         </Form>
       </Modal>
     </>

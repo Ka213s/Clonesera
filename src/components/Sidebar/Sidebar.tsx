@@ -12,6 +12,7 @@ import {
   QuestionCircleOutlined,
   HistoryOutlined,
   SendOutlined,
+
 } from '@ant-design/icons';
 import { sidebarMenuItemsData } from '../../consts'; 
 
@@ -31,6 +32,7 @@ const iconComponents: { [key: string]: JSX.Element } = {
   QuestionCircleOutlined: <QuestionCircleOutlined />,
   HistoryOutlined: <HistoryOutlined />,
   SendOutlined: <SendOutlined />,
+ 
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {

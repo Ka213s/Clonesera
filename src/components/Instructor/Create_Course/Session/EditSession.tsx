@@ -47,8 +47,8 @@ const ButtonEdit: React.FC<ButtonEditProps> = ({ _id }) => {
 
   return (
     <>
-      <Button icon={<EditOutlined />} onClick={showModal}>
-        Edit
+      <Button className='mr-2' icon={<EditOutlined />} onClick={showModal}>
+      
       </Button>
       <Modal
         visible={visible}

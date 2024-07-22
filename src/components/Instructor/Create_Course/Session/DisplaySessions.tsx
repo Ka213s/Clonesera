@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Table, TableColumnsType } from 'antd';
+import moment from 'moment';
 import { getSessions } from '../../../../utils/commonImports';
 import ButtonEdit from './EditSession';
 import ButtonDelete from './DeleteSession';
-
+  
 interface Session {
   _id: string;
   name: string;
   course_name: string;
-  user_name: string;
-  is_deleted: boolean;
+  created_at: string;
 }
 
 const DisplaySessions: React.FC = () => {
@@ -42,22 +42,20 @@ const DisplaySessions: React.FC = () => {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
+   
     },
     {
       title: 'Course Name',
       dataIndex: 'course_name',
       key: 'course_name',
+     
     },
     {
-      title: 'User Name',
-      dataIndex: 'user_name',
-      key: 'user_name',
-    },
-    {
-      title: 'Is Deleted',
-      dataIndex: 'is_deleted',
-      key: 'is_deleted',
-      render: (isDeleted: boolean) => (isDeleted ? 'Yes' : 'No'),
+      title: 'Created At',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (text: string) => moment(text).format('DD-MM-YYYY'),
+      
     },
     {
       title: 'Actions',
@@ -68,6 +66,7 @@ const DisplaySessions: React.FC = () => {
           <ButtonDelete _id={record._id} />
         </>
       ),
+      align: 'center',
     },
   ];
 
@@ -76,6 +75,7 @@ const DisplaySessions: React.FC = () => {
       dataSource={sessions}
       columns={columns}
       rowKey="_id"
+      style={{ textAlign: 'center' }}
     />
   );
 };

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Button, Form, Input, message } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 import { getLessonById, updateLesson } from '../../../../utils/commonImports';
-import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor'; 
+import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor';
 import FileUploader from '../../../FileUploader';
 
 interface UpdateLessonProps {
@@ -31,7 +32,12 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
       try {
         const lessonData: Lesson = await getLessonById(lesson_id);
         setLesson(lessonData);
-        form.setFieldsValue(lessonData);
+
+        // Format `full_time` for the form
+        const formattedFullTime = lessonData.full_time > 60
+          ? `${Math.floor(lessonData.full_time / 60)}h ${lessonData.full_time % 60}m`
+          : `${lessonData.full_time}m`;
+        form.setFieldsValue({ ...lessonData, full_time: formattedFullTime });
       } catch (error) {
         console.error('Error fetching lesson:', error);
       }
@@ -48,21 +54,26 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
 
   const handleOk = async (values: Lesson): Promise<void> => {
     try {
-      // Đảm bảo gửi "" nếu không có video_url hoặc image_url
-      const updatedValues = {
+      // Parse `full_time` from the format "Xh Ym" or "Xm"
+      const fullTimeString = values.full_time as unknown as string;
+      const match = fullTimeString.match(/(\d+)h (\d+)m/) || [];
+      const hours = match[1] ? parseInt(match[1], 10) : 0;
+      const minutes = match[2] ? parseInt(match[2], 10) : parseInt(fullTimeString.replace('m', ''), 10);
+      const fullTimeInMinutes = hours * 60 + minutes;
+
+      const updatedValues: Lesson = {
         ...values,
+        full_time: fullTimeInMinutes,
         video_url: values.video_url || "",
         image_url: values.image_url || ""
       };
 
-      console.log('updatedValues:', updatedValues);
-      console.log('lesson_id:', lesson_id);
-      
       await updateLesson(lesson_id, updatedValues);
       setIsModalVisible(false);
-      console.log('Lesson updated:', updatedValues);
+      message.success('Lesson updated successfully');
     } catch (error) {
       console.error('Error updating lesson:', error);
+      message.error('Failed to update lesson');
     }
   };
 
@@ -81,7 +92,7 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
 
   return (
     <>
-      <Button onClick={showModal}>Update</Button>
+      <Button className='mr-2' icon={<EditOutlined />} onClick={showModal}></Button>
       <Modal title="Update Lesson" visible={isModalVisible} onCancel={handleCancel} footer={null}>
         {lesson && (
           <Form form={form} onFinish={handleOk} initialValues={lesson}>
@@ -101,13 +112,13 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
               <Input />
             </Form.Item>
             <Form.Item name="description" label="Description">
-              <TinyMCEEditorComponent 
-                value={lesson.description || ''} 
-                onEditorChange={(content) => form.setFieldsValue({ description: content })} 
+              <TinyMCEEditorComponent
+                value={lesson.description || ''}
+                onEditorChange={(content) => form.setFieldsValue({ description: content })}
               />
             </Form.Item>
             <Form.Item name="full_time" label="Full Time" rules={[{ required: true, message: 'Please input the full time!' }]}>
-              <Input type="number" />
+              <Input />
             </Form.Item>
             <Form.Item name="position_order" label="Position Order" rules={[{ required: true, message: 'Please input the position order!' }]}>
               <Input type="number" />
@@ -125,8 +136,8 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
                         Your browser does not support the video tag.
                       </video>
                     )}
-                    <FileUploader 
-                      type="video" 
+                    <FileUploader
+                      type="video"
                       onUploadSuccess={(url) => handleUploadSuccess(url, 'video')}
                     />
                   </>
@@ -138,8 +149,8 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
                     {getFieldValue('image_url') && (
                       <img src={getFieldValue('image_url')} alt="Lesson Image" style={{ width: '100%' }} />
                     )}
-                    <FileUploader 
-                      type="image" 
+                    <FileUploader
+                      type="image"
                       onUploadSuccess={(url) => handleUploadSuccess(url, 'image')}
                     />
                   </>

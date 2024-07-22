@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
+import { ExclamationCircleOutlined, DeleteOutlined } from '@ant-design/icons';
 import { deleteLesson } from '../../../../utils/commonImports';
 const { confirm } = Modal;
 
@@ -30,7 +30,15 @@ const DeleteLesson: React.FC<DeleteLessonProps> = ({ lesson_id }) => {
     }
   };
 
-  return <Button onClick={showDeleteConfirm}>Delete</Button>;
+  return (
+    <Button
+      icon={<DeleteOutlined />}
+      onClick={showDeleteConfirm}
+      danger
+    >
+    
+    </Button>
+  );
 };
 
 export default DeleteLesson;

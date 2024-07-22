@@ -5,7 +5,9 @@ import {
   UserOutlined,
   DashboardOutlined,
   BookOutlined,
-  TeamOutlined
+  TeamOutlined,
+  ShoppingCartOutlined,
+  MessageOutlined
 } from '@ant-design/icons';
 import { SidebarAdminData } from '../../consts'; 
 
@@ -23,7 +25,9 @@ const iconComponents: { [key: string]: JSX.Element } = {
   UserOutlined: <UserOutlined />,
   DashboardOutlined: <DashboardOutlined />,
   BookOutlined: <BookOutlined />,
-  TeamOutlined: <TeamOutlined />
+  TeamOutlined: <TeamOutlined />,
+  ShoppingCartOutlined : <ShoppingCartOutlined />,
+  MessageOutlined : <MessageOutlined />
 };
 
 const renderMenuItems = (items: MenuItem[], navigate: (path: string) => void) => 

@@ -14,7 +14,7 @@ export const setGlobalLoadingHandler = (loadingHandler: (loading: boolean) => vo
   setLoading = loadingHandler;
 };
 
-const axiosInstance: AxiosInstance = axios.create({
+const defaultAxiosInstance: AxiosInstance = axios.create({
   baseURL: config.API_BASE_URL,
   headers: {
     'content-type': 'application/json; charset=UTF-8'
@@ -23,7 +23,43 @@ const axiosInstance: AxiosInstance = axios.create({
   timeoutErrorMessage: 'Connection timeout exceeded'
 });
 
-axiosInstance.interceptors.request.use(
+defaultAxiosInstance.interceptors.request.use(
+  (config) => {
+    setLoading(true);
+    return config;
+  },
+  (error) => {
+    setLoading(false);
+    return Promise.reject(error);
+  }
+);
+
+defaultAxiosInstance.interceptors.response.use(
+  (response) => {
+    setLoading(false);
+    return response.data;
+  },
+  (err: AxiosError) => {
+    setLoading(false);
+    const { response } = err;
+    if (response) {
+      handleErrorByToast(err);
+      handleHttpErrors(response.status);
+    }
+    return Promise.reject(err);
+  }
+);
+
+const tokenAxiosInstance: AxiosInstance = axios.create({
+  baseURL: config.API_BASE_URL,
+  headers: {
+    'content-type': 'application/json; charset=UTF-8'
+  },
+  timeout: 300000,
+  timeoutErrorMessage: 'Connection timeout exceeded'
+});
+
+tokenAxiosInstance.interceptors.request.use(
   (config) => {
     setLoading(true);
     const token = localStorage.getItem('token');
@@ -38,7 +74,7 @@ axiosInstance.interceptors.request.use(
   }
 );
 
-axiosInstance.interceptors.response.use(
+tokenAxiosInstance.interceptors.response.use(
   (response) => {
     setLoading(false);
     return response.data;
@@ -48,13 +84,11 @@ axiosInstance.interceptors.response.use(
     const { response } = err;
     if (response) {
       handleErrorByToast(err);
-        handleHttpErrors(response.status);
+      handleHttpErrors(response.status);
     }
     return Promise.reject(err);
   }
 );
-
-
 
 const handleErrorByToast = (errors: AxiosError) => {
   const data = errors.response?.data as ErrorResponse | undefined;
@@ -71,4 +105,4 @@ const handleErrorByToast = (errors: AxiosError) => {
   return Promise.reject(data?.errors ?? { message });
 };
 
-export default axiosInstance;
+export { defaultAxiosInstance, tokenAxiosInstance };

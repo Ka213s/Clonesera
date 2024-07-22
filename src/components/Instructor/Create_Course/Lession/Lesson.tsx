@@ -5,8 +5,10 @@ import DisplayLeesion from './DisplayLeesion';
 const LessonComponent: React.FC = () => {
   return (
     <div>
-    <CreateLessionButton />
-    <DisplayLeesion />
+      <div className="flex justify-end mb-4">
+        <CreateLessionButton />
+      </div>
+      <DisplayLeesion />
     </div >
   );
 };

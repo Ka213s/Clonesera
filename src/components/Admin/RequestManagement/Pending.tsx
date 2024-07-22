@@ -2,7 +2,7 @@ import { React, useEffect, useState, useCallback, useMemo, Button, Table, Pagina
 import { toast } from 'react-toastify';
 import { getUsers, reviewProfileInstructor } from '../../../services/Api';
 import { ColumnsType } from 'antd/es/table';
-import 'react-toastify/dist/ReactToastify.css';
+
 
 interface User {
     _id: string;
@@ -17,7 +17,7 @@ interface User {
 
 const Pending: React.FC = () => {
     const [users, setUsers] = useState<User[]>([]);
-    const [loading, setLoading] = useState<boolean>(false);
+   
     const [pageNum, setPageNum] = useState<number>(1);
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalItems, setTotalItems] = useState<number>(0);
@@ -27,10 +27,10 @@ const Pending: React.FC = () => {
 
     const fetchUsers = useCallback(
         async (page: number, pageSize: number) => {
-            setLoading(true);
+            
             try {
                 const data = await getUsers(
-                    { keyword: '', role: 'instructor', status: true, is_deleted: false },
+                    { keyword: '', role: 'instructor', status: true, is_deleted: false, is_verified: "false" },
                     page,
                     pageSize
                 );
@@ -40,9 +40,7 @@ const Pending: React.FC = () => {
                 setTotalItems(data.pageInfo.totalItems);
             } catch (error) {
                 toast.error('Failed to fetch users');
-            } finally {
-                setLoading(false);
-            }
+            } 
         },
         []
     );
@@ -141,7 +139,7 @@ const Pending: React.FC = () => {
             <Table
                 columns={columns}
                 dataSource={users.map(user => ({ ...user, key: user._id }))}
-                loading={loading}
+              
                 pagination={false}
                 className="mb-4"
             />

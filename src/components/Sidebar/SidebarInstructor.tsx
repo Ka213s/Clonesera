@@ -15,9 +15,11 @@ import {
   CheckOutlined,
   SettingOutlined,
   SendOutlined,
-  UserOutlined
+  UserOutlined,
+  ShoppingCartOutlined
 } from '@ant-design/icons';
 import { SidebarIntructorData } from '../../consts';
+
 
 interface SidebarProps {
   showMenu: boolean;
@@ -37,7 +39,8 @@ const iconComponents: { [key: string]: JSX.Element } = {
   CheckOutlined: <CheckOutlined />,
   SettingOutlined: <SettingOutlined />,
   SendOutlined: <SendOutlined />,
-  UserOutlined: <UserOutlined />
+  UserOutlined: <UserOutlined />,
+  ShoppingCartOutlined : <ShoppingCartOutlined />
 };
 
 const SidebarInstructor: React.FC<SidebarProps> = ({ showMenu }) => {

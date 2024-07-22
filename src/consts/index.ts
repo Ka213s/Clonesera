@@ -18,12 +18,18 @@ export const ADMIN = {
   CATEGORY: '/categories',
   PENDING_COURSE: '/pending-courses',
   LOG_COURSE: '/log-course',
+  PURCHASE: '/purchase',
+  BLOG: '/blog'
 }
 export const INSTRUCTOR = {
   COURSE: '/courses',
   LIST_SUBSCRIPTION: '/list-subscription',
   VIEW_ALL_COURSE: '/view-all-course',
-  VIEW_PROFILE: '/view-profile'
+  VIEW_MY_PROFILE: '/view-my-profile',
+  VIEW_PROFILE: '/view-profile/:id',
+  PURCHASE: '/purchased-courses',
+  COURSE_SOLD: '/courses-sold',
+  REVIEW: '/review',  
 };
 export const PUBLIC = {
   HOME: '/homepage',
@@ -38,7 +44,10 @@ export const PUBLIC = {
   LIST_SUBSCRIBED: '/list-subscribed',
   SUBCRIPTION: '/subcription',
   VIEW_CART: '/view-cart',
-  PAYMENT: '/payment'
+  PAYMENT: '/payment',
+  VIEW_ORDER: '/view-order',
+  LEARN_COURSE: '/learn-course-detail/:id',
+  BLOG_DETAIL: '/blog-detail/:id'
 };
 
 export const sidebarMenuItemsData = {
@@ -89,35 +98,30 @@ export const sidebarMenuItemsData = {
 
 export const SidebarIntructorData = {
   insSidebarItem: [
-    { text: "My Profile", icon: "UserOutlined", url: "/view-profile" },
+    { text: "My Profile", icon: "UserOutlined", url: "/view-my-profile" },
     { text: "Manage Course", icon: "BookOutlined", url: "/courses" },
-    { text: "View All Course ", icon: "BookOutlined", url: "/view-all-course" },
+
     { text: "Subscription", icon: "BellOutlined", url: "/list-subscription" },
     { text: "Log Course", icon: "BookOutlined", url: "/log-course" },
-    // { text: "Messages", icon: "MessageOutlined", url: "/instructor/messages" },
-    // { text: "Notifications", icon: "BellOutlined", url: "/instructor/notifications" },
-    // { text: "My Certificates", icon: "SafetyCertificateOutlined", url: "/instructor/myCertificates" },
-    // { text: "Reviews", icon: "StarOutlined", url: "/instructor/reviews" },
-    // { text: "Earning", icon: "DollarOutlined", url: "/instructor/earning" },
-    // { text: "Payout", icon: "WalletOutlined", url: "/instructor/payout" },
-    // { text: "Statements", icon: "FileTextOutlined", url: "/instructor/statements" },
-    // { text: "Verification", icon: "CheckOutlined", url: "/instructor/verification" },
-    { text: "Setting", icon: "SettingOutlined", url: "/setting-page" },
-    // { text: "Send Feedback", icon: "SendOutlined", url: "/feedback" }
+    { text: "Courses Sold", icon: "ShoppingCartOutlined", url: "/courses-sold" }, // Courses others have bought from me
+    { text: "Purchased Courses", icon: "ShoppingCartOutlined", url: "/purchased-courses" }, // Courses I have bought
+    { text: "Review", icon: "StarOutlined", url: "/review" },
+    { text: "Setting", icon: "SettingOutlined", url: "/setting-page" }
+    
   ]
 };
 
 export const SidebarStudentData = {
   studentSidebarItem: [
     { text: "Subscription", icon: "FaBell", url: "/list-subscribed" },
-    // { "text": "Purchased Courses", "icon": "FaBook", "url": "/student/purchasedCourses" },
+    { "text": "Setting", icon: "FaCogs", url: "/setting-page" },
+    { "text": "Order", icon: "FaBill", url: "/view-order" },
     // { "text": "Messages", "icon": "FaComments", "url": "/student/messages" },
     // { "text": "Notifications", "icon": "FaBell", "url": "/student/notifications" },
     // { "text": "My Certificates", "icon": "FaCertificate", "url": "/student/myCertificates" },
     // { "text": "Reviews", "icon": "FaStar", "url": "/student/reviews" },
     // { "text": "Credits", "icon": "FaCreditCard", "url": "/student/credits" },
     // { "text": "Statements", "icon": "FaFile", "url": "/student/statements" },
-    { "text": "Setting", "icon": "FaCogs", "url": "/setting-page" },
     // { "text": "Send Feedback", "icon": "FaPaperPlane", "url": "/feedback" }
   ]
 };
@@ -129,7 +133,9 @@ export const SidebarAdminData = {
     { "key": "/categories", "label": "Category Management", "icon": "DashboardOutlined" },
     { "key": "/view-all-course", "label": "All Courses", "icon": "BookOutlined" },
     { "key": "/pending-courses", "label": "Pending Courses", "icon": "BookOutlined" },
-    { "key": "/log-course", "label": "Course Log", "icon": "BookOutlined" }
+    { "key": "/log-course", "label": "Course Log", "icon": "BookOutlined" },
+    { "key": "/purchase", "label": "Purchase", "icon": "ShoppingCartOutlined" },
+    { "key": "/blog", "label": "Blog", "icon": "MessageOutlined" }
 
   ]
 };

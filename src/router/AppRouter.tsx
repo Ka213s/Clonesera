@@ -7,19 +7,24 @@ import PrivateRoute from './PrivateRoute';
 import { ROLES } from '../utils/commonImports';
 import { ADMIN, ERROR, INSTRUCTOR, PUBLIC } from '../consts';
 
-// Public Pages and Components
 const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
 const Logout = lazy(() => import('../components/Logout'));
 const Register = lazy(() => import('../pages/Register'));
 const Category = lazy(() => import('../pages/Admin/Category'));
+const Blog = lazy(() => import('../pages/Admin/Blog'));
+const BlogDetail = lazy(() => import('../pages/BlogDetail'));
 const SettingPage = lazy(() => import('../pages/SettingPage'));
 const Course = lazy(() => import('../pages/Instructor/ManagementCourse'));
+const CourseSold = lazy(() => import('../pages/CourseSold'));
+const PurchasedCours = lazy(() => import('../pages/PurchasedCourses'));
+const Purchase = lazy(() => import('../pages/Admin/Purchase'));
 const VerifyEmail = lazy(() => import('../components/VerifyEmailDone'));
 const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
 const RequestManagement = lazy(() => import('../pages/RequestManagement'));
 const ListSubscription = lazy(() => import('../pages/Instructor/ListSubscription'));
-
+const LearnCourseDetail = lazy(() => import('../pages/LearnCourseDetail'));
+const ReViewInstructor = lazy(() => import('../pages/Instructor/ViewReview'));
 const ListSubscribed = lazy(() => import('../pages/Student/ListSubscribed'));
 const DisplayAccount = lazy(() => import('../components/Admin/AccoutUser/ActiveTab'));
 const CreateAccount = lazy(() => import('../components/Admin/CreateAccount/CreateAccount'));
@@ -27,8 +32,10 @@ const CourseDetails = lazy(() => import('../pages/CourseDetails'));
 const LogCourse = lazy(() => import('../components/Admin/LogCourse/LogCourse'));
 const PedingCourse = lazy(() => import('../pages/Admin/PedingCourse'));
 const ViewAllCourse = lazy(() => import('../pages/Instructor/ViewAllCourse'));
+const ViewMyProfile = lazy(() => import('../components/ViewProfile/ViewMyProfile'));
 const ViewProfile = lazy(() => import('../components/ViewProfile/ViewProfile'));
 const ViewCart = lazy(() => import('../pages/ViewCart'));
+const ViewOrder = lazy(() => import('../pages/ViewOrder'));
 const Payment = lazy(() => import('../pages/Payment'));
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));
@@ -46,20 +53,28 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.COURSE} element={<Course />} />
                         <Route path={PUBLIC.COURSE_DETAIL} element={<CourseDetails />} />
                         <Route path={PUBLIC.VIEW_CART} element={<ViewCart />} />
+                        <Route path={PUBLIC.LEARN_COURSE} element={<LearnCourseDetail />} />
+                        <Route path={PUBLIC.VIEW_ORDER} element={<ViewOrder />} />
                         <Route path={PUBLIC.PAYMENT} element={<Payment />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
-               
+                        <Route path={PUBLIC.BLOG_DETAIL} element={<BlogDetail />} />
+                        <Route path={INSTRUCTOR.VIEW_MY_PROFILE} element={<ViewMyProfile />} />
                         <Route path={INSTRUCTOR.VIEW_PROFILE} element={<ViewProfile />} />
                         <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />
                         <Route path={INSTRUCTOR.LIST_SUBSCRIPTION} element={<PrivateRoute element={ListSubscription} allowedRoles={[ROLES.INSTRUCTOR]} />} />
+                        <Route path={INSTRUCTOR.REVIEW} element={<PrivateRoute element={ReViewInstructor} allowedRoles={[ROLES.INSTRUCTOR]} />} />
+                        <Route path={INSTRUCTOR.COURSE_SOLD} element={<PrivateRoute element={CourseSold} allowedRoles={[ROLES.INSTRUCTOR]} />} />
+                        <Route path={INSTRUCTOR.PURCHASE} element={<PrivateRoute element={PurchasedCours} allowedRoles={[ROLES.STUDENT, ROLES.INSTRUCTOR]} />} />
+                        <Route path={ADMIN.PURCHASE} element={<PrivateRoute element={Purchase} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={INSTRUCTOR.VIEW_ALL_COURSE} element={<PrivateRoute element={ViewAllCourse} allowedRoles={[ROLES.INSTRUCTOR, ROLES.ADMIN]} />} />
                         <Route path={ADMIN.REQUEST_MANAGEMENT} element={<PrivateRoute element={RequestManagement} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={ADMIN.DISPLAY_ACCOUNT} element={<PrivateRoute element={DisplayAccount} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={ADMIN.CREATE_ACCOUNT} element={<PrivateRoute element={CreateAccount} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={ADMIN.CATEGORY} element={<PrivateRoute element={Category} allowedRoles={[ROLES.ADMIN]} />} />
                         <Route path={ADMIN.PENDING_COURSE} element={<PrivateRoute element={PedingCourse} allowedRoles={[ROLES.ADMIN]} />} />
-                        <Route path={ADMIN.LOG_COURSE} element={<PrivateRoute element={LogCourse} allowedRoles={[ROLES.ADMIN , ROLES.INSTRUCTOR]} />} />
-                        
+                        <Route path={ADMIN.LOG_COURSE} element={<PrivateRoute element={LogCourse} allowedRoles={[ROLES.ADMIN, ROLES.INSTRUCTOR]} />} />
+                        <Route path={ADMIN.BLOG} element={<PrivateRoute element={Blog} allowedRoles={[ROLES.ADMIN]} />} />
+
                     </Route>
 
                     {/* Routes without MainLayout */}
@@ -71,6 +86,7 @@ const AppRouter: React.FC = () => {
                     <Route path={PUBLIC.REGISTER} element={<Register />} />
                     <Route path={PUBLIC.VERIFY_EMAIL} element={<VerifyEmail />} />
                     <Route path={PUBLIC.FORGOT_PASSWORD} element={<ForgotPassword />} />
+                 
                 </Routes>
             </Suspense>
             <ToastContainer />

@@ -29,13 +29,11 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
 
   const fetchUsers = async (pageNum: number, pageSize: number) => {
     try {
-      const response = await getUsers({ keyword: '', role: 'all', status, is_deleted: isDeleted }, pageNum, pageSize);
+      const response = await getUsers({ keyword: '', role: 'all', status, is_deleted: isDeleted , is_verified: "false" }, pageNum, pageSize);
       console.log('response', response.pageData);
-      
-      // Lọc ra các tài khoản có is_verified là false
-      const filteredData = response.pageData.filter((user: User) => !user.is_verified);
+     
 
-      setData(filteredData);
+      setData(response.pageData);
 
       setPagination({
         current: response.pageNum,

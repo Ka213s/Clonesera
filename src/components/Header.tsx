@@ -40,6 +40,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     }
   }, [isLoggedIn]);
 
+
   const fetchCartCount = async () => {
     const data = {
       searchCondition: {
@@ -66,8 +67,8 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const handleLogoClick = (e: React.MouseEvent) => {
     if (role === 'admin') {
       e.preventDefault();
-      navigate('/display-account'); 
-    }else {
+      navigate('/display-account');
+    } else {
       e.preventDefault();
       navigate('/homepage');
     }
@@ -96,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       </Menu.Item>
       <Menu.Divider />
       <Menu.Item key="profile">
-        <Link to="/view-profile">
+        <Link to="/view-my-profile">
           <UserOutlined /> Profile
         </Link>
       </Menu.Item>
