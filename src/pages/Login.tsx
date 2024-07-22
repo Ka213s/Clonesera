@@ -227,22 +227,14 @@ const Login: React.FC = () => {
                 />
               </div>
               <div>
+                <h1>Upload Image</h1>
                 <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
-                {avatar && (
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-600">Image selected:</p>
-                    <img src={avatar} alt="Selected avatar" className="w-full h-32 object-cover rounded-lg" />
-                  </div>
-                )}
+               
               </div>
               <div>
+              <h1>Upload Video</h1>
                 <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
-                {video && (
-                  <div className="mt-2">
-                    <p className="text-sm text-gray-600">Video selected:</p>
-                    <video src={video} controls className="w-full h-32 object-cover rounded-lg" />
-                  </div>
-                )}
+             
               </div>
               <div className="col-span-2">
                 <input
