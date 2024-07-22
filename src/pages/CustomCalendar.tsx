@@ -22,17 +22,18 @@ const CustomCalendar: React.FC = () => {
   };
 
   const wrapperStyle: React.CSSProperties = {
-    width: 380,
+    width: '100%',
+    maxWidth: 345,
     border: `1px solid ${token.colorBorderSecondary}`,
     borderRadius: token.borderRadiusLG,
     background: token.colorBgContainer,
     padding: '16px',
     boxShadow: token.boxShadow,
-    margin: '24px auto'
+    margin: '24px auto',
   };
 
   return (
-    <div style={wrapperStyle} className="flex flex-col items-center">
+    <div style={wrapperStyle} className="hidden sm:flex flex-col items-center px-4 sm:px-6 md:px-8">
       <div className="w-full flex flex-col items-center mb-6 border-b border-gray-200 pb-4">
         <div className="text-gray-500 text-sm mb-1">
           {value ? formatDate(value).split(',')[0] : 'Select a date'}
@@ -41,7 +42,7 @@ const CustomCalendar: React.FC = () => {
           {value ? formatDate(value).split(',').slice(1).join(', ') : 'Select a date'}
         </div>
       </div>
-      <Calendar fullscreen={false} value={value} onPanelChange={onPanelChange} onSelect={onSelect} />
+      <Calendar fullscreen={false} value={value} onPanelChange={onPanelChange} onSelect={onSelect} className="w-full" />
     </div>
   );
 };
