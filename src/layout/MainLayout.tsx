@@ -2,20 +2,20 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-// import Loading from '../components/Loading';
+import Loading from '../components/Loading';
 import Sidebar from '../components/Sidebar/Sidebar';
 import SidebarStudent from '../components/Sidebar/SidebarStudent';
 import SidebarInstructor from '../components/Sidebar/SidebarInstructor';
 import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
 import { Layout } from 'antd';
-// import { setGlobalLoadingHandler } from '../services/axiosInstance';
+import { setGlobalLoadingHandler } from '../services/axiosInstance';
 
 const { Content } = Layout;
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [showMenu, setShowMenu] = useState(true);
   const [role, setRole] = useState<string | null>(null);
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -28,7 +28,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    // setGlobalLoadingHandler(setIsLoading);
+    setGlobalLoadingHandler(setIsLoading);
 
     if (location.pathname === '/home' && role === 'admin') {
       navigate('/admin/request-management');
@@ -73,7 +73,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <Layout className="overflow-hidden h-screen flex flex-col">
       <Header toggleMenu={toggleMenu} />
-      {/* <Loading isLoading={isLoading}> */}
+      <Loading isLoading={isLoading}>
         {renderSidebar}
         <Content className={`transition-all duration-300 overflow-auto ${showMenu ? 'ml-56' : 'ml-0'}`}>
           <div className="flex flex-col min-h-screen">
@@ -83,7 +83,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <Footer />
           </div>
         </Content>
-      {/* </Loading> */}
+      </Loading>
     </Layout>
   );
 };

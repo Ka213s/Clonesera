@@ -28,7 +28,7 @@ const Review: React.FC = () => {
           },
           pageInfo: { pageNum: 1, pageSize: 10 },
         });
-
+  
         const detailedReviews: ReviewData[] = await Promise.all(
           reviewData.pageData.map(async (review: { _id: string }) => {
             const detailedReview = await getReviewById(review._id);

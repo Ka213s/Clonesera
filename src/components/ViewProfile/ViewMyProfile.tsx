@@ -33,16 +33,15 @@ const ViewProfile: React.FC = () => {
                 setUserData(data);
             } catch (error) {
                 console.error('Error fetching user data:', error);
-                // Handle error fetching user data
+              
             }
         };
 
         fetchData();
-    }, []); // Empty dependency array to run only once on mount
+    }, []); 
 
     const renderTabContent = () => {
-        if (!userData) return null; // Handle case where userData is null
-
+        if (!userData) return null; 
         switch (activeTab) {
             case 'About':
                 return <AboutTab userData={userData} />;

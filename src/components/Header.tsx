@@ -40,11 +40,10 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     }
   }, [isLoggedIn]);
 
-
   const fetchCartCount = async () => {
     const data = {
       searchCondition: {
-        status: '',
+        status: 'new',
         is_deleted: false,
       },
       pageInfo: {
@@ -55,10 +54,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 
     try {
       const response = await getCart(data);
-      const filteredItems = response.pageData.filter(
-        (item: { status: string }) => item.status === 'new' || item.status === 'cancel'
-      );
-      setCartCount(filteredItems.length);
+      setCartCount(response.pageData.length);
     } catch (error) {
       console.error('Failed to fetch cart count:', error);
     }
@@ -82,7 +78,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     navigate('/view-cart');
   };
 
-  
   const userMenu = (
     <Menu>
       <Menu.Item key="welcome">
@@ -137,9 +132,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               />
             </Badge>
 
-        
-          
-            <Divider className="border-gray-400  h-9" type="vertical" />
+            <Divider className="border-gray-400 h-9" type="vertical" />
             <div className="">
               <Dropdown overlay={userMenu} trigger={['click']}>
                 <Avatar

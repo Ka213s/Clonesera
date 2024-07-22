@@ -1,9 +1,10 @@
+// src/components/HeaderNoMenu.tsx
 import React, { useEffect, useState } from 'react';
 import { Button, Badge, Dropdown, Avatar, Menu, Typography, Divider } from 'antd';
 import { PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
-import { getCart } from '../services/Api';
+import { useCart } from '../consts/CartContext';
 
 const { Text } = Typography;
 
@@ -12,7 +13,7 @@ const HeaderNoMenu: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  const [cartCount, setCartCount] = useState<number>(0);
+  const { cartCount } = useCart(); // Use cart count from context
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -30,41 +31,11 @@ const HeaderNoMenu: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      fetchCartCount();
-    }
-  }, [isLoggedIn]);
-
-  const fetchCartCount = async () => {
-    const data = {
-      searchCondition: {
-        status: '',
-        is_deleted: false,
-      },
-      pageInfo: {
-        pageNum: 1,
-        pageSize: 100,
-      },
-    };
-
-    try {
-      const response = await getCart(data);
-      const filteredItems = response.pageData.filter(
-        (item: { status: string }) => item.status === 'new' || item.status === 'cancel'
-      );
-      setCartCount(filteredItems.length);
-    } catch (error) {
-      console.error('Failed to fetch cart count:', error);
-    }
-  };
-
   const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     if (role === 'admin') {
-      e.preventDefault();
       navigate('/display-account');
     } else {
-      e.preventDefault();
       navigate('/homepage');
     }
   };
@@ -76,8 +47,6 @@ const HeaderNoMenu: React.FC = () => {
   const handleViewCart = () => {
     navigate('/view-cart');
   };
-
-
 
   const userMenu = (
     <Menu>
@@ -127,7 +96,6 @@ const HeaderNoMenu: React.FC = () => {
               />
             </Badge>
 
-         
             <Divider className="border-gray-400 h-9" type="vertical" />
             <div className="">
               <Dropdown overlay={userMenu} trigger={['click']}>
