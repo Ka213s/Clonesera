@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Tabs, Button, Modal } from 'antd';
 import DisplayAccount from './DisplayAccount';
-
 import AccountIsVerify from './AccountIsVerify';
 import CreateAccount from '../CreateAccount/CreateAccount'; // Ensure the path is correct
 
