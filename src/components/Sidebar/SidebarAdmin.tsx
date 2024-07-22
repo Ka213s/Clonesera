@@ -7,9 +7,11 @@ import {
   BookOutlined,
   TeamOutlined,
   ShoppingCartOutlined,
-  MessageOutlined
+  MessageOutlined,
+  FileTextOutlined,
+  MoneyCollectOutlined
 } from '@ant-design/icons';
-import { SidebarAdminData } from '../../consts'; 
+import { SidebarAdminData } from '../../consts';
 
 interface SidebarProps {
   showMenu: boolean;
@@ -26,11 +28,13 @@ const iconComponents: { [key: string]: JSX.Element } = {
   DashboardOutlined: <DashboardOutlined />,
   BookOutlined: <BookOutlined />,
   TeamOutlined: <TeamOutlined />,
-  ShoppingCartOutlined : <ShoppingCartOutlined />,
-  MessageOutlined : <MessageOutlined />
+  ShoppingCartOutlined: <ShoppingCartOutlined />,
+  MessageOutlined: <MessageOutlined />,
+  FileTextOutlined: <FileTextOutlined />,
+  MoneyCollectOutlined: <MoneyCollectOutlined />
 };
 
-const renderMenuItems = (items: MenuItem[], navigate: (path: string) => void) => 
+const renderMenuItems = (items: MenuItem[], navigate: (path: string) => void) =>
   items.map((item) => (
     <Menu.Item key={item.key} icon={iconComponents[item.icon || '']} onClick={() => navigate(item.key)}>
       {item.label}

@@ -84,12 +84,6 @@ const PurchasedCours: React.FC = () => {
       key: 'purchase_no',
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: (status: string) => getStatusTag(status),
-    },
-    {
       title: 'Price Paid',
       dataIndex: 'price_paid',
       key: 'price_paid',

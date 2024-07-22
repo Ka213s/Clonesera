@@ -1,4 +1,4 @@
-import {  tokenAxiosInstance } from './axiosInstance';
+import { tokenAxiosInstance } from './axiosInstance';
 import { toast } from 'react-toastify';
 
 export const registerAccountStudent = async (data: { name: string; email: string; password: string; role: string; }) => {
@@ -348,5 +348,19 @@ export const getBlogsPublic = async (data: { searchCondition: { category_id: str
 };
 export const getBlogByIdPublic = async (id: string) => {
   const response = await tokenAxiosInstance.get(`/api/client/blog/${id}`);
+  return response.data;
+};
+
+export const createPayout = async (transactions: { purchase_id: string }[]) => {
+  const response = await tokenAxiosInstance.post('/api/payout', { transactions });
+  toast.success("Payout created successfully");
+  return response.data;
+};
+export const getPayouts = async (data: { searchCondition: { payout_no: string; instructor_id: string; status: string; is_instructor: boolean; is_delete: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
+  const response = await tokenAxiosInstance.post('/api/payout/search', data);
+  return response.data;
+};
+export const updatePayout = async (id: string, data: { status: string; comment: string }) => {
+  const response = await tokenAxiosInstance.put(`/api/payout/update-status/${id}`, data);
   return response.data;
 };
