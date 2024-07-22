@@ -41,6 +41,7 @@ const ViewOrder = lazy(() => import('../pages/ViewOrder'));
 const Payment = lazy(() => import('../pages/Payment'));
 const PayoutManagement = lazy(() => import('../pages/Admin/PayoutManagement'));
 const Finance = lazy(() => import('../pages/Admin/Finance'));
+const TransactionDetail = lazy(() => import('../pages/TransactionDetail'));
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));
 const PageError403 = lazy(() => import('../pages/Error/PageError403'));
@@ -52,13 +53,13 @@ const AppRouter: React.FC = () => {
                 <Routes>
                     {/* Public Routes with MainLayout */}
                     <Route element={<LayoutRoute />}>
-                      
+
                         <Route path={PUBLIC.VIEW_CART} element={<ViewCart />} />
                         <Route path={PUBLIC.VIEW_ORDER} element={<ViewOrder />} />
                         <Route path={PUBLIC.PAYMENT} element={<Payment />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
                         <Route path={PUBLIC.BLOG_DETAIL} element={<BlogDetail />} />
-                        <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />                       
+                        <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />
                     </Route>
 
                     {/* Instructor Routes with MainLayout */}
@@ -72,6 +73,7 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.PAYOUT} element={<PrivateRoute element={Payout} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.PURCHASE} element={<PrivateRoute element={PurchasedCours} allowedRoles={[ROLES.STUDENT, ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.VIEW_ALL_COURSE} element={<PrivateRoute element={ViewAllCourse} allowedRoles={[ROLES.INSTRUCTOR, ROLES.ADMIN]} />} />
+                        <Route path={INSTRUCTOR.TRANSACTION_DETAIL} element={<PrivateRoute element={TransactionDetail} allowedRoles={[ROLES.INSTRUCTOR, ROLES.ADMIN]} />} />
                     </Route>
 
                     {/* Admin Routes with MainLayout */}

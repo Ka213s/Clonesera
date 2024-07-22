@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Button } from 'antd';
-import { TablePaginationConfig } from 'antd/lib/table';
 import { Link } from 'react-router-dom';
+import { TablePaginationConfig } from 'antd/lib/table';
 import { getPayouts } from '../../../services/Api';
 
 interface Transaction {
@@ -39,7 +39,7 @@ interface ApiResponse {
     };
 }
 
-const Completed: React.FC = () => {
+const CompletedPayout: React.FC = () => {
     const [data, setData] = useState<PayoutData[]>([]);
     const [pagination, setPagination] = useState<TablePaginationConfig>({
         current: 1,
@@ -62,7 +62,7 @@ const Completed: React.FC = () => {
                     instructor_id: '',
                     status: 'completed', // Filter for completed status
                     is_instructor: false,
-                    is_delete: false,
+                    is_delete: false
                 },
                 pageInfo
             });
@@ -142,4 +142,4 @@ const Completed: React.FC = () => {
     );
 };
 
-export default Completed;
+export default CompletedPayout;

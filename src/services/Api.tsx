@@ -360,7 +360,6 @@ export const getBlogByIdPublic = async (id: string) => {
 
 export const createPayout = async (transactions: { purchase_id: string }[]) => {
   const response = await tokenAxiosInstance.post('/api/payout', { transactions });
-  toast.success("Payout created successfully");
   return response.data;
 };
 export const getPayouts = async (data: { searchCondition: { payout_no: string; instructor_id: string; status: string; is_instructor: boolean; is_delete: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
