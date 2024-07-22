@@ -52,7 +52,7 @@ const AppRouter: React.FC = () => {
                 <Routes>
                     {/* Public Routes with MainLayout */}
                     <Route element={<LayoutRoute />}>
-                        <Route path={PUBLIC.COURSE_DETAIL} element={<CourseDetails />} />
+                      
                         <Route path={PUBLIC.VIEW_CART} element={<ViewCart />} />
                         <Route path={PUBLIC.VIEW_ORDER} element={<ViewOrder />} />
                         <Route path={PUBLIC.PAYMENT} element={<Payment />} />
@@ -92,6 +92,7 @@ const AppRouter: React.FC = () => {
                     <Route element={<LayoutNoSidebar />}>
                         <Route path={PUBLIC.HOME} element={<HomePage />} />
                         <Route path={PUBLIC.LEARN_COURSE} element={<LearnCourseDetail />} />
+                        <Route path={PUBLIC.COURSE_DETAIL} element={<CourseDetails />} />
                     </Route>
 
                     {/* Error Routes */}
