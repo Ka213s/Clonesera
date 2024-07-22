@@ -13,6 +13,12 @@ export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [cartCount, setCartCount] = useState<number>(0);
 
   const fetchCartCount = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.log('No token found. Skipping cart count fetch.');
+      return;
+    }
+
     const data = {
       searchCondition: {
         status: 'new',
