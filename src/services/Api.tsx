@@ -3,10 +3,12 @@ import { toast } from 'react-toastify';
 
 export const registerAccountStudent = async (data: { name: string; email: string; password: string; role: string; }) => {
   const response = await tokenAxiosInstance.post("/api/users", data);
+  toast.success("Registration successful");
   return response.data;
 };
 export const registerAccountInstructor = async (data: { name: string; email: string; password: string; role: string; phone_number: string; description: string; video: string; avatar: string; }) => {
   const response = await tokenAxiosInstance.post("/api/users", data);
+  toast.success("Registration successful");
   return response.data;
 };
 
@@ -30,9 +32,6 @@ export const loginUserByGoogle = async (data: { google_id: string; }) => {
 
 export const registerUserByGoogle = async (data: { google_id: string; role: string; description: string; video: string; phone_number: string; }) => {
   const response = await tokenAxiosInstance.post("/api/users/google", data);
-  if (response.data.token) {
-    localStorage.setItem('token', response.data.token);
-  }
   toast.success("Google registration successful");
   return response.data;
 };
@@ -127,11 +126,13 @@ export const createCategory = async (data: { name: string; description: string; 
 
 export const editCategory = async (id: string, data: { name: string; description: string; parent_category_id?: string }) => {
   const response = await tokenAxiosInstance.put(`/api/category/${id}`, data);
+  toast.success("Category updated successfully");
   return response.data;
 };
 
 export const deleteCategory = async (id: string) => {
   const response = await tokenAxiosInstance.delete(`/api/category/${id}`);
+  toast.success("Category deleted successfully");
   return response.data;
 };
 
@@ -360,6 +361,7 @@ export const getBlogByIdPublic = async (id: string) => {
 
 export const createPayout = async (transactions: { purchase_id: string }[]) => {
   const response = await tokenAxiosInstance.post('/api/payout', { transactions });
+  toast.success("Payout created successfully");
   return response.data;
 };
 export const getPayouts = async (data: { searchCondition: { payout_no: string; instructor_id: string; status: string; is_instructor: boolean; is_delete: boolean; }; pageInfo: { pageNum: number; pageSize: number; }; }) => {
@@ -368,5 +370,6 @@ export const getPayouts = async (data: { searchCondition: { payout_no: string; i
 };
 export const updatePayout = async (id: string, data: { status: string; comment: string }) => {
   const response = await tokenAxiosInstance.put(`/api/payout/update-status/${id}`, data);
+  toast.success("Payout updated successfully");
   return response.data;
 };
