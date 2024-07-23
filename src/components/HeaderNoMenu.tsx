@@ -1,10 +1,10 @@
-// src/components/HeaderNoMenu.tsx
 import React, { useEffect, useState } from 'react';
-import { Button, Badge, Dropdown, Avatar, Menu, Typography, Divider } from 'antd';
+import { Button, Badge, Dropdown, Avatar, Typography, Divider } from 'antd';
 import { PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
+import type { MenuProps } from 'antd';
 import logo from '../assets/Logo-2.png';
-import { useCart } from '../consts/CartContext';
+import { useCartContext } from '../consts/CartContext'; // Import the custom hook
 
 const { Text } = Typography;
 
@@ -13,7 +13,8 @@ const HeaderNoMenu: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  const { cartCount } = useCart(); // Use cart count from context
+  const { totalCartItems } = useCartContext(); // Use the custom hook to access context
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,24 +49,31 @@ const HeaderNoMenu: React.FC = () => {
     navigate('/view-cart');
   };
 
-  const userMenu = (
-    <Menu>
-      <Menu.Item key="welcome">
+  const userMenu: MenuProps['items'] = [
+    {
+      key: 'welcome',
+      label: (
         <Text>Welcome, {username}!</Text>
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item key="profile">
+      )
+    },
+    { type: 'divider' },
+    {
+      key: 'profile',
+      label: (
         <Link to="/view-my-profile">
           <UserOutlined /> Profile
         </Link>
-      </Menu.Item>
-      <Menu.Item key="logout">
+      )
+    },
+    {
+      key: 'logout',
+      label: (
         <span onClick={() => navigate('/logout')}>
           <UserOutlined /> Logout
         </span>
-      </Menu.Item>
-    </Menu>
-  );
+      )
+    }
+  ];
 
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
@@ -78,7 +86,7 @@ const HeaderNoMenu: React.FC = () => {
       <div className="flex items-center ml-auto space-x-8 pr-4">
         {isLoggedIn ? (
           <>
-            <Button type="primary" className="custom-button">
+            <Button type="primary" className="custom-button" onClick={handleCreateCourse}>
               Create New Course
             </Button>
             <Button
@@ -89,7 +97,7 @@ const HeaderNoMenu: React.FC = () => {
               onClick={handleCreateCourse}
             />
 
-            <Badge count={cartCount}>
+            <Badge count={totalCartItems}>
               <ShoppingCartOutlined
                 className="icon-size text-2xl cursor-pointer text-black"
                 onClick={handleViewCart}
@@ -98,7 +106,7 @@ const HeaderNoMenu: React.FC = () => {
 
             <Divider className="border-gray-400 h-9" type="vertical" />
             <div className="">
-              <Dropdown overlay={userMenu} trigger={['click']}>
+              <Dropdown menu={{ items: userMenu }} trigger={['click']}>
                 <Avatar
                   size="large"
                   src={avatar || 'default-avatar-path'}

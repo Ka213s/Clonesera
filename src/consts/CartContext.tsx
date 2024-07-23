@@ -1,58 +1,52 @@
-// src/context/CartContext.tsx
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
-import { getCart } from '../services/Api';
+import React, { createContext, useState, useContext, useEffect } from 'react';
+import { getCart } from '../services/Api'; // Import your API call
 
-interface CartContextProps {
-  cartCount: number;
-  updateCartCount: () => void;
+interface CartContextType {
+  totalCartItems: number;
+  setTotalCartItems: React.Dispatch<React.SetStateAction<number>>;
 }
 
-const CartContext = createContext<CartContextProps | undefined>(undefined);
+const CartContext = createContext<CartContextType | undefined>(undefined);
 
-export const CartProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-  const [cartCount, setCartCount] = useState<number>(0);
+export const useCartContext = () => {
+  const context = useContext(CartContext);
+  if (!context) {
+    throw new Error('useCartContext must be used within a CartProvider');
+  }
+  return context;
+};
 
-  const fetchCartCount = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.log('No token found. Skipping cart count fetch.');
-      return;
-    }
-
-    const data = {
-      searchCondition: {
-        status: 'new',
-        is_deleted: false,
-      },
-      pageInfo: {
-        pageNum: 1,
-        pageSize: 100,
-      },
-    };
-
-    try {
-      const response = await getCart(data);
-      setCartCount(response.pageInfo.totalItems);
-    } catch (error) {
-      console.error('Failed to fetch cart count:', error);
-    }
-  };
+export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [totalCartItems, setTotalCartItems] = useState<number>(0);
 
   useEffect(() => {
-    fetchCartCount();
+    const fetchCartItems = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        console.log('No token found in local storage');
+        return;
+      }
+
+      try {
+        const cartData = await getCart({
+          searchCondition: { status: 'new', is_deleted: false },
+          pageInfo: { pageNum: 1, pageSize: 10 }
+        });
+        console.log('Cart data:', cartData);
+        setTotalCartItems(cartData.pageInfo.totalItems);
+      } catch (error) {
+        console.error('Failed to fetch cart items:', error);
+      }
+    };
+
+    fetchCartItems();
   }, []);
 
   return (
-    <CartContext.Provider value={{ cartCount, updateCartCount: fetchCartCount }}>
+    <CartContext.Provider value={{ totalCartItems, setTotalCartItems }}>
       {children}
     </CartContext.Provider>
   );
 };
 
-export const useCart = (): CartContextProps => {
-  const context = useContext(CartContext);
-  if (context === undefined) {
-    throw new Error('useCart must be used within a CartProvider');
-  }
-  return context;
-};
+export { CartContext };

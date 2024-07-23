@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Upload, Button, Image, message } from 'antd';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { storage } from '../config/firebaseConfig';
 import type { UploadFile, UploadProps } from 'antd';
@@ -8,7 +8,7 @@ import type { UploadFile, UploadProps } from 'antd';
 interface FileUploaderProps {
   type: 'image' | 'video';
   onUploadSuccess: (url: string) => void;
-  defaultImage?: string; // New prop for existing avatar
+  defaultImage?: string;
 }
 
 const getBase64 = (file: File): Promise<string> =>
@@ -24,8 +24,11 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
   const [fileList, setFileList] = useState<UploadFile[]>([]);
+  const [videoUrl, setVideoUrl] = useState('');
+  const [buttonVisible, setButtonVisible] = useState(true);
+  const [videoVisible, setVideoVisible] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Set default image if provided
   useEffect(() => {
     if (defaultImage) {
       setFileList([{ uid: '-1', name: 'default_image', url: defaultImage, status: 'done' }]);
@@ -41,13 +44,11 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
     setPreviewOpen(true);
   };
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
+  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => setFileList(newFileList);
 
   const handleUpload = async (file: File) => {
     if (!file) return;
 
-    // Get file extension
     const fileExtension = file.name.split('.').pop()?.toLowerCase();
     const allowedImageExtensions = ['jpg', 'jpeg', 'png', 'gif'];
     const allowedVideoExtensions = ['mp4', 'avi', 'mov', 'mkv'];
@@ -81,8 +82,12 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
         async () => {
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
           onUploadSuccess(downloadURL);
-          message.success(`${type.charAt(0).toUpperCase() + type.slice(1)} uploaded successfully`);
           setUploading(false);
+          setButtonVisible(false); // Hide the button after upload
+          if (type === 'video') {
+            setVideoUrl(downloadURL);
+            setTimeout(() => setVideoVisible(true), 100); // Add delay for smooth transition
+          }
         }
       );
     } catch (error) {
@@ -90,6 +95,18 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
       console.error('Error uploading file:', error);
       setUploading(false);
     }
+  };
+
+  const handleDelete = () => {
+    setVideoVisible(false);
+    setTimeout(() => {
+      setVideoUrl('');
+      setButtonVisible(true);
+      setFileList([]);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }, 300); // Match the duration with CSS transition
   };
 
   const uploadProps: UploadProps = {
@@ -104,6 +121,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
     showUploadList: {
       showRemoveIcon: !uploading,
     },
+    accept: type === 'image' ? 'image/*' : 'video/*', // Set accept attribute based on type
   };
 
   const uploadButton = (
@@ -112,21 +130,85 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
     </Button>
   );
 
+  const handleButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
+
   return (
     <>
-      <Upload {...uploadProps}>
-        {fileList.length >= 1 ? null : uploadButton}
-      </Upload>
-      {previewImage && (
-        <Image
-          wrapperStyle={{ display: 'none' }}
-          preview={{
-            visible: previewOpen,
-            onVisibleChange: (visible) => setPreviewOpen(visible),
-            afterOpenChange: (visible) => !visible && setPreviewImage(''),
-          }}
-          src={previewImage}
-        />
+      {type === 'image' ? (
+        <>
+          <Upload {...uploadProps}>
+            {fileList.length >= 1 ? null : uploadButton}
+          </Upload>
+          {previewImage && (
+            <Image
+              wrapperStyle={{ display: 'none' }}
+              preview={{
+                visible: previewOpen,
+                onVisibleChange: (visible) => setPreviewOpen(visible),
+                afterOpenChange: (visible) => !visible && setPreviewImage(''),
+              }}
+              src={previewImage}
+            />
+          )}
+        </>
+      ) : (
+        <div style={{ textAlign: 'center' }}>
+          <input
+            type="file"
+            accept="video/*"
+            style={{ display: 'none' }}
+            ref={fileInputRef}
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) handleUpload(file);
+            }}
+            disabled={uploading}
+          />
+          {buttonVisible && (
+            <Button
+              icon={<PlusOutlined />}
+              loading={uploading}
+              style={{
+                borderRadius: '50%',
+                width: '100px',
+                height: '100px',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                fontSize: '15px',
+              }}
+              onClick={handleButtonClick}
+            >
+              <span style={{ fontSize: '14px' }}>Upload</span>
+            </Button>
+          )}
+          {videoUrl && (
+            <div
+              style={{
+                opacity: videoVisible ? 1 : 0,
+                transition: 'opacity 0.3s ease-in-out',
+                marginTop: 20,
+              }}
+            >
+              <video src={videoUrl} controls style={{ width: '60%', borderRadius: '8px' }} />
+              <Button
+                icon={<DeleteOutlined />}
+                style={{
+                  marginTop: 10,
+                  display: 'block',
+                  marginRight: 'auto',
+                }}
+                onClick={handleDelete}
+              >
+                Delete Video
+              </Button>
+            </div>
+          )}
+        </div>
       )}
     </>
   );

@@ -16,7 +16,8 @@ import {
   SettingOutlined,
   SendOutlined,
   UserOutlined,
-  ShoppingCartOutlined
+  ShoppingCartOutlined,
+  AppstoreOutlined
 } from '@ant-design/icons';
 import { SidebarIntructorData } from '../../consts';
 
@@ -40,7 +41,8 @@ const iconComponents: { [key: string]: JSX.Element } = {
   SettingOutlined: <SettingOutlined />,
   SendOutlined: <SendOutlined />,
   UserOutlined: <UserOutlined />,
-  ShoppingCartOutlined : <ShoppingCartOutlined />
+  ShoppingCartOutlined: <ShoppingCartOutlined />,
+  AppstoreOutlined: <AppstoreOutlined />
 };
 
 const SidebarInstructor: React.FC<SidebarProps> = ({ showMenu }) => {

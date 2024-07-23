@@ -13,6 +13,7 @@ import {
   FileTextOutlined,
   SettingOutlined,
   SendOutlined,
+  AppstoreOutlined
 } from '@ant-design/icons';
 import { SidebarStudentData } from '../../consts';
 
@@ -31,7 +32,8 @@ const iconComponents: { [key: string]: JSX.Element } = {
   FaFile: <FileTextOutlined />,
   FaCogs: <SettingOutlined />,
   FaPaperPlane: <SendOutlined />,
-  FaBill: <FileTextOutlined />
+  FaBill: <FileTextOutlined />,
+  FaDashboard: <AppstoreOutlined />
 };
 
 const SidebarStudent: React.FC<SidebarProps> = ({ showMenu }) => {

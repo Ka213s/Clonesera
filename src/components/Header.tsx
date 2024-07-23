@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Badge, Dropdown, Avatar, Menu, Typography, Divider } from 'antd';
+import { Button, Badge, Dropdown, Avatar, Typography, Divider } from 'antd';
+import type { MenuProps } from 'antd';
 import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
-import { getCart } from '../services/Api';
+import { useCartContext } from '../consts/CartContext'; // Import the custom hook
 
 const { Text } = Typography;
 
@@ -16,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  const [cartCount, setCartCount] = useState<number>(0);
+  const { totalCartItems } = useCartContext(); // Use the custom hook to access context
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,31 +35,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      fetchCartCount();
-    }
-  }, [isLoggedIn]);
 
-  const fetchCartCount = async () => {
-    const data = {
-      searchCondition: {
-        status: 'new',
-        is_deleted: false,
-      },
-      pageInfo: {
-        pageNum: 1,
-        pageSize: 100,
-      },
-    };
-
-    try {
-      const response = await getCart(data);
-      setCartCount(response.pageData.length);
-    } catch (error) {
-      console.error('Failed to fetch cart count:', error);
-    }
-  };
 
   const handleLogoClick = (e: React.MouseEvent) => {
     if (role === 'admin') {
@@ -78,24 +55,31 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     navigate('/view-cart');
   };
 
-  const userMenu = (
-    <Menu>
-      <Menu.Item key="welcome">
-        <Text>Welcome, {username}!</Text>
-      </Menu.Item>
-      <Menu.Divider />
-      <Menu.Item key="profile">
+  const userMenu: MenuProps['items'] = [
+    {
+      key: 'welcome',
+      label: <Text>Welcome, {username}!</Text>,
+    },
+    {
+      type: 'divider',
+    },
+    {
+      key: 'profile',
+      label: (
         <Link to="/view-my-profile">
           <UserOutlined /> Profile
         </Link>
-      </Menu.Item>
-      <Menu.Item key="logout">
+      ),
+    },
+    {
+      key: 'logout',
+      label: (
         <span onClick={() => navigate('/logout')}>
           <UserOutlined /> Logout
         </span>
-      </Menu.Item>
-    </Menu>
-  );
+      ),
+    },
+  ];
 
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
@@ -114,7 +98,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       <div className="flex items-center ml-auto space-x-8 pr-4">
         {isLoggedIn ? (
           <>
-            <Button type="primary" className="custom-button">
+            <Button type="primary" className="custom-button" onClick={handleCreateCourse}>
               Create New Course
             </Button>
             <Button
@@ -125,7 +109,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               onClick={handleCreateCourse}
             />
 
-            <Badge count={cartCount}>
+            <Badge count={totalCartItems}>
               <ShoppingCartOutlined
                 className="icon-size text-2xl cursor-pointer text-black"
                 onClick={handleViewCart}
@@ -134,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 
             <Divider className="border-gray-400 h-9" type="vertical" />
             <div className="">
-              <Dropdown overlay={userMenu} trigger={['click']}>
+            <Dropdown menu={{ items: userMenu }} trigger={['click']}>
                 <Avatar
                   size="large"
                   src={avatar || 'default-avatar-path'}
