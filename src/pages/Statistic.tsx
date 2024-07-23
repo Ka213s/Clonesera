@@ -19,7 +19,6 @@ const Statistic: React.FC = () => {
       const fetchUser = async () => {
         try {
           const userData = await getCurrentLogin();
-          console.log('User data:', userData);
           setUser(userData);
         } catch (error) {
           console.error('Error fetching user data:', error);
