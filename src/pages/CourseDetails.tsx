@@ -6,7 +6,7 @@ import { PlayCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import 'tailwindcss/tailwind.css';
 import ReviewSection from './ReviewSection';
-import { useCart } from '../consts/CartContext';
+
 
 const { Panel } = Collapse;
 
@@ -52,7 +52,6 @@ const CourseDetails: React.FC = () => {
   const [course, setCourse] = useState<Course | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const { updateCartCount } = useCart();
 
   useEffect(() => {
     const fetchCourseDetail = async () => {
@@ -95,7 +94,7 @@ const CourseDetails: React.FC = () => {
           }
           return prevCourse;
         });
-        updateCartCount();
+
       } catch (error) {
         message.error('Error adding course to cart');
         console.error('Error adding course to cart:', error);
