@@ -7,7 +7,6 @@ import { Editor } from '@tinymce/tinymce-react';
 import 'tailwindcss/tailwind.css';
 import ReviewSection from './ReviewSection';
 
-
 const { Panel } = Collapse;
 
 interface Lesson {
@@ -69,6 +68,7 @@ const CourseDetails: React.FC = () => {
         } else {
           data = await NT_getCourseDetail(id);
         }
+        console.log(data);
         setCourse(data);
       } catch (error) {
         message.error('Error fetching course details');
@@ -129,6 +129,30 @@ const CourseDetails: React.FC = () => {
     return `${minutes}m`;
   };
 
+  const renderCourseButton = () => {
+    if (course?.is_purchased) {
+      return (
+        <Button
+          type="default"
+          onClick={handleLearnCourse}
+          className="mb-4 custom-button p-4 bg-green-500 text-white hover:bg-green-600"
+        >
+          Learn Course
+        </Button>
+      );
+    } else {
+      return (
+        <Button
+          type="default"
+          onClick={course?.is_in_cart ? handleViewCart : handleAddToCart}
+          className="mb-4 custom-button p-4 bg-blue-500 text-white hover:bg-blue-600"
+        >
+          {course?.is_in_cart ? 'View Cart' : 'Add to Cart'}
+        </Button>
+      );
+    }
+  };
+
   return (
     <div className="container mx-auto p-4 text-sm">
       <Button onClick={() => navigate('/homepage')} className="mb-4 bg-blue-500 text-white hover:bg-blue-600">
@@ -170,24 +194,7 @@ const CourseDetails: React.FC = () => {
                 <strong>Description:</strong> {course?.description.replace(/<\/?p>/g, '')}
               </p>
               <div className="flex space-x-4 mt-8">
-                {!course?.is_purchased && (
-                  <Button
-                    type="default"
-                    onClick={course?.is_in_cart ? handleViewCart : handleAddToCart}
-                    className="mb-4 custom-button p-4 bg-blue-500 text-white hover:bg-blue-600"
-                  >
-                    {course?.is_in_cart ? 'View Cart' : 'Add to Cart'}
-                  </Button>
-                )}
-                {course?.is_purchased && (
-                  <Button
-                    type="default"
-                    onClick={handleLearnCourse}
-                    className="mb-4 custom-button p-4 bg-green-500 text-white hover:bg-green-600"
-                  >
-                    Learn Course
-                  </Button>
-                )}
+                {renderCourseButton()}
                 <Button
                   type="default"
                   icon={<PlayCircleOutlined />}

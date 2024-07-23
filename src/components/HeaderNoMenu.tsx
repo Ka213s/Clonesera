@@ -1,4 +1,3 @@
-// src/components/HeaderNoMenu.tsx
 import React, { useEffect, useState } from 'react';
 import { Button, Badge, Dropdown, Avatar, Typography, Divider } from 'antd';
 import { PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
