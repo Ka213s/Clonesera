@@ -11,10 +11,22 @@ interface User {
 const Statistic: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const [greeting, setGreeting] = useState('Good Morning');
 
   useEffect(() => {
     const token = localStorage.getItem('token');
-   
+
+    const setGreetingMessage = () => {
+      const currentHour = new Date().getHours();
+      if (currentHour < 12) {
+        setGreeting('Good Morning');
+      } else if (currentHour < 18) {
+        setGreeting('Good Afternoon');
+      } else {
+        setGreeting('Good Evening');
+      }
+    };
+
     if (token) {
       const fetchUser = async () => {
         try {
@@ -32,6 +44,8 @@ const Statistic: React.FC = () => {
     } else {
       setLoading(false);
     }
+
+    setGreetingMessage();
   }, []);
 
   return (
@@ -46,7 +60,7 @@ const Statistic: React.FC = () => {
           </div>
           <div className="mt-4 text-center">
             <h3 className="text-xl font-bold">
-              Good Morning, {user.name} <span className="text-red-500">🔥</span>
+              {greeting}, {user.name} <span className="text-red-500">🔥</span>
             </h3>
             <p className="text-sm text-gray-600">Continue your learning to achieve your target!</p>
           </div>
@@ -58,7 +72,7 @@ const Statistic: React.FC = () => {
           </div>
           <div className="mt-4 text-center">
             <h3 className="text-xl font-bold">
-              Good Morning, User <span className="text-red-500">🔥</span>
+              {greeting}, User <span className="text-red-500">🔥</span>
             </h3>
             <p className="text-sm text-gray-600">Continue your learning to achieve your target!</p>
           </div>
