@@ -12,6 +12,11 @@ export const registerAccountInstructor = async (data: { name: string; email: str
   return response.data;
 };
 
+export const getSettingDefault = async () => {
+  const response = await tokenAxiosInstance.get("/api/setting/default");
+  return response.data;
+};
+
 export const loginAccount = async (data: { email: string; password: string }) => {
   const response = await tokenAxiosInstance.post("/api/auth", data);
   if (response.data.token) {

@@ -21,7 +21,7 @@ export const ADMIN = {
   PURCHASE: '/purchase',
   BLOG: '/blog',
   PAYOUT_MANAGEMENT: '/payout-management',
-  FINANCE: '/finance'
+  DASHBOARD_ADMIN: '/dashboard-admin'
 }
 export const INSTRUCTOR = {
   COURSE: '/courses',
@@ -33,7 +33,8 @@ export const INSTRUCTOR = {
   COURSE_SOLD: '/courses-sold',
   REVIEW: '/review',
   PAYOUT: '/payout',
-  TRANSACTION_DETAIL: '/transaction/:id'
+  TRANSACTION_DETAIL: '/transaction/:id',
+  DASHBOARD_INSTRUCTOR: '/dashboard-instructor'
 };
 export const PUBLIC = {
   HOME: '/homepage',
@@ -51,7 +52,8 @@ export const PUBLIC = {
   PAYMENT: '/payment',
   VIEW_ORDER: '/view-order',
   LEARN_COURSE: '/learn-course-detail/:id',
-  BLOG_DETAIL: '/blog-detail/:id'
+  BLOG_DETAIL: '/blog-detail/:id',
+  DASHBOARD_STUDENT: '/dashboard-student'
 };
 
 export const sidebarMenuItemsData = {
@@ -102,9 +104,9 @@ export const sidebarMenuItemsData = {
 
 export const SidebarIntructorData = {
   insSidebarItem: [
+    { text: "Dashboard", icon: "AppstoreOutlined", url: "/dashboard-instructor" },
     { text: "My Profile", icon: "UserOutlined", url: "/view-my-profile" },
     { text: "Manage Course", icon: "BookOutlined", url: "/courses" },
-
     { text: "Subscription", icon: "BellOutlined", url: "/list-subscription" },
     { text: "Log Course", icon: "BookOutlined", url: "/log-course" },
     { text: "Courses Sold", icon: "ShoppingCartOutlined", url: "/courses-sold" }, // Courses others have bought from me
@@ -118,10 +120,10 @@ export const SidebarIntructorData = {
 
 export const SidebarStudentData = {
   studentSidebarItem: [
+    { text: "Dashboard", icon: "FaDashboard", url: "/dashboard-student" },
     { text: "Subscription", icon: "FaBell", url: "/list-subscribed" },
     { "text": "Setting", icon: "FaCogs", url: "/setting-page" },
     { "text": "Order", icon: "FaBill", url: "/view-order" },
-    // { "text": "Messages", "icon": "FaComments", "url": "/student/messages" },
     // { "text": "Notifications", "icon": "FaBell", "url": "/student/notifications" },
     // { "text": "My Certificates", "icon": "FaCertificate", "url": "/student/myCertificates" },
     // { "text": "Reviews", "icon": "FaStar", "url": "/student/reviews" },
@@ -133,7 +135,7 @@ export const SidebarStudentData = {
 
 export const SidebarAdminData = {
   menuItems: [
-    { "key": "/finance", "label": "Finance", "icon": "MoneyCollectOutlined" },
+    { "key": "/dashboard-admin", "label": "Dashboard", "icon": "AppstoreOutlined" },
     { "key": "/display-account", "label": "Manager User", "icon": "TeamOutlined" },
     { "key": "/request-management", "label": "Request Management", "icon": "TeamOutlined" },
     { "key": "/categories", "label": "Category Management", "icon": "DashboardOutlined" },
