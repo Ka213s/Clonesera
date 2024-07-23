@@ -9,7 +9,7 @@ import SidebarInstructor from '../components/Sidebar/SidebarInstructor';
 import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
 import { Layout } from 'antd';
 import { setGlobalLoadingHandler } from '../services/axiosInstance';
-
+import { CartProvider } from '../consts/CartContext';  // Import the provider
 const { Content } = Layout;
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -71,6 +71,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, [location.pathname, role, showMenu, navigate]);
 
   return (
+    <CartProvider>
     <Layout className="overflow-hidden h-screen flex flex-col">
       <Header toggleMenu={toggleMenu} />
       <Loading isLoading={isLoading}>
@@ -85,6 +86,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
         </Content>
       </Loading>
     </Layout>
+    </CartProvider>
   );
 };
 

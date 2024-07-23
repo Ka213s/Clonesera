@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderNoMenu from '../components/HeaderNoMenu';
 import Footer from '../components/Footer';
 import { Layout } from 'antd';
+import { CartProvider } from '../consts/CartContext';  // Import the provider
 
 const { Content } = Layout;
 
@@ -26,22 +27,19 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, [location.pathname, role, navigate]);
 
   return (
-    <Layout className="overflow-hidden h-screen flex flex-col">
-     
-      <HeaderNoMenu />
-      <Content className="transition-all duration-300 overflow-auto ml-0">
-        <div className="flex flex-col min-h-screen">
-          <div className="flex-1 pt-16 mt-4 p-4 overflow-auto">
-        
-            {children}
-           
+    <CartProvider>
+      <Layout className="overflow-hidden h-screen flex flex-col">
+        <HeaderNoMenu />
+        <Content className="transition-all duration-300 overflow-auto ml-0">
+          <div className="flex flex-col min-h-screen">
+            <div className="flex-1 pt-16 mt-4 p-4 overflow-auto">
+              {children}
+            </div>
+            <Footer />
           </div>
-          <Footer />
-        </div>
-      
-      </Content>
-     
-    </Layout>
+        </Content>
+      </Layout>
+    </CartProvider>
   );
 };
 

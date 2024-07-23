@@ -4,7 +4,7 @@ import type { MenuProps } from 'antd';
 import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
-import { getCart } from '../services/Api';
+import { useCartContext } from '../consts/CartContext'; // Import the custom hook
 
 const { Text } = Typography;
 
@@ -17,7 +17,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  const [cartCount, setCartCount] = useState<number>(0);
+  const { totalCartItems } = useCartContext(); // Use the custom hook to access context
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,31 +35,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     }
   }, []);
 
-  useEffect(() => {
-    if (isLoggedIn) {
-      fetchCartCount();
-    }
-  }, [isLoggedIn]);
 
-  const fetchCartCount = async () => {
-    const data = {
-      searchCondition: {
-        status: 'new',
-        is_deleted: false,
-      },
-      pageInfo: {
-        pageNum: 1,
-        pageSize: 100,
-      },
-    };
-
-    try {
-      const response = await getCart(data);
-      setCartCount(response.pageData.length);
-    } catch (error) {
-      console.error('Failed to fetch cart count:', error);
-    }
-  };
 
   const handleLogoClick = (e: React.MouseEvent) => {
     if (role === 'admin') {
@@ -133,7 +109,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               onClick={handleCreateCourse}
             />
 
-            <Badge count={cartCount}>
+            <Badge count={totalCartItems}>
               <ShoppingCartOutlined
                 className="icon-size text-2xl cursor-pointer text-black"
                 onClick={handleViewCart}

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { NT_getCourseDetail, getCourseDetail, createCart } from '../services/Api';
+import { NT_getCourseDetail, getCourseDetail, createCart, getCart } from '../../services/Api';
 import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse, Skeleton } from 'antd';
 import { PlayCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import 'tailwindcss/tailwind.css';
 import ReviewSection from './ReviewSection';
+import { useCartContext } from '../../consts/CartContext';  // Import the context
+import { toast } from 'react-toastify';
 
 const { Panel } = Collapse;
 
@@ -51,6 +53,7 @@ const CourseDetails: React.FC = () => {
   const [course, setCourse] = useState<Course | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const { setTotalCartItems } = useCartContext();  // Use the context
 
   useEffect(() => {
     const fetchCourseDetail = async () => {
@@ -68,7 +71,6 @@ const CourseDetails: React.FC = () => {
         } else {
           data = await NT_getCourseDetail(id);
         }
-        console.log(data);
         setCourse(data);
       } catch (error) {
         message.error('Error fetching course details');
@@ -82,9 +84,21 @@ const CourseDetails: React.FC = () => {
   }, [id, navigate]);
 
   const handleAddToCart = async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+     toast.error('Please login to add course to cart');
+      return;
+    }
+
     if (course) {
       try {
         await createCart({ course_id: course._id });
+        const cartData = await getCart({
+          searchCondition: { status: 'new', is_deleted: false },
+          pageInfo: { pageNum: 1, pageSize: 10 }
+        });
+        setTotalCartItems(cartData.pageInfo.totalItems);
+
         setCourse(prevCourse => {
           if (prevCourse) {
             return {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Form, Input, List, message, Rate } from "antd";
 import { EditOutlined } from "@ant-design/icons";
-import { createReview, getReviews, updateReview } from '../utils/commonImports';
+import { createReview, getReviews, updateReview } from '../../utils/commonImports';
 
 interface Review {
   id: string;

@@ -4,6 +4,7 @@ import { PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/ic
 import { Link, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
 import logo from '../assets/Logo-2.png';
+import { useCartContext } from '../consts/CartContext'; // Import the custom hook
 
 const { Text } = Typography;
 
@@ -12,7 +13,8 @@ const HeaderNoMenu: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  
+  const { totalCartItems } = useCartContext(); // Use the custom hook to access context
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -95,7 +97,7 @@ const HeaderNoMenu: React.FC = () => {
               onClick={handleCreateCourse}
             />
 
-            <Badge count={3}>
+            <Badge count={totalCartItems}>
               <ShoppingCartOutlined
                 className="icon-size text-2xl cursor-pointer text-black"
                 onClick={handleViewCart}

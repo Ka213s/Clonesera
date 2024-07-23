@@ -30,7 +30,7 @@ const ReViewInstructor = lazy(() => import('../pages/Instructor/ViewReview'));
 const ListSubscribed = lazy(() => import('../pages/Student/ListSubscribed'));
 const DisplayAccount = lazy(() => import('../components/Admin/AccoutUser/ActiveTab'));
 const CreateAccount = lazy(() => import('../components/Admin/CreateAccount/CreateAccount'));
-const CourseDetails = lazy(() => import('../pages/CourseDetails'));
+const CourseDetails = lazy(() => import('../pages/CourseDetails/CourseDetails'));
 const LogCourse = lazy(() => import('../components/Admin/LogCourse/LogCourse'));
 const PedingCourse = lazy(() => import('../pages/Admin/PedingCourse'));
 const ViewAllCourse = lazy(() => import('../pages/Instructor/ViewAllCourse'));
