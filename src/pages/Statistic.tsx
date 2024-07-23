@@ -74,7 +74,7 @@ const Statistic: React.FC = () => {
             <h3 className="text-xl font-bold">
               {greeting}, User <span className="text-red-500">🔥</span>
             </h3>
-            <p className="text-sm text-gray-600">Continue your learning to achieve your target!</p>
+            <p className="text-sm text-gray-600">Sign in to start your learning journey!</p>
           </div>
         </div>
       )}
