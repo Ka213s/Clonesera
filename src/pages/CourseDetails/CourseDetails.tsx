@@ -6,7 +6,7 @@ import { PlayCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import 'tailwindcss/tailwind.css';
 import ReviewSection from './ReviewSection';
-import { useCartContext } from '../../consts/CartContext';  // Import the context
+import { useCartContext } from '../../consts/CartContext'; 
 import { toast } from 'react-toastify';
 
 const { Panel } = Collapse;

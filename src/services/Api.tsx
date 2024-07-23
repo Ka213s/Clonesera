@@ -296,7 +296,6 @@ export const deleteCart = async (id: string) => {
 
 export const updateCart = async (data: { status: string; items: { _id: string; cart_no: string }[] }) => {
   const response = await tokenAxiosInstance.put('/api/cart/update-status', data);
-  toast.success("Cart updated successfully");
   return response.data;
 };
 
