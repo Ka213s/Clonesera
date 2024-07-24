@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { Breadcrumb, message, Layout, Menu, Spin, Button } from "antd";
 import { getCourseDetail, getLessonById } from "../utils/commonImports";
 import {
@@ -10,6 +10,7 @@ import {
     MenuFoldOutlined,
     MenuUnfoldOutlined
 } from '@ant-design/icons';
+import parse from 'html-react-parser';
 import "tailwindcss/tailwind.css";
 
 const { Sider, Content, Header } = Layout;
@@ -40,10 +41,16 @@ interface Course {
 }
 
 const LearnCourseDetail: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+    const { id, lessonId } = useParams<{ id: string, lessonId?: string }>();
+    
+    // Log the two IDs
+    console.log("Course ID:", id);
+    console.log("Lesson ID:", lessonId);
+    
     const [course, setCourse] = useState<Course | null>(null);
     const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
     const [collapsed, setCollapsed] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCourseDetail = async () => {
@@ -55,7 +62,13 @@ const LearnCourseDetail: React.FC = () => {
             try {
                 const data = await getCourseDetail(id);
                 setCourse(data);
-                setSelectedLesson(data.session_list[0]?.lesson_list[0] || null);
+                if (lessonId) {
+                    fetchLessonDetail(lessonId);
+                } else if (data.session_list.length > 0 && data.session_list[0].lesson_list.length > 0) {
+                    const firstLessonId = data.session_list[0].lesson_list[0]._id;
+                    fetchLessonDetail(firstLessonId);
+                    navigate(`/learn-course-detail/${id}/lesson/${firstLessonId}`);
+                }
             } catch (error) {
                 message.error("Error fetching course details");
                 console.error("Error fetching course details:", error);
@@ -63,7 +76,7 @@ const LearnCourseDetail: React.FC = () => {
         };
 
         fetchCourseDetail();
-    }, [id]);
+    }, [id, lessonId, navigate]);
 
     const fetchLessonDetail = async (lessonId: string) => {
         try {
@@ -77,6 +90,7 @@ const LearnCourseDetail: React.FC = () => {
 
     const handleLessonClick = (lesson: Lesson) => {
         fetchLessonDetail(lesson._id);
+        navigate(`/learn-course-detail/${id}/lesson/${lesson._id}`);
     };
 
     const getLessonIcon = (lessonType: string) => {
@@ -175,8 +189,8 @@ const LearnCourseDetail: React.FC = () => {
                                     </div>
                                 )}
                                 {selectedLesson.description && (
-                                    <div className="mt-4">
-                                        <p className="text-lg">{selectedLesson.description}</p>
+                                    <div className="mt-4 text-lg">
+                                        {parse(selectedLesson.description)}
                                     </div>
                                 )}
                             </div>

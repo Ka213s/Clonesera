@@ -52,7 +52,7 @@ export const PUBLIC = {
   VIEW_CART: '/view-cart',
   PAYMENT: '/payment',
   VIEW_ORDER: '/view-order',
-  LEARN_COURSE: '/learn-course-detail/:id',
+  LEARN_COURSE: '/learn-course-detail/:id/lesson/:lessonId',
   BLOG_DETAIL: '/blog-detail/:id',
   DASHBOARD_STUDENT: '/dashboard-student'
 };

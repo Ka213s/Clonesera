@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Badge, Dropdown, Avatar, Typography, Divider } from 'antd';
+import { Button, Badge, Dropdown, Avatar, Typography, Divider, Input } from 'antd';
 import { PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
@@ -7,6 +7,7 @@ import logo from '../assets/Logo-2.png';
 import { useCartContext } from '../consts/CartContext'; // Import the custom hook
 
 const { Text } = Typography;
+const { Search } = Input;
 
 const HeaderNoMenu: React.FC = () => {
   const [avatar, setAvatar] = useState<string | null>(null);
@@ -45,12 +46,12 @@ const HeaderNoMenu: React.FC = () => {
     navigate('/courses');
   };
 
-  const handleViewAllCourses = () => {
-    navigate('/homepage/view-all-course');
-  };
-
   const handleViewCart = () => {
     navigate('/view-cart');
+  };
+
+  const handleSearch = (value: string) => {
+    navigate(`/homepage/view-all-course?search=${value}`);
   };
 
   const userMenu: MenuProps['items'] = [
@@ -88,11 +89,12 @@ const HeaderNoMenu: React.FC = () => {
       </div>
 
       <div className="flex-grow flex justify-center">
-        <div className="flex space-x-4">
-        
-          <Button className="custom-button-1" onClick={handleViewAllCourses}>View All Course</Button>
-        
-        </div>
+        <Search
+          placeholder="Search courses"
+          enterButton
+          onSearch={handleSearch}
+          style={{ width: 300 }}
+        />
       </div>
 
       <div className="flex items-center ml-auto space-x-8 pr-4">

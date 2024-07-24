@@ -16,6 +16,7 @@
     "antd": "^5.19.3",
     "axios": "^1.7.2",
     "firebase": "^10.12.3",
+    "html-react-parser": "^5.1.12",
     "lottie-react": "^2.4.0",
     "moment": "^2.30.1",
     "react": "^18.3.1",

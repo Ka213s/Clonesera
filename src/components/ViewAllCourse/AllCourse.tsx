@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Tag, Skeleton, Rate, Button, Input, Pagination } from 'antd';
-import { LeftOutlined, RightOutlined, ReloadOutlined } from '@ant-design/icons';
+import { Tag, Skeleton, Rate, Button, Input, Pagination, Select } from 'antd';
+import { ReloadOutlined } from '@ant-design/icons';
 import { NT_getPublicCourses, NT_getCategoriesClient } from '../../utils/commonImports';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const { Search } = Input;
+const { Option } = Select;
 
 interface Course {
   _id: number;
@@ -45,12 +46,10 @@ const AllCourse: React.FC = () => {
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [totalItems, setTotalItems] = useState(0);
   const [pageSize, setPageSize] = useState(10);
-  const [categoriesTotalPages, setCategoriesTotalPages] = useState(1);
-  const [categoriesPage, setCategoriesPage] = useState(1);
-  const categoriesPerPage = 5;
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
-  const fetchCategories = async (pageNum: number) => {
+  const fetchCategories = async () => {
     try {
       const data = {
         searchCondition: {
@@ -58,13 +57,12 @@ const AllCourse: React.FC = () => {
           is_delete: false,
         },
         pageInfo: {
-          pageNum,
-          pageSize: categoriesPerPage,
+          pageNum: 1,
+          pageSize: 1000, // Set pageSize to 1000
         },
       };
       const response: ApiResponse<Category> = await NT_getCategoriesClient(data);
       setCategories(response.pageData);
-      setCategoriesTotalPages(response.pageInfo.totalPages);
     } catch (error) {
       console.error('Error fetching categories:', error);
     }
@@ -94,18 +92,19 @@ const AllCourse: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchCategories(categoriesPage);
-  }, [categoriesPage]);
+    fetchCategories();
+  }, []);
 
   useEffect(() => {
-    fetchCourses(searchKeyword, selectedCategory, currentPage, pageSize);
-  }, [selectedCategory, searchKeyword, currentPage, pageSize]);
+    const keyword = searchParams.get('search') || '';
+    setSearchKeyword(keyword);
+    fetchCourses(keyword, selectedCategory, currentPage, pageSize);
+  }, [selectedCategory, searchParams, currentPage, pageSize]);
 
   const handleViewDetails = (courseId: number) => navigate(`/course-detail/${courseId}`);
 
   const handleSearch = (value: string) => {
-    setSearchKeyword(value);
-    setCurrentPage(1);
+    navigate(`/homepage/view-all-course?search=${value}`);
   };
 
   const resetFilters = () => {
@@ -113,16 +112,6 @@ const AllCourse: React.FC = () => {
     setSearchKeyword('');
     setCurrentPage(1);
     fetchCourses('', null, 1, pageSize);
-  };
-
-  
-
-  const handleCategoriesPageChange = (direction: 'prev' | 'next') => {
-    if (direction === 'prev' && categoriesPage > 1) {
-      setCategoriesPage(categoriesPage - 1);
-    } else if (direction === 'next' && categoriesPage < categoriesTotalPages) {
-      setCategoriesPage(categoriesPage + 1);
-    }
   };
 
   return (
@@ -138,30 +127,26 @@ const AllCourse: React.FC = () => {
           style={{ width: 300 }}
         />
         <Button icon={<ReloadOutlined />} onClick={resetFilters} />
-        <Button
-          icon={<LeftOutlined />}
-          onClick={() => handleCategoriesPageChange('prev')}
-          disabled={categoriesPage === 1}
-        />
-        <div className="flex space-x-2 overflow-x-auto">
+        <Select
+          style={{ width: 200 }}
+          placeholder="Select a category"
+          onChange={(value) => setSelectedCategory(value)}
+          allowClear
+          showSearch
+          filterOption={(input, option) =>
+            option?.children
+              ? option.children.toString().toLowerCase().includes(input.toLowerCase())
+              : false
+          }
+        >
           {categories.map((category) => (
-            <Button
-              key={category._id}
-              type={selectedCategory === category._id ? 'primary' : 'default'}
-              onClick={() => setSelectedCategory(category._id)}
-              className="whitespace-nowrap"
-            >
+            <Option key={category._id} value={category._id}>
               {category.name}
-            </Button>
+            </Option>
           ))}
-        </div>
-        <Button
-          icon={<RightOutlined />}
-          onClick={() => handleCategoriesPageChange('next')}
-          disabled={categoriesPage === categoriesTotalPages}
-        />
+        </Select>
       </div>
-     
+
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {loading ? (
           Array.from({ length: pageSize }).map((_, index) => (
