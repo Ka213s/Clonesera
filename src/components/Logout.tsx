@@ -5,8 +5,7 @@ const Logout: React.FC = () => {
   const navigate = useNavigate();
 
   const handleLogout = useCallback(() => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userData');
+    localStorage.clear;
     navigate('/login');
   }, [navigate]);
 

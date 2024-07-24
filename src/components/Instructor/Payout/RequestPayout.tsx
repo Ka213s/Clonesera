@@ -70,8 +70,9 @@ const RequestPayout: React.FC = () => {
             });
             // Filter data to include only request_payout and rejected statuses
             const filteredData = result.pageData.filter(payout =>
-                payout.status === 'new' || payout.status === 'rejected'
+                payout.status === 'new' || payout.status === 'rejected' || payout.status === 'request_payout'
             );
+            
             setData(filteredData);
             setPagination({
                 ...pagination,

@@ -17,7 +17,7 @@ interface CartItem {
 
 const ViewCart: React.FC = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
+
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const navigate = useNavigate();
 
@@ -62,8 +62,6 @@ const ViewCart: React.FC = () => {
             } catch (error) {
                 console.error('Error fetching cart items:', error);
                 message.error('Error fetching cart items');
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -110,10 +108,7 @@ const ViewCart: React.FC = () => {
     const totalDiscount = selectedItems.reduce((acc, item) => acc + item.discount, 0);
     const totalBill = totalPrice - totalDiscount;
 
-    if (loading) {
-        return <div className="flex justify-center items-center h-screen">Loading...</div>;
-    }
-
+  
     if (cartItems.length === 0) {
         return <div className="flex justify-center items-center h-screen">No items in the cart</div>;
     }

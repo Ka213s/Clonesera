@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { NT_getCourseDetail, getCourseDetail, createCart, getCart, updateCart } from '../../services/Api';
+import { NT_getCourseDetail, getCourseDetail, createCart, getCart } from '../../services/Api';
 import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse, Skeleton } from 'antd';
 import { PlayCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
@@ -116,53 +116,15 @@ const CourseDetails: React.FC = () => {
     }
   };
 
-  const handleEnroll = async () => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      toast.error('Please login to Enroll');
-      return;
-    }
-    if (course) {
-      try {
-        const cartData = { course_id: course._id };
-        const cartFree = await createCart(cartData);
-        console.log('cartFree:', cartFree);
-        if (cartFree) {
-          const cartNo = cartFree.cart_no;
-          const cartId = cartFree._id;
-          const updateCartDataWaitingPaid = {
-            status: 'waiting_paid',
-            items: [{ _id: cartId, cart_no: cartNo }]
-          };
-          await updateCart(updateCartDataWaitingPaid);
-          const updateCartDataCompleted = {
-            status: 'completed',
-            items: [{ _id: cartId, cart_no: cartNo }]
-          };
-          await updateCart(updateCartDataCompleted);
-          toast.success('Enrolled successfully');
-          setCourse(prevCourse => {
-            if (prevCourse) {
-              return {
-                ...prevCourse,
-                is_purchased: true,
-              };
-            }
-            return prevCourse;
-          });
-        } else {
-          message.error('Error enrolling in course');
-        }
-      } catch (error) {
-        message.error('Error enrolling in course');
-        console.error('Error enrolling in course:', error);
-      }
-    }
-    
-  };
-
   const handleViewCart = () => {
     navigate('/view-cart');
+  };
+
+  const handleLearnCourse  = (lessonId?: string) => {
+    if (course) {
+      const firstLessonId = lessonId || course.session_list[0]?.lesson_list[0]?._id;
+      navigate(`/learn-course-detail/${course._id}/lesson/${firstLessonId}`);
+    }
   };
 
   const showModal = () => {
@@ -171,12 +133,6 @@ const CourseDetails: React.FC = () => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
-  };
-
-  const handleLearnCourse = () => {
-    if (course) {
-      navigate(`/learn-course-detail/${course._id}`);
-    }
   };
 
   const formatFullTime = (minutes: number) => {
@@ -193,20 +149,10 @@ const CourseDetails: React.FC = () => {
       return (
         <Button
           type="default"
-          onClick={handleLearnCourse}
+          onClick={() => handleLearnCourse()}
           className="mb-4 custom-button p-4 bg-green-500 text-white hover:bg-green-600"
         >
           Learn Course
-        </Button>
-      );
-    } else if (course?.price === 0) {
-      return (
-        <Button
-          type="default"
-          onClick={handleEnroll}
-          className="mb-4 custom-button p-4 bg-green-500 text-black hover:bg-green-600"
-        >
-          Enroll
         </Button>
       );
     } else {
@@ -214,7 +160,7 @@ const CourseDetails: React.FC = () => {
         <Button
           type="default"
           onClick={course?.is_in_cart ? handleViewCart : handleAddToCart}
-          className="mb-4 custom-button p-4 bg-green-500 text-black hover:bg-green-600"
+          className="mb-4 custom-button p-4 bg-blue-500 text-white hover:bg-blue-600"
         >
           {course?.is_in_cart ? 'View Cart' : 'Add to Cart'}
         </Button>
@@ -274,7 +220,7 @@ const CourseDetails: React.FC = () => {
                   type="default"
                   icon={<PlayCircleOutlined />}
                   onClick={showModal}
-                  className="mb-4 custom-button p-4 bg-green-500 text-black hover:bg-green-600"
+                  className="mb-4 custom-button p-4 bg-yellow-500 text-white hover:bg-yellow-600"
                 >
                   Watch Introduction
                 </Button>
@@ -321,12 +267,19 @@ const CourseDetails: React.FC = () => {
                 <List
                   dataSource={session.lesson_list}
                   renderItem={(lesson) => (
-                    <List.Item className="flex justify-between items-center">
+                    <List.Item
+                      className="flex justify-between items-center cursor-pointer"
+                      onClick={course?.is_purchased ? () => handleLearnCourse(lesson._id) : undefined}
+                    >
                       <div>
                         <Tooltip title={lesson.lesson_type}>
                           <InfoCircleOutlined className="mr-2" />
                         </Tooltip>
-                        {lesson.name}
+                        {course?.is_purchased ? (
+                          <span className="text-blue-600 hover:underline">{lesson.name}</span>
+                        ) : (
+                          <span>{lesson.name}</span>
+                        )}
                       </div>
                       <div>{formatFullTime(lesson.full_time)}</div>
                     </List.Item>
