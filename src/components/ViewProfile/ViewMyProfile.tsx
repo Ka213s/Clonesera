@@ -24,7 +24,6 @@ interface UserData {
 const ViewProfile: React.FC = () => {
     const [activeTab, setActiveTab] = useState('About');
     const [userData, setUserData] = useState<UserData | null>(null);
-  
 
     useEffect(() => {
         const fetchData = async () => {
@@ -34,15 +33,14 @@ const ViewProfile: React.FC = () => {
                 setUserData(data);
             } catch (error) {
                 console.error('Error fetching user data:', error);
-              
             }
         };
 
         fetchData();
-    }, []); 
+    }, []);
 
     const renderTabContent = () => {
-        if (!userData) return null; 
+        if (!userData) return null;
         switch (activeTab) {
             case 'About':
                 return <AboutTab userData={userData} />;
@@ -57,38 +55,39 @@ const ViewProfile: React.FC = () => {
 
     return (
         <div className="p-8 bg-gray-100 min-h-screen overflow-y-auto">
-            <div className="bg-white p-8 rounded-lg shadow-lg">
-                <div className="flex justify-between items-center">
-                    <div className="flex items-center">
+            <div className="flex space-x-8">
+                {/* Left Section */}
+                <div className="w-1/4 bg-white p-8 rounded-lg shadow-lg">
+                    <div className="flex flex-col items-center">
                         <img
                             src={userData?.avatar || '/default/avatar.jpg'}
                             alt="Avatar"
-                            className="w-32 h-32 rounded-full border-4 border-white -mt-16 mb-5 shadow-lg"
+                            className="w-32 h-32 rounded-full mb-4 shadow-lg"
                         />
-                        <div className="ml-8">
-                            <h1 className="text-3xl font-bold">{userData?.name || 'Your Name'}</h1>
-                            <p className="text-gray-600">@{userData?.email || 'username'}</p>
-                            <p className="text-gray-600 mt-2">{userData?.phone_number || 'Location'}</p>
-                        </div>
+                        <h1 className="text-2xl font-bold">{userData?.name || 'Your Name'}</h1>
+                        <p className="text-gray-600">@{userData?.email || 'username'}</p>
+                        <p className="text-gray-600 mt-2">{userData?.phone_number || 'Location'}</p>
                     </div>
-                
                 </div>
-            </div>
 
-            {/* Main content wrapper */}
-            <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
-                <div className="flex space-x-6 border-b border-gray-200 pb-3">
-                    {['About', 'Course', 'Subscription'].map((tab) => (
-                        <button
-                            key={tab}
-                            className={`text-gray-600 pb-2 focus:outline-none ${activeTab === tab ? 'border-b-2 border-[#9997F5] font-semibold text-[#9997F5]' : ''}`}
-                            onClick={() => setActiveTab(tab)}
-                        >
-                            {tab}
-                        </button>
-                    ))}
+                {/* Right Section */}
+                <div className="w-3/4">
+                    {/* Tabs */}
+                    <div className="bg-white p-6 rounded-lg shadow-lg">
+                        <div className="flex space-x-6 border-b border-gray-200 pb-3">
+                            {['About', 'Course', 'Subscription'].map((tab) => (
+                                <button
+                                    key={tab}
+                                    className={`text-gray-600 pb-2 focus:outline-none ${activeTab === tab ? 'border-b-2 border-[#9997F5] font-semibold text-[#9997F5]' : ''}`}
+                                    onClick={() => setActiveTab(tab)}
+                                >
+                                    {tab}
+                                </button>
+                            ))}
+                        </div>
+                        {renderTabContent()}
+                    </div>
                 </div>
-                {renderTabContent()}
             </div>
         </div>
     );
