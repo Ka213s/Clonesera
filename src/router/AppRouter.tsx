@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes,Navigate  } from 'react-router-dom';
 import LayoutRoute from '../layout/LayoutRoute';
 import LayoutNoSidebar from '../layout/LayoutNoSidebar';
 import { ToastContainer } from 'react-toastify';
@@ -52,9 +52,10 @@ const AppRouter: React.FC = () => {
         <Router>
             <Suspense>
                 <Routes>
+                    <Route path="/" element={<Navigate to="/homepage" />} />
+
                     {/* Public Routes with MainLayout */}
                     <Route element={<LayoutRoute />}>
-
                         <Route path={PUBLIC.VIEW_CART} element={<ViewCart />} />
                         <Route path={PUBLIC.VIEW_ORDER} element={<ViewOrder />} />
                         <Route path={PUBLIC.PAYMENT} element={<Payment />} />

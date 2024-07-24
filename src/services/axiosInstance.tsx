@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosError } from 'axios';
+import axios, { AxiosInstance, AxiosError, AxiosResponse } from 'axios';
 import { toast } from 'react-toastify';
 import config from '../config/config';
 import { handleHttpErrors } from '../consts/errorHandler';
@@ -35,11 +35,11 @@ defaultAxiosInstance.interceptors.request.use(
 );
 
 defaultAxiosInstance.interceptors.response.use(
-  (response) => {
+  (response: AxiosResponse) => {
     setLoading(false);
     return response.data;
   },
-  (err: AxiosError) => {
+  (err: AxiosError<ErrorResponse>) => {
     setLoading(false);
     const { response } = err;
     if (response) {
@@ -75,22 +75,28 @@ tokenAxiosInstance.interceptors.request.use(
 );
 
 tokenAxiosInstance.interceptors.response.use(
-  (response) => {
+  (response: AxiosResponse) => {
     setLoading(false);
     return response.data;
   },
-  (err: AxiosError) => {
+  (err: AxiosError<ErrorResponse>) => {
     setLoading(false);
     const { response } = err;
     if (response) {
       handleErrorByToast(err);
-      handleHttpErrors(response.status);
+      
+      if (response.data.message !== 'Token is expired') {
+        handleHttpErrors(response.status);
+      } else {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userData');
+      }
     }
     return Promise.reject(err);
   }
 );
 
-const handleErrorByToast = (errors: AxiosError) => {
+const handleErrorByToast = (errors: AxiosError<ErrorResponse>) => {
   const data = errors.response?.data as ErrorResponse | undefined;
   let message: string | undefined = data?.message ?? errors.message ?? 'An error occurred';
 

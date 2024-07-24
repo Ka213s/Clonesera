@@ -13,7 +13,7 @@ const HeaderNoMenu: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  const { totalCartItems } = useCartContext(); // Use the custom hook to access context
+  const { totalCartItems } = useCartContext(); 
 
   const navigate = useNavigate();
 
