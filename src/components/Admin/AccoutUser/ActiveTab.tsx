@@ -25,7 +25,7 @@ const ActiveTab: React.FC = () => {
     <div style={{ position: 'relative' }}>
       <Button
         type="primary"
-        style={{ position: 'absolute', top: 0, right: 0, zIndex: 1000 }}
+        style={{ position: 'absolute', top: 0, right: 0, zIndex: 10 }}
         onClick={showModal}
         className='custom-button'
       >
@@ -35,7 +35,7 @@ const ActiveTab: React.FC = () => {
         <TabPane tab="DisplayAccount" key="1">
           <DisplayAccount status={true} isDeleted={false} />
         </TabPane>
-        <TabPane tab="DisplayAccount chưa verify" key="2">
+        <TabPane tab="DisplayAccount is not verified" key="2">
           <AccountIsVerify status={true} isDeleted={false} />
         </TabPane>
         
