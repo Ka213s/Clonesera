@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Table, Alert } from 'antd';
 import moment from 'moment';
+import { Link } from 'react-router-dom';
 import { getItemsByStudent } from '../../utils/commonImports';
 
 interface Course {
@@ -76,6 +77,9 @@ const PurchasedCours: React.FC = () => {
       title: 'Course Name',
       dataIndex: 'course_name',
       key: 'course_name',
+      render: (text: string, record: Course) => (
+        <Link to={`/learn-course-detail/${record.course_id}`}>{text}</Link>
+      ),
     },
     {
       title: 'Purchase Number',
@@ -115,7 +119,6 @@ const PurchasedCours: React.FC = () => {
 
   return (
     <div>
-   
       <Table columns={columns} dataSource={purchasedCourses} rowKey="_id" />
     </div>
   );

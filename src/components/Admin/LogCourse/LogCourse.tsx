@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { Table } from "antd";
+import React, { useEffect, useState, useCallback } from "react";
+import { Table, Pagination, message, Input } from "antd";
 import { getCourses, getCourseLogs } from "../../../utils/commonImports";
 import { getStatusTag } from "../../../utils/statusTagUtils";
-import SearchCourse from "../ViewAllCourse/SearchCourse";
 
 interface Course {
   _id: string;
@@ -20,43 +19,54 @@ interface Log {
   comment: string;
 }
 
+const { Search } = Input;
+
 const LogCourse: React.FC = () => {
   const [logs, setLogs] = useState<Log[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
-  const [keyword, setKeyword] = useState<string>("");
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [totalLogs, setTotalLogs] = useState<number>(0);
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
+
+  const fetchCoursesAndLogs = useCallback(
+    async (page: number, size: number, keyword: string) => {
+      try {
+        const coursesData = await getCourses(
+          { keyword, category: "", status: "", is_deleted: false },
+          page,
+          size
+        );
+
+        if (coursesData && coursesData.pageData) {
+          setCourses(coursesData.pageData);
+          const courseIds: string[] = coursesData.pageData.map(
+            (course: Course) => course._id
+          );
+          const logsDataPromises = courseIds.map((courseId: string) =>
+            getCourseLogs({
+              searchCondition: { course_id: courseId },
+              pageInfo: { pageNum: page, pageSize: size },
+            })
+          );
+
+          const logsDataArray = await Promise.all(logsDataPromises);
+          const allLogs = logsDataArray.flatMap((logData) => logData.pageData);
+          setLogs(allLogs);
+          // Assuming logsDataArray[0].pageInfo contains totalItems
+          setTotalLogs(logsDataArray[0].pageInfo.totalItems);
+        }
+      } catch (error) {
+        message.error("Error fetching data");
+        console.error("Error fetching data:", error);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
-    fetchCoursesAndLogs();
-  }, []);
-
-  const fetchCoursesAndLogs = async () => {
-    try {
-      const coursesData = await getCourses(
-        { keyword, category: "", status: "", is_deleted: false },
-        1,
-        10
-      );
-
-      if (coursesData && coursesData.pageData) {
-        setCourses(coursesData.pageData);
-        const courseIds: string[] = coursesData.pageData.map(
-          (course: Course) => course._id
-        );
-        const logsDataPromises = courseIds.map((courseId: string) =>
-          getCourseLogs({
-            searchCondition: { course_id: courseId },
-            pageInfo: { pageNum: 1, pageSize: 10 },
-          })
-        );
-
-        const logsDataArray = await Promise.all(logsDataPromises);
-        const allLogs = logsDataArray.flatMap((logData) => logData.pageData);
-        setLogs(allLogs);
-      }
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
-  };
+    fetchCoursesAndLogs(pageNum, pageSize, searchKeyword);
+  }, [pageNum, pageSize, searchKeyword, fetchCoursesAndLogs]);
 
   const getCourseName = (courseId: string) => {
     const course = courses.find((course) => course._id === courseId);
@@ -90,13 +100,36 @@ const LogCourse: React.FC = () => {
   ];
 
   const handleSearch = (value: string) => {
-    setKeyword(value);
+    setSearchKeyword(value);
+    setPageNum(1); // Reset to first page on search
   };
 
   return (
     <div>
-      <SearchCourse onSearch={handleSearch} />
-      <Table columns={columns} dataSource={logs} rowKey="_id" />
+      <div style={{ marginBottom: 16 }}>
+        <Search
+          placeholder="Search by course name"
+          enterButton="Search"
+          allowClear
+          size="large"
+          onSearch={handleSearch}
+          style={{ width: 300 }}
+        />
+      </div>
+      <Table columns={columns} dataSource={logs} rowKey="_id" pagination={false} />
+      <div className="flex justify-end mt-5">
+        <Pagination
+          current={pageNum}
+          pageSize={pageSize}
+          total={totalLogs}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={(page, pageSize) => {
+            setPageNum(page);
+            setPageSize(pageSize);
+          }}
+          showSizeChanger
+        />
+      </div>
     </div>
   );
 };

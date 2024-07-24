@@ -1,4 +1,3 @@
-// ViewOrder.tsx: Page này để xem hóa đơn có status là waiting_paid và completed
 import React, { useState } from 'react';
 import WaitingPaid from '../components/Order/WaitingPaid';
 import Completed from '../components/Order/Completed';

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Button } from 'antd';
-import { TablePaginationConfig } from 'antd/lib/table';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Table, Pagination, Input } from 'antd';
 import { Link } from 'react-router-dom';
 import { getPayouts } from '../../../services/Api';
 
 interface Transaction {
-    _id: string; // Transaction ID
+    _id: string;
     price: number;
     discount: number;
     price_paid: number;
@@ -39,48 +38,50 @@ interface ApiResponse {
     };
 }
 
+const { Search } = Input;
+
 const Completed: React.FC = () => {
     const [data, setData] = useState<PayoutData[]>([]);
-    const [pagination, setPagination] = useState<TablePaginationConfig>({
-        current: 1,
-        pageSize: 10,
-        total: 0,
-    });
+    const [current, setCurrent] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
+    const [total, setTotal] = useState<number>(0);
+    const [searchKeyword, setSearchKeyword] = useState<string>("");
 
-    useEffect(() => {
-        fetchData({
-            pageNum: pagination.current || 1,
-            pageSize: pagination.pageSize || 10,
-        });
-    }, [pagination.current]);
-
-    const fetchData = async (pageInfo: { pageNum: number; pageSize: number }) => {
+    const fetchData = useCallback(async (pageInfo: { pageNum: number; pageSize: number }, keyword: string) => {
         try {
             const result: ApiResponse = await getPayouts({
                 searchCondition: {
-                    payout_no: '',
+                    payout_no: keyword,
                     instructor_id: '',
-                    status: 'completed', // Filter for completed status
+                    status: 'completed',
                     is_instructor: false,
                     is_delete: false,
                 },
                 pageInfo
             });
+
             setData(result.pageData);
-            setPagination({
-                ...pagination,
-                total: result.pageInfo.totalItems,
-            });
+            setTotal(result.pageInfo.totalItems);
         } catch (error) {
             console.error('Failed to fetch data:', error);
         }
+    }, []);
+
+    useEffect(() => {
+        fetchData({
+            pageNum: current,
+            pageSize
+        }, searchKeyword);
+    }, [current, pageSize, searchKeyword, fetchData]);
+
+    const handlePageChange = (page: number, pageSize?: number) => {
+        setCurrent(page);
+        if (pageSize) setPageSize(pageSize);
     };
 
-    const handleTableChange = (pagination: TablePaginationConfig) => {
-        setPagination({
-            ...pagination,
-            current: pagination.current || 1,
-        });
+    const handleSearch = (value: string) => {
+        setSearchKeyword(value);
+        setCurrent(1); // Reset to the first page on search
     };
 
     const columns = [
@@ -122,22 +123,33 @@ const Completed: React.FC = () => {
 
     return (
         <div>
-            <Button
-                type="primary"
-                onClick={() => fetchData({
-                    pageNum: pagination.current || 1,
-                    pageSize: pagination.pageSize || 10,
-                })}
-            >
-                Reload
-            </Button>
+            <div className="flex items-center mb-4">
+                <Search
+                    placeholder="Search by payout number"
+                    enterButton="Search"
+                    allowClear
+                    size="large"
+                    onSearch={handleSearch}
+                    className="mr-4 w-80"
+                />
+            </div>
             <Table
                 columns={columns}
                 dataSource={data}
-                pagination={pagination}
-                onChange={handleTableChange}
+                pagination={false}
                 rowKey="_id"
             />
+            <div className="flex justify-end mt-5">
+                <Pagination
+                    current={current}
+                    pageSize={pageSize}
+                    total={total}
+                    showTotal={(total) => `Total ${total} items`}
+                    onChange={handlePageChange}
+                    onShowSizeChange={handlePageChange}
+                    showSizeChanger
+                />
+            </div>
         </div>
     );
 };

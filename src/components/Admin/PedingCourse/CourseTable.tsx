@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { Table, message } from "antd";
+import React, { useState, useEffect, useCallback } from "react";
+import { Table, Pagination, message, Input } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
 import { getCourses, getCourseDetail } from "../../../utils/commonImports";
-import SearchCourse from "../ViewAllCourse/SearchCourse";
+
+const { Search } = Input;
 
 interface Course {
   _id: string;
@@ -35,31 +36,38 @@ const CourseTable: React.FC<CourseTableProps> = ({
   onSelectionChange,
 }) => {
   const [courses, setCourses] = useState<Course[]>([]);
-  const [keyword, setKeyword] = useState<string>("");
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [totalCourses, setTotalCourses] = useState<number>(0);
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
+
+  const fetchCourses = useCallback(
+    async (page: number, size: number, keyword: string) => {
+      try {
+        const data = await getCourses(
+          { keyword, category: "", status: "waiting_approve", is_deleted: false },
+          page,
+          size
+        );
+        const coursesWithDetails = await Promise.all(
+          data.pageData.map(async (course: Course) => {
+            const courseDetail = await fetchCourseDetail(course._id);
+            return { ...course, sessions: courseDetail.session_list };
+          })
+        );
+        setCourses(coursesWithDetails);
+        setTotalCourses(data.pageInfo.totalItems);
+      } catch (error) {
+        message.error("Error fetching courses");
+        console.error("Error fetching courses:", error);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
-    fetchCourses();
-  }, []);
-
-  const fetchCourses = async () => {
-    try {
-      const data = await getCourses(
-        { keyword, category: "", status: "waiting_approve", is_deleted: false },
-        1,
-        10
-      );
-      const coursesWithDetails = await Promise.all(
-        data.pageData.map(async (course: Course) => {
-          const courseDetail = await fetchCourseDetail(course._id);
-          return { ...course, sessions: courseDetail.session_list };
-        })
-      );
-      setCourses(coursesWithDetails);
-    } catch (error) {
-      message.error("Error fetching courses");
-      console.error("Error fetching courses:", error);
-    }
-  };
+    fetchCourses(pageNum, pageSize, searchKeyword);
+  }, [pageNum, pageSize, searchKeyword, fetchCourses]);
 
   const fetchCourseDetail = async (courseId: string) => {
     const data = await getCourseDetail(courseId);
@@ -67,7 +75,8 @@ const CourseTable: React.FC<CourseTableProps> = ({
   };
 
   const handleSearch = (value: string) => {
-    setKeyword(value);
+    setSearchKeyword(value);
+    setPageNum(1); // Reset to first page on search
   };
 
   const courseColumns: ColumnsType<Course> = [
@@ -102,16 +111,39 @@ const CourseTable: React.FC<CourseTableProps> = ({
 
   return (
     <div>
-      <SearchCourse onSearch={handleSearch} />
+      <div style={{ marginBottom: 16 }}>
+        <Search
+          placeholder="Search by course name"
+          enterButton="Search"
+          allowClear
+          size="large"
+          onSearch={handleSearch}
+          style={{ width: 300 }}
+        />
+      </div>
       <Table
         columns={courseColumns}
         dataSource={courses}
         rowKey="_id"
+        pagination={false}
         rowSelection={{
           type: "checkbox",
           ...rowSelection,
         }}
       />
+      <div className="flex justify-end mt-5">
+        <Pagination
+          current={pageNum}
+          pageSize={pageSize}
+          total={totalCourses}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={(page, pageSize) => {
+            setPageNum(page);
+            setPageSize(pageSize);
+          }}
+          showSizeChanger
+        />
+      </div>
     </div>
   );
 };

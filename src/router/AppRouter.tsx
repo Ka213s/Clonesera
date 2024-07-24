@@ -20,7 +20,6 @@ const SettingPage = lazy(() => import('../pages/SettingPage'));
 const Course = lazy(() => import('../pages/Instructor/ManagementCourse'));
 const CourseSold = lazy(() => import('../pages/CourseSold'));
 const Payout = lazy(() => import('../pages/Instructor/Payout'));
-const PurchasedCours = lazy(() => import('../pages/PurchasedCourses'));
 const Purchase = lazy(() => import('../pages/Admin/Purchase'));
 const VerifyEmail = lazy(() => import('../components/VerifyEmailDone'));
 const ForgotPassword = lazy(() => import('../pages/ForgotPassword'));
@@ -77,7 +76,6 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.REVIEW} element={<PrivateRoute element={ReViewInstructor} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.COURSE_SOLD} element={<PrivateRoute element={CourseSold} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.PAYOUT} element={<PrivateRoute element={Payout} allowedRoles={[ROLES.INSTRUCTOR]} />} />
-                        <Route path={INSTRUCTOR.PURCHASE} element={<PrivateRoute element={PurchasedCours} allowedRoles={[ROLES.STUDENT, ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.VIEW_ALL_COURSE} element={<PrivateRoute element={ViewAllCourse} allowedRoles={[ROLES.INSTRUCTOR, ROLES.ADMIN]} />} />
                         <Route path={INSTRUCTOR.TRANSACTION_DETAIL} element={<PrivateRoute element={TransactionDetail} allowedRoles={[ROLES.INSTRUCTOR, ROLES.ADMIN]} />} />
                     </Route>

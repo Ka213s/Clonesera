@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Table, Avatar, PaginationProps, Tag } from 'antd';
+import { Table, Avatar, Pagination, Tag, Input } from 'antd';
 import { getUsers } from '../../../utils/commonImports';
+
+const { Search } = Input;
 
 interface User {
   _id: string;
@@ -9,7 +11,7 @@ interface User {
   email: string;
   role: string;
   status: boolean;
-  is_verified: boolean; 
+  is_verified: boolean;
 }
 
 interface Pagination {
@@ -26,19 +28,25 @@ interface DisplayAccountProps {
 const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDeleted = false }) => {
   const [data, setData] = useState<User[]>([]);
   const [pagination, setPagination] = useState<Pagination>({ current: 1, pageSize: 10, total: 0 });
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
 
-  const fetchUsers = async (pageNum: number, pageSize: number) => {
+  const fetchUsers = async (pageNum: number, pageSize: number, keyword: string) => {
     try {
-      const response = await getUsers({ keyword: '', role: 'all', status, is_deleted: isDeleted , is_verified: "false" }, pageNum, pageSize);
+      const response = await getUsers({
+        keyword,
+        role: 'all',
+        status,
+        is_deleted: isDeleted,
+        is_verified: 'false'
+      }, pageNum, pageSize);
       console.log('response', response.pageData);
-     
 
       setData(response.pageData);
 
       setPagination({
-        current: response.pageNum,
-        pageSize: response.pageSize,
-        total: response.total, 
+        current: response.pageInfo.pageNum,
+        pageSize: response.pageInfo.pageSize,
+        total: response.pageInfo.totalItems,
       });
     } catch (error) {
       console.error('Failed to fetch users:', error);
@@ -46,11 +54,16 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
   };
 
   useEffect(() => {
-    fetchUsers(pagination.current, pagination.pageSize);
-  }, [pagination.current, pagination.pageSize, status, isDeleted]);
+    fetchUsers(pagination.current, pagination.pageSize, searchKeyword);
+  }, [pagination.current, pagination.pageSize, status, isDeleted, searchKeyword]);
 
-  const handleTableChange = (pagination: PaginationProps) => {
-    fetchUsers(pagination.current!, pagination.pageSize!);
+  const handleTableChange = (pagination: any) => {
+    fetchUsers(pagination.current!, pagination.pageSize!, searchKeyword);
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchKeyword(value);
+    setPagination(prev => ({ ...prev, current: 1 })); // Reset to the first page on new search
   };
 
   const columns = [
@@ -98,17 +111,42 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
   ];
 
   return (
-    <Table
-      columns={columns}
-      rowKey={(record: User) => record._id}
-      dataSource={data}
-      pagination={{
-        current: pagination.current,
-        pageSize: pagination.pageSize,
-        total: pagination.total,
-      }}
-      onChange={handleTableChange}
-    />
+    <>
+      <div className="mb-4">
+        <Search
+          placeholder="Search by name or email"
+          enterButton="Search"
+          allowClear
+          size="large"
+          onSearch={handleSearch}
+          className="mr-4 w-80"
+        />
+      </div>
+      <Table
+        columns={columns}
+        rowKey={(record: User) => record._id}
+        dataSource={data}
+        pagination={false} // Disable pagination in Table component
+        onChange={handleTableChange}
+      />
+      <div className="flex justify-end mt-5">
+        <Pagination
+          current={pagination.current}
+          pageSize={pagination.pageSize}
+          total={pagination.total}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={(page, pageSize) => {
+            setPagination({
+              current: page,
+              pageSize: pageSize!,
+              total: pagination.total,
+            });
+            fetchUsers(page, pageSize!, searchKeyword);
+          }}
+          showSizeChanger
+        />
+      </div>
+    </>
   );
 };
 

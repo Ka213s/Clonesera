@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Table, message } from "antd";
+import React, { useEffect, useState, useCallback } from "react";
+import { Table, Pagination, message, Input } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { getCourses } from "../../../utils/commonImports";
 import moment from "moment";
 import { getStatusTag } from "../../../utils/statusTagUtils";
-import SearchCourse from "./SearchCourse";
+
+const { Search } = Input;
 
 interface Course {
-  _id: number;
+  _id: string;
   name: string;
   category_name: string;
   status: string;
@@ -18,31 +19,41 @@ interface Course {
 
 const CourseTable: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [totalCourses, setTotalCourses] = useState<number>(0);
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
 
-  const fetchCourses = async (searchKeyword: string = "") => {
-    try {
-      const searchCondition = {
-        keyword: searchKeyword,
-        category: "",
-        status: "",
-        is_deleted: false,
-      };
-      const pageNum = 1;
-      const pageSize = 10;
-      const response = await getCourses(searchCondition, pageNum, pageSize);
-      setCourses(response.pageData);
-    } catch (error) {
-      message.error("Error fetching courses");
-      console.error("Error fetching courses:", error);
-    }
-  };
+  const fetchCourses = useCallback(
+    async (page: number, size: number, keyword: string) => {
+      try {
+        const searchCondition = {
+          keyword,
+          category: "",
+          status: "",
+          is_deleted: false,
+        };
+        const response = await getCourses(searchCondition, page, size);
+        console.log(response);
+        if (response) {
+          setCourses(response.pageData);
+          setTotalCourses(response.pageInfo.totalItems);
+        }
+      } catch (error) {
+        message.error("Error fetching courses");
+        console.error("Error fetching courses:", error);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
-    fetchCourses();
-  }, []);
+    fetchCourses(pageNum, pageSize, searchKeyword);
+  }, [pageNum, pageSize, searchKeyword, fetchCourses]);
 
   const handleSearch = (value: string) => {
-    fetchCourses(value);
+    setSearchKeyword(value);
+    setPageNum(1); // Reset to first page on search
   };
 
   const columns: ColumnsType<Course> = [
@@ -82,8 +93,35 @@ const CourseTable: React.FC = () => {
 
   return (
     <div>
-      <SearchCourse onSearch={handleSearch} />
-      <Table columns={columns} dataSource={courses} rowKey="_id" />
+      <div style={{ marginBottom: 16 }}>
+        <Search
+          placeholder="Search by course name"
+          enterButton="Search"
+          allowClear
+          size="large"
+          onSearch={handleSearch}
+          style={{ width: 300 }}
+        />
+      </div>
+      <Table
+        columns={columns}
+        dataSource={courses}
+        rowKey="_id"
+        pagination={false}
+      />
+      <div className="flex justify-end mt-5">
+        <Pagination
+          current={pageNum}
+          pageSize={pageSize}
+          total={totalCourses}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={(page, pageSize) => {
+            setPageNum(page);
+            setPageSize(pageSize);
+          }}
+          showSizeChanger
+        />
+      </div>
     </div>
   );
 };

@@ -1,7 +1,9 @@
-import React from 'react';
-import { Table } from 'antd';
-import { ColumnsType } from 'antd/lib/table';
-import moment from 'moment';
+import React, { useState, useEffect } from "react";
+import { Table, Pagination, message, Input } from "antd";
+import { ColumnsType } from "antd/lib/table";
+import moment from "moment";
+
+const { Search } = Input;
 
 interface Lesson {
   _id: string;
@@ -48,6 +50,36 @@ const renderMedia = (record: Lesson) => {
 };
 
 const LessonTable: React.FC<LessonTableProps> = ({ lessons }) => {
+  const [filteredLessons, setFilteredLessons] = useState<Lesson[]>([]);
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [totalLessons, setTotalLessons] = useState<number>(lessons.length);
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
+
+  useEffect(() => {
+    const fetchLessons = async () => {
+      try {
+        // Filter lessons based on search keyword
+        const filteredData = lessons.filter((lesson) =>
+          lesson.name.toLowerCase().includes(searchKeyword.toLowerCase())
+        );
+
+        setFilteredLessons(filteredData);
+        setTotalLessons(filteredData.length);
+      } catch (error) {
+        message.error("Error filtering lessons");
+        console.error("Error filtering lessons:", error);
+      }
+    };
+
+    fetchLessons();
+  }, [searchKeyword, lessons]);
+
+  const handleSearch = (value: string) => {
+    setSearchKeyword(value);
+    setPageNum(1); // Reset to first page on search
+  };
+
   const lessonColumns: ColumnsType<Lesson> = [
     { title: 'Name', dataIndex: 'name', key: 'name' },
     { title: 'Course Name', dataIndex: 'course_name', key: 'course_name' },
@@ -63,11 +95,37 @@ const LessonTable: React.FC<LessonTableProps> = ({ lessons }) => {
   ];
 
   return (
-    <Table
-      columns={lessonColumns}
-      dataSource={lessons}
-      rowKey="_id"
-    />
+    <div>
+      <div style={{ marginBottom: 16 }}>
+        <Search
+          placeholder="Search by lesson name"
+          enterButton="Search"
+          allowClear
+          size="large"
+          onSearch={handleSearch}
+          style={{ width: 300 }}
+        />
+      </div>
+      <Table
+        columns={lessonColumns}
+        dataSource={filteredLessons.slice((pageNum - 1) * pageSize, pageNum * pageSize)}
+        rowKey="_id"
+        pagination={false}
+      />
+      <div className="flex justify-end mt-5">
+        <Pagination
+          current={pageNum}
+          pageSize={pageSize}
+          total={totalLessons}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={(page, pageSize) => {
+            setPageNum(page);
+            setPageSize(pageSize);
+          }}
+          showSizeChanger
+        />
+      </div>
+    </div>
   );
 };
 
