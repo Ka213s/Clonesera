@@ -51,7 +51,7 @@ export const PUBLIC = {
   VIEW_CART: '/view-cart',
   PAYMENT: '/payment',
   VIEW_ORDER: '/view-order',
-  LEARN_COURSE: '/learn-course-detail/:id',
+  LEARN_COURSE: '/learn-course-detail/:id/lesson/:lessonId',
   BLOG_DETAIL: '/blog-detail/:id',
   DASHBOARD_STUDENT: '/dashboard-student'
 };
@@ -120,10 +120,11 @@ export const SidebarIntructorData = {
 
 export const SidebarStudentData = {
   studentSidebarItem: [
+    { text: "My Profile", icon: "FaFile", url: "/view-my-profile" },
     { text: "Dashboard", icon: "FaDashboard", url: "/dashboard-student" },
     { text: "Subscription", icon: "FaBell", url: "/list-subscribed" },
-    { "text": "Setting", icon: "FaCogs", url: "/setting-page" },
-    { "text": "Order", icon: "FaBill", url: "/view-order" },
+    { text: "Setting", icon: "FaCogs", url: "/setting-page" },
+    { text: "Order", icon: "FaBill", url: "/view-order" },
     // { "text": "Notifications", "icon": "FaBell", "url": "/student/notifications" },
     // { "text": "My Certificates", "icon": "FaCertificate", "url": "/student/myCertificates" },
     // { "text": "Reviews", "icon": "FaStar", "url": "/student/reviews" },

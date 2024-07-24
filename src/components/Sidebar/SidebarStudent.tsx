@@ -3,13 +3,7 @@ import { Menu } from 'antd';
 import { useNavigate } from 'react-router-dom';
 
 import {
-  HomeOutlined,
-  BookOutlined,
-  CommentOutlined,
   BellOutlined,
-  TrophyOutlined,
-  StarOutlined,
-  CreditCardOutlined,
   FileTextOutlined,
   SettingOutlined,
   SendOutlined,
@@ -22,13 +16,7 @@ interface SidebarProps {
 }
 
 const iconComponents: { [key: string]: JSX.Element } = {
-  FaHome: <HomeOutlined />,
-  FaBook: <BookOutlined />,
-  FaComments: <CommentOutlined />,
   FaBell: <BellOutlined />,
-  FaCertificate: <TrophyOutlined />,
-  FaStar: <StarOutlined />,
-  FaCreditCard: <CreditCardOutlined />,
   FaFile: <FileTextOutlined />,
   FaCogs: <SettingOutlined />,
   FaPaperPlane: <SendOutlined />,

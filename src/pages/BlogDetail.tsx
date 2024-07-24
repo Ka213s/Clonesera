@@ -3,8 +3,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Typography, Spin } from 'antd';
+import parse from 'html-react-parser';
 import { getBlogByIdPublic } from '../utils/commonImports';
-import { Editor } from '@tinymce/tinymce-react';
 
 const { Title, Paragraph } = Typography;
 
@@ -54,25 +54,19 @@ const BlogDetail: React.FC = () => {
           <Paragraph><strong>Category:</strong> {blog.category_name}</Paragraph>
           <Paragraph><strong>Updated at:</strong> {new Date(blog.updated_at).toLocaleDateString()}</Paragraph>
           <Paragraph><strong>Description:</strong> {blog.description}</Paragraph>
-          <Editor
-            apiKey="2yifh7kylzpd5szlkd3irl90etvaxhqgknrd2zfbdz4sjeox" // Replace with your actual TinyMCE API key
-            initialValue={blog.content || ''}
-            init={{
-              menubar: false,
-              plugins: 'autoresize',
-              toolbar: false,
-              autoresize_bottom_margin: 20,
-              autoresize_overflow_padding: 10,
-              content_style: 'body { font-family: Arial, sans-serif; font-size: 14px; }', // Adjust font styles if needed
-              setup: (editor) => {
-                editor.on('init', () => {
-                  editor.getContainer().style.overflow = 'hidden';
-                  editor.getContainer().style.border = 'none'; // Remove the border
-                });
-              },
+          <div
+            style={{
+              fontFamily: 'Arial, sans-serif',
+              fontSize: '14px',
+              overflow: 'hidden',
+              paddingBottom: '20px',
+              paddingLeft: '10px',
+              paddingRight: '10px',
+              border: 'none'
             }}
-            disabled={true}
-          />
+          >
+            {parse(blog.content || '')}
+          </div>
         </>
       ) : (
         <p>Blog not found</p>

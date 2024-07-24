@@ -7,6 +7,8 @@ import FileUploader from '../components/FileUploader';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import type { RadioChangeEvent } from 'antd';
+import Lottie from 'lottie-react';
+import animationData from '../assets/Animation - 1721792712537.json';
 
 interface FormValues {
     fullName: string;
@@ -25,6 +27,7 @@ const Register: React.FC = () => {
     const navigate = useNavigate();
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [selectedRole, setSelectedRole] = useState<'student' | 'instructor'>('student');
+    const [isInstructorDetailsVisible, setIsInstructorDetailsVisible] = useState(false);
 
     const handleLoginClick = () => {
         navigate('/login');
@@ -43,7 +46,15 @@ const Register: React.FC = () => {
                 };
                 console.log('Registering student:', studentData);
                 await registerAccountStudent(studentData);
+                toast.success('Đăng ký thành công. Vui lòng kiểm tra email của bạn.');
+                setTimeout(() => {
+                    navigate('/login');
+                }, 2000); // Đợi 2 giây trước khi chuyển hướng
             } else if (values.role === 'instructor') {
+                if (!isInstructorDetailsVisible) {
+                    setIsInstructorDetailsVisible(true);
+                    return; // Do not submit form yet
+                }
                 const instructorData = {
                     name: values.fullName,
                     email: values.email,
@@ -56,12 +67,11 @@ const Register: React.FC = () => {
                 };
                 console.log('Registering instructor:', instructorData);
                 await registerAccountInstructor(instructorData);
+                toast.success('Đăng ký thành công. Vui lòng kiểm tra email của bạn.');
+                setTimeout(() => {
+                    navigate('/login');
+                }, 2000); // Đợi 2 giây trước khi chuyển hướng
             }
-            toast.success('Đăng ký thành công. Vui lòng kiểm tra email của bạn.');
-
-            setTimeout(() => {
-                navigate('/login');
-            }, 2000); // Đợi 2 giây trước khi chuyển hướng
         } catch (error) {
             toast.error('Đăng ký thất bại');
         } finally {
@@ -73,6 +83,7 @@ const Register: React.FC = () => {
 
     const handleRoleChange = (e: RadioChangeEvent) => {
         setSelectedRole(e.target.value as 'student' | 'instructor');
+        setIsInstructorDetailsVisible(false); // Hide additional details if role changes
     };
 
     const handleVideoUploadSuccess = (url: string) => {
@@ -83,11 +94,16 @@ const Register: React.FC = () => {
         form.setFieldsValue({ avatarUrl: url });
     };
 
+
+    const handleBackClick = () => {
+        setIsInstructorDetailsVisible(false);
+    };
+
     return (
-        <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-green-400 to-white-500 relative">
+        <div className="flex flex-col md:flex-row items-center justify-center w-full h-screen bg-gradient-to-r from-green-400 to-white-500 relative">
             <ToastContainer />
-            <div className="flex w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10">
-                <div className="w-full md:w-1/2 px-6 py-8 flex flex-col justify-center overflow-y-auto max-h-screen">
+            <div className="flex flex-col md:flex-row w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10">
+                <div className={`w-full md:w-1/2 px-6 py-8 flex flex-col justify-center overflow-y-auto max-h-screen ${isInstructorDetailsVisible ? 'hidden' : ''}`}>
                     <Link to="/">
                         <img src={logo} alt="Logo" className="h-10 w-auto mb-6 cursor-pointer" />
                     </Link>
@@ -100,69 +116,73 @@ const Register: React.FC = () => {
                         className="flex flex-col gap-3"
                         initialValues={{ role: 'student' }}
                     >
-                        <Form.Item
-                            name="fullName"
-                            rules={[{ required: true, message: 'Please input your full name!' }]}
-                        >
-                            <Input placeholder='Full Name' size="large" />
-                        </Form.Item>
-                        <Form.Item
-                            name="email"
-                            rules={[
-                                { required: true, message: 'Please input your email!' },
-                                { type: 'email', message: 'Please enter a valid email!' }
-                            ]}
-                        >
-                            <Input placeholder='Email' size="large" />
-                        </Form.Item>
-                        <div className="flex gap-3">
-                            <Form.Item
-                                name="password"
-                                rules={[
-                                    { required: true, message: 'Please input your password!' },
-                                    { min: 6, message: 'Password must be at least 6 characters long!' }
-                                ]}
-                                className="w-1/2"
-                            >
-                                <Input.Password
-                                    placeholder='Password'
-                                    size="large"
-                                    iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
-                                />
-                            </Form.Item>
-                            <Form.Item
-                                name="confirmPassword"
-                                dependencies={['password']}
-                                rules={[
-                                    { required: true, message: 'Please confirm your password!' },
-                                    ({ getFieldValue }) => ({
-                                        validator(_, value) {
-                                            if (!value || getFieldValue('password') === value) {
-                                                return Promise.resolve();
-                                            }
-                                            return Promise.reject(new Error('The two passwords that you entered do not match!'));
-                                        },
-                                    }),
-                                ]}
-                                className="w-1/2"
-                            >
-                                <Input.Password
-                                    placeholder='Confirm Password'
-                                    size="large"
-                                    iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
-                                />
-                            </Form.Item>
-                        </div>
-                        <Form.Item
-                            name="role"
-                            rules={[{ required: true, message: 'Please select a role!' }]}
-                        >
-                            <Radio.Group onChange={handleRoleChange} className="flex flex-row gap-2">
-                                <Radio value="student">Student</Radio>
-                                <Radio value="instructor">Instructor</Radio>
-                            </Radio.Group>
-                        </Form.Item>
-                        {selectedRole === 'instructor' && (
+                        {!isInstructorDetailsVisible && (
+                            <>
+                                <Form.Item
+                                    name="fullName"
+                                    rules={[{ required: true, message: 'Please input your full name!' }]}
+                                >
+                                    <Input placeholder='Full Name' size="large" />
+                                </Form.Item>
+                                <Form.Item
+                                    name="email"
+                                    rules={[
+                                        { required: true, message: 'Please input your email!' },
+                                        { type: 'email', message: 'Please enter a valid email!' }
+                                    ]}
+                                >
+                                    <Input placeholder='Email' size="large" />
+                                </Form.Item>
+                                <div className="flex flex-col md:flex-row gap-3">
+                                    <Form.Item
+                                        name="password"
+                                        rules={[
+                                            { required: true, message: 'Please input your password!' },
+                                            { min: 6, message: 'Password must be at least 6 characters long!' }
+                                        ]}
+                                        className="w-full md:w-1/2"
+                                    >
+                                        <Input.Password
+                                            placeholder='Password'
+                                            size="large"
+                                            iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+                                        />
+                                    </Form.Item>
+                                    <Form.Item
+                                        name="confirmPassword"
+                                        dependencies={['password']}
+                                        rules={[
+                                            { required: true, message: 'Please confirm your password!' },
+                                            ({ getFieldValue }) => ({
+                                                validator(_, value) {
+                                                    if (!value || getFieldValue('password') === value) {
+                                                        return Promise.resolve();
+                                                    }
+                                                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                                },
+                                            }),
+                                        ]}
+                                        className="w-full md:w-1/2"
+                                    >
+                                        <Input.Password
+                                            placeholder='Confirm Password'
+                                            size="large"
+                                            iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+                                        />
+                                    </Form.Item>
+                                </div>
+                                <Form.Item
+                                    name="role"
+                                    rules={[{ required: true, message: 'Please select a role!' }]}
+                                >
+                                    <Radio.Group onChange={handleRoleChange} className="flex flex-col md:flex-row gap-2">
+                                        <Radio value="student">Student</Radio>
+                                        <Radio value="instructor">Instructor</Radio>
+                                    </Radio.Group>
+                                </Form.Item>
+                            </>
+                        )}
+                        {isInstructorDetailsVisible && (
                             <>
                                 <Form.Item
                                     name="phone_number"
@@ -176,12 +196,12 @@ const Register: React.FC = () => {
                                 >
                                     <Input.TextArea placeholder='Description' rows={4} size="large" />
                                 </Form.Item>
-                                <div className="flex gap-4">
+                                <div className="flex flex-col md:flex-row gap-4">
                                     <Form.Item
                                         name="videoUrl"
                                         rules={[{ required: true, message: 'Please upload a video!' }]}
                                         label="Upload Video"
-                                        className="w-1/2"
+                                        className="w-full md:w-1/2"
                                     >
                                         <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
                                     </Form.Item>
@@ -189,7 +209,7 @@ const Register: React.FC = () => {
                                         name="avatarUrl"
                                         rules={[{ required: true, message: 'Please upload an avatar!' }]}
                                         label="Upload Avatar"
-                                        className="w-1/2"
+                                        className="w-full md:w-1/2"
                                     >
                                         <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
                                     </Form.Item>
@@ -203,28 +223,35 @@ const Register: React.FC = () => {
                                 disabled={isButtonDisabled}
                                 className='w-full py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700'
                             >
-                                {isButtonDisabled ? 'Please wait...' : 'Register'}
+                                {selectedRole === 'instructor' && !isInstructorDetailsVisible
+                                    ? 'Next'
+                                    : isButtonDisabled
+                                        ? 'Please wait...'
+                                        : 'Register'}
                             </Button>
+                            {isInstructorDetailsVisible && (
+                                <Button
+                                    type="default"
+                                    onClick={handleBackClick}
+                                    className='w-full py-3 mt-3 text-lg font-semibold text-gray-600 border rounded-lg hover:bg-gray-200'
+                                >
+                                    Back
+                                </Button>
+                            )}
                         </Form.Item>
                     </Form>
-                    <div className='mt-2 text-base flex justify-between items-center'>
+                    <div className='mt-3 text-base flex justify-between items-center'>
                         <p>Already have an account?</p>
                         <Button onClick={handleLoginClick} className="py-2 px-5 bg-white border rounded-xl hover:scale-110 duration-300">
                             Sign In
                         </Button>
                     </div>
                 </div>
-                <div className="relative w-1/2 hidden md:flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
-                    <div className="absolute inset-0 w-full h-full overflow-hidden">
-                        <div className="blob bg-blue-400 w-full h-full"></div>
-                        <div className="blob bg-green-400 animation-delay-2000 w-full h-full"></div>
-                        <div className="blob bg-purple-400 animation-delay-4000 w-full h-full"></div>
+                <div className={`hidden md:flex relative w-full md:w-1/2 items-center justify-center bg-gradient-to-r from-blue-500 to-green-600 ${!isInstructorDetailsVisible ? 'hidden' : ''}`}>
+                    <div className="absolute inset-0 w-full h-full">
+                        <Lottie animationData={animationData} loop={true} className="w-full h-full" />
                     </div>
                 </div>
-            </div>
-            <div className="ocean">
-                <div className="wave"></div>
-                <div className="wave"></div>
             </div>
         </div>
     );

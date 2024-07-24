@@ -46,7 +46,7 @@ const CreateLessonButton: React.FC = () => {
       const response = await getCourses({
         keyword: '',
         category: '',
-        status: '',
+        status: 'new',
         is_deleted: false,
       }, 1, 10);
       setCourses(response.pageData);
@@ -110,6 +110,8 @@ const CreateLessonButton: React.FC = () => {
         visible={isModalVisible}
         onCancel={() => setIsModalVisible(false)}
         onOk={() => form.submit()}
+        width={800} // Adjust the modal width if needed
+        style={{ top: '20px' }} // Adjust the modal margin-top
       >
         <Form
           form={form}
@@ -172,7 +174,7 @@ const CreateLessonButton: React.FC = () => {
               rules={[{ required: true, message: 'Please upload an image!' }]}
             >
               <FileUploader type="image" onUploadSuccess={setImageURL} />
-           
+              {imageURL && <img src={imageURL} alt="Uploaded Image" style={{ marginTop: '10px', maxWidth: '100%' }} />}
             </Form.Item>
           )}
           {lessonType === 'video' && (

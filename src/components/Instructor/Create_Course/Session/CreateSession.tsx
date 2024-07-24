@@ -17,9 +17,9 @@ const AddSession: React.FC = () => {
 
   useEffect(() => {
     const fetchCourses = async () => {
-      
-        const response = await getCourses({ keyword: '', category: '', status: 'new', is_deleted: false }, 1, 100);
-        setCourses(response.pageData);
+      const response = await getCourses({ keyword: '', category: '', status: 'new', is_deleted: false }, 1, 100);
+      console.log('Fetched coursesaaa:', response.pageData);
+      setCourses(response.pageData);
     };
     fetchCourses();
   }, []);
@@ -27,7 +27,6 @@ const AddSession: React.FC = () => {
   const handleSubmit = async (values: { name: string; course_id: string; description: string; }) => {
     try {
       await createSession(values);
-      message.success('Session created successfully');
       setIsOpen(false);
       form.resetFields();
     } catch (error) {
@@ -43,6 +42,8 @@ const AddSession: React.FC = () => {
         visible={isOpen}
         onCancel={() => setIsOpen(false)}
         footer={null}
+        width={800} // Adjust the modal width
+        style={{ top: '20px' }} // Adjust the modal margin-top
       >
         <Form
           form={form}
