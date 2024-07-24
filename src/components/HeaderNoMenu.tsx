@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Badge, Dropdown, Avatar, Typography, Divider, Input } from 'antd';
-import { PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import { PlusOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined  } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
 import logo from '../assets/Logo-2.png';
@@ -91,7 +91,11 @@ const HeaderNoMenu: React.FC = () => {
       <div className="flex-grow flex justify-center">
         <Search
           placeholder="Search courses"
-          enterButton
+          enterButton={
+            <Button type="primary" style={{ backgroundColor: '#22c55e', borderColor: '#22c55e' }}>
+              <SearchOutlined />
+            </Button>
+          }
           onSearch={handleSearch}
           style={{ width: 300 }}
         />
