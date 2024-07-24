@@ -37,6 +37,7 @@ export const INSTRUCTOR = {
 };
 export const PUBLIC = {
   HOME: '/homepage',
+  VIEW_ALL_COURSE_HP: '/homepage/view-all-course',
   COURSE_DETAIL: '/course-detail/:id',
   LOGOUT: '/logout',
   ANOTHER_PAGE: '/another-page',

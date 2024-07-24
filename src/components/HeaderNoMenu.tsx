@@ -13,7 +13,7 @@ const HeaderNoMenu: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  const { totalCartItems } = useCartContext(); 
+  const { totalCartItems } = useCartContext();
 
   const navigate = useNavigate();
 
@@ -43,6 +43,10 @@ const HeaderNoMenu: React.FC = () => {
 
   const handleCreateCourse = () => {
     navigate('/courses');
+  };
+
+  const handleViewAllCourses = () => {
+    navigate('/homepage/view-all-course');
   };
 
   const handleViewCart = () => {
@@ -77,10 +81,18 @@ const HeaderNoMenu: React.FC = () => {
 
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 ml-5">
         <Link to="/" onClick={handleLogoClick}>
           <img src={logo} alt="Logo" className="h-12 w-auto cursor-pointer" />
         </Link>
+      </div>
+
+      <div className="flex-grow flex justify-center">
+        <div className="flex space-x-4">
+          <Button className="custom-button-1">Button 1</Button>
+          <Button className="custom-button-1" onClick={handleViewAllCourses}>View All Course</Button>
+          <Button className="custom-button-1">Button 3</Button>
+        </div>
       </div>
 
       <div className="flex items-center ml-auto space-x-8 pr-4">

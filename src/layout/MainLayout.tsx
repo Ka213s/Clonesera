@@ -9,7 +9,7 @@ import SidebarInstructor from '../components/Sidebar/SidebarInstructor';
 import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
 import { Layout } from 'antd';
 import { setGlobalLoadingHandler } from '../services/axiosInstance';
-import { CartProvider } from '../consts/CartContext';  // Import the provider
+import { CartProvider } from '../consts/CartContext';  
 const { Content } = Layout;
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -72,20 +72,20 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <CartProvider>
-    <Layout className="overflow-hidden h-screen flex flex-col">
-      <Header toggleMenu={toggleMenu} />
-      <Loading isLoading={isLoading}>
-        {renderSidebar}
-        <Content className={`transition-all duration-300 overflow-auto ${showMenu ? 'ml-56' : 'ml-0'}`}>
-          <div className="flex flex-col min-h-screen">
-            <div className="flex-1 pt-16 mt-4 p-4 overflow-auto">
-              {children}
+      <Layout className="overflow-hidden h-screen flex flex-col">
+        <Header toggleMenu={toggleMenu} />
+        <Loading isLoading={isLoading}>
+          {renderSidebar}
+          <Content className={`transition-all duration-300 overflow-auto ${showMenu ? 'ml-56' : 'ml-0'}`}>
+            <div className="flex flex-col min-h-screen">
+              <div className="flex-1 pt-16 mt-4 p-4 overflow-auto">
+                {children}
+              </div>
+              <Footer />
             </div>
-            <Footer />
-          </div>
-        </Content>
-      </Loading>
-    </Layout>
+          </Content>
+        </Loading>
+      </Layout>
     </CartProvider>
   );
 };

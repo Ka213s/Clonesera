@@ -15,6 +15,7 @@ const Register = lazy(() => import('../pages/Register'));
 const Category = lazy(() => import('../pages/Admin/Category'));
 const Blog = lazy(() => import('../pages/Admin/Blog'));
 const BlogDetail = lazy(() => import('../pages/BlogDetail'));
+const ViewAllCourseHomePage = lazy(() => import('../components/ViewAllCourse/AllCourse'));
 const SettingPage = lazy(() => import('../pages/SettingPage'));
 const Course = lazy(() => import('../pages/Instructor/ManagementCourse'));
 const CourseSold = lazy(() => import('../pages/CourseSold'));
@@ -96,6 +97,7 @@ const AppRouter: React.FC = () => {
                     {/* Routes with No Sidebar Layout */}
                     <Route element={<LayoutNoSidebar />}>
                         <Route path={PUBLIC.HOME} element={<HomePage />} />
+                        <Route path={PUBLIC.VIEW_ALL_COURSE_HP} element={<ViewAllCourseHomePage />} />
                         <Route path={PUBLIC.LEARN_COURSE} element={<LearnCourseDetail />} />
                         <Route path={PUBLIC.COURSE_DETAIL} element={<CourseDetails />} />
                     </Route>
