@@ -15,10 +15,9 @@
 }
 
 .custom-button {
-  
   border-radius: 50px;
-  background-color: #22c55e !important; 
-  color: #000000 !important; 
+  background-color: #22c55e;
+  color: #000000;
   font-weight: 500;
 }
 

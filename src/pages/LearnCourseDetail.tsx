@@ -1,7 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { Breadcrumb, message, Layout, Menu, Spin } from "antd";
+import { Breadcrumb, message, Layout, Menu, Spin, Button } from "antd";
 import { getCourseDetail, getLessonById } from "../utils/commonImports";
+import {
+    FileOutlined,
+    VideoCameraOutlined,
+    ReadOutlined,
+    EyeOutlined,
+    MenuFoldOutlined,
+    MenuUnfoldOutlined
+} from '@ant-design/icons';
 import "tailwindcss/tailwind.css";
 
 const { Sider, Content, Header } = Layout;
@@ -35,6 +43,7 @@ const LearnCourseDetail: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const [course, setCourse] = useState<Course | null>(null);
     const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
+    const [collapsed, setCollapsed] = useState(false);
 
     useEffect(() => {
         const fetchCourseDetail = async () => {
@@ -70,6 +79,19 @@ const LearnCourseDetail: React.FC = () => {
         fetchLessonDetail(lesson._id);
     };
 
+    const getLessonIcon = (lessonType: string) => {
+        switch (lessonType) {
+            case "video":
+                return <VideoCameraOutlined />;
+            case "reading":
+                return <ReadOutlined />;
+            case "image":
+                return <FileOutlined />;
+            default:
+                return <EyeOutlined />;
+        }
+    };
+
     if (!course) {
         return (
             <div className="flex items-center justify-center min-h-screen">
@@ -80,17 +102,31 @@ const LearnCourseDetail: React.FC = () => {
 
     return (
         <Layout className="min-h-screen overflow-auto">
-            <Header className="bg-white shadow-md">
-                <Breadcrumb>
-                    <Breadcrumb.Item>Home</Breadcrumb.Item>
-                    <Breadcrumb.Item>{course.name}</Breadcrumb.Item>
+            <Header className="bg-white shadow-md flex items-center px-4">
+                <Button
+                    type="text"
+                    icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                    onClick={() => setCollapsed(!collapsed)}
+                    className="mr-4"
+                />
+                <div className="flex-1">
                     {selectedLesson && (
-                        <Breadcrumb.Item>{selectedLesson.name}</Breadcrumb.Item>
+                        <Breadcrumb>
+                            <Breadcrumb.Item>Home</Breadcrumb.Item>
+                            <Breadcrumb.Item>{course.name}</Breadcrumb.Item>
+                            <Breadcrumb.Item>{selectedLesson.name}</Breadcrumb.Item>
+                        </Breadcrumb>
                     )}
-                </Breadcrumb>
+                </div>
             </Header>
             <Layout>
-                <Sider width={300} className="bg-white shadow-md p-4 overflow-auto">
+                <Sider
+                    collapsible
+                    collapsed={collapsed}
+                    width={300}
+                    className="bg-white shadow-md overflow-auto"
+                    trigger={null}
+                >
                     <Menu
                         mode="inline"
                         defaultOpenKeys={[course.session_list[0]?._id]}
@@ -101,6 +137,7 @@ const LearnCourseDetail: React.FC = () => {
                                 {session.lesson_list.map((lesson) => (
                                     <Menu.Item
                                         key={lesson._id}
+                                        icon={getLessonIcon(lesson.lesson_type)}
                                         onClick={() => handleLessonClick(lesson)}
                                     >
                                         {lesson.name}
