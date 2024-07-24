@@ -89,9 +89,9 @@ const HeaderNoMenu: React.FC = () => {
 
       <div className="flex-grow flex justify-center">
         <div className="flex space-x-4">
-          <Button className="custom-button-1">Button 1</Button>
+        
           <Button className="custom-button-1" onClick={handleViewAllCourses}>View All Course</Button>
-          <Button className="custom-button-1">Button 3</Button>
+        
         </div>
       </div>
 

@@ -44,7 +44,7 @@ const AllCourse: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [searchKeyword, setSearchKeyword] = useState<string>('');
   const [totalItems, setTotalItems] = useState(0);
-  const [pageSize, setPageSize] = useState(16);
+  const [pageSize, setPageSize] = useState(10);
   const [categoriesTotalPages, setCategoriesTotalPages] = useState(1);
   const [categoriesPage, setCategoriesPage] = useState(1);
   const categoriesPerPage = 5;
@@ -115,10 +115,7 @@ const AllCourse: React.FC = () => {
     fetchCourses('', null, 1, pageSize);
   };
 
-  const handlePageChange = (page: number, pageSize?: number) => {
-    setCurrentPage(page);
-    if (pageSize) setPageSize(pageSize);
-  };
+  
 
   const handleCategoriesPageChange = (direction: 'prev' | 'next') => {
     if (direction === 'prev' && categoriesPage > 1) {
@@ -232,16 +229,19 @@ const AllCourse: React.FC = () => {
         )}
       </div>
       <div className="flex justify-end items-center mt-6">
-      <div className="text-right ml-4">
-          Total Courses: {totalItems}
-        </div>
         <Pagination
           current={currentPage}
           pageSize={pageSize}
           total={totalItems}
-          onChange={handlePageChange}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={(page, pageSize) => {
+            setCurrentPage(page);
+            setPageSize(pageSize);
+            fetchCourses(searchKeyword, selectedCategory, page, pageSize);
+          }}
+          showSizeChanger
+          className="text-center"
         />
-      
       </div>
     </div>
   );
