@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Table, Button, Input, Pagination, message } from 'antd';
+import { Table, Input, Pagination, message } from 'antd';
 import { Link } from 'react-router-dom';
 import { getPayouts } from '../../../services/Api';
 
