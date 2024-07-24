@@ -1,20 +1,22 @@
-// WaitingPaid.tsx: page này để view những khóa học đang chờ thanh toán, item có status waiting_paid sẽ ở trong page này.
-import { React, useEffect, useState, getCart, updateCart, Button, DeleteOutlined } from '../../utils/commonImports';
+import { React, useEffect, useState, useNavigate, getCart, message, Button, Checkbox, getCourseDetail, updateCart, DeleteOutlined } from '../../utils/commonImports';
 import { toast } from 'react-toastify';
 
 interface CartItem {
     _id: string;
     course_name: string;
+    course_id: string;
     instructor_name: string;
     price: number;
     discount: number;
     cart_no: string;
     status: string;
+    image_url: string;
 }
 
 const WaitingPaid: React.FC = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchCartItems = async () => {
@@ -31,43 +33,31 @@ const WaitingPaid: React.FC = () => {
 
             try {
                 const response = await getCart(data);
-                setCartItems(response.pageData);
+                const courseIds = response.pageData.map((item: CartItem) => item.course_id);
+
+                const courseDetails = await Promise.all(courseIds.map(async (id: string) => {
+                    try {
+                        return await getCourseDetail(id);
+                    } catch (error) {
+                        console.error(`Error fetching course details for course_id ${id}:`, error);
+                        return null;
+                    }
+                }));
+
+                const getCartImage = response.pageData.map((item: CartItem, index: number) => ({
+                    ...item,
+                    image_url: courseDetails[index] ? courseDetails[index].image_url : ''
+                }));
+
+                setCartItems(getCartImage);
             } catch (error) {
                 console.error('Error fetching cart items:', error);
-                toast.error('Error fetching cart items');
+                message.error('Error fetching cart items');
             }
         };
 
         fetchCartItems();
     }, []);
-
-    const handleSelectChange = (selectedKeys: React.Key[]) => {
-        setSelectedRowKeys(selectedKeys);
-    };
-
-    const handlePayNow = async () => {
-        const selectedItems = cartItems.filter(item => selectedRowKeys.includes(item._id));
-        if (selectedItems.length === 0) {
-            toast.error('Please select items to pay');
-            return;
-        }
-
-        try {
-            await updateCart({
-                status: 'completed',
-                items: selectedItems.map(item => ({
-                    _id: item._id,
-                    cart_no: item.cart_no
-                }))
-            });
-            setCartItems(cartItems.filter(item => !selectedRowKeys.includes(item._id)));
-            setSelectedRowKeys([]);
-            toast.success('Payment successful');
-        } catch (error) {
-            console.error('Error during payment:', error);
-            toast.error('Error during payment');
-        }
-    };
 
     const handleDelete = async (itemId: string, cartNo: string) => {
         try {
@@ -82,74 +72,107 @@ const WaitingPaid: React.FC = () => {
             toast.error('Error deleting item');
         }
     };
+
+    const handleSelectChange = (selectedKeys: React.Key[]) => {
+        setSelectedRowKeys(selectedKeys);
+    };
+
+    const handleCheckout = () => {
+        const selectedItems = cartItems.filter(item => selectedRowKeys.includes(item._id));
+        if (selectedItems.length === 0) {
+            message.warning('Please select items to checkout');
+            return;
+        }
+
+        const courseIds = selectedItems.map(item => item.course_id);
+        navigate('/payment', { state: { courseIds } });
+    };
+
     const selectedItems = cartItems.filter(item => selectedRowKeys.includes(item._id));
     const totalPrice = selectedItems.reduce((acc, item) => acc + item.price, 0);
     const totalDiscount = selectedItems.reduce((acc, item) => acc + item.discount, 0);
     const totalBill = totalPrice - totalDiscount;
 
     if (cartItems.length === 0) {
-        return <div className="flex justify-center items-center h-screen">No items waiting for payment</div>;
+        return <div className="flex justify-center items-center h-screen">No items in the cart</div>;
     }
 
     return (
-        <div className="p-4 flex flex-col lg:flex-row">
+        <div className="p-2 lg:p-4 flex flex-col lg:flex-row gap-4">
             <div className="lg:w-2/3">
-                <p className='text-gray-700 mb-6'>Let's complete your payment!</p>
-                <div className="flex flex-col gap-4">
+                <div className="flex items-center mb-2">
+                    <Checkbox
+                        onChange={e => {
+                            const checked = e.target.checked;
+                            setSelectedRowKeys(checked ? cartItems.map(item => item._id) : []);
+                        }}
+                        checked={selectedRowKeys.length === cartItems.length}
+                    >
+                        Select all
+                    </Checkbox>
+                    <span className="ml-auto text-blue-500">{cartItems.length} courses in waiting paid</span>
+                </div>
+                <div className="flex flex-col gap-2">
                     {cartItems.map(item => (
-                        <div key={item._id} className="bg-white p-4 rounded shadow-md">
-                            <div className="flex items-start gap-4 mb-4">
-                                <input
-                                    type="checkbox"
-                                    checked={selectedRowKeys.includes(item._id)}
-                                    onChange={() => {
-                                        const newSelectedRowKeys = selectedRowKeys.includes(item._id)
-                                            ? selectedRowKeys.filter(key => key !== item._id)
-                                            : [...selectedRowKeys, item._id];
-                                        handleSelectChange(newSelectedRowKeys);
-                                    }}
-                                />
-                                <div className="flex flex-col w-full">
-                                    <div className="flex justify-between items-center mb-2">
-                                        <h2 className="text-xl font-semibold">{item.course_name}</h2>
-                                        <DeleteOutlined
-                                            className="text-red-500 cursor-pointer"
-                                            onClick={() => handleDelete(item._id, item.cart_no)}
-                                        />
+                        <div key={item._id} className="bg-white p-2 rounded-md shadow-sm flex items-start gap-2">
+                            <Checkbox
+                                checked={selectedRowKeys.includes(item._id)}
+                                onChange={() => {
+                                    const newSelectedRowKeys = selectedRowKeys.includes(item._id)
+                                        ? selectedRowKeys.filter(key => key !== item._id)
+                                        : [...selectedRowKeys, item._id];
+                                    handleSelectChange(newSelectedRowKeys);
+                                }}
+                            />
+                            <img src={item.image_url} alt={item.course_name} className="w-10 h-10 mr-2" />
+                            <div className="flex flex-col w-full">
+                                <div className="flex justify-between items-center mb-1">
+                                    <h2 className="text-sm font-semibold">{item.course_name}</h2>
+                                    <DeleteOutlined
+                                        className="text-red-500 cursor-pointer"
+                                        onClick={() => handleDelete(item._id, item.cart_no)}
+                                    />
+                                </div>
+                                <div className="flex items-center mb-1">
+                                    <p className="text-gray-600 text-xs">By {item.instructor_name}</p>
+                                </div>
+                                <div className="flex items-center justify-between">
+                                    <div className="flex items-center">
+                                        {item.discount > 0 && (
+                                            <>
+                                                <span className="text-gray-500 line-through text-xs">${item.price.toFixed(2)}</span>
+                                                <span className="ml-1 flex items-center">
+                                                    <i className="fas fa-tag text-green-500 text-xs"></i>
+                                                    <span className="text-green-500 text-xs ml-1">Discount: ${item.discount.toFixed(2)}</span>
+                                                </span>
+                                            </>
+                                        )}
                                     </div>
-                                    <p className="text-gray-600 mb-2">Instructor: {item.instructor_name}</p>
-                                    <p className="text-red-500 text-lg font-bold mb-4">${item.price}</p>
+                                    <span className={`text-sm font-bold ${item.discount > 0 ? 'text-red-500' : 'text-black'}`}>
+                                        ${(item.price - item.discount).toFixed(2)}
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
-            <div className="lg:w-1/3 lg:ml-4 lg:mt-0 mt-8 p-8 bg-white rounded shadow-md">
-                <h2 className="flex justify-center text-2xl font-bold">ORDER SUMMARY</h2>
-                {selectedItems.length > 0 ? (
-                    <div className="mt-4 p-4 border-t border-gray-200">
-                        {selectedItems.map(item => (
-                            <div key={item._id} className="flex flex-row justify-between items-center border-gray-200 py-2">
-                                <p className="text-gray-800">{item.course_name}</p>
-                                <p className="text-red-500 font-semibold">${item.price}</p>
-                            </div>
-                        ))}
-                        <div className="border-t border-gray-200 mt-4 pt-4">
-                            <p className="text-gray-800 mb-1">Original Price: ${totalPrice}</p>
-                            <p className="text-gray-800 mb-1">Total Discount: ${totalDiscount}</p>
-                            <p className="text-gray-600 text-xl font-semibold mb-2">Total Price: ${totalBill}</p>
-                        </div>
-                    </div>
-                ) : (
-                    <p className="text-gray-600 mb-2">No items selected</p>
-                )}
-                <Button
-                    type="primary"
-                    className="mt-4 w-full py-3 text-lg font-semibold"
-                    onClick={handlePayNow}
-                >
-                    Buy Now
+            <div className="lg:w-1/3 p-4 bg-white rounded-md shadow-sm">
+                <h2 className="text-lg font-bold mb-2">Order Summary</h2>
+                <div className="flex justify-between mb-1">
+                    <span>Subtotal</span>
+                    <span className="text-sm font-bold">${totalPrice.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between mb-1">
+                    <span>Total Discount</span>
+                    <span className="text-sm font-bold">-${totalDiscount.toFixed(2)}</span>
+                </div>
+                <div className="flex justify-between mb-2">
+                    <span className="text-lg font-semibold">Total</span>
+                    <span className="text-lg font-semibold">${totalBill.toFixed(2)}</span>
+                </div>
+                <Button type="primary" className="w-full py-2 text-sm font-semibold" onClick={handleCheckout}>
+                    Checkout Now
                 </Button>
             </div>
         </div>

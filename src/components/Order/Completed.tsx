@@ -1,89 +1,125 @@
-import { React, useEffect, useState, useCallback, Table, Pagination, getCart } from '../../utils/commonImports';
-import { toast } from 'react-toastify';
-import { ColumnsType } from 'antd/es/table';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect } from 'react';
+import { Table, Alert } from 'antd';
+import moment from 'moment';
+import { Link } from 'react-router-dom';
+import { getItemsByStudent } from '../../utils/commonImports';
 
-interface CartItem {
+interface Course {
   _id: string;
-  course_name: string;
+  purchase_no: string;
+  status: string;
   price_paid: number;
+  price: number;
+  discount: number;
+  cart_id: string;
+  course_id: string;
+  student_id: string;
+  instructor_id: string;
   created_at: string;
+  is_deleted: boolean;
+  cart_no: string;
+  course_name: string;
+  student_name: string;
+  instructor_name: string;
+}
+
+interface FetchData {
+  searchCondition: {
+    purchase_no: string;
+    cart_no: string;
+    course_id: string;
+    status: string;
+    is_delete: boolean;
+  };
+  pageInfo: {
+    pageNum: number;
+    pageSize: number;
+  };
 }
 
 const Completed: React.FC = () => {
-  const [cartItems, setCartItems] = useState<CartItem[]>([]);
-  const [pageNum, setPageNum] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
-  const [totalItems, setTotalItems] = useState<number>(0);
+  const [purchasedCourses, setPurchasedCourses] = useState<Course[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
 
-  const fetchCartItems = useCallback(
-    async (page: number, pageSize: number) => {
-      const data = {
+  useEffect(() => {
+    const fetchPurchasedCourses = async () => {
+      const data: FetchData = {
         searchCondition: {
-          status: 'completed',
-          is_deleted: false,
+          purchase_no: '',
+          cart_no: '',
+          course_id: '',
+          status: '',
+          is_delete: false,
         },
         pageInfo: {
-          pageNum: page,
-          pageSize: pageSize,
+          pageNum: 1,
+          pageSize: 10,
         },
       };
 
       try {
-        const response = await getCart(data);
-        setCartItems(response.pageData);
-        setTotalItems(response.pageInfo.totalItems);
+        const response = await getItemsByStudent(data);
+        console.log('response:', response);
+        setPurchasedCourses(response.pageData);
       } catch (error) {
-        toast.error('Failed to fetch cart items');
+        setError(error as Error);
+      } finally {
+        setLoading(false);
       }
-    },
-    []
-  );
+    };
 
-  useEffect(() => {
-    fetchCartItems(pageNum, pageSize);
-  }, [pageNum, pageSize, fetchCartItems]);
+    fetchPurchasedCourses();
+  }, []);
 
-  const columns: ColumnsType<CartItem> = [
+  const columns = [
     {
       title: 'Course Name',
       dataIndex: 'course_name',
       key: 'course_name',
+      render: (text: string, record: Course) => (
+        <Link to={`/learn-course-detail/${record.course_id}`}>{text}</Link>
+      ),
     },
     {
-      title: 'Price',
+      title: 'Purchase Number',
+      dataIndex: 'purchase_no',
+      key: 'purchase_no',
+    },
+    {
+      title: 'Price Paid',
       dataIndex: 'price_paid',
       key: 'price_paid',
-      render: (price_paid: number) => `$${price_paid.toFixed(2)}`,
     },
     {
-      title: 'Purchased Date',
+      title: 'Discount',
+      dataIndex: 'discount',
+      key: 'discount',
+    },
+    {
+      title: 'Student Name',
+      dataIndex: 'student_name',
+      key: 'student_name',
+    },
+    {
+      title: 'Instructor Name',
+      dataIndex: 'instructor_name',
+      key: 'instructor_name',
+    },
+    {
+      title: 'Created At',
       dataIndex: 'created_at',
       key: 'created_at',
-      render: (created_at: string) => new Date(created_at).toLocaleString(),
+      render: (text: string) => moment(text).format('DD/MM/YYYY'),
     },
   ];
 
+  if (loading) return null;
+  if (error) return <Alert message="Error" description={error.message} type="error" showIcon />;
+
   return (
-    <div className="p-4">
-      <Table
-        columns={columns}
-        dataSource={cartItems.map(item => ({ ...item, key: item._id }))}
-        pagination={false}
-        className="mb-4"
-      />
-      <Pagination
-        current={pageNum}
-        pageSize={pageSize}
-        total={totalItems}
-        onChange={(page, pageSize) => {
-          setPageNum(page);
-          setPageSize(pageSize);
-          fetchCartItems(page, pageSize);
-        }}
-        showSizeChanger
-        className="text-center"
-      />
+    <div>
+      <Table columns={columns} dataSource={purchasedCourses} rowKey="_id" />
     </div>
   );
 };

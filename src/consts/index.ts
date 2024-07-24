@@ -29,7 +29,6 @@ export const INSTRUCTOR = {
   VIEW_ALL_COURSE: '/view-all-course',
   VIEW_MY_PROFILE: '/view-my-profile',
   VIEW_PROFILE: '/view-profile/:id',
-  PURCHASE: '/purchased-courses',
   COURSE_SOLD: '/courses-sold',
   REVIEW: '/review',
   PAYOUT: '/payout',
@@ -110,8 +109,8 @@ export const SidebarIntructorData = {
     { text: "Subscription", icon: "BellOutlined", url: "/list-subscription" },
     { text: "Log Course", icon: "BookOutlined", url: "/log-course" },
     { text: "Courses Sold", icon: "ShoppingCartOutlined", url: "/courses-sold" }, // Courses others have bought from me
-    { text: "Payout", icon: "FileTextOutlined", url: "/payout" },
-    { text: "Purchased Courses", icon: "ShoppingCartOutlined", url: "/purchased-courses" }, // Courses I have bought
+    { text: "Payout", icon: "TransactionOutlined", url: "/payout" },
+    { text: "Order", icon: "FileTextOutlined", url: "/view-order" },
     { text: "Review", icon: "StarOutlined", url: "/review" },
     { text: "Setting", icon: "SettingOutlined", url: "/setting-page" }
 

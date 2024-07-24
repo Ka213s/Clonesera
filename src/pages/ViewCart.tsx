@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getCart, updateCart, message, Button, Checkbox, getCourseDetail } from '../utils/commonImports';
+import { React, useEffect, useState, useNavigate, getCart, updateCart, message, Button, Checkbox, getCourseDetail } from '../utils/commonImports';
 import DeleteCart from '../components/Cart/DeleteCart';
 
 interface CartItem {
@@ -17,7 +15,6 @@ interface CartItem {
 
 const ViewCart: React.FC = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
-    const [loading, setLoading] = useState<boolean>(true);
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
     const navigate = useNavigate();
 
@@ -38,32 +35,29 @@ const ViewCart: React.FC = () => {
                 const response = await getCart(data);
                 const courseIds = response.pageData.map((item: CartItem) => item.course_id);
 
-                // Fetch course details for each course_id
                 const courseDetails = await Promise.all(courseIds.map(async (id: string) => {
                     try {
                         return await getCourseDetail(id);
                     } catch (error) {
                         console.error(`Error fetching course details for course_id ${id}:`, error);
-                        return null; // Handle error gracefully
+                        return null;
                     }
                 }));
 
-                // Update cart items with image_url
-                const updatedCartItems = response.pageData.map((item: CartItem, index: number) => ({
-                    ...item,
-                    image_url: courseDetails[index] ? courseDetails[index].image_url : ''
-                }));
+                // Get course image and filter course with status new and cancel to display
+                const getCartItems = response.pageData
+                    .map((item: CartItem, index: number) => ({
+                        ...item,
+                        image_url: courseDetails[index] ? courseDetails[index].image_url : ''
+                    }))
+                    .filter((item: CartItem) =>
+                        item.status === 'new' || item.status === 'cancel'
+                    );
 
-                // Filter and set cart items
-                const filteredItems = updatedCartItems.filter((item: CartItem) =>
-                    item.status === 'new' || item.status === 'cancel'
-                );
-                setCartItems(filteredItems);
+                setCartItems(getCartItems);
             } catch (error) {
                 console.error('Error fetching cart items:', error);
                 message.error('Error fetching cart items');
-            } finally {
-                setLoading(false);
             }
         };
 
@@ -109,10 +103,6 @@ const ViewCart: React.FC = () => {
     const totalPrice = selectedItems.reduce((acc, item) => acc + item.price, 0);
     const totalDiscount = selectedItems.reduce((acc, item) => acc + item.discount, 0);
     const totalBill = totalPrice - totalDiscount;
-
-    if (loading) {
-        return <div className="flex justify-center items-center h-screen">Loading...</div>;
-    }
 
     if (cartItems.length === 0) {
         return <div className="flex justify-center items-center h-screen">No items in the cart</div>;
