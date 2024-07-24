@@ -377,3 +377,7 @@ export const updatePayout = async (id: string, data: { status: string; comment: 
   toast.success("Payout updated successfully");
   return response.data;
 };
+export const NT_getCategoriesClient = async (data: { searchCondition: { keyword?: string; is_delete?: boolean; }, pageInfo: { pageNum: number; pageSize: number } }) => {
+  const response = await defaultAxiosInstance.post('/api/client/category/search', data);
+  return response.data;
+};

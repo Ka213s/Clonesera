@@ -170,9 +170,11 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
           />
           {buttonVisible && (
             <Button
+            type='dashed'
               icon={<PlusOutlined />}
               loading={uploading}
               style={{
+                background: '#fafafa',
                 borderRadius: '50%',
                 width: '100px',
                 height: '100px',

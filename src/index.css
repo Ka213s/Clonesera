@@ -15,7 +15,6 @@
 }
 
 .custom-button {
-  
   border-radius: 50px;
   background-color: #22c55e !important; 
   color: #000000 !important; 
@@ -24,6 +23,21 @@
 
 .custom-button:hover {
   background-color: #000000 !important; 
+  color: rgb(4, 254, 4) !important;
+  font-weight: 600;
+}
+
+.custom-button-1 {
+  width: 150px;
+  border-radius: 8px;
+  background-color: none !important; 
+  color: #22c55e !important; 
+  font-weight: 500;
+  border: 1px solid #22c55e;
+}
+
+.custom-button-1:hover {
+  background-color: #343232 !important; 
   color: rgb(4, 254, 4) !important;
   font-weight: 600;
 }
