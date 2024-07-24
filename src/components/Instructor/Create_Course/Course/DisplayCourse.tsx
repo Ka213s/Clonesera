@@ -109,12 +109,7 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
       dataIndex: 'category_name',
       key: 'category_name',
     },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: getStatusTag,
-    },
+   
     {
       title: 'Price',
       dataIndex: 'price',
@@ -132,10 +127,16 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
       render: (text: string) => moment(text).format('DD-MM-YYYY'),
     },
     {
+      title: 'Status',
+      dataIndex: 'status',
+      key: 'status',
+      render: getStatusTag,
+    },
+    {
       title: 'Actions',
       key: 'actions',
       render: (_, record) => renderActions(record),
-      align: 'center',
+   
     },
   ];
 

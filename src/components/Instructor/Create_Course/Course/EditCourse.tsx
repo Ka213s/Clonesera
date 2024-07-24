@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { EditOutlined } from '@ant-design/icons';
-import { Button, Modal, Form, Input, InputNumber, message, Select } from 'antd';
+import { Button, Modal, Form, Input, InputNumber, message, Select, Row, Col } from 'antd';
 import { getCourseById, updateCourse } from '../../../../utils/commonImports';
 import FileUploader from '../../../FileUploader';
 import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor';
@@ -93,35 +93,43 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
         visible={isModalVisible}
         onOk={handleOk}
         onCancel={handleCancel}
+        width={800} // Adjust the modal width if needed
+        style={{ top: '20px' }} // Adjust the modal margin-top
       >
         <Form
           form={form}
           layout="vertical"
         >
-          <Form.Item
-            name="name"
-            label="Course Name"
-            rules={[{ required: true, message: 'Please input the course name!' }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="category_id"
-            label="Category"
-            rules={[{ required: true, message: 'Please select a category!' }]}
-          >
-            <Select placeholder="Select a category">
-              {parents.map(parent => (
-                <Select.OptGroup key={parent._id} label={parent.name}>
-                  {categories[parent._id] && categories[parent._id].map(category => (
-                    <Option key={category._id} value={category._id}>
-                      {category.name}
-                    </Option>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="name"
+                label="Course Name"
+                rules={[{ required: true, message: 'Please input the course name!' }]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="category_id"
+                label="Category"
+                rules={[{ required: true, message: 'Please select a category!' }]}
+              >
+                <Select placeholder="Select a category">
+                  {parents.map(parent => (
+                    <Select.OptGroup key={parent._id} label={parent.name}>
+                      {categories[parent._id] && categories[parent._id].map(category => (
+                        <Option key={category._id} value={category._id}>
+                          {category.name}
+                        </Option>
+                      ))}
+                    </Select.OptGroup>
                   ))}
-                </Select.OptGroup>
-              ))}
-            </Select>
-          </Form.Item>
+                </Select>
+              </Form.Item>
+            </Col>
+          </Row>
           <Form.Item
             name="description"
             label="Description"
@@ -145,26 +153,32 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
               onEditorChange={(content) => form.setFieldsValue({ content })}
             />
           </Form.Item>
-          <Form.Item
-            name="video_url"
-            label="Video URL"
-          >
-            {videoUrl ? <video src={videoUrl} controls style={{ width: '100%' }} /> : null}
-            <FileUploader
-              type="video"
-              onUploadSuccess={(url) => handleUploadSuccess(url, 'video')}
-            />
-          </Form.Item>
-          <Form.Item
-            name="image_url"
-            label="Image URL"
-          >
-            {imageUrl ? <img src={imageUrl} alt="Course Image" style={{ width: '100%' }} /> : null}
-            <FileUploader
-              type="image"
-              onUploadSuccess={(url) => handleUploadSuccess(url, 'image')}
-            />
-          </Form.Item>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="video_url"
+                label="Video URL"
+              >
+                {videoUrl ? <video src={videoUrl} controls style={{ width: '100%' }} /> : null}
+                <FileUploader
+                  type="video"
+                  onUploadSuccess={(url) => handleUploadSuccess(url, 'video')}
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="image_url"
+                label="Image URL"
+              >
+                {imageUrl ? <img src={imageUrl} alt="Course Image" style={{ width: '100%' }} /> : null}
+                <FileUploader
+                  type="image"
+                  onUploadSuccess={(url) => handleUploadSuccess(url, 'image')}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
           <Form.Item
             name="price"
             label="Price"
