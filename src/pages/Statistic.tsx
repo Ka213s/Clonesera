@@ -23,16 +23,16 @@ const Statistic: React.FC = () => {
       const currentHour = new Date().getHours();
       if (currentHour < 12) {
         setGreeting('Good Morning');
-        setGreetingClass('text-yellow-500'); // Morning style
-        setGreetingIcon(<CoffeeOutlined className="text-yellow-500" />); // Morning icon
+        setGreetingClass('text-yellow-800'); // Morning style
+        setGreetingIcon(<CoffeeOutlined className="text-yellow-800" />); // Morning icon
       } else if (currentHour < 18) {
         setGreeting('Good Afternoon');
-        setGreetingClass('text-orange-500'); // Afternoon style
-        setGreetingIcon(<SunOutlined className="text-orange-500" />); // Afternoon icon
+        setGreetingClass('text-orange-700'); // Afternoon style
+        setGreetingIcon(<SunOutlined className="text-orange-800" />); // Afternoon icon
       } else {
         setGreeting('Good Evening');
-        setGreetingClass('text-blue-500'); // Evening style
-        setGreetingIcon(<MoonOutlined className="text-black-500" />); // Evening icon
+        setGreetingClass('text-blue-800'); // Evening style
+        setGreetingIcon(<MoonOutlined className="text-black-800" />); // Evening icon
       }
     };
 
@@ -70,7 +70,7 @@ const Statistic: React.FC = () => {
             <h3 className={`text-xl font-bold ${greetingClass}`}>
               {greeting}, {user.name} {greetingIcon}
             </h3>
-            <p className="text-sm text-gray-100 font-semibold italic bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 px-4 py-2 rounded-lg mt-2 shadow-lg">
+            <p className="text-sm text-black font-semibold italic bg-gradient-to-r from-green-400 to-blue-500 px-4 py-2 rounded-lg mt-2 shadow-lg">
               Continue your learning to achieve your target!
             </p>
           </div>
@@ -84,7 +84,7 @@ const Statistic: React.FC = () => {
             <h3 className={`text-xl font-bold ${greetingClass}`}>
               {greeting}, User {greetingIcon}
             </h3>
-            <p className="text-sm text-gray-100 font-semibold italic bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 px-4 py-2 rounded-lg mt-2 shadow-lg">
+            <p className="text-sm text-black font-semibold italic bg-gradient-to-r from-green-400 to-blue-500 px-4 py-2 rounded-lg mt-2 shadow-lg">
               Sign in to start your learning journey!
             </p>
           </div>
