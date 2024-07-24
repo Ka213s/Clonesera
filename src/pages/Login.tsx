@@ -6,6 +6,8 @@ import { Form, Input, Button } from 'antd';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import FileUploader from '../components/FileUploader';
 import { loginAccount, getCurrentLogin, registerUserByGoogle, loginUserByGoogle, config, logo } from '../utils/commonImports';
+import Lottie from 'lottie-react';
+import animationData from '../assets/Animation - 1721792712537.json';
 
 const Login: React.FC = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
@@ -145,12 +147,12 @@ const Login: React.FC = () => {
                   />
                 </Form.Item>
 
-                <div className="flex items-center justify-between w-full mb-6">
-                  <div className="flex items-center">
-                    <input type="checkbox" className="w-4 h-4 mr-2" />
-                    <p className="text-sm">Remember Me</p>
-                  </div>
-                  <Button type="link" className="text-sm font-medium text-gray-500 underline" onClick={handleForgotPasswordClick}>
+                <div className="flex w-full mb-6">
+                  <Button
+                    type="link"
+                    className="text-sm font-medium text-gray-500 underline ml-auto" // Added 'ml-auto'
+                    onClick={handleForgotPasswordClick}
+                  >
                     Forgot password?
                   </Button>
                 </div>
@@ -183,17 +185,11 @@ const Login: React.FC = () => {
               </Button>
             </div>
           </div>
-          <div className="relative w-full md:w-1/2 flex items-center justify-center bg-gradient-to-r from-blue-500 to-purple-600">
-            <div className="absolute inset-0 w-full h-full overflow-hidden">
-              <div className="blob bg-blue-400 w-full h-full"></div>
-              <div className="blob bg-green-400 animation-delay-2000 w-full h-full"></div>
-              <div className="blob bg-purple-400 animation-delay-4000 w-full h-full"></div>
+          <div className="relative w-full md:w-1/2 flex items-center justify-center bg-gradient-to-r from-blue-500 to-green-600">
+            <div className="absolute inset-0 w-full h-full">
+              <Lottie animationData={animationData} loop={true} className="w-full h-full" />
             </div>
           </div>
-        </div>
-        <div className="ocean">
-          <div className="wave"></div>
-          <div className="wave"></div>
         </div>
       </div>
       {isRoleModalVisible && (
@@ -229,12 +225,10 @@ const Login: React.FC = () => {
               <div>
                 <label className="text-gray-600 mb-2">Upload Avatar</label>
                 <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
-               
               </div>
               <div>
                 <label className="text-gray-600 mb-2">Upload Introduction Video</label>
                 <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
-             
               </div>
               <div className="col-span-2">
                 <input

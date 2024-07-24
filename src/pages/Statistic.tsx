@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import defaultAvatar from '../assets/Avatar01.jpg';
 import { getCurrentLogin } from '../utils/commonImports';
 import { Skeleton } from 'antd';
+import { CoffeeOutlined, SunOutlined, MoonOutlined } from '@ant-design/icons';
 
 interface User {
   name: string;
@@ -12,6 +13,8 @@ const Statistic: React.FC = () => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [greeting, setGreeting] = useState('Good Morning');
+  const [greetingClass, setGreetingClass] = useState('text-yellow-500');
+  const [greetingIcon, setGreetingIcon] = useState<React.ReactNode>(<CoffeeOutlined />);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
@@ -20,10 +23,16 @@ const Statistic: React.FC = () => {
       const currentHour = new Date().getHours();
       if (currentHour < 12) {
         setGreeting('Good Morning');
+        setGreetingClass('text-yellow-500'); // Morning style
+        setGreetingIcon(<CoffeeOutlined className="text-yellow-500" />); // Morning icon
       } else if (currentHour < 18) {
         setGreeting('Good Afternoon');
+        setGreetingClass('text-orange-500'); // Afternoon style
+        setGreetingIcon(<SunOutlined className="text-orange-500" />); // Afternoon icon
       } else {
         setGreeting('Good Evening');
+        setGreetingClass('text-blue-500'); // Evening style
+        setGreetingIcon(<MoonOutlined className="text-black-500" />); // Evening icon
       }
     };
 
@@ -58,10 +67,12 @@ const Statistic: React.FC = () => {
             <img src={user.avatar} alt="Avatar" className="w-24 h-24 rounded-full" />
           </div>
           <div className="mt-4 text-center">
-            <h3 className="text-xl font-bold">
-              {greeting}, {user.name} <span className="text-red-500">🔥</span>
+            <h3 className={`text-xl font-bold ${greetingClass}`}>
+              {greeting}, {user.name} {greetingIcon}
             </h3>
-            <p className="text-sm text-gray-600">Continue your learning to achieve your target!</p>
+            <p className="text-sm text-gray-100 font-semibold italic bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 px-4 py-2 rounded-lg mt-2 shadow-lg">
+              Continue your learning to achieve your target!
+            </p>
           </div>
         </div>
       ) : (
@@ -70,10 +81,12 @@ const Statistic: React.FC = () => {
             <img src={defaultAvatar} alt="Default Avatar" className="w-24 h-24 rounded-full" />
           </div>
           <div className="mt-4 text-center">
-            <h3 className="text-xl font-bold">
-              {greeting}, User <span className="text-red-500">🔥</span>
+            <h3 className={`text-xl font-bold ${greetingClass}`}>
+              {greeting}, User {greetingIcon}
             </h3>
-            <p className="text-sm text-gray-600">Sign in to start your learning journey!</p>
+            <p className="text-sm text-gray-100 font-semibold italic bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 px-4 py-2 rounded-lg mt-2 shadow-lg">
+              Sign in to start your learning journey!
+            </p>
           </div>
         </div>
       )}

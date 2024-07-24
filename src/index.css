@@ -61,15 +61,6 @@
   opacity: 0.8;
   animation: blob 8s infinite;
 }
-
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
-
 html, body {
   height: 100%;
 }
@@ -203,4 +194,15 @@ html, body, #root {
 /* Thêm đoạn CSS này vào tập tin CSS của bạn */
 .no-scroll {
   overflow: hidden;
+}
+@media (max-width: 768px) {
+  .hidden {
+      display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .hidden {
+      display: block !important;
+  }
 }

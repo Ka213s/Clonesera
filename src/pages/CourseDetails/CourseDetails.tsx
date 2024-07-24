@@ -204,7 +204,7 @@ const CourseDetails: React.FC = () => {
         <Button
           type="default"
           onClick={handleEnroll}
-          className="mb-4 custom-button p-4 bg-blue-500 text-white hover:bg-blue-600"
+          className="mb-4 custom-button p-4 bg-green-500 text-black hover:bg-green-600"
         >
           Enroll
         </Button>
@@ -214,7 +214,7 @@ const CourseDetails: React.FC = () => {
         <Button
           type="default"
           onClick={course?.is_in_cart ? handleViewCart : handleAddToCart}
-          className="mb-4 custom-button p-4 bg-blue-500 text-white hover:bg-blue-600"
+          className="mb-4 custom-button p-4 bg-green-500 text-black hover:bg-green-600"
         >
           {course?.is_in_cart ? 'View Cart' : 'Add to Cart'}
         </Button>
@@ -274,7 +274,7 @@ const CourseDetails: React.FC = () => {
                   type="default"
                   icon={<PlayCircleOutlined />}
                   onClick={showModal}
-                  className="mb-4 custom-button p-4 bg-yellow-500 text-white hover:bg-yellow-600"
+                  className="mb-4 custom-button p-4 bg-green-500 text-black hover:bg-green-600"
                 >
                   Watch Introduction
                 </Button>
