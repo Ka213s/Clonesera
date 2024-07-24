@@ -118,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 
             <Divider className="border-gray-400 h-9" type="vertical" />
             <div className="">
-            <Dropdown menu={{ items: userMenu }} trigger={['click']}>
+              <Dropdown menu={{ items: userMenu }} trigger={['click']}>
                 <Avatar
                   size="large"
                   src={avatar || 'default-avatar-path'}
@@ -129,12 +129,12 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
           </>
         ) : (
           <>
-            <Link to="/login">
-              <Button type="primary" className="custom-button">Login</Button>
-            </Link>
-            <Link to="/register">
-              <Button type="primary" className="custom-button">Register</Button>
-            </Link>
+              <Link to="/login">
+                <Button type="primary">Login</Button>
+              </Link>
+              <Link to="/register">
+                <Button type="primary">Register</Button>
+              </Link>
           </>
         )}
       </div>
