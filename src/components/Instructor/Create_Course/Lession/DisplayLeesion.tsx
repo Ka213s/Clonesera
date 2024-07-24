@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { Table, TableColumnsType } from 'antd';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Table, Pagination, Input, message } from 'antd';
 import moment from 'moment';
 import { getLessons } from '../../../../utils/commonImports';
 import UpdateLesson from './EditLesson';
 import DeleteLesson from './DeleteLesson';
+import type { ColumnsType } from 'antd/es/table';
 
 interface Lesson {
   _id: string;
@@ -25,32 +26,40 @@ interface SearchCondition {
   is_deleted: boolean;
 }
 
+const { Search } = Input;
+
 const DisplayLesson: React.FC = () => {
   const [lessons, setLessons] = useState<Lesson[]>([]);
+  const [totalLessons, setTotalLessons] = useState<number>(0);
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
 
-  const fetchLessons = async () => {
-    try {
-      const searchCondition: SearchCondition = {
-        keyword: '',
-        course_id: '',
-        session_id: '',
-        lesson_type: '',
-        is_position_order: false,
-        is_deleted: false,
-      };
-      const pageNum = 1;
-      const pageSize = 10;
-
-      const data = await getLessons(searchCondition, pageNum, pageSize);
-      setLessons(data.pageData); // Ensure `data.pageData` includes necessary fields
-    } catch (error) {
-      console.error('Error fetching lessons:', error);
-    }
-  };
+  const fetchLessons = useCallback(
+    async (page: number, size: number, keyword: string) => {
+      try {
+        const searchCondition: SearchCondition = {
+          keyword: keyword,
+          course_id: '',
+          session_id: '',
+          lesson_type: '',
+          is_position_order: false,
+          is_deleted: false,
+        };
+        const data = await getLessons(searchCondition, page, size);
+        setLessons(data.pageData); // Ensure `data.pageData` includes necessary fields
+        setTotalLessons(data.pageInfo.totalItems); // Assuming `data.pageInfo` contains `totalItems`
+      } catch (error) {
+        message.error('Failed to fetch lessons');
+        console.error('Error fetching lessons:', error);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
-    fetchLessons();
-  }, []);
+    fetchLessons(pageNum, pageSize, searchKeyword);
+  }, [pageNum, pageSize, searchKeyword, fetchLessons]);
 
   const formatFullTime = (minutes: number) => {
     if (minutes >= 60) {
@@ -64,7 +73,7 @@ const DisplayLesson: React.FC = () => {
   const renderMedia = (record: Lesson) => {
     if (record.video_url) {
       return (
-        <div className="flex justify-center items-center ">
+        <div className="flex justify-center items-center">
           <video width="200" controls className='rounded-md'>
             <source src={record.video_url} type="video/mp4" />
             Your browser does not support the video tag.
@@ -73,7 +82,7 @@ const DisplayLesson: React.FC = () => {
       );
     } else if (record.image_url) {
       return (
-        <div className="flex justify-center items-center ">
+        <div className="flex justify-center items-center">
           <img src={record.image_url} alt="lesson media" width="200" className='rounded-md'/>
         </div>
       );
@@ -81,38 +90,33 @@ const DisplayLesson: React.FC = () => {
     return null;
   };
 
-  const columns: TableColumnsType<Lesson> = [
+  const columns: ColumnsType<Lesson> = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-     
     },
     {
       title: 'Course Name',
       dataIndex: 'course_name',
       key: 'course_name',
-   
     },
     {
       title: 'Type',
       dataIndex: 'lesson_type',
       key: 'lesson_type',
-    
     },
     {
       title: 'Full Time',
       dataIndex: 'full_time',
       key: 'full_time',
       render: (value: number) => formatFullTime(value),
-     
     },
     {
       title: 'Created At',
       dataIndex: 'created_at',
       key: 'created_at',
       render: (text: string) => moment(text).format('DD-MM-YYYY'),
-    
     },
     {
       title: 'Media',
@@ -133,12 +137,44 @@ const DisplayLesson: React.FC = () => {
     },
   ];
 
+  const handleSearch = (value: string) => {
+    setSearchKeyword(value);
+    setPageNum(1); // Reset to first page on search
+  };
+
   return (
-    <Table
-      dataSource={lessons}
-      columns={columns}
-      rowKey="_id"
-    />
+    <div>
+      <div style={{ marginBottom: 16 }}>
+        <Search
+          placeholder="Search by lesson name"
+          enterButton="Search"
+          allowClear
+          size="large"
+          onSearch={handleSearch}
+          style={{ width: 300 }}
+        />
+      </div>
+      <Table
+        dataSource={lessons}
+        columns={columns}
+        rowKey="_id"
+        style={{ textAlign: 'center' }}
+        pagination={false}
+      />
+      <div className="flex justify-end mt-5">
+        <Pagination
+          current={pageNum}
+          pageSize={pageSize}
+          total={totalLessons}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={(page, pageSize) => {
+            setPageNum(page);
+            setPageSize(pageSize);
+          }}
+          showSizeChanger
+        />
+      </div>
+    </div>
   );
 };
 

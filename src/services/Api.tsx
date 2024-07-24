@@ -374,7 +374,6 @@ export const getPayouts = async (data: { searchCondition: { payout_no: string; i
 };
 export const updatePayout = async (id: string, data: { status: string; comment: string }) => {
   const response = await tokenAxiosInstance.put(`/api/payout/update-status/${id}`, data);
-  toast.success("Payout updated successfully");
   return response.data;
 };
 export const NT_getCategoriesClient = async (data: { searchCondition: { keyword?: string; is_delete?: boolean; }, pageInfo: { pageNum: number; pageSize: number } }) => {

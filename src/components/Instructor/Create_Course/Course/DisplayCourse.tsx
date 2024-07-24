@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Table, message, Select, Button } from 'antd';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { Table, message, Select, Button, Input, Pagination } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
 import { getCourses, changeCourseStatus } from '../../../../utils/commonImports';
@@ -8,6 +8,7 @@ import DeleteButton from './DeleteCourse';
 import { getStatusTag } from '../../../../utils/statusTagUtils'; // Adjust the import path accordingly
 
 const { Option } = Select;
+const { Search } = Input;
 
 interface Course {
   _id: number;
@@ -26,29 +27,35 @@ interface CourseTableProps {
 const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [totalItems, setTotalItems] = useState<number>(0);
 
-  useEffect(() => {
-    const fetchCourses = async () => {
+  const fetchCourses = useCallback(
+    async (keyword: string, page: number, pageSize: number) => {
       try {
         const searchCondition = {
-          keyword: '',
+          keyword: keyword,
           category: '',
           status: '',
           is_deleted: false,
         };
-        const pageNum = 1;
-        const pageSize = 10;
-        const response = await getCourses(searchCondition, pageNum, pageSize);
+        const response = await getCourses(searchCondition, page, pageSize);
         setCourses(response.pageData);
+        setTotalItems(response.pageInfo.totalItems); // Assuming response contains pageInfo with totalItems
         console.log('Fetched courses:', response.pageData);
       } catch (error) {
         message.error('Error fetching courses');
         console.error('Error fetching courses:', error);
       }
-    };
+    },
+    []
+  );
 
-    fetchCourses();
-  }, []);
+  useEffect(() => {
+    fetchCourses(searchKeyword, pageNum, pageSize);
+  }, [searchKeyword, pageNum, pageSize, fetchCourses]);
 
   useEffect(() => {
     setSelectedCourseIds(selectedRowKeys);
@@ -98,46 +105,49 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
     );
   };
 
-  const columns: ColumnsType<Course> = [
-    {
-      title: 'Name',
-      dataIndex: 'name',
-      key: 'name',
-    },
-    {
-      title: 'Category Name',
-      dataIndex: 'category_name',
-      key: 'category_name',
-    },
-    {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
-      render: getStatusTag,
-    },
-    {
-      title: 'Price',
-      dataIndex: 'price',
-      key: 'price',
-    },
-    {
-      title: 'Discount',
-      dataIndex: 'discount',
-      key: 'discount',
-    },
-    {
-      title: 'Created At',
-      dataIndex: 'created_at',
-      key: 'created_at',
-      render: (text: string) => moment(text).format('DD-MM-YYYY'),
-    },
-    {
-      title: 'Actions',
-      key: 'actions',
-      render: (_, record) => renderActions(record),
-      align: 'center',
-    },
-  ];
+  const columns: ColumnsType<Course> = useMemo(
+    () => [
+      {
+        title: 'Name',
+        dataIndex: 'name',
+        key: 'name',
+      },
+      {
+        title: 'Category Name',
+        dataIndex: 'category_name',
+        key: 'category_name',
+      },
+      {
+        title: 'Status',
+        dataIndex: 'status',
+        key: 'status',
+        render: getStatusTag,
+      },
+      {
+        title: 'Price',
+        dataIndex: 'price',
+        key: 'price',
+      },
+      {
+        title: 'Discount',
+        dataIndex: 'discount',
+        key: 'discount',
+      },
+      {
+        title: 'Created At',
+        dataIndex: 'created_at',
+        key: 'created_at',
+        render: (text: string) => moment(text).format('DD-MM-YYYY'),
+      },
+      {
+        title: 'Actions',
+        key: 'actions',
+        render: (_, record) => renderActions(record),
+        align: 'center',
+      },
+    ],
+    [renderActions]
+  );
 
   const rowSelection = {
     selectedRowKeys,
@@ -146,13 +156,45 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
     },
   };
 
+  const handleSearch = (value: string) => {
+    setSearchKeyword(value);
+    setPageNum(1); // Reset to first page on search
+  };
+
   return (
-    <Table
-      rowSelection={rowSelection}
-      columns={columns}
-      dataSource={courses}
-      rowKey="_id"
-    />
+    <>
+      <div style={{ marginBottom: 16 }}>
+        <Search
+          placeholder="Search by course name"
+          enterButton="Search"
+          allowClear
+          size="large"
+          onSearch={handleSearch}
+          style={{ width: 300 }}
+        />
+      </div>
+      <Table
+        rowSelection={rowSelection}
+        columns={columns}
+        dataSource={courses}
+        rowKey="_id"
+        pagination={false}
+      />
+      <div className="flex justify-end mt-5">
+        <Pagination
+          current={pageNum}
+          pageSize={pageSize}
+          total={totalItems}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={(page, pageSize) => {
+            setPageNum(page);
+            setPageSize(pageSize);
+            fetchCourses(searchKeyword, page, pageSize);
+          }}
+          showSizeChanger
+        />
+      </div>
+    </>
   );
 };
 

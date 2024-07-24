@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Alert } from 'antd';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Table, Alert, Input, Pagination } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { getItemsByStudent } from '../../utils/commonImports';
@@ -37,40 +37,57 @@ interface FetchData {
   };
 }
 
+const { Search } = Input;
+
 const Completed: React.FC = () => {
   const [purchasedCourses, setPurchasedCourses] = useState<Course[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [totalItems, setTotalItems] = useState<number>(0);
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
 
-  useEffect(() => {
-    const fetchPurchasedCourses = async () => {
-      const data: FetchData = {
-        searchCondition: {
-          purchase_no: '',
-          cart_no: '',
-          course_id: '',
-          status: '',
-          is_delete: false,
-        },
-        pageInfo: {
-          pageNum: 1,
-          pageSize: 10,
-        },
-      };
-
-      try {
-        const response = await getItemsByStudent(data);
-        console.log('response:', response);
-        setPurchasedCourses(response.pageData);
-      } catch (error) {
-        setError(error as Error);
-      } finally {
-        setLoading(false);
-      }
+  const fetchPurchasedCourses = useCallback(async (page: number, size: number, keyword: string) => {
+    const data: FetchData = {
+      searchCondition: {
+        purchase_no: keyword,
+        cart_no: '',
+        course_id: '',
+        status: '',
+        is_delete: false,
+      },
+      pageInfo: {
+        pageNum: page,
+        pageSize: size,
+      },
     };
 
-    fetchPurchasedCourses();
+    try {
+      const response = await getItemsByStudent(data);
+      console.log('response:', response);
+      setPurchasedCourses(response.pageData);
+      setTotalItems(response.pageInfo.totalItems); // Assuming API provides totalItems
+    } catch (error) {
+      setError(error as Error);
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => {
+    fetchPurchasedCourses(pageNum, pageSize, searchKeyword);
+  }, [pageNum, pageSize, searchKeyword, fetchPurchasedCourses]);
+
+  const handleSearch = (value: string) => {
+    setSearchKeyword(value);
+    setPageNum(1); // Reset to the first page on search
+  };
+
+  const handlePageChange = (page: number, pageSize: number) => {
+    setPageNum(page);
+    setPageSize(pageSize);
+  };
 
   const columns = [
     {
@@ -114,12 +131,37 @@ const Completed: React.FC = () => {
     },
   ];
 
-  if (loading) return null;
+  if (loading) return <div>Loading...</div>;
   if (error) return <Alert message="Error" description={error.message} type="error" showIcon />;
 
   return (
     <div>
-      <Table columns={columns} dataSource={purchasedCourses} rowKey="_id" />
+      <div className="flex items-center mb-4">
+        <Search
+          placeholder="Search by purchase number"
+          enterButton="Search"
+          allowClear
+          size="large"
+          onSearch={handleSearch}
+          className="w-80"
+        />
+      </div>
+      <Table
+        columns={columns}
+        dataSource={purchasedCourses}
+        rowKey="_id"
+        pagination={false}
+      />
+      <div className="flex justify-end mt-5">
+        <Pagination
+          current={pageNum}
+          pageSize={pageSize}
+          total={totalItems}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={handlePageChange}
+          showSizeChanger
+        />
+      </div>
     </div>
   );
 };

@@ -25,7 +25,7 @@ const ActiveTab: React.FC = () => {
     <div style={{ position: 'relative' }}>
       <Button
         type="primary"
-        style={{ position: 'absolute', top: 0, right: 0, zIndex: 1000 }}
+        style={{ position: 'absolute', top: 0, right: 0, }}
         onClick={showModal}
         className='custom-button'
       >

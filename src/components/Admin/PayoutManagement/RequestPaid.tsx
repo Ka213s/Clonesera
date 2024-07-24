@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Button, Modal, Input } from 'antd';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Table, Button, Modal, Input, Pagination } from 'antd';
 import { TablePaginationConfig } from 'antd/lib/table';
 import { Link } from 'react-router-dom';
 import { getPayouts, updatePayout } from '../../../services/Api';
 import { toast } from 'react-toastify';
 
 interface Transaction {
-    _id: string; // Transaction ID
+    _id: string;
     price: number;
     discount: number;
     price_paid: number;
@@ -40,6 +40,8 @@ interface ApiResponse {
     };
 }
 
+const { Search } = Input;
+
 const RequestPaid: React.FC = () => {
     const [data, setData] = useState<PayoutData[]>([]);
     const [pagination, setPagination] = useState<TablePaginationConfig>({
@@ -50,19 +52,13 @@ const RequestPaid: React.FC = () => {
     const [rejectModalVisible, setRejectModalVisible] = useState(false);
     const [rejectComment, setRejectComment] = useState('');
     const [currentPayoutId, setCurrentPayoutId] = useState<string | null>(null);
+    const [searchKeyword, setSearchKeyword] = useState<string>("");
 
-    useEffect(() => {
-        fetchData({
-            pageNum: pagination.current || 1,
-            pageSize: pagination.pageSize || 10,
-        });
-    }, [pagination.current]);
-
-    const fetchData = async (pageInfo: { pageNum: number; pageSize: number }) => {
+    const fetchData = useCallback(async (pageInfo: { pageNum: number; pageSize: number }, keyword: string) => {
         try {
             const result: ApiResponse = await getPayouts({
                 searchCondition: {
-                    payout_no: '',
+                    payout_no: keyword,
                     instructor_id: '',
                     status: 'request_payout',
                     is_instructor: false,
@@ -75,16 +71,30 @@ const RequestPaid: React.FC = () => {
             setPagination({
                 ...pagination,
                 total: result.pageInfo.totalItems,
+                current: pageInfo.pageNum,
+                pageSize: pageInfo.pageSize,
             });
         } catch (error) {
             console.error('Failed to fetch data:', error);
         }
-    };
+    }, []);
+
+    useEffect(() => {
+        fetchData({
+            pageNum: pagination.current || 1,
+            pageSize: pagination.pageSize || 10,
+        }, searchKeyword);
+    }, [pagination.current, pagination.pageSize, searchKeyword, fetchData]);
 
     const handleTableChange = (pagination: TablePaginationConfig) => {
+        setPagination(pagination);
+    };
+
+    const handleSearch = (value: string) => {
+        setSearchKeyword(value);
         setPagination({
             ...pagination,
-            current: pagination.current || 1,
+            current: 1,
         });
     };
 
@@ -98,7 +108,7 @@ const RequestPaid: React.FC = () => {
             fetchData({
                 pageNum: pagination.current || 1,
                 pageSize: pagination.pageSize || 10,
-            });
+            }, searchKeyword);
         } catch (error) {
             toast.error('Failed to approve payout');
             console.error('Failed to approve payout:', error);
@@ -122,7 +132,7 @@ const RequestPaid: React.FC = () => {
             fetchData({
                 pageNum: pagination.current || 1,
                 pageSize: pagination.pageSize || 10,
-            });
+            }, searchKeyword);
             setRejectModalVisible(false);
             setRejectComment('');
         } catch (error) {
@@ -182,22 +192,39 @@ const RequestPaid: React.FC = () => {
 
     return (
         <div>
-            <Button
-                type="primary"
-                onClick={() => fetchData({
-                    pageNum: pagination.current || 1,
-                    pageSize: pagination.pageSize || 10,
-                })}
-            >
-                Reload
-            </Button>
+            <div className="flex items-center mb-4">
+                <Search
+                    placeholder="Search by payout number"
+                    enterButton="Search"
+                    allowClear
+                    size="large"
+                    onSearch={handleSearch}
+                    className="mr-4 w-80"
+                />
+            </div>
             <Table
                 columns={columns}
                 dataSource={data}
-                pagination={pagination}
+                pagination={false}
                 onChange={handleTableChange}
                 rowKey="_id"
             />
+            <div className="flex justify-end mt-5">
+                <Pagination
+                    current={pagination.current}
+                    pageSize={pagination.pageSize}
+                    total={pagination.total}
+                    showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+                    onChange={(page, pageSize) => {
+                        setPagination({
+                            ...pagination,
+                            current: page,
+                            pageSize: pageSize,
+                        });
+                    }}
+                    showSizeChanger
+                />
+            </div>
             <Modal
                 title="Reject Payout"
                 visible={rejectModalVisible}

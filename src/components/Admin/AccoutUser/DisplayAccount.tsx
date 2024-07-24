@@ -1,5 +1,7 @@
-import { Table, Avatar, PaginationProps } from 'antd';
-import { React, useEffect, useState, getUsers } from '../../../utils/commonImports';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Table, Avatar, Pagination, Input } from 'antd';
+import { PaginationProps } from 'antd/es/pagination';
+import { getUsers } from '../../../utils/commonImports';
 import DeleteButton from './DeleteButton';
 import StatusToggle from './StatusToggle';
 import RoleSelect from './RoleSelect';
@@ -26,32 +28,38 @@ interface DisplayAccountProps {
   isDeleted?: boolean;
 }
 
+const { Search } = Input;
+
 const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDeleted = false }) => {
   const [data, setData] = useState<User[]>([]);
   const [pagination, setPagination] = useState<Pagination>({ current: 1, pageSize: 10, total: 0 });
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
 
-  const fetchUsers = async (pageNum: number, pageSize: number) => {
+  const fetchUsers = useCallback(async (pageNum: number, pageSize: number, keyword: string) => {
     try {
-      const response = await getUsers({ keyword: '', role: 'all', status, is_deleted: isDeleted, is_verified : "true" }, pageNum, pageSize);
-      console.log('responsea:', response);
+      const response = await getUsers({ keyword, role: 'all', status, is_deleted: isDeleted, is_verified: "true" }, pageNum, pageSize);
       setData(response.pageData);
       setPagination({
         current: response.pageInfo.pageNum,
         pageSize: response.pageInfo.pageSize,
         total: response.pageInfo.totalItems,
       });
-      
     } catch (error) {
       console.error('Failed to fetch users:', error);
     }
-  };
+  }, [status, isDeleted]);
 
   useEffect(() => {
-    fetchUsers(pagination.current, pagination.pageSize);
-  }, [pagination.current, pagination.pageSize, status, isDeleted]);
+    fetchUsers(pagination.current, pagination.pageSize, searchKeyword);
+  }, [pagination.current, pagination.pageSize, searchKeyword, fetchUsers]);
 
   const handleTableChange = (pagination: PaginationProps) => {
-    fetchUsers(pagination.current!, pagination.pageSize!);
+    fetchUsers(pagination.current!, pagination.pageSize!, searchKeyword);
+  };
+
+  const handleSearch = (value: string) => {
+    setSearchKeyword(value);
+    setPagination(prev => ({ ...prev, current: 1 }));
   };
 
   const handleEdit = (_id: string) => {
@@ -120,17 +128,41 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
   ];
 
   return (
-    <Table
-      columns={columns}
-      rowKey={(record: User) => record._id}
-      dataSource={data}
-      pagination={{
-        current: pagination.current,
-        pageSize: pagination.pageSize,
-        total: pagination.total,
-      }}
-      onChange={handleTableChange}
-    />
+    <div>
+      <div className="flex items-center mb-4">
+        <Search
+          placeholder="Search by name or email"
+          enterButton="Search"
+          allowClear
+          size="large"
+          onSearch={handleSearch}
+          className="mr-4 w-80"
+        />
+      </div>
+      <Table
+        columns={columns}
+        dataSource={data}
+        pagination={false}
+        onChange={handleTableChange}
+        rowKey={(record: User) => record._id}
+      />
+      <div className="flex justify-end mt-5">
+        <Pagination
+          current={pagination.current}
+          pageSize={pagination.pageSize}
+          total={pagination.total}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={(page, pageSize) => {
+            setPagination({
+              current: page,
+              pageSize: pageSize!,
+              total: pagination.total,
+            });
+          }}
+          showSizeChanger
+        />
+      </div>
+    </div>
   );
 };
 

@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import { Table, Alert } from 'antd';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Table, Pagination, Input, Alert } from 'antd';
 import moment from 'moment';
 import { getItemsAdmin } from '../../utils/commonImports';
 import { getStatusTag } from '../../utils/statusTagUtils';
+
+const { Search } = Input;
 
 interface Course {
   _id: string;
@@ -39,22 +41,26 @@ interface FetchData {
 
 const Purchase: React.FC = () => {
   const [purchasedCourses, setPurchasedCourses] = useState<Course[]>([]);
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [totalCourses, setTotalCourses] = useState<number>(0);
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  useEffect(() => {
-    const fetchPurchasedCourses = async () => {
+  const fetchPurchasedCourses = useCallback(
+    async (page: number, size: number, keyword: string) => {
       const data: FetchData = {
         searchCondition: {
-          purchase_no: "",
+          purchase_no: keyword,
           cart_no: "",
           course_id: "",
           status: "",
           is_delete: false
         },
         pageInfo: {
-          pageNum: 1,
-          pageSize: 10
+          pageNum: page,
+          pageSize: size
         }
       };
 
@@ -62,15 +68,24 @@ const Purchase: React.FC = () => {
         const response = await getItemsAdmin(data);
         console.log('response:', response);
         setPurchasedCourses(response.pageData);
+        setTotalCourses(response.pageInfo.totalItems);
       } catch (error) {
         setError(error as Error);
       } finally {
         setLoading(false);
       }
-    };
+    },
+    []
+  );
 
-    fetchPurchasedCourses();
-  }, []);
+  useEffect(() => {
+    fetchPurchasedCourses(pageNum, pageSize, searchKeyword);
+  }, [pageNum, pageSize, searchKeyword, fetchPurchasedCourses]);
+
+  const handleSearch = (value: string) => {
+    setSearchKeyword(value);
+    setPageNum(1); // Reset to first page on search
+  };
 
   const columns = [
     {
@@ -122,8 +137,35 @@ const Purchase: React.FC = () => {
 
   return (
     <div>
-      <h1>Purchased Courses</h1>
-      <Table columns={columns} dataSource={purchasedCourses} rowKey="_id" />
+      <div style={{ marginBottom: 16 }}>
+        <Search
+          placeholder="Search by purchase number"
+          enterButton="Search"
+          allowClear
+          size="large"
+          onSearch={handleSearch}
+          style={{ width: 500 }}
+        />
+      </div>
+      <Table
+        columns={columns}
+        dataSource={purchasedCourses}
+        rowKey="_id"
+        pagination={false}
+      />
+      <div className="flex justify-end mt-5">
+        <Pagination
+          current={pageNum}
+          pageSize={pageSize}
+          total={totalCourses}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={(page, pageSize) => {
+            setPageNum(page);
+            setPageSize(pageSize);
+          }}
+          showSizeChanger
+        />
+      </div>
     </div>
   );
 };

@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Button } from 'antd';
-import { TablePaginationConfig } from 'antd/lib/table';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Table, Button, Pagination, Input, message } from 'antd';
 import { Link } from 'react-router-dom';
 import { getPayouts, updatePayout } from '../../../services/Api';
 import { toast } from 'react-toastify';
@@ -40,54 +39,46 @@ interface ApiResponse {
     };
 }
 
+const { Search } = Input;
+
 const RequestPayout: React.FC = () => {
     const [data, setData] = useState<PayoutData[]>([]);
-    const [pagination, setPagination] = useState<TablePaginationConfig>({
-        current: 1,
-        pageSize: 10,
-        total: 0,
-    });
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [pageNum, setPageNum] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
+    const [totalPayouts, setTotalPayouts] = useState<number>(0);
+    const [searchKeyword, setSearchKeyword] = useState<string>("");
 
-    useEffect(() => {
-        fetchData({
-            pageNum: pagination.current || 1,
-            pageSize: pagination.pageSize || 10,
-        });
-    }, [pagination.current]);
-
-    const fetchData = async (pageInfo: { pageNum: number; pageSize: number }) => {
+    const fetchData = useCallback(async (page: number, size: number, keyword: string) => {
         try {
             const result: ApiResponse = await getPayouts({
                 searchCondition: {
-                    payout_no: '',
+                    payout_no: keyword,
                     instructor_id: '',
                     status: '',
                     is_instructor: false,
                     is_delete: false
                 },
-                pageInfo
+                pageInfo: {
+                    pageNum: page,
+                    pageSize: size
+                }
             });
             // Filter data to include only request_payout and rejected statuses
             const filteredData = result.pageData.filter(payout =>
                 payout.status === 'new' || payout.status === 'rejected'
             );
             setData(filteredData);
-            setPagination({
-                ...pagination,
-                total: result.pageInfo.totalItems,
-            });
+            setTotalPayouts(result.pageInfo.totalItems); 
         } catch (error) {
+            message.error('Failed to fetch data');
             console.error('Failed to fetch data:', error);
         }
-    };
+    }, []);
 
-    const handleTableChange = (pagination: TablePaginationConfig) => {
-        setPagination({
-            ...pagination,
-            current: pagination.current || 1,
-        });
-    };
+    useEffect(() => {
+        fetchData(pageNum, pageSize, searchKeyword);
+    }, [pageNum, pageSize, searchKeyword, fetchData]);
 
     const handleSelectChange = (selectedKeys: React.Key[]) => {
         setSelectedRowKeys(selectedKeys);
@@ -103,11 +94,8 @@ const RequestPayout: React.FC = () => {
                 });
             }
             toast.success('Payout request successfully. Please wait admin for approval!');
-            fetchData({
-                pageNum: pagination.current || 1,
-                pageSize: pagination.pageSize || 10,
-            });
-            setSelectedRowKeys([]); // Clear selection after request
+            fetchData(pageNum, pageSize, searchKeyword); 
+            setSelectedRowKeys([]); 
         } catch (error) {
             toast.error('Failed to request payout');
             console.error('Failed to request payout:', error);
@@ -141,25 +129,30 @@ const RequestPayout: React.FC = () => {
         },
     ];
 
+    const handleSearch = (value: string) => {
+        setSearchKeyword(value);
+        setPageNum(1); 
+    };
+
     return (
         <div>
-            <Button
-                type="primary"
-                onClick={() => fetchData({
-                    pageNum: pagination.current || 1,
-                    pageSize: pagination.pageSize || 10,
-                })}
-            >
-                Reload
-            </Button>
-            <Button
-                type="primary"
-                onClick={handleRequestPayout}
-                disabled={selectedRowKeys.length === 0} // Disable if no rows are selected
-                style={{ marginLeft: 10 }}
-            >
-                Request Payout
-            </Button>
+            <div className="flex items-center mb-4">
+                <Search
+                    placeholder="Search by payout number"
+                    enterButton="Search"
+                    allowClear
+                    size="large"
+                    onSearch={handleSearch}
+                    className="mr-4 w-80"
+                />
+                <Button
+                    type="primary"
+                    onClick={handleRequestPayout}
+                    disabled={selectedRowKeys.length === 0} 
+                >
+                    Request Payout
+                </Button>
+            </div>
             <Table
                 rowSelection={{
                     selectedRowKeys,
@@ -167,10 +160,22 @@ const RequestPayout: React.FC = () => {
                 }}
                 columns={columns}
                 dataSource={data}
-                pagination={pagination}
-                onChange={handleTableChange}
-                rowKey="_id" // Use _id as the row key
+                rowKey="_id" 
+                pagination={false}
             />
+            <div className="flex justify-end mt-5">
+                <Pagination
+                    current={pageNum}
+                    pageSize={pageSize}
+                    total={totalPayouts}
+                    showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+                    onChange={(page, pageSize) => {
+                        setPageNum(page);
+                        setPageSize(pageSize);
+                    }}
+                    showSizeChanger
+                />
+            </div>
         </div>
     );
 };

@@ -1,5 +1,9 @@
-import { React, useEffect, useState, useNavigate, getCart, message, Button, Checkbox, getCourseDetail, updateCart, DeleteOutlined } from '../../utils/commonImports';
+import React, { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { message, Button, Checkbox, Input, Pagination } from 'antd';
 import { toast } from 'react-toastify';
+import { getCart, getCourseDetail, updateCart } from '../../utils/commonImports';
+import { DeleteOutlined } from '@ant-design/icons';
 
 interface CartItem {
     _id: string;
@@ -13,51 +17,59 @@ interface CartItem {
     image_url: string;
 }
 
+const { Search } = Input;
+
 const WaitingPaid: React.FC = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
+    const [pageNum, setPageNum] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
+    const [totalItems, setTotalItems] = useState<number>(0);
+    const [searchKeyword, setSearchKeyword] = useState<string>('');
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const fetchCartItems = async () => {
-            const data = {
-                searchCondition: {
-                    status: 'waiting_paid',
-                    is_deleted: false,
-                },
-                pageInfo: {
-                    pageNum: 1,
-                    pageSize: 100,
-                },
-            };
-
-            try {
-                const response = await getCart(data);
-                const courseIds = response.pageData.map((item: CartItem) => item.course_id);
-
-                const courseDetails = await Promise.all(courseIds.map(async (id: string) => {
-                    try {
-                        return await getCourseDetail(id);
-                    } catch (error) {
-                        console.error(`Error fetching course details for course_id ${id}:`, error);
-                        return null;
-                    }
-                }));
-
-                const getCartImage = response.pageData.map((item: CartItem, index: number) => ({
-                    ...item,
-                    image_url: courseDetails[index] ? courseDetails[index].image_url : ''
-                }));
-
-                setCartItems(getCartImage);
-            } catch (error) {
-                console.error('Error fetching cart items:', error);
-                message.error('Error fetching cart items');
-            }
+    const fetchCartItems = useCallback(async (page: number, size: number, keyword: string) => {
+        const data = {
+            searchCondition: {
+                status: 'waiting_paid',
+                is_deleted: false,
+                course_name: keyword, // Assuming API supports course_name search
+            },
+            pageInfo: {
+                pageNum: page,
+                pageSize: size,
+            },
         };
 
-        fetchCartItems();
+        try {
+            const response = await getCart(data);
+            const courseIds = response.pageData.map((item: CartItem) => item.course_id);
+
+            const courseDetails = await Promise.all(courseIds.map(async (id: string) => {
+                try {
+                    return await getCourseDetail(id);
+                } catch (error) {
+                    console.error(`Error fetching course details for course_id ${id}:`, error);
+                    return null;
+                }
+            }));
+
+            const getCartImage = response.pageData.map((item: CartItem, index: number) => ({
+                ...item,
+                image_url: courseDetails[index] ? courseDetails[index].image_url : ''
+            }));
+
+            setCartItems(getCartImage);
+            setTotalItems(response.pageInfo.totalItems); // Assuming API provides totalItems
+        } catch (error) {
+            console.error('Error fetching cart items:', error);
+            message.error('Error fetching cart items');
+        }
     }, []);
+
+    useEffect(() => {
+        fetchCartItems(pageNum, pageSize, searchKeyword);
+    }, [pageNum, pageSize, searchKeyword, fetchCartItems]);
 
     const handleDelete = async (itemId: string, cartNo: string) => {
         try {
@@ -88,29 +100,44 @@ const WaitingPaid: React.FC = () => {
         navigate('/payment', { state: { courseIds } });
     };
 
+    const handleSearch = (value: string) => {
+        setSearchKeyword(value);
+        setPageNum(1); // Reset to the first page on search
+    };
+
     const selectedItems = cartItems.filter(item => selectedRowKeys.includes(item._id));
     const totalPrice = selectedItems.reduce((acc, item) => acc + item.price, 0);
     const totalDiscount = selectedItems.reduce((acc, item) => acc + item.discount, 0);
     const totalBill = totalPrice - totalDiscount;
 
     if (cartItems.length === 0) {
-        return <div className="flex justify-center items-center h-screen">No items in the cart</div>;
+        return <div className="flex justify-center items-center h-screen">No items in waiting paid</div>;
     }
 
     return (
         <div className="p-2 lg:p-4 flex flex-col lg:flex-row gap-4">
             <div className="lg:w-2/3">
-                <div className="flex items-center mb-2">
-                    <Checkbox
-                        onChange={e => {
-                            const checked = e.target.checked;
-                            setSelectedRowKeys(checked ? cartItems.map(item => item._id) : []);
-                        }}
-                        checked={selectedRowKeys.length === cartItems.length}
-                    >
-                        Select all
-                    </Checkbox>
-                    <span className="ml-auto text-blue-500">{cartItems.length} courses in waiting paid</span>
+                <div className="flex items-center mb-4">
+                    <Search
+                        placeholder="Search by course name"
+                        enterButton="Search"
+                        allowClear
+                        size="large"
+                        onSearch={handleSearch}
+                        className="mr-4 w-80"
+                    />
+                    <div className="flex items-center mb-2">
+                        <Checkbox
+                            onChange={e => {
+                                const checked = e.target.checked;
+                                setSelectedRowKeys(checked ? cartItems.map(item => item._id) : []);
+                            }}
+                            checked={selectedRowKeys.length === cartItems.length}
+                        >
+                            Select all
+                        </Checkbox>
+                        <span className="ml-auto text-blue-500">{cartItems.length} courses in waiting paid</span>
+                    </div>
                 </div>
                 <div className="flex flex-col gap-2">
                     {cartItems.map(item => (
@@ -155,6 +182,19 @@ const WaitingPaid: React.FC = () => {
                             </div>
                         </div>
                     ))}
+                </div>
+                <div className="flex justify-end mt-5">
+                    <Pagination
+                        current={pageNum}
+                        pageSize={pageSize}
+                        total={totalItems}
+                        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+                        onChange={(page, pageSize) => {
+                            setPageNum(page);
+                            setPageSize(pageSize);
+                        }}
+                        showSizeChanger
+                    />
                 </div>
             </div>
             <div className="lg:w-1/3 p-4 bg-white rounded-md shadow-sm">

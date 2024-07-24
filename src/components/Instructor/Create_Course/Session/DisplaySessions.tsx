@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { Table, TableColumnsType } from 'antd';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Table, Pagination, Input, message } from 'antd';
 import moment from 'moment';
 import { getSessions } from '../../../../utils/commonImports';
 import ButtonEdit from './EditSession';
 import ButtonDelete from './DeleteSession';
-  
+import type { ColumnsType } from 'antd/es/table';
+
 interface Session {
   _id: string;
   name: string;
@@ -12,50 +13,58 @@ interface Session {
   created_at: string;
 }
 
+const { Search } = Input;
+
 const DisplaySessions: React.FC = () => {
   const [sessions, setSessions] = useState<Session[]>([]);
+  const [totalSessions, setTotalSessions] = useState<number>(0);
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [searchKeyword, setSearchKeyword] = useState<string>('');
 
-  const fetchSessions = async () => {
-    try {
-      const response = await getSessions(
-        {
-          keyword: '',
-          course_id: '',
-          is_position_order: false,
-          is_deleted: false,
-        },
-        1,
-        10
-      );
-      setSessions(response.pageData);
-    } catch (error) {
-      console.error('Failed to fetch sessions', error);
-    }
-  };
+  const fetchSessions = useCallback(
+    async (page: number, size: number, keyword: string) => {
+      try {
+        const response = await getSessions(
+          {
+            keyword: keyword,
+            course_id: '',
+            is_position_order: false,
+            is_deleted: false,
+          },
+          page,
+          size
+        );
+        setSessions(response.pageData);
+        setTotalSessions(response.pageInfo.totalItems); // Assuming response contains pageInfo with totalItems
+      } catch (error) {
+        message.error('Failed to fetch sessions');
+        console.error('Failed to fetch sessions', error);
+      }
+    },
+    []
+  );
 
   useEffect(() => {
-    fetchSessions();
-  }, []);
+    fetchSessions(pageNum, pageSize, searchKeyword);
+  }, [pageNum, pageSize, searchKeyword, fetchSessions]);
 
-  const columns: TableColumnsType<Session> = [
+  const columns: ColumnsType<Session> = [
     {
       title: 'Name',
       dataIndex: 'name',
       key: 'name',
-   
     },
     {
       title: 'Course Name',
       dataIndex: 'course_name',
       key: 'course_name',
-     
     },
     {
       title: 'Created At',
       dataIndex: 'created_at',
       key: 'created_at',
       render: (text: string) => moment(text).format('DD-MM-YYYY'),
-      
     },
     {
       title: 'Actions',
@@ -70,13 +79,44 @@ const DisplaySessions: React.FC = () => {
     },
   ];
 
+  const handleSearch = (value: string) => {
+    setSearchKeyword(value);
+    setPageNum(1); // Reset to first page on search
+  };
+
   return (
-    <Table
-      dataSource={sessions}
-      columns={columns}
-      rowKey="_id"
-      style={{ textAlign: 'center' }}
-    />
+    <div>
+      <div style={{ marginBottom: 16 }}>
+        <Search
+          placeholder="Search by session name"
+          enterButton="Search"
+          allowClear
+          size="large"
+          onSearch={handleSearch}
+          style={{ width: 300 }}
+        />
+      </div>
+      <Table
+        dataSource={sessions}
+        columns={columns}
+        rowKey="_id"
+        style={{ textAlign: 'center' }}
+        pagination={false}
+      />
+      <div className="flex justify-end mt-5">
+        <Pagination
+          current={pageNum}
+          pageSize={pageSize}
+          total={totalSessions}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={(page, pageSize) => {
+            setPageNum(page);
+            setPageSize(pageSize);
+          }}
+          showSizeChanger
+        />
+      </div>
+    </div>
   );
 };
 
