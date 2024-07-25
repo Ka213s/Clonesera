@@ -108,7 +108,7 @@ const Login: React.FC = () => {
   return (
     <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
       <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-green-400 to-white-500 relative">
-        <div className="flex flex-col w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10 md:flex-row">
+        <div className="flex flex-col w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10 md:flex-row" style={{ width: '100%', height: '90%' }}>
           <div className="w-full md:w-1/2 px-4 md:px-20 py-10 flex flex-col justify-between">
             <div>
               <Link to={'/homepage'}>
@@ -142,20 +142,18 @@ const Login: React.FC = () => {
                 >
                   <Input.Password
                     placeholder="Password"
-                    className="w-full p-3 mb-4 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     iconRender={(visible) => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
                   />
                 </Form.Item>
 
-                <div className="flex w-full mb-6">
-                  <Button
-                    type="link"
-                    className="text-sm font-medium text-gray-500 underline ml-auto" // Added 'ml-auto'
-                    onClick={handleForgotPasswordClick}
-                  >
-                    Forgot password?
-                  </Button>
-                </div>
+                <Button
+                  type="link"
+                  className="text-sm font-medium text-gray-500 underline mb-4 self-end"
+                  onClick={handleForgotPasswordClick}
+                >
+                  Forgot password?
+                </Button>
 
                 <Button
                   type="primary"
