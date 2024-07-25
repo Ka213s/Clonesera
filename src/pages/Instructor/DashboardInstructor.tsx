@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Card, Row, Col } from 'antd';
-import { BookOutlined, UsergroupAddOutlined, AppstoreOutlined } from '@ant-design/icons';
-import { getCourses, getSubscribers } from '../../services/Api';
+import { BookOutlined, UsergroupAddOutlined, AppstoreOutlined, DollarOutlined } from '@ant-design/icons';
+import { getCourses, getSubscribers, getCurrentLogin } from '../../services/Api';
 
 const InstructorDashboard: React.FC = () => {
     const [totalCourses, setTotalCourses] = useState<number | null>(null);
     const [totalSubscribers, setTotalSubscribers] = useState<number | null>(null);
+    const [balanceTotal, setBalanceTotal] = useState<number | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,6 +28,10 @@ const InstructorDashboard: React.FC = () => {
                 const subscriberData = await getSubscribers(searchConditionSubscribers, 1, 10);
                 console.log("Total Subscribers:", subscriberData);
                 setTotalSubscribers(subscriberData.pageInfo.totalItems);
+
+                const currentUser = await getCurrentLogin();
+                console.log("Current User:", currentUser);
+                setBalanceTotal(currentUser.balance_total);
             } catch (error) {
                 console.error('Failed to fetch data', error);
             }
@@ -45,6 +50,11 @@ const InstructorDashboard: React.FC = () => {
             title: 'Total Subscribers',
             value: totalSubscribers,
             icon: <UsergroupAddOutlined style={{ fontSize: '48px', color: '#9254de' }} />
+        },
+        {
+            title: 'Balance Total',
+            value: balanceTotal,
+            icon: <DollarOutlined style={{ fontSize: '48px', color: '#52c41a' }} />
         }
     ];
 

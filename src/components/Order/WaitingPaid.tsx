@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { message, Button, Checkbox, Input, Pagination } from 'antd';
+import { message, Button, Checkbox } from 'antd';
 import { toast } from 'react-toastify';
 import { getCart, getCourseDetail, updateCart } from '../../utils/commonImports';
 import { DeleteOutlined } from '@ant-design/icons';
@@ -17,27 +17,20 @@ interface CartItem {
     image_url: string;
 }
 
-const { Search } = Input;
-
 const WaitingPaid: React.FC = () => {
     const [cartItems, setCartItems] = useState<CartItem[]>([]);
     const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-    const [pageNum, setPageNum] = useState<number>(1);
-    const [pageSize, setPageSize] = useState<number>(10);
-    const [totalItems, setTotalItems] = useState<number>(0);
-    const [searchKeyword, setSearchKeyword] = useState<string>('');
     const navigate = useNavigate();
 
-    const fetchCartItems = useCallback(async (page: number, size: number, keyword: string) => {
+    const fetchCartItems = useCallback(async () => {
         const data = {
             searchCondition: {
                 status: 'waiting_paid',
                 is_deleted: false,
-                course_name: keyword, // Assuming API supports course_name search
             },
             pageInfo: {
-                pageNum: page,
-                pageSize: size,
+                pageNum: 1, // Fetching all items without pagination
+                pageSize: 1000, // Assuming a high page size to fetch all items
             },
         };
 
@@ -60,7 +53,6 @@ const WaitingPaid: React.FC = () => {
             }));
 
             setCartItems(getCartImage);
-            setTotalItems(response.pageInfo.totalItems); // Assuming API provides totalItems
         } catch (error) {
             console.error('Error fetching cart items:', error);
             message.error('Error fetching cart items');
@@ -68,8 +60,8 @@ const WaitingPaid: React.FC = () => {
     }, []);
 
     useEffect(() => {
-        fetchCartItems(pageNum, pageSize, searchKeyword);
-    }, [pageNum, pageSize, searchKeyword, fetchCartItems]);
+        fetchCartItems();
+    }, [fetchCartItems]);
 
     const handleDelete = async (itemId: string, cartNo: string) => {
         try {
@@ -100,11 +92,6 @@ const WaitingPaid: React.FC = () => {
         navigate('/payment', { state: { courseIds } });
     };
 
-    const handleSearch = (value: string) => {
-        setSearchKeyword(value);
-        setPageNum(1); // Reset to the first page on search
-    };
-
     const selectedItems = cartItems.filter(item => selectedRowKeys.includes(item._id));
     const totalPrice = selectedItems.reduce((acc, item) => acc + item.price, 0);
     const totalDiscount = selectedItems.reduce((acc, item) => acc + item.discount, 0);
@@ -117,27 +104,17 @@ const WaitingPaid: React.FC = () => {
     return (
         <div className="p-2 lg:p-4 flex flex-col lg:flex-row gap-4">
             <div className="lg:w-2/3">
-                <div className="flex items-center mb-4">
-                    <Search
-                        placeholder="Search by course name"
-                        enterButton="Search"
-                        allowClear
-                        size="large"
-                        onSearch={handleSearch}
-                        className="mr-4 w-80"
-                    />
-                    <div className="flex items-center mb-2">
-                        <Checkbox
-                            onChange={e => {
-                                const checked = e.target.checked;
-                                setSelectedRowKeys(checked ? cartItems.map(item => item._id) : []);
-                            }}
-                            checked={selectedRowKeys.length === cartItems.length}
-                        >
-                            Select all
-                        </Checkbox>
-                        <span className="ml-auto text-blue-500">{cartItems.length} courses in waiting paid</span>
-                    </div>
+                <div className="flex items-center mb-2">
+                    <Checkbox
+                        onChange={e => {
+                            const checked = e.target.checked;
+                            setSelectedRowKeys(checked ? cartItems.map(item => item._id) : []);
+                        }}
+                        checked={selectedRowKeys.length === cartItems.length}
+                    >
+                        Select all
+                    </Checkbox>
+                    <span className="ml-auto text-blue-500">{cartItems.length} courses in waiting paid</span>
                 </div>
                 <div className="flex flex-col gap-2">
                     {cartItems.map(item => (
@@ -182,19 +159,6 @@ const WaitingPaid: React.FC = () => {
                             </div>
                         </div>
                     ))}
-                </div>
-                <div className="flex justify-end mt-5">
-                    <Pagination
-                        current={pageNum}
-                        pageSize={pageSize}
-                        total={totalItems}
-                        showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-                        onChange={(page, pageSize) => {
-                            setPageNum(page);
-                            setPageSize(pageSize);
-                        }}
-                        showSizeChanger
-                    />
                 </div>
             </div>
             <div className="lg:w-1/3 p-4 bg-white rounded-md shadow-sm">
