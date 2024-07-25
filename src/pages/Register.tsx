@@ -102,7 +102,7 @@ const Register: React.FC = () => {
     return (
         <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-green-400 to-white-500 relative">
             <ToastContainer />
-            <div className="flex flex-col w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10 md:flex-row" style={{ width: '100%', height: '90%' }}>
+            <div className="flex flex-col w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10 md:flex-row">
                 <div className={`w-full md:w-1/2 px-4 md:px-20 py-10 flex flex-col justify-between ${isInstructorDetailsVisible ? 'hidden' : ''}`}>
                     <Link to="/">
                         <img src={logo} alt="Logo" className="h-10 w-auto mb-6 cursor-pointer" />
@@ -183,26 +183,20 @@ const Register: React.FC = () => {
                             </>
                         )}
                         {isInstructorDetailsVisible && (
-                            <div className="flex flex-col md:flex-row gap-8">
-                                {/* Cột bên phải: Số điện thoại và Mô tả */}
-                                <div className="flex-1 space-y-6">
-                                    <Form.Item
-                                        name="phone_number"
-                                        rules={[{ required: true, message: 'Please input your phone number!' }]}
-                                        className="flex flex-col"
-                                    >
-                                        <Input placeholder='Phone Number' size="large" className="rounded-lg border-gray-300 shadow-sm" />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="description"
-                                        rules={[{ required: true, message: 'Please input your description!' }]}
-                                        className="flex flex-col"
-                                    >
-                                        <Input.TextArea placeholder='Description' rows={4} size="large" className="rounded-lg border-gray-300 shadow-sm" />
-                                    </Form.Item>
-                                </div>
-                                {/* Cột bên trái: Ảnh và Video */}
-                                <div className="flex space-x-6">
+                            <>
+                                <Form.Item
+                                    name="phone_number"
+                                    rules={[{ required: true, message: 'Please input your phone number!' }]}
+                                >
+                                    <Input placeholder='Phone Number' size="large" />
+                                </Form.Item>
+                                <Form.Item
+                                    name="description"
+                                    rules={[{ required: true, message: 'Please input your description!' }]}
+                                >
+                                    <Input.TextArea placeholder='Description' rows={4} size="large" />
+                                </Form.Item>
+                                <div className="flex flex-col md:flex-row gap-4">
                                     <Form.Item
                                         name="videoUrl"
                                         rules={[{ required: true, message: 'Please upload a video!' }]}
@@ -220,7 +214,7 @@ const Register: React.FC = () => {
                                         <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
                                     </Form.Item>
                                 </div>
-                            </div>
+                            </>
                         )}
                         <Form.Item>
                             <Button
