@@ -1,7 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Table, Pagination, Input, message } from 'antd';
+import { React, useEffect, useState, useCallback, Table, Pagination, Input, message, getSessions, SearchOutlined } from '../../../../utils/commonImports';
 import moment from 'moment';
-import { getSessions } from '../../../../utils/commonImports';
 import ButtonEdit from './EditSession';
 import ButtonDelete from './DeleteSession';
 import type { ColumnsType } from 'antd/es/table';
@@ -89,7 +87,7 @@ const DisplaySessions: React.FC = () => {
       <div style={{ marginBottom: 16 }}>
         <Search
           placeholder="Search by session name"
-          enterButton="Search"
+          enterButton={<SearchOutlined />}
           allowClear
           size="large"
           onSearch={handleSearch}

@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Table, Pagination, message, Input } from "antd";
+import { React, useState, useEffect, SearchOutlined, Table, Pagination, message, Input } from "../../../utils/commonImports";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
 
@@ -63,7 +62,7 @@ const SessionTable: React.FC<SessionTableProps> = ({ sessions }) => {
       <div style={{ marginBottom: 16 }}>
         <Search
           placeholder="Search by session name"
-          enterButton="Search"
+          enterButton={<SearchOutlined />}
           allowClear
           size="large"
           onSearch={handleSearch}

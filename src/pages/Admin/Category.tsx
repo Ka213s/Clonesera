@@ -1,6 +1,9 @@
-import { Table, Pagination, Button, Modal, Select, Input, React, useEffect, useState, useCallback, useMemo, getCategories, createCategory, editCategory, deleteCategory, EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '../../utils/commonImports';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { Table, Pagination, Button, Modal, Select, Input, message } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import { getCategories, createCategory, editCategory, deleteCategory } from '../../utils/commonImports';
 import CategoryForm from '../../components/Admin/Category/CategoryForm';
+import { EditOutlined, DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 
 interface Category {
     _id: string;
@@ -15,31 +18,31 @@ interface FormValues {
     parent_category_id?: string;
 }
 
+const { Search } = Input;
+
 const Category: React.FC = () => {
     const [categories, setCategories] = useState<Category[]>([]);
     const [parentCategories, setParentCategories] = useState<Category[]>([]);
-   
-    const [page, setPage] = useState(1);
-    const [pageSize, setPageSize] = useState(10);
-    const [totalItems, setTotalItems] = useState(0);
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
     const [editingCategory, setEditingCategory] = useState<Category | null>(null);
     const [filterOption, setFilterOption] = useState<'parent' | 'sub' | ''>('');
-    const [searchKeyword, setSearchKeyword] = useState('');
+    const [searchKeyword, setSearchKeyword] = useState<string>('');
+    const [pageNum, setPageNum] = useState<number>(1);
+    const [pageSize, setPageSize] = useState<number>(10);
+    const [totalCategories, setTotalCategories] = useState<number>(0);
 
     const fetchCategories = useCallback(
-        async (page: number, pageSize: number, filterOption: string, keyword: string) => {
-          
+        async (page: number, size: number, keyword: string, filterOption: string) => {
             try {
                 const searchCondition = {
-                    keyword,
+                    keyword: keyword,
                     category: '',
                     status: '',
                     is_deleted: false,
                 };
 
-                const data = await getCategories(searchCondition, page, pageSize);
+                const data = await getCategories(searchCondition, page, size);
 
                 let filteredCategories = data.pageData;
                 if (filterOption === 'parent') {
@@ -49,22 +52,21 @@ const Category: React.FC = () => {
                 }
 
                 setCategories(filteredCategories);
-                setTotalItems(data.pageInfo.totalItems);
+                setTotalCategories(data.pageInfo.totalItems); // Adjust based on your API response
 
                 const parentData = await getCategories({ keyword: '', category: '', status: '', is_deleted: false }, 1, 1000);
                 setParentCategories(parentData.pageData);
             } catch (error) {
+                message.error('Error fetching categories');
                 console.error('Error fetching categories:', error);
             }
         },
         []
     );
 
-   
-
     useEffect(() => {
-        fetchCategories(page, pageSize, filterOption, searchKeyword);
-    }, [page, pageSize, filterOption, fetchCategories]);
+        fetchCategories(pageNum, pageSize, searchKeyword, filterOption);
+    }, [pageNum, pageSize, searchKeyword, filterOption, fetchCategories]);
 
     const columns: ColumnsType<Category> = useMemo(
         () => [
@@ -73,7 +75,6 @@ const Category: React.FC = () => {
                 dataIndex: 'name',
                 key: 'name',
             },
-          
             {
                 title: 'Parent Category',
                 dataIndex: 'parent_category_id',
@@ -124,7 +125,7 @@ const Category: React.FC = () => {
             onOk: async () => {
                 try {
                     await deleteCategory(id);
-                    fetchCategories(page, pageSize, filterOption, searchKeyword);
+                    fetchCategories(pageNum, pageSize, searchKeyword, filterOption);
                 } catch (error) {
                     console.error('Failed to delete category:', error);
                 }
@@ -140,7 +141,7 @@ const Category: React.FC = () => {
                 await createCategory(values);
             }
             setIsModalVisible(false);
-            fetchCategories(page, pageSize, filterOption, searchKeyword);
+            fetchCategories(pageNum, pageSize, searchKeyword, filterOption);
         } catch (error) {
             console.error('Failed to save category:', error);
         }
@@ -150,11 +151,9 @@ const Category: React.FC = () => {
         setIsModalVisible(false);
     };
 
-    const handleSearch = (event?: React.KeyboardEvent<HTMLInputElement>) => {
-        if (!event || event.key === 'Enter') {
-            setPage(1);
-            fetchCategories(1, pageSize, filterOption, searchKeyword);
-        }
+    const handleSearch = (value: string) => {
+        setSearchKeyword(value);
+        setPageNum(1); // Reset to first page on search
     };
 
     return (
@@ -165,8 +164,7 @@ const Category: React.FC = () => {
                     placeholder="Select"
                     onChange={(value) => {
                         setFilterOption(value as 'parent' | 'sub' | '');
-                        setPage(1);
-                        fetchCategories(1, pageSize, value as 'parent' | 'sub' | '', searchKeyword);
+                        setPageNum(1); // Reset to first page on filter change
                     }}
                     allowClear
                     className="mr-2 w-40"
@@ -174,14 +172,14 @@ const Category: React.FC = () => {
                     <Select.Option value="parent">Parent Category</Select.Option>
                     <Select.Option value="sub">Sub Category</Select.Option>
                 </Select>
-                <Input
-                    placeholder="Search"
-                    value={searchKeyword}
-                    onChange={(e) => setSearchKeyword(e.target.value)}
-                    onKeyPress={handleSearch}
-                    className="mr-2 w-60"
+                <Search
+                    placeholder="Search by category name"
+                    enterButton={<SearchOutlined />}
+                    allowClear
+                    size="large"
+                    onSearch={handleSearch}
+                    style={{ width: 300, marginRight: '16px' }}
                 />
-                <Button type="primary" onClick={() => handleSearch()} icon={<SearchOutlined />} className="mr-2 !bg-green-500 hover:scale-105" />
                 <Button type="primary" onClick={handleAddCategory} icon={<PlusOutlined />} className="custom-button ml-auto">
                     New Category
                 </Button>
@@ -189,22 +187,22 @@ const Category: React.FC = () => {
             <Table
                 columns={columns}
                 dataSource={categories.map(category => ({ ...category, key: category._id }))}
-              
                 pagination={false}
                 className="mb-4"
             />
-            <Pagination
-                current={page}
-                pageSize={pageSize}
-                total={totalItems}
-                onChange={(page, pageSize) => {
-                    setPage(page);
-                    setPageSize(pageSize);
-                    fetchCategories(page, pageSize, filterOption, searchKeyword);
-                }}
-                showSizeChanger
-                className="text-center"
-            />
+            <div className="flex justify-end mt-5">
+                <Pagination
+                    current={pageNum}
+                    pageSize={pageSize}
+                    total={totalCategories}
+                    showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+                    onChange={(page, pageSize) => {
+                        setPageNum(page);
+                        setPageSize(pageSize);
+                    }}
+                    showSizeChanger
+                />
+            </div>
             <CategoryForm
                 isVisible={isModalVisible}
                 isEditing={isEditing}
@@ -218,4 +216,3 @@ const Category: React.FC = () => {
 };
 
 export default Category;
-

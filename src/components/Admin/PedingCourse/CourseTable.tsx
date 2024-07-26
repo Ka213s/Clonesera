@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback } from "react";
 import { Table, Pagination, message, Input } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
-import { getCourses, getCourseDetail } from "../../../utils/commonImports";
+import { getCourses, getCourseDetail, SearchOutlined } from "../../../utils/commonImports";
 
 const { Search } = Input;
 
@@ -92,8 +92,17 @@ const CourseTable: React.FC<CourseTableProps> = ({
       key: "status",
       render: getStatusTag,
     },
-    { title: "Price", dataIndex: "price", key: "price" },
-    { title: "Discount", dataIndex: "discount", key: "discount" },
+    {
+      title: "Price",
+      dataIndex: "price",
+      key: "price",
+      render: (price: number) => price.toLocaleString(),
+    },
+    {
+      title: "Discount",
+      dataIndex: "discount",
+      key: "discount"
+    },
     {
       title: "Created At",
       dataIndex: "created_at",
@@ -114,7 +123,7 @@ const CourseTable: React.FC<CourseTableProps> = ({
       <div style={{ marginBottom: 16 }}>
         <Search
           placeholder="Search by course name"
-          enterButton="Search"
+          enterButton={<SearchOutlined />}
           allowClear
           size="large"
           onSearch={handleSearch}

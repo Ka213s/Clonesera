@@ -1,7 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Table, Pagination, Input, Alert } from 'antd';
+import { React, useState, useEffect, useCallback, Table, Pagination, Input, Alert, getItemsAdmin, SearchOutlined } from '../../utils/commonImports';
 import moment from 'moment';
-import { getItemsAdmin } from '../../utils/commonImports';
 import { getStatusTag } from '../../utils/statusTagUtils';
 
 const { Search } = Input;
@@ -108,6 +106,7 @@ const Purchase: React.FC = () => {
       title: 'Price Paid',
       dataIndex: 'price_paid',
       key: 'price_paid',
+      render: (price_paid: number) => price_paid.toLocaleString(),
     },
     {
       title: 'Discount',
@@ -140,7 +139,7 @@ const Purchase: React.FC = () => {
       <div style={{ marginBottom: 16 }}>
         <Search
           placeholder="Search by purchase number"
-          enterButton="Search"
+          enterButton={<SearchOutlined />}
           allowClear
           size="large"
           onSearch={handleSearch}

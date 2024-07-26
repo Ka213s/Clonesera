@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Table, Rate, message } from 'antd';
-import { getReviews, getReviewById } from '../../../utils/commonImports';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Table, Rate, message, Input, Pagination } from 'antd';
+import { getReviews } from '../../../utils/commonImports';
+import { SearchOutlined } from '@ant-design/icons';
 
 interface ReviewData {
   _id: string;
@@ -11,49 +12,61 @@ interface ReviewData {
   updated_at: string;
 }
 
-const Review: React.FC = () => {
-  const [reviews, setReviews] = useState<ReviewData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+interface ReviewResponse {
+  pageData: ReviewData[];
+  pageInfo: {
+    totalItems: number;
+  };
+}
 
-  useEffect(() => {
-    const fetchReviews = async () => {
+const { Search } = Input;
+
+const Review: React.FC = () => {
+  const [filteredReviews, setFilteredReviews] = useState<ReviewData[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [pageNum, setPageNum] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [totalReviews, setTotalReviews] = useState<number>(0);
+  const [searchKeyword, setSearchKeyword] = useState<string>("");
+
+  const fetchReviews = useCallback(
+    async (page: number, size: number) => {
       try {
-        const reviewData = await getReviews({
+        const reviewData: ReviewResponse = await getReviews({
           searchCondition: {
-            course_id: "",
+            course_id: "", 
             rating: 0,
             is_instructor: false,
             is_rating_order: false,
             is_deleted: false,
           },
-          pageInfo: { pageNum: 1, pageSize: 10 },
+          pageInfo: { pageNum: page, pageSize: size },
         });
-  
-        const detailedReviews: ReviewData[] = await Promise.all(
-          reviewData.pageData.map(async (review: { _id: string }) => {
-            const detailedReview = await getReviewById(review._id);
-            return {
-              _id: detailedReview._id,
-              reviewer_name: detailedReview.reviewer_name,
-              course_name: detailedReview.course_name,
-              comment: detailedReview.comment,
-              rating: detailedReview.rating,
-              updated_at: detailedReview.updated_at,
-            };
-          })
-        );
 
-        setReviews(detailedReviews);
+        // Filter reviews client-side based on search keyword
+        const filtered = reviewData.pageData.filter(review =>
+          review.course_name.toLowerCase().includes(searchKeyword.toLowerCase())
+        );
+        setFilteredReviews(filtered);
+        setTotalReviews(reviewData.pageInfo.totalItems);
       } catch (error) {
         message.error('Error fetching reviews');
         console.error('Error fetching reviews:', error);
       } finally {
         setLoading(false);
       }
-    };
+    },
+    [searchKeyword]
+  );
 
-    fetchReviews();
-  }, []);
+  useEffect(() => {
+    fetchReviews(pageNum, pageSize);
+  }, [pageNum, pageSize, fetchReviews]);
+
+  const handleSearch = (value: string) => {
+    setSearchKeyword(value);
+    setPageNum(1); 
+  };
 
   const columns = [
     {
@@ -87,13 +100,36 @@ const Review: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
-      <h2 className="text-3xl font-bold mb-4">Reviews</h2>
+      <div style={{ marginBottom: 16 }}>
+        <Search
+          placeholder="Search by course name"
+          enterButton={<SearchOutlined />}
+          allowClear
+          size="large"
+          onSearch={handleSearch}
+          style={{ width: 300 }}
+        />
+      </div>
       <Table
         columns={columns}
-        dataSource={reviews}
+        dataSource={filteredReviews}
         rowKey="_id"
         loading={loading}
+        pagination={false} 
       />
+      <div className="flex justify-end mt-5">
+        <Pagination
+          current={pageNum}
+          pageSize={pageSize}
+          total={totalReviews}
+          showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+          onChange={(page, pageSize) => {
+            setPageNum(page);
+            setPageSize(pageSize);
+          }}
+          showSizeChanger
+        />
+      </div>
     </div>
   );
 };

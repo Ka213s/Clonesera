@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Avatar, Pagination, Tag, Input } from 'antd';
-import { getUsers } from '../../../utils/commonImports';
+import { getUsers, SearchOutlined } from '../../../utils/commonImports';
 
 const { Search } = Input;
 
@@ -115,7 +115,7 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
       <div className="mb-4">
         <Search
           placeholder="Search by name or email"
-          enterButton="Search"
+          enterButton={<SearchOutlined />}
           allowClear
           size="large"
           onSearch={handleSearch}

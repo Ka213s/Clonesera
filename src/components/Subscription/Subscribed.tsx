@@ -1,8 +1,6 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { Button, Table, Pagination, Input } from 'antd';
+import { React, useEffect, useState, useCallback, useMemo, Button, Table, Pagination, Input, getSubscribeds, updateSubscribed, SearchOutlined } from '../../utils/commonImports';
 import { ColumnsType } from 'antd/es/table';
 import { toast } from 'react-toastify';
-import { getSubscribeds, updateSubscribed } from '../../utils/commonImports';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface Subscribed {
@@ -113,7 +111,7 @@ const Subscribed: React.FC = () => {
             <div style={{ marginBottom: 16 }}>
                 <Search
                     placeholder="Search by instructor name"
-                    enterButton="Search"
+                    enterButton={<SearchOutlined />}
                     allowClear
                     size="large"
                     onSearch={handleSearch}

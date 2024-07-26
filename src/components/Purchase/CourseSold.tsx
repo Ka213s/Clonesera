@@ -1,7 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Table, Button, Input, message, Pagination } from 'antd';
+import { React, useCallback, useEffect, useState, Table, Button, Input, message, Pagination, getItemsByInstructor, SearchOutlined } from '../../utils/commonImports';
 import { TablePaginationConfig } from 'antd/es/table';
-import { getItemsByInstructor } from '../../utils/commonImports';
 import { getStatusTag } from '../../utils/statusTagUtils';
 import { createPayout } from '../../services/Api';
 import { toast } from 'react-toastify';
@@ -98,7 +96,6 @@ const Purchase: React.FC = () => {
       const transactions = selectedRowKeys.map((id) => ({ purchase_id: id as string }));
       const response = await createPayout(transactions);
       console.log('Payout response:', response);
-      toast.success("Payout created successfully!");
       setSelectedRowKeys([]); // Clear selection after creation
     } catch (error) {
       toast.error("Failed to create payout");
@@ -149,6 +146,7 @@ const Purchase: React.FC = () => {
       title: 'Price Paid',
       dataIndex: 'price_paid',
       key: 'price_paid',
+      render: (price_paid: number) => price_paid.toLocaleString(),
     },
     {
       title: 'Student Name',
@@ -161,7 +159,7 @@ const Purchase: React.FC = () => {
     <div>
       <Input.Search
         placeholder="Search by course name"
-        enterButton="Search"
+        enterButton={<SearchOutlined />}
         allowClear
         onSearch={handleSearch}
         style={{ marginBottom: 16, width: 300 }}
@@ -169,7 +167,7 @@ const Purchase: React.FC = () => {
       <Button
         type="primary"
         onClick={handleCreatePayout}
-        disabled={selectedRowKeys.length === 0} 
+        disabled={selectedRowKeys.length === 0}
         style={{ marginLeft: 10 }}
       >
         Create Payout
@@ -181,7 +179,7 @@ const Purchase: React.FC = () => {
         }}
         columns={columns}
         dataSource={filteredData}
-        pagination={false} 
+        pagination={false}
         onChange={handleTableChange}
         rowKey="_id"
       />

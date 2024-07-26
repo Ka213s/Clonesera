@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Table, Pagination, Input } from 'antd';
+import { React, useEffect, useState, useCallback, SearchOutlined, Table, Pagination, Input } from '../../../utils/commonImports';
 import { Link } from 'react-router-dom';
 import { getPayouts } from '../../../services/Api';
 
@@ -99,16 +98,19 @@ const Rejected: React.FC = () => {
             title: 'Balance Origin',
             dataIndex: 'balance_origin',
             key: 'balance_origin',
+            render: (balance_origin: number) => balance_origin.toLocaleString(),
         },
         {
             title: 'Balance Instructor Paid',
             dataIndex: 'balance_instructor_paid',
             key: 'balance_instructor_paid',
+            render: (balance_instructor_paid: number) => balance_instructor_paid.toLocaleString(),
         },
         {
             title: 'Balance Instructor Received',
             dataIndex: 'balance_instructor_received',
             key: 'balance_instructor_received',
+            render: (balance_instructor_received: number) => balance_instructor_received.toLocaleString(),
         },
         {
             title: 'Transaction',
@@ -126,7 +128,7 @@ const Rejected: React.FC = () => {
             <div className="flex items-center mb-4">
                 <Search
                     placeholder="Search by payout number"
-                    enterButton="Search"
+                    enterButton={<SearchOutlined />}
                     allowClear
                     size="large"
                     onSearch={handleSearch}

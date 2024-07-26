@@ -1,11 +1,9 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { Table, message, Select, Button, Input, Pagination } from 'antd';
+import { React, useEffect, useState, useCallback, useMemo, Table, message, Select, Button, Input, Pagination, getCourses, changeCourseStatus, SearchOutlined } from '../../../../utils/commonImports';
 import { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
-import { getCourses, changeCourseStatus } from '../../../../utils/commonImports';
 import EditButton from './EditCourse';
 import DeleteButton from './DeleteCourse';
-import { getStatusTag } from '../../../../utils/statusTagUtils'; // Adjust the import path accordingly
+import { getStatusTag } from '../../../../utils/statusTagUtils'; 
 
 const { Option } = Select;
 const { Search } = Input;
@@ -127,6 +125,7 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
         title: 'Price',
         dataIndex: 'price',
         key: 'price',
+        render: (price: number) => price.toLocaleString(),
       },
       {
         title: 'Discount',
@@ -166,7 +165,7 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
       <div style={{ marginBottom: 16 }}>
         <Search
           placeholder="Search by course name"
-          enterButton="Search"
+          enterButton={<SearchOutlined />}
           allowClear
           size="large"
           onSearch={handleSearch}

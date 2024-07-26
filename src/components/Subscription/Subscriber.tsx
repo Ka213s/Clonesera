@@ -1,8 +1,6 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { Table, Pagination, Input } from 'antd';
+import { React, useEffect, useState, useCallback, useMemo, Table, Pagination, Input, getSubscribers, SearchOutlined } from '../../utils/commonImports';
 import { ColumnsType } from 'antd/es/table';
 import { toast } from 'react-toastify';
-import { getSubscribers } from '../../utils/commonImports';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface Subscriber {
@@ -84,7 +82,7 @@ const Subscriber: React.FC = () => {
             <div style={{ marginBottom: 16 }}>
                 <Search
                     placeholder="Search by subscriber name"
-                    enterButton="Search"
+                    enterButton={<SearchOutlined />}
                     allowClear
                     size="large"
                     onSearch={handleSearch}

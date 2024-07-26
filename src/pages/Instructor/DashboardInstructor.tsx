@@ -40,6 +40,11 @@ const InstructorDashboard: React.FC = () => {
         fetchData();
     }, []);
 
+    const formatNumber = (value: number | null): string | null => {
+        if (value === null) return null;
+        return value.toLocaleString('en-US');
+    };
+
     const stats = [
         {
             title: 'Total Courses',
@@ -52,8 +57,8 @@ const InstructorDashboard: React.FC = () => {
             icon: <UsergroupAddOutlined style={{ fontSize: '48px', color: '#9254de' }} />
         },
         {
-            title: 'Balance Total',
-            value: balanceTotal,
+            title: 'Total Balance',
+            value: formatNumber(balanceTotal),
             icon: <DollarOutlined style={{ fontSize: '48px', color: '#52c41a' }} />
         }
     ];

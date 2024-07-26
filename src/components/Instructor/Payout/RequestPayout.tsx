@@ -1,5 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Table, Button, Pagination, Input, message } from 'antd';
+import { React, useEffect, useState, useCallback, SearchOutlined, Table, Button, Pagination, Input, message } from '../../../utils/commonImports';
 import { Link } from 'react-router-dom';
 import { getPayouts, updatePayout } from '../../../services/Api';
 import { toast } from 'react-toastify';
@@ -68,9 +67,9 @@ const RequestPayout: React.FC = () => {
             const filteredData = result.pageData.filter(payout =>
                 payout.status === 'new' || payout.status === 'rejected' || payout.status === 'request_payout'
             );
-            
+
             setData(filteredData);
-            setTotalPayouts(result.pageInfo.totalItems); 
+            setTotalPayouts(result.pageInfo.totalItems);
         } catch (error) {
             message.error('Failed to fetch data');
             console.error('Failed to fetch data:', error);
@@ -95,8 +94,8 @@ const RequestPayout: React.FC = () => {
                 });
             }
             toast.success('Payout request successfully. Please wait admin for approval!');
-            fetchData(pageNum, pageSize, searchKeyword); 
-            setSelectedRowKeys([]); 
+            fetchData(pageNum, pageSize, searchKeyword);
+            setSelectedRowKeys([]);
         } catch (error) {
             toast.error('Failed to request payout');
             console.error('Failed to request payout:', error);
@@ -126,13 +125,13 @@ const RequestPayout: React.FC = () => {
         {
             title: 'Price Paid',
             key: 'price_paid',
-            render: (record: PayoutData) => record.transactions.reduce((total, transaction) => total + transaction.price_paid, 0),
+            render: (record: PayoutData) => record.transactions.reduce((total, transaction) => total + transaction.price_paid, 0).toLocaleString(),
         },
     ];
 
     const handleSearch = (value: string) => {
         setSearchKeyword(value);
-        setPageNum(1); 
+        setPageNum(1);
     };
 
     return (
@@ -140,7 +139,7 @@ const RequestPayout: React.FC = () => {
             <div className="flex items-center mb-4">
                 <Search
                     placeholder="Search by payout number"
-                    enterButton="Search"
+                    enterButton={<SearchOutlined />}
                     allowClear
                     size="large"
                     onSearch={handleSearch}
@@ -149,7 +148,7 @@ const RequestPayout: React.FC = () => {
                 <Button
                     type="primary"
                     onClick={handleRequestPayout}
-                    disabled={selectedRowKeys.length === 0} 
+                    disabled={selectedRowKeys.length === 0}
                 >
                     Request Payout
                 </Button>
@@ -161,7 +160,7 @@ const RequestPayout: React.FC = () => {
                 }}
                 columns={columns}
                 dataSource={data}
-                rowKey="_id" 
+                rowKey="_id"
                 pagination={false}
             />
             <div className="flex justify-end mt-5">
