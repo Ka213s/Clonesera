@@ -1,7 +1,5 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Table, Pagination, Input, message } from 'antd';
+import { React, useEffect, useState, useCallback, Table, Pagination, Input, message, getLessons, SearchOutlined } from '../../../../utils/commonImports';
 import moment from 'moment';
-import { getLessons } from '../../../../utils/commonImports';
 import UpdateLesson from './EditLesson';
 import DeleteLesson from './DeleteLesson';
 import type { ColumnsType } from 'antd/es/table';
@@ -83,7 +81,7 @@ const DisplayLesson: React.FC = () => {
     } else if (record.image_url) {
       return (
         <div className="flex justify-center items-center">
-          <img src={record.image_url} alt="lesson media" width="200" className='rounded-md'/>
+          <img src={record.image_url} alt="lesson media" width="200" className='rounded-md' />
         </div>
       );
     }
@@ -147,7 +145,7 @@ const DisplayLesson: React.FC = () => {
       <div style={{ marginBottom: 16 }}>
         <Search
           placeholder="Search by lesson name"
-          enterButton="Search"
+          enterButton={<SearchOutlined />}
           allowClear
           size="large"
           onSearch={handleSearch}

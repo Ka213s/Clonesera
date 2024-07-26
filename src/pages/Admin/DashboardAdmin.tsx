@@ -64,10 +64,15 @@ const AdminDashboard: React.FC = () => {
     fetchData();
   }, []);
 
+  const formatNumber = (value: number | null): string | null => {
+    if (value === null) return null;
+    return value.toLocaleString('en-US');
+  };
+
   const stats = [
     {
       title: 'Total Money',
-      value: TotalMoney,
+      value: formatNumber(TotalMoney),
       icon: <DollarOutlined style={{ fontSize: '48px', color: '#faad14' }} />
     },
     {

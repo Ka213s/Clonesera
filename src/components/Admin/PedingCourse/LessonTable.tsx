@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { React, useState, useEffect, SearchOutlined } from "../../../utils/commonImports";
 import { Table, Pagination, message, Input } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
@@ -42,7 +42,7 @@ const renderMedia = (record: Lesson) => {
   } else if (record.image_url) {
     return (
       <div className="flex justify-center items-center ">
-        <img src={record.image_url} alt="lesson media" width="200" className='rounded-md'/>
+        <img src={record.image_url} alt="lesson media" width="200" className='rounded-md' />
       </div>
     );
   }
@@ -99,7 +99,7 @@ const LessonTable: React.FC<LessonTableProps> = ({ lessons }) => {
       <div style={{ marginBottom: 16 }}>
         <Search
           placeholder="Search by lesson name"
-          enterButton="Search"
+          enterButton={<SearchOutlined />}
           allowClear
           size="large"
           onSearch={handleSearch}

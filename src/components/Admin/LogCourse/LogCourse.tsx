@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Table, Pagination, message, Input } from "antd";
-import { getCourses, getCourseLogs } from "../../../utils/commonImports";
+import { getCourses, getCourseLogs, SearchOutlined } from "../../../utils/commonImports";
 import { getStatusTag } from "../../../utils/statusTagUtils";
 
 interface Course {
@@ -109,7 +109,7 @@ const LogCourse: React.FC = () => {
       <div style={{ marginBottom: 16 }}>
         <Search
           placeholder="Search by course name"
-          enterButton="Search"
+          enterButton={<SearchOutlined />}
           allowClear
           size="large"
           onSearch={handleSearch}

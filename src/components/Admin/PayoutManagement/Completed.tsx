@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import { React, useEffect, useState, useCallback, SearchOutlined } from '../../../utils/commonImports';
 import { Table, Pagination, Input } from 'antd';
 import { Link } from 'react-router-dom';
 import { getPayouts } from '../../../services/Api';
@@ -81,7 +81,7 @@ const Completed: React.FC = () => {
 
     const handleSearch = (value: string) => {
         setSearchKeyword(value);
-        setCurrent(1); // Reset to the first page on search
+        setCurrent(1); 
     };
 
     const columns = [
@@ -99,16 +99,19 @@ const Completed: React.FC = () => {
             title: 'Balance Origin',
             dataIndex: 'balance_origin',
             key: 'balance_origin',
+            render: (balance_origin: number) => balance_origin.toLocaleString(),
         },
         {
             title: 'Balance Instructor Paid',
             dataIndex: 'balance_instructor_paid',
             key: 'balance_instructor_paid',
+            render: (balance_instructor_paid: number) => balance_instructor_paid.toLocaleString(),
         },
         {
             title: 'Balance Instructor Received',
             dataIndex: 'balance_instructor_received',
             key: 'balance_instructor_received',
+            render: (balance_instructor_received: number) => balance_instructor_received.toLocaleString(),
         },
         {
             title: 'Transaction',
@@ -126,7 +129,7 @@ const Completed: React.FC = () => {
             <div className="flex items-center mb-4">
                 <Search
                     placeholder="Search by payout number"
-                    enterButton="Search"
+                    enterButton={<SearchOutlined />}
                     allowClear
                     size="large"
                     onSearch={handleSearch}

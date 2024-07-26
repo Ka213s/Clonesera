@@ -6,7 +6,7 @@ import { PlayCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
 import 'tailwindcss/tailwind.css';
 import ReviewSection from './ReviewSection';
-import { useCartContext } from '../../consts/CartContext'; 
+import { useCartContext } from '../../consts/CartContext';
 import { toast } from 'react-toastify';
 
 const { Panel } = Collapse;
@@ -53,7 +53,7 @@ const CourseDetails: React.FC = () => {
   const [course, setCourse] = useState<Course | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const { setTotalCartItems } = useCartContext();  // Use the context
+  const { setTotalCartItems } = useCartContext();  
 
   useEffect(() => {
     const fetchCourseDetail = async () => {
@@ -120,7 +120,7 @@ const CourseDetails: React.FC = () => {
     navigate('/view-cart');
   };
 
-  const handleLearnCourse  = (lessonId?: string) => {
+  const handleLearnCourse = (lessonId?: string) => {
     if (course) {
       const firstLessonId = lessonId || course.session_list[0]?.lesson_list[0]?._id;
       navigate(`/learn-course-detail/${course._id}/lesson/${firstLessonId}`);
@@ -142,6 +142,10 @@ const CourseDetails: React.FC = () => {
       return `${hours}h ${remainingMinutes}m`;
     }
     return `${minutes}m`;
+  };
+
+  const formatPrice = (price: number) => {
+    return price.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
   };
 
   const renderCourseButton = () => {
@@ -198,8 +202,8 @@ const CourseDetails: React.FC = () => {
                   <span className="ml-2 text-green-500 font-semibold">Free</span>
                 ) : (
                   <>
-                    <span className="line-through text-gray-500">${course?.price}</span>
-                    <span className="ml-2 text-red-500 font-semibold">${course?.price_paid}</span>
+                    <span className="line-through text-gray-500">{formatPrice(course?.price || 0)}</span>
+                    <span className="ml-2 text-red-500 font-semibold">{formatPrice(course?.price_paid || 0)}</span>
                     {course?.discount !== undefined && course.discount > 0 && (
                       <Tag color="red" className="ml-2">
                         - {course.discount}%

@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { Table, Pagination, message, Input } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { getCourses } from "../../../utils/commonImports";
+import { getCourses, SearchOutlined } from "../../../utils/commonImports";
 import moment from "moment";
 import { getStatusTag } from "../../../utils/statusTagUtils";
 
@@ -77,6 +77,7 @@ const CourseTable: React.FC = () => {
       title: <div className="center-header">Price</div>,
       dataIndex: "price",
       key: "price",
+      render: (price: number) => price.toLocaleString(),
     },
     {
       title: <div className="center-header">Discount</div>,
@@ -96,7 +97,7 @@ const CourseTable: React.FC = () => {
       <div style={{ marginBottom: 16 }}>
         <Search
           placeholder="Search by course name"
-          enterButton="Search"
+          enterButton={<SearchOutlined />}
           allowClear
           size="large"
           onSearch={handleSearch}

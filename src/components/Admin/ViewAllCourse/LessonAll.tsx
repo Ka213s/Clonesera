@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Table, Pagination, message, Input } from 'antd';
 import moment from 'moment';
-import { getLessons } from '../../../utils/commonImports';
+import { getLessons, SearchOutlined } from '../../../utils/commonImports';
 import { ColumnsType } from 'antd/es/table';
 
 const { Search } = Input;
@@ -138,7 +138,7 @@ const DisplayLesson: React.FC = () => {
       <div style={{ marginBottom: 16 }}>
         <Search
           placeholder="Search by lesson name"
-          enterButton="Search"
+          enterButton={<SearchOutlined />}
           allowClear
           size="large"
           onSearch={handleSearch}

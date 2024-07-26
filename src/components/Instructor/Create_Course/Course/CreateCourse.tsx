@@ -165,13 +165,22 @@ const CreateCourseButton: React.FC = () => {
                 label="Price"
                 rules={[{ required: true, message: 'Please input the price!' }]}
               >
-                <InputNumber min={0} style={{ width: '100%' }} />
+                <InputNumber
+                  min={0}
+                  style={{ width: '100%' }}
+                  formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+                />
               </Form.Item>
               <Form.Item
                 name="discount"
                 label="Discount"
+                rules={[{ required: true, message: 'Please input the discount!' }]}
               >
-                <InputNumber min={0} max={100} style={{ width: '100%' }} />
+                <InputNumber
+                  min={0}
+                  max={100}
+                  style={{ width: '100%' }}
+                />
               </Form.Item>
             </>
           )}

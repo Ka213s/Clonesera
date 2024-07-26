@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Table, Avatar, Pagination, Input } from 'antd';
 import { PaginationProps } from 'antd/es/pagination';
-import { getUsers } from '../../../utils/commonImports';
+import { getUsers, SearchOutlined } from '../../../utils/commonImports';
 import DeleteButton from './DeleteButton';
 import StatusToggle from './StatusToggle';
 import RoleSelect from './RoleSelect';
@@ -132,7 +132,7 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
       <div className="flex items-center mb-4">
         <Search
           placeholder="Search by name or email"
-          enterButton="Search"
+          enterButton={<SearchOutlined />}
           allowClear
           size="large"
           onSearch={handleSearch}

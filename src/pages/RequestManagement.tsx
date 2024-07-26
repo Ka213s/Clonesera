@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import { React, useState, useEffect, useCallback, useMemo, SearchOutlined } from '../utils/commonImports';
 import { Button, Table, Pagination, Modal, Input } from 'antd';
 import { toast } from 'react-toastify';
 import { getUsers, reviewProfileInstructor } from '../services/Api';
@@ -144,7 +144,7 @@ const RequestManagement: React.FC = () => {
             <div className="flex items-center mb-4">
                 <Search
                     placeholder="Search by user name or email"
-                    enterButton="Search"
+                    enterButton={<SearchOutlined />}
                     allowClear
                     size="large"
                     onSearch={handleSearch}

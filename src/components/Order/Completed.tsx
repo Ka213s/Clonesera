@@ -1,8 +1,6 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { Table, Alert, Input, Pagination } from 'antd';
+import { React, useState, useEffect, useCallback, SearchOutlined, Table, Alert, Input, Pagination, getItemsByStudent } from '../../utils/commonImports';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
-import { getItemsByStudent } from '../../utils/commonImports';
 
 interface Course {
   _id: string;
@@ -95,7 +93,7 @@ const Completed: React.FC = () => {
       dataIndex: 'course_name',
       key: 'course_name',
       render: (text: string, record: Course) => (
-        <Link to={`/learn-course-detail/${record.course_id}`}>{text}</Link>
+        <Link to={`/course-detail/${record.course_id}`}>{text}</Link>
       ),
     },
     {
@@ -107,6 +105,7 @@ const Completed: React.FC = () => {
       title: 'Price Paid',
       dataIndex: 'price_paid',
       key: 'price_paid',
+      render: (price_paid: number) => price_paid.toLocaleString(),
     },
     {
       title: 'Discount',
@@ -139,7 +138,7 @@ const Completed: React.FC = () => {
       <div className="flex items-center mb-4">
         <Search
           placeholder="Search by purchase number"
-          enterButton="Search"
+          enterButton={<SearchOutlined />}
           allowClear
           size="large"
           onSearch={handleSearch}
