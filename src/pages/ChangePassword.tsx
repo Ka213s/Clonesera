@@ -57,7 +57,7 @@ const ChangePassword: React.FC = () => {
                     name="newPassword"
                     rules={[
                         { required: true, message: 'New Password is required' },
-                        { min: 8, message: 'New Password must be at least 8 characters' },
+                        { min: 6, message: 'New Password must be at least 6 characters' },
                     ]}
                 >
                     <Input />

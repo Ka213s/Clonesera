@@ -21,6 +21,18 @@ export const getStatusTag = (status: string) => {
     case 'inactive':
       color = 'gray'; // Màu xám cho trạng thái không hoạt động
       break;
+    case 'request_paid':
+      color = 'yellow';
+      break;
+    case 'request_payout':
+      color = 'yellow';
+      break;
+    case 'completed':
+      color = 'green';
+      break;
+    case 'rejected':
+      color = 'red'; // Màu đỏ núi lửa cho trạng thái từ chối
+      break;
     default:
       color = 'blue'; // Màu xanh lam cho các trạng thái không xác định
       break;

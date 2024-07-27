@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Spin, message } from 'antd';
-import { useParams } from 'react-router-dom';
 import { getPayouts } from '../services/Api';
 
 interface Transaction {
-    _id: string; // Transaction ID
+    _id: string;
     price: number;
     discount: number;
     price_paid: number;
@@ -38,46 +37,50 @@ interface ApiResponse {
     };
 }
 
-const TransactionDetail: React.FC = () => {
-    const { id } = useParams<{ id: string }>();
+interface TransactionDetailProps {
+    payoutId: string | null;
+}
+
+const TransactionDetail: React.FC<TransactionDetailProps> = ({ payoutId }) => {
     const [transactions, setTransactions] = useState<Transaction[]>([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const result: ApiResponse = await getPayouts({
-                    searchCondition: {
-                        payout_no: '',
-                        instructor_id: '',
-                        status: '',
-                        is_instructor: false,
-                        is_delete: false,
-                    },
-                    pageInfo: {
-                        pageNum: 1,
-                        pageSize: 10,
+        if (payoutId) {
+            const fetchData = async () => {
+                try {
+                    const result: ApiResponse = await getPayouts({
+                        searchCondition: {
+                            payout_no: '',
+                            instructor_id: '',
+                            status: '',
+                            is_instructor: false,
+                            is_delete: false,
+                        },
+                        pageInfo: {
+                            pageNum: 1,
+                            pageSize: 10,
+                        }
+                    });
+
+                    const payout = result.pageData.find(payout => payout._id === payoutId);
+
+                    if (payout) {
+                        setTransactions(payout.transactions);
+                    } else {
+                        message.error('Payout not found');
                     }
-                });
-
-                // Find the payout that matches the payout ID
-                const payout = result.pageData.find(payout => payout._id === id);
-
-                if (payout) {
-                    setTransactions(payout.transactions);
-                } else {
-                    message.error('Payout not found');
+                } catch (error) {
+                    message.error('Failed to fetch transaction details');
+                    console.error('Failed to fetch transaction details:', error);
+                } finally {
+                    setLoading(false);
                 }
-            } catch (error) {
-                message.error('Failed to fetch transaction details');
-                console.error('Failed to fetch transaction details:', error);
-            } finally {
-                setLoading(false);
-            }
-        };
+            };
 
-        fetchData();
-    }, [id]);
+            fetchData();
+        }
+    }, [payoutId]);
 
     const columns = [
         {
