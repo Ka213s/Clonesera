@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Tag, Skeleton, Rate } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { NT_getPublicCourses } from '../utils/commonImports';
+import { NT_getPublicCourses, formatCurrency } from '../utils/commonImports';
 import { useNavigate } from 'react-router-dom';
+
 
 interface Course {
   _id: number;
@@ -145,7 +146,7 @@ const PopularCourses: React.FC = () => {
                   <div className="flex items-center justify-between mt-auto mb-2">
                     <div className="text-lg font-semibold text-green-600">
                       <span className="text-xl">
-                        {course.price_paid === 0 ? 'Free' : `$${course.price_paid}`}
+                        {course.price_paid === 0 ? 'Free' : formatCurrency(course.price_paid)}
                       </span>
                       <span className="text-sm text-gray-500 ml-2"></span>
                     </div>
