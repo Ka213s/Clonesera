@@ -1,5 +1,5 @@
 import React, { Suspense, lazy } from 'react';
-import { BrowserRouter as Router, Route, Routes,Navigate  } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import LayoutRoute from '../layout/LayoutRoute';
 import LayoutNoSidebar from '../layout/LayoutNoSidebar';
 import { ToastContainer } from 'react-toastify';
@@ -96,10 +96,10 @@ const AppRouter: React.FC = () => {
 
                     {/* Routes with No Sidebar Layout */}
                     <Route element={<LayoutNoSidebar />}>
-                        <Route path={PUBLIC.HOME} element={<HomePage />} />
+                        <Route path={PUBLIC.HOME} element={<PrivateRoute element={HomePage} allowedRoles={[ROLES.INSTRUCTOR , ROLES.STUDENT]} />} />
                         <Route path={PUBLIC.VIEW_ALL_COURSE_HP} element={<ViewAllCourseHomePage />} />
                         <Route path={PUBLIC.LEARN_COURSE} element={<LearnCourseDetail />} />
-                        <Route path={PUBLIC.COURSE_DETAIL} element={<CourseDetails />} />
+                        <Route path={PUBLIC.COURSE_DETAIL} element={<PrivateRoute element={CourseDetails} allowedRoles={[ROLES.INSTRUCTOR , ROLES.STUDENT]} />} />
                     </Route>
 
                     {/* Error Routes */}
