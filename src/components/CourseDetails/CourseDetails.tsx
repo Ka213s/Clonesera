@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { NT_getCourseDetail, getCourseDetail, createCart, getCart } from '../../services/Api';
+import { NT_getCourseDetail, getCourseDetail, createCart, getCart, formatCurrency } from '../../utils/commonImports';
 import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse, Skeleton } from 'antd';
 import { PlayCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import { Editor } from '@tinymce/tinymce-react';
@@ -144,9 +144,7 @@ const CourseDetails: React.FC = () => {
     return `${minutes}m`;
   };
 
-  const formatPrice = (price: number) => {
-    return price.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
-  };
+
 
   const renderCourseButton = () => {
     if (course?.is_purchased) {
@@ -169,6 +167,24 @@ const CourseDetails: React.FC = () => {
           {course?.is_in_cart ? 'View Cart' : 'Add to Cart'}
         </Button>
       );
+    }
+  };
+
+  const renderPrice = () => {
+    if (course?.price === 0) {
+      return <span className="ml-2 text-green-500 font-semibold">Free</span>;
+    } else if (course?.discount && course.discount > 0) {
+      return (
+        <>
+          <span className="line-through text-gray-500">{formatCurrency(course.price)}</span>
+          <span className="ml-2 text-red-500 font-semibold">{formatCurrency(course.price_paid)}</span>
+          <Tag color="red" className="ml-2">
+            - {course.discount}%
+          </Tag>
+        </>
+      );
+    } else {
+      return <span className="text-red-500 font-semibold">{formatCurrency(course?.price || 0)}</span>;
     }
   };
 
@@ -198,19 +214,7 @@ const CourseDetails: React.FC = () => {
               </p>
               <p className="mb-2 flex items-center">
                 <strong className="mr-2">Price:</strong>
-                {course?.price === 0 ? (
-                  <span className="ml-2 text-green-500 font-semibold">Free</span>
-                ) : (
-                  <>
-                    <span className="line-through text-gray-500">{formatPrice(course?.price || 0)}</span>
-                    <span className="ml-2 text-red-500 font-semibold">{formatPrice(course?.price_paid || 0)}</span>
-                    {course?.discount !== undefined && course.discount > 0 && (
-                      <Tag color="red" className="ml-2">
-                        - {course.discount}%
-                      </Tag>
-                    )}
-                  </>
-                )}
+                {renderPrice()}
               </p>
               <p className="mb-2">
                 <strong>Full Time:</strong> {formatFullTime(course?.full_time || 0)}
