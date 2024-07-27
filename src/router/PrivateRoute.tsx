@@ -10,10 +10,6 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ element: Component, allowed
     const userData = localStorage.getItem('userData');
     const userRole = userData ? JSON.parse(userData).role : null;
 
-    if (userRole === 'admin') {
-        return <Navigate to="/display-account" />;
-    }
-
     return userRole && allowedRoles.includes(userRole) ? <Component /> : <Navigate to="/homepage" />;
 }
 
