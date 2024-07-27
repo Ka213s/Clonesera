@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getUserData, updateSubscribed } from '../../utils/commonImports'; // Adjust the import path as necessary
+import { getUserData, updateSubscribed, getSubscribeds } from '../../utils/commonImports';
 import CourseTab from './CourseTab';
 import SubscriptionTab from './SubscriptionTab';
 import AboutTab from './AboutTab';
@@ -25,18 +25,20 @@ interface UserData {
 const ViewProfile: React.FC = () => {
     const [activeTab, setActiveTab] = useState('About');
     const [userData, setUserData] = useState<UserData | null>(null);
+    const [isSubscribed, setIsSubscribed] = useState(false);
     const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log('id:', id);
-            if (id) { // Check if id is defined
+            if (id) {
                 try {
                     const data = await getUserData(id);
                     setUserData(data);
+                    const subscribeds = await getSubscribeds({ keyword: "", is_delete: false }, 1, 10);
+                    console.log('Subscribeds:', subscribeds);
+                    setIsSubscribed(subscribeds.total > 0);
                 } catch (error) {
                     console.error('Error fetching user data:', error);
-                    // Handle error fetching user data
                 }
             } else {
                 console.error('No user ID provided');
@@ -44,12 +46,13 @@ const ViewProfile: React.FC = () => {
         };
 
         fetchData();
-    }, [id]); // Dependency array to run when id changes
+    }, [id]);
 
     const handleSubscribe = async () => {
         if (userData) {
             try {
                 await updateSubscribed(userData._id);
+                setIsSubscribed(true);
                 alert('Subscribed successfully!');
             } catch (error) {
                 console.error('Error subscribing:', error);
@@ -58,8 +61,21 @@ const ViewProfile: React.FC = () => {
         }
     };
 
+    const handleUnsubscribe = async () => {
+        if (userData) {
+            try {
+                await updateSubscribed(userData._id);
+                setIsSubscribed(false);
+                alert('Unsubscribed successfully!');
+            } catch (error) {
+                console.error('Error unsubscribing:', error);
+                alert('Failed to unsubscribe.');
+            }
+        }
+    };
+
     const renderTabContent = () => {
-        if (!userData) return null; // Handle case where userData is null
+        if (!userData) return null;
 
         switch (activeTab) {
             case 'About':
@@ -90,15 +106,13 @@ const ViewProfile: React.FC = () => {
                         </div>
                     </div>
                     <button
-                        className="px-4 py-2 bg-green-600 text-white rounded-lg"
-                        onClick={handleSubscribe}
+                        className={`px-4 py-2 ${isSubscribed ? 'bg-red-600' : 'bg-green-600'} text-white rounded-lg`}
+                        onClick={isSubscribed ? handleUnsubscribe : handleSubscribe}
                     >
-                        Subscribe
+                        {isSubscribed ? 'Unsubscribe' : 'Subscribe'}
                     </button>
                 </div>
             </div>
-
-            {/* Main content wrapper */}
             <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">
                 <div className="flex space-x-6 border-b border-gray-200 pb-3">
                     {['About', 'Course', 'Subscription'].map((tab) => (

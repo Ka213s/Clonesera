@@ -68,9 +68,11 @@ const CreateBlog: React.FC = () => {
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Create Blog
-      </Button>
+      <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '10px' }}>
+        <Button className='custom-button' type="primary" onClick={showModal}>
+          Create Blog
+        </Button>
+      </div>
       <Modal
         title="Create New Blog"
         visible={isModalVisible}

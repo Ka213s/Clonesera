@@ -29,7 +29,7 @@ const Payout: React.FC = () => {
                         key={tab.key}
                         onClick={() => setActiveTab(tab.key)}
                         className={`py-2 px-4 text-sm font-medium ${activeTab === tab.key
-                            ? 'text-red-500 border-b-2 border-red-500'
+                            ? 'text-green-500 border-b-2 border-green-500'
                             : 'text-gray-500'
                             }`}
                     >
