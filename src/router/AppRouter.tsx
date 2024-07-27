@@ -43,7 +43,7 @@ const PayoutManagement = lazy(() => import('../pages/Admin/PayoutManagement'));
 const DashboardAdmin = lazy(() => import('../pages/Admin/DashboardAdmin'));
 const InstructorDashboard = lazy(() => import('../pages/Instructor/DashboardInstructor'));
 const DashboardStudent = lazy(() => import('../pages/Student/DashboardStudent'));
-const TransactionDetail = lazy(() => import('../pages/TransactionDetail'));
+// const TransactionDetail = lazy(() => import('../pages/TransactionDetail'));
 const PageError404 = lazy(() => import('../pages/Error/PageError404'));
 const PageError500 = lazy(() => import('../pages/Error/PageError500'));
 const PageError403 = lazy(() => import('../pages/Error/PageError403'));
@@ -77,7 +77,7 @@ const AppRouter: React.FC = () => {
                         <Route path={INSTRUCTOR.COURSE_SOLD} element={<PrivateRoute element={CourseSold} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.PAYOUT} element={<PrivateRoute element={Payout} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.VIEW_ALL_COURSE} element={<PrivateRoute element={ViewAllCourse} allowedRoles={[ROLES.INSTRUCTOR, ROLES.ADMIN]} />} />
-                        <Route path={INSTRUCTOR.TRANSACTION_DETAIL} element={<PrivateRoute element={TransactionDetail} allowedRoles={[ROLES.INSTRUCTOR, ROLES.ADMIN]} />} />
+                        {/* <Route path={INSTRUCTOR.TRANSACTION_DETAIL} element={<PrivateRoute element={TransactionDetail} allowedRoles={[ROLES.INSTRUCTOR, ROLES.ADMIN]} />} /> */}
                     </Route>
 
                     {/* Admin Routes with MainLayout */}

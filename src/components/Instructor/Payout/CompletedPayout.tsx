@@ -1,9 +1,11 @@
-import { React, useEffect, useState, useCallback, SearchOutlined, Table, Input, Pagination, message } from '../../../utils/commonImports';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Table, Input, Pagination, message, Modal, Button } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import { getPayouts } from '../../../services/Api';
+import TransactionDetail from '../../../pages/TransactionDetail';
 
 interface Transaction {
-    _id: string; 
+    _id: string;
     price: number;
     discount: number;
     price_paid: number;
@@ -45,6 +47,8 @@ const CompletedPayout: React.FC = () => {
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalPayouts, setTotalPayouts] = useState<number>(0);
     const [searchKeyword, setSearchKeyword] = useState<string>("");
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+    const [selectedPayoutId, setSelectedPayoutId] = useState<string | null>(null);
 
     const fetchData = useCallback(async (page: number, size: number, keyword: string) => {
         try {
@@ -52,7 +56,7 @@ const CompletedPayout: React.FC = () => {
                 searchCondition: {
                     payout_no: keyword,
                     instructor_id: '',
-                    status: 'completed', // Filter for completed status
+                    status: 'completed',
                     is_instructor: false,
                     is_delete: false
                 },
@@ -75,12 +79,17 @@ const CompletedPayout: React.FC = () => {
 
     const handleSearch = (value: string) => {
         setSearchKeyword(value);
-        setPageNum(1); // Reset to the first page on search
+        setPageNum(1);
     };
 
     const handleTableChange = (pagination: any) => {
         setPageNum(pagination.current || 1);
         setPageSize(pagination.pageSize || 10);
+    };
+
+    const handleViewClick = (id: string) => {
+        setSelectedPayoutId(id);
+        setIsModalVisible(true);
     };
 
     const columns = [
@@ -90,9 +99,13 @@ const CompletedPayout: React.FC = () => {
             key: 'payout_no',
         },
         {
-            title: 'Instructor Name',
-            dataIndex: 'instructor_name',
-            key: 'instructor_name',
+            title: 'Transaction',
+            key: 'transaction_id',
+            render: (record: PayoutData) => (
+                <Button type="link" onClick={() => handleViewClick(record._id)}>
+                    View
+                </Button>
+            ),
         },
         {
             title: 'Balance Origin',
@@ -112,15 +125,7 @@ const CompletedPayout: React.FC = () => {
             key: 'balance_instructor_received',
             render: (balance_instructor_received: number) => balance_instructor_received.toLocaleString(),
         },
-        {
-            title: 'Transaction',
-            key: 'transaction_id',
-            render: (record: PayoutData) => (
-                <Link to={`/transaction/${record._id}`}>
-                    View
-                </Link>
-            ),
-        },
+
     ];
 
     return (
@@ -155,6 +160,15 @@ const CompletedPayout: React.FC = () => {
                     showSizeChanger
                 />
             </div>
+            <Modal
+                title="Transaction Details"
+                visible={isModalVisible}
+                onCancel={() => setIsModalVisible(false)}
+                footer={null}
+                width={1000}
+            >
+                <TransactionDetail payoutId={selectedPayoutId} />
+            </Modal>
         </div>
     );
 };
