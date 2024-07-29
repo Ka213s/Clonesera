@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { NT_getCourseDetail, getCourseDetail, createCart, getCart, formatCurrency } from '../../utils/commonImports';
-import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse, Skeleton } from 'antd';
+import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse, Skeleton, Rate } from 'antd';
 import { PlayCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import 'tailwindcss/tailwind.css';
 import ReviewSection from './ReviewSection';
@@ -41,6 +41,7 @@ interface Course {
   video_url: string;
   discount?: number;
   price_paid: number;
+  average_rating: number;
   full_time: number;
   content: string;
   session_list: Session[];
@@ -146,8 +147,6 @@ const CourseDetails: React.FC = () => {
     return `${minutes}m`;
   };
 
-
-
   const renderCourseButton = () => {
     if (course?.is_purchased) {
       return (
@@ -224,6 +223,13 @@ const CourseDetails: React.FC = () => {
               <p className="mb-4">
                 <strong>Description:</strong> {course?.description.replace(/<\/?p>/g, '')}
               </p>
+              <div className="mb-4">
+                <strong>Rating:</strong>
+                <span className="relative top-[2px] ml-2">
+                  <Rate disabled defaultValue={course?.average_rating} allowHalf />
+                </span>
+              </div>
+
               <div className="flex space-x-4 mt-8">
                 {renderCourseButton()}
                 <Button
@@ -244,7 +250,6 @@ const CourseDetails: React.FC = () => {
           <div className="mt-4 text-lg">
             {parse(course?.content || '')}
           </div>
-         
           <h2 className="text-xl font-bold mb-4 mt-5">Course Session</h2>
           <Collapse accordion>
             {course?.session_list.map((session) => (
@@ -285,7 +290,6 @@ const CourseDetails: React.FC = () => {
           </Collapse>
           <Divider />
           <ReviewSubmit courseId={course ? course._id : null} />
-
           {course?.is_purchased && <ReviewSection courseId={course._id} />}
         </div>
       </Card>
