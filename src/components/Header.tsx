@@ -4,8 +4,7 @@ import type { MenuProps } from 'antd';
 import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
-import { useCartContext } from '../consts/CartContext';
-import { getCurrentLogin } from '../utils/commonImports';
+import { useCartContext } from '../consts/CartContext'; 
 
 const { Text } = Typography;
 
@@ -14,47 +13,36 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
-  const [avatar, setAvatar] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [role, setRole] = useState<string | null>(null);
-  const [username, setUsername] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [userState, setUserState] = useState({
+    avatar: null,
+    isLoggedIn: false,
+    role: null,
+    username: null
+  });
   const { totalCartItems } = useCartContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setIsLoggedIn(false);
-        setIsLoading(false);
-        return;
-      }
-
-      try {
-        const userData = await getCurrentLogin();
-        if (userData) {
-          setAvatar(userData.avatar || null);
-          setRole(userData.role);
-          setUsername(userData.name);
-          setIsLoggedIn(true);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } catch (error) {
-        console.error('Failed to fetch user data:', error);
-        setIsLoggedIn(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUserData();
+    const storedUserData = localStorage.getItem('userData');
+    if (storedUserData) {
+      const userData = JSON.parse(storedUserData);
+      setUserState({
+        avatar: userData.avatar || null,
+        isLoggedIn: true,
+        role: userData.role,
+        username: userData.name
+      });
+    } else {
+      setUserState(prevState => ({
+        ...prevState,
+        isLoggedIn: false
+      }));
+    }
   }, []);
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (role === 'admin') {
+    if (userState.role === 'admin') {
       navigate('/display-account');
     } else {
       navigate('/homepage');
@@ -72,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const userMenu: MenuProps['items'] = [
     {
       key: 'welcome',
-      label: <Text>Welcome, {username}!</Text>,
+      label: <Text>Welcome, {userState.username}!</Text>,
     },
     {
       type: 'divider',
@@ -95,10 +83,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     },
   ];
 
-  if (isLoading) {
-    return null; 
-  }
-
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
       <div className="flex items-center space-x-4">
@@ -114,9 +98,9 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       </div>
 
       <div className="flex items-center ml-auto space-x-8 pr-4">
-        {isLoggedIn ? (
+        {userState.isLoggedIn ? (
           <>
-            {role === 'instructor' && (
+            {userState.role === 'instructor' && (
               <>
                 <Button type="primary" className="custom-button" onClick={handleCreateCourse}>
                   Create New Course
@@ -139,10 +123,10 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 
             <Divider className="border-gray-400 h-9" type="vertical" />
             <div className="">
-              <Dropdown menu={{ items: userMenu }} trigger={['hover']} overlayClassName="hover-dropdown">
+              <Dropdown menu={{ items: userMenu }} trigger={['click']}>
                 <Avatar
                   size="large"
-                  src={avatar || 'default-avatar-path'}
+                  src={userState.avatar || 'default-avatar-path'}
                   className="border-2 hover:border-gray-800 transition duration-300 ease-in-out"
                 />
               </Dropdown>

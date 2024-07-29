@@ -4,56 +4,45 @@ import { PlusOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined } from
 import { Link, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
 import logo from '../assets/Logo-2.png';
-import { useCartContext } from '../consts/CartContext'; // Import the custom hook
-import { getCurrentLogin } from '../utils/commonImports';
+import { useCartContext } from '../consts/CartContext';
 
 const { Text } = Typography;
 const { Search } = Input;
 
 const HeaderNoMenu: React.FC = () => {
-  const [avatar, setAvatar] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [role, setRole] = useState<string | null>(null);
-  const [username, setUsername] = useState<string | null>(null);
+  const [userState, setUserState] = useState({
+    avatar: null,
+    isLoggedIn: false,
+    role: null,
+    username: null
+  });
   const { totalCartItems } = useCartContext();
-
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setIsLoggedIn(false);
-        return;
-      }
-
-      try {
-        const userData = await getCurrentLogin();
-        if (userData) {
-          setAvatar(userData.avatar || null);
-          setRole(userData.role || null);
-          setUsername(userData.name || null);
-          setIsLoggedIn(true);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } catch (error) {
-        console.error('Failed to fetch user data:', error);
-        setIsLoggedIn(false);
-      }
-    };
-
-    fetchUserData();
+    const storedUserData = localStorage.getItem('userData');
+    if (storedUserData) {
+      const userData = JSON.parse(storedUserData);
+      setUserState({
+        avatar: userData.avatar || null,
+        isLoggedIn: true,
+        role: userData.role,
+        username: userData.name
+      });
+    } else {
+      setUserState(prevState => ({
+        ...prevState,
+        isLoggedIn: false
+      }));
+    }
   }, []);
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    switch (role) {
-      case 'admin':
-        navigate('/display-account');
-        break;
-      default:
-        navigate('/homepage');
+    if (userState.role === 'admin') {
+      navigate('/display-account');
+    } else {
+      navigate('/homepage');
     }
   };
 
@@ -73,7 +62,7 @@ const HeaderNoMenu: React.FC = () => {
     {
       key: 'welcome',
       label: (
-        <Text>Welcome, {username}!</Text>
+        <Text>Welcome, {userState.username}!</Text>
       )
     },
     { type: 'divider' },
@@ -117,9 +106,9 @@ const HeaderNoMenu: React.FC = () => {
       </div>
 
       <div className="flex items-center ml-auto space-x-8 pr-4">
-        {isLoggedIn ? (
+        {userState.isLoggedIn ? (
           <>
-            {role === 'instructor' && (
+            {userState.role === 'instructor' && (
               <>
                 <Button type="primary" className="custom-button" onClick={handleCreateCourse}>
                   Create New Course
@@ -142,10 +131,10 @@ const HeaderNoMenu: React.FC = () => {
 
             <Divider className="border-gray-400 h-9" type="vertical" />
             <div className="">
-              <Dropdown menu={{ items: userMenu }} trigger={['hover']}>
+              <Dropdown menu={{ items: userMenu }} trigger={['click']}>
                 <Avatar
                   size="large"
-                  src={avatar || 'default-avatar-path'}
+                  src={userState.avatar || 'default-avatar-path'}
                   className="border-2 hover:border-gray-800 transition duration-300 ease-in-out"
                 />
               </Dropdown>

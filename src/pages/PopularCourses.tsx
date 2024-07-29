@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Tag, Skeleton, Rate } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { NT_getPublicCourses, formatCurrency } from '../utils/commonImports';
+import { getPublicCourses, formatCurrency } from '../utils/commonImports';
 import { useNavigate, Link } from 'react-router-dom';
 
 interface Course {
@@ -42,7 +42,7 @@ const PopularCourses: React.FC = () => {
           pageSize: 10,
         },
       };
-      const response: ApiResponse = await NT_getPublicCourses(data);
+      const response: ApiResponse = await getPublicCourses(data);
       setCourses(response.pageData);
       setLoading(false);
     };
@@ -63,7 +63,7 @@ const PopularCourses: React.FC = () => {
   };
 
   const handleButtonClick = (courseId: number, isPurchased: boolean, e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation(); // Prevent event from propagating
+    e.stopPropagation(); 
     if (!isPurchased) {
       navigate(`/course-detail/${courseId}`);
     }
@@ -95,65 +95,64 @@ const PopularCourses: React.FC = () => {
               </div>
             ))
           ) : (
-            courses.map((course) => (
-              <div key={course._id} className="course-slide">
-                <Link
-                  to={`/course-detail/${course._id}`}
-                  className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl p-4 cursor-pointer"
-                  style={{ height: '395px' }}
-                >
-                  <img
-                    src={course.image_url}
-                    alt={course.name}
-                    className="w-full h-40 object-cover mb-4"
-                  />
-                  <div className="flex items-center mt-2 space-x-2 ml-2">
-                    <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
-                      <span className="text-gray-500 text-sm">{course.session_count} Session</span>
-                    </div>
-                    <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
-                      <span className="text-gray-500 text-sm">{course.lesson_count} Lessons</span>
-                    </div>
-                    <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
-                      <span className="text-gray-500 text-sm">
-                        {course.full_time > 0
-                          ? `${Math.floor(course.full_time / 60)}h ${course.full_time % 60}m`
-                          : '0h 0m'}
-                      </span>
-                    </div>
+            courses.slice(currentIndex, currentIndex + 4).map((course) => (
+              <Link
+                to={`/course-detail/${course._id}`}
+                key={course._id}
+                className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl p-4 cursor-pointer" // Thêm cursor-pointer để chỉ rõ đây là phần có thể nhấp chuột
+                style={{ height: '395px' }}
+              >
+                <img
+                  src={course.image_url}
+                  alt={course.name}
+                  className="w-full h-40 object-cover mb-4"
+                />
+                <div className="flex items-center mt-2 space-x-2 ml-2">
+                  <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
+                    <span className="text-gray-500 text-sm">{course.session_count} Session</span>
                   </div>
-                  <div className="p-2 flex flex-col flex-grow">
-                    <h2 className="text-lg font-semibold mt-1 h-10 overflow-hidden overflow-ellipsis whitespace-nowrap">
-                      {course.name}
-                    </h2>
-                    <p className="text-sm text-gray-600 mb-2">
-                      <Tag color="blue">
-                        {course.category_name || 'Default Category'}
-                      </Tag>
+                  <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
+                    <span className="text-gray-500 text-sm">{course.lesson_count} Lessons</span>
+                  </div>
+                  <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
+                    <span className="text-gray-500 text-sm">
+                      {course.full_time > 0
+                        ? `${Math.floor(course.full_time / 60)}h ${course.full_time % 60}m`
+                        : '0h 0m'}
+                    </span>
+                  </div>
+                </div>
+                <div className="p-2 flex flex-col flex-grow">
+                  <h2 className="text-lg font-semibold mt-1 h-10 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                    {course.name}
+                  </h2>
+                  <p className="text-sm text-gray-600 mb-2">
+                    <Tag color="blue">
+                      {course.category_name || 'Default Category'}
+                    </Tag>
+                  </p>
+                  <div className="flex items-center mb-2">
+                    <p className="text-sm text-gray-700">
+                      <strong>{course.instructor_name}</strong>
                     </p>
-                    <div className="flex items-center mb-2">
-                      <p className="text-sm text-gray-700">
-                        <strong>{course.instructor_name}</strong>
-                      </p>
-                    </div>
-                    <Rate disabled defaultValue={course.average_rating} allowHalf style={{ fontSize: 16 }} />
-                    <div className="flex items-center justify-between mt-auto mb-2">
-                      <div className="text-lg font-semibold text-green-600">
-                        <span className="text-xl">
-                          {course.price_paid === 0 ? 'Free' : formatCurrency(course.price_paid)}
-                        </span>
-                        <span className="text-sm text-gray-500 ml-2"></span>
-                      </div>
-                      <button
-                        onClick={(e) => handleButtonClick(course._id, course.is_purchased, e)}
-                        className={`py-1 px-2 rounded-md transition duration-300 ${course.is_purchased ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-green-600 text-white hover:bg-green-700'}`}
-                      >
-                        {course.is_purchased ? 'Learn' : 'Join Now'}
-                      </button>
-                    </div>
                   </div>
-                </Link>
-              </div>
+                  <Rate disabled defaultValue={course.average_rating} allowHalf style={{ fontSize: 16 }} />
+                  <div className="flex items-center justify-between mt-auto mb-2">
+                    <div className="text-lg font-semibold text-green-600">
+                      <span className="text-xl">
+                        {course.price_paid === 0 ? 'Free' : formatCurrency(course.price_paid)}
+                      </span>
+                      <span className="text-sm text-gray-500 ml-2"></span>
+                    </div>
+                    <button
+                      onClick={(e) => handleButtonClick(course._id, course.is_purchased, e)}
+                      className={`py-1 px-2 rounded-md transition duration-300 ${course.is_purchased ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-green-600 text-white hover:bg-green-700'}`}
+                    >
+                      {course.is_purchased ? 'Purchased' : 'Buy Now'}
+                    </button>
+                  </div>
+                </div>
+              </Link>
             ))
           )}
         </div>
