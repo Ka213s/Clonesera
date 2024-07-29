@@ -74,14 +74,14 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
           <Button
             type="primary"
             style={{ marginLeft: 10 }}
-            onClick={() => message.info('Nhấn vào đây Send to admin để gửi tới admin duyệt')}
+            onClick={() => message.info('Click here Send to admin to send to admin for approval')}
           >
-            Chờ admin duyệt để kích hoạt
+           Wait for admin approval to activate
           </Button>
         ) : (
           <Select
             defaultValue={record.status}
-            style={{ width: 220, marginLeft: 10 }}
+            style={{ width: 120, marginLeft: 10 }}
             onChange={(value) => handleChangeStatus(record._id, value)}
           >
             <Option value="active">Active</Option>
@@ -131,7 +131,7 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
         title: 'Actions',
         key: 'actions',
         render: (_, record) => renderActions(record),
-        align: 'center',
+       
       },
     ],
     [renderActions]
@@ -146,7 +146,7 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
 
   const handleSearch = (value: string) => {
     setSearchKeyword(value);
-    setPageNum(1); // Reset to first page on search
+    setPageNum(1); 
   };
 
   return (
