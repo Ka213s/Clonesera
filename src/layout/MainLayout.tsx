@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Loading from '../components/Loading';
-
+import Sidebar from '../components/Sidebar/Sidebar';
 import SidebarStudent from '../components/Sidebar/SidebarStudent';
 import SidebarInstructor from '../components/Sidebar/SidebarInstructor';
 import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
@@ -40,7 +40,9 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   };
 
   const renderSidebar = useMemo(() => {
-   
+    if (!role) {
+      return <Sidebar showMenu={showMenu} />;
+    }
 
     if (location.pathname === '/home') {
       switch (role) {

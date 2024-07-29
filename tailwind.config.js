@@ -13,6 +13,9 @@ export default {
       animation: {
         'blob': 'blob 8s infinite',
       },
+      maxWidth: {
+        '4/5': '80%',
+      },
       container: {
         center: true,
         padding: '1rem',
