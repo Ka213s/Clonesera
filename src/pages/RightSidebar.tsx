@@ -1,6 +1,5 @@
 import React from 'react';
 import Statistic from './Statistic';
-import CustomCalendar from './CustomCalendar';
 
 const RightSidebar: React.FC = () => {
   return (
@@ -11,9 +10,6 @@ const RightSidebar: React.FC = () => {
       </div>
 
       {/* Calendar Section */}
-      <div>
-        <CustomCalendar />
-      </div>
     </div>
   );
 };
