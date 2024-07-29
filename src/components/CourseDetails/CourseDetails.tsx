@@ -87,6 +87,7 @@ const CourseDetails: React.FC = () => {
   const handleAddToCart = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
+      navigate('/login');
       toast.error('Please login to add course to cart');
       return;
     }
