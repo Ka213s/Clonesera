@@ -70,10 +70,6 @@ const ForgotPassword: React.FC = () => {
                 </div>
                 <ToastContainer />
             </div>
-            <div className="ocean">
-                <div className="wave"></div>
-                <div className="wave"></div>
-            </div>
         </div>
     );
 };
