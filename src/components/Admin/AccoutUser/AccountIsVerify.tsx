@@ -14,7 +14,7 @@ interface User {
   is_verified: boolean;
 }
 
-interface Pagination {
+interface PaginationProps {
   current: number;
   pageSize: number;
   total: number;
@@ -27,11 +27,10 @@ interface DisplayAccountProps {
 
 const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDeleted = false }) => {
   const [data, setData] = useState<User[]>([]);
-  const [pagination, setPagination] = useState<Pagination>({ current: 1, pageSize: 10, total: 0 });
+  const [pagination, setPagination] = useState<PaginationProps>({ current: 1, pageSize: 10, total: 0 });
   const [searchKeyword, setSearchKeyword] = useState<string>('');
 
   const fetchUsers = async (pageNum: number, pageSize: number, keyword: string) => {
-    try {
       const response = await getUsers({
         keyword,
         role: 'all',
@@ -39,31 +38,25 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
         is_deleted: isDeleted,
         is_verified: 'false'
       }, pageNum, pageSize);
-      console.log('response', response.pageData);
-
       setData(response.pageData);
-
       setPagination({
         current: response.pageInfo.pageNum,
         pageSize: response.pageInfo.pageSize,
         total: response.pageInfo.totalItems,
       });
-    } catch (error) {
-      console.error('Failed to fetch users:', error);
-    }
   };
 
   useEffect(() => {
     fetchUsers(pagination.current, pagination.pageSize, searchKeyword);
   }, [pagination.current, pagination.pageSize, status, isDeleted, searchKeyword]);
 
-  const handleTableChange = (pagination: any) => {
-    fetchUsers(pagination.current!, pagination.pageSize!, searchKeyword);
+  const handleTableChange = (newPagination: PaginationProps) => {
+    fetchUsers(newPagination.current, newPagination.pageSize, searchKeyword);
   };
 
   const handleSearch = (value: string) => {
     setSearchKeyword(value);
-    setPagination(prev => ({ ...prev, current: 1 })); // Reset to the first page on new search
+    setPagination(prev => ({ ...prev, current: 1 }));
   };
 
   const columns = [
@@ -127,7 +120,7 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
         rowKey={(record: User) => record._id}
         dataSource={data}
         pagination={false} // Disable pagination in Table component
-        onChange={handleTableChange}
+        onChange={(pagination) => handleTableChange(pagination as PaginationProps)}
       />
       <div className="flex justify-end mt-5">
         <Pagination

@@ -107,7 +107,6 @@ const handleErrorByToast = (errors: AxiosError<ErrorResponse>) => {
       message = errorMessages.join(', ');
     }
   }
-  console.log('Error:', data);
   toast.error(message);
   return Promise.reject(data?.errors ?? { message });
 };

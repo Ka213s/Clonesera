@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { Form, Input, Select, Button, Row, Col } from 'antd';
 import { createUser } from '../../../utils/commonImports';
-import { toast } from 'react-toastify'; // Ensure you have installed and configured react-toastify
-import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor'; // Ensure the path is correct
-import FileUploader from '../../FileUploader'; // Ensure the path is correct
+import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor';
+import FileUploader from '../../FileUploader'; 
 
 const { Option } = Select;
 
@@ -46,17 +45,11 @@ const CreateAccount: React.FC = () => {
     if (role !== 'student') {
       userData = { ...userData, avatar: avatarUrl, video: videoUrl };
     }
-
-    try {
       await createUser(userData);
       form.resetFields();
       setDescription('');
       setAvatarUrl('');
       setVideoUrl('');
-    } catch (error) {
-      toast.error('Failed to create user');
-      console.error('Error creating user:', error);
-    }
   };
 
   const handleRoleChange = (value: string) => {

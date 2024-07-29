@@ -1,5 +1,5 @@
 import React from 'react';
-import { Modal, Button, message } from 'antd';
+import { Modal, Button } from 'antd';
 import { deleteBlog } from '../../../utils/commonImports'; // Ensure the path is correct
 
 interface DeleteBlogProps {
@@ -12,13 +12,9 @@ interface DeleteBlogProps {
 const DeleteBlog: React.FC<DeleteBlogProps> = ({ visible, id, onClose, onDelete }) => {
   const handleDelete = async () => {
     if (id) {
-      try {
         await deleteBlog(id);
         onDelete(id); 
         onClose(); 
-      } catch (error) {
-        message.error('Failed to delete blog');
-      }
     }
   };
 

@@ -9,8 +9,6 @@ const StudentDashboard: React.FC = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                // Fetch total purchased courses
                 const searchConditionPurchasedCourses = {
                     purchase_no: '',
                     cart_no: '',
@@ -18,22 +16,15 @@ const StudentDashboard: React.FC = () => {
                     status: '',
                     is_delete: false,
                 };
-                const pageInfo = { pageNum: 1, pageSize: 10 }; // Adjust as needed
+                const pageInfo = { pageNum: 1, pageSize: 10 };
                 const purchasedCoursesData = await getItemsByStudent({ searchCondition: searchConditionPurchasedCourses, pageInfo });
-                console.log("Total Purchased Courses:", purchasedCoursesData);
                 setTotalPurchasedCourses(purchasedCoursesData.pageInfo.totalItems);
-
-                // Fetch total subscriptions
                 const searchConditionSubscriptions = {
                     keyword: '',
                     is_delete: false,
                 };
                 const subscriptionsData = await getSubscribeds(searchConditionSubscriptions, 1, 10);
-                console.log("Total Subscribed:", subscriptionsData);
                 setTotalSubscribed(subscriptionsData.pageInfo.totalItems);
-            } catch (error) {
-                console.error('Failed to fetch data', error);
-            }
         };
 
         fetchData();

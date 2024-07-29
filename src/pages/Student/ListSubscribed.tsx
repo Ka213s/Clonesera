@@ -24,21 +24,16 @@ const ListSubscribed: React.FC = () => {
 
     const fetchSubscriptions = useCallback(
         async (page: number, pageSize: number) => {
-            try {
                 const data = await getSubscribeds(
                     { keyword: '', is_delete: false },
                     page,
                     pageSize
                 );
-
                 const filteredData = data.pageData.filter((item: Subscribed) => item.is_subscribed);
                 setAllSubscriptions(filteredData);
                 const paginatedData = filteredData.slice((page - 1) * pageSize, page * pageSize);
                 setSubscriptions(paginatedData);
                 setTotalItems(filteredData.length);
-            } catch (error) {
-                toast.error('Failed to fetch subscriptions');
-            }
         },
         []
     );
@@ -57,7 +52,6 @@ const ListSubscribed: React.FC = () => {
     }, [searchKeyword, allSubscriptions, pageNum, pageSize]);
 
     const handleSubscribeToggle = async (instructor_id: string, is_subscribed: boolean) => {
-        try {
             await updateSubscribed(instructor_id);
             toast.success(is_subscribed ? 'Unsubscribed successfully' : 'Subscribed successfully');
             setAllSubscriptions(prev =>
@@ -67,9 +61,6 @@ const ListSubscribed: React.FC = () => {
                         : sub
                 )
             );
-        } catch (error) {
-            toast.error('Failed to update subscription');
-        }
     };
 
     const columns: ColumnsType<Subscribed> = useMemo(

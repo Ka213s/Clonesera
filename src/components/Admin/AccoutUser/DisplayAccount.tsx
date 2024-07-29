@@ -17,7 +17,7 @@ interface User {
   is_verified: boolean;
 }
 
-interface Pagination {
+interface PaginationData {
   current: number;
   pageSize: number;
   total: number;
@@ -32,11 +32,10 @@ const { Search } = Input;
 
 const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDeleted = false }) => {
   const [data, setData] = useState<User[]>([]);
-  const [pagination, setPagination] = useState<Pagination>({ current: 1, pageSize: 10, total: 0 });
+  const [pagination, setPagination] = useState<PaginationData>({ current: 1, pageSize: 10, total: 0 });
   const [searchKeyword, setSearchKeyword] = useState<string>("");
 
   const fetchUsers = useCallback(async (pageNum: number, pageSize: number, keyword: string) => {
-    try {
       const response = await getUsers({ keyword, role: 'all', status, is_deleted: isDeleted, is_verified: "true" }, pageNum, pageSize);
       setData(response.pageData);
       setPagination({
@@ -44,9 +43,6 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
         pageSize: response.pageInfo.pageSize,
         total: response.pageInfo.totalItems,
       });
-    } catch (error) {
-      console.error('Failed to fetch users:', error);
-    }
   }, [status, isDeleted]);
 
   useEffect(() => {
@@ -54,7 +50,11 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
   }, [pagination.current, pagination.pageSize, searchKeyword, fetchUsers]);
 
   const handleTableChange = (pagination: PaginationProps) => {
-    fetchUsers(pagination.current!, pagination.pageSize!, searchKeyword);
+    setPagination({
+      current: pagination.current!,
+      pageSize: pagination.pageSize!,
+      total: pagination.total!,
+    });
   };
 
   const handleSearch = (value: string) => {
@@ -62,21 +62,13 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
     setPagination(prev => ({ ...prev, current: 1 }));
   };
 
-  const handleEdit = (_id: string) => {
-    console.log(`Edit user with _id: ${_id}`);
-  };
+  const handleRoleChange = () => {};
 
-  const handleDelete = (_id: string) => {
-    console.log(`Delete user with _id: ${_id}`);
-  };
+  const handleStatusChange = () => {};
 
-  const handleStatusChange = (_id: string, status: boolean) => {
-    console.log(`Toggle status for user with _id: ${_id}, new status: ${status}`);
-  };
+  const handleEdit = () => {};
 
-  const handleRoleChange = (_id: string, role: string) => {
-    console.log(`Change role for user with _id: ${_id}, new role: ${role}`);
-  };
+  const handleDelete = () => {};
 
   const columns = [
     {

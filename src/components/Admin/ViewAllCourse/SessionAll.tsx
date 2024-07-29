@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Table, Pagination, message, Input } from 'antd';
+import { Table, Pagination, Input } from 'antd';
 import moment from 'moment';
 import { getSessions, SearchOutlined } from '../../../utils/commonImports';
 import { ColumnsType } from 'antd/es/table';
@@ -22,7 +22,7 @@ const DisplaySessions: React.FC = () => {
 
   const fetchSessions = useCallback(
     async (page: number, size: number, keyword: string) => {
-      try {
+   
         const searchCondition = {
           keyword,
           course_id: '',
@@ -34,10 +34,7 @@ const DisplaySessions: React.FC = () => {
           setSessions(response.pageData);
           setTotalSessions(response.pageInfo.totalItems);
         }
-      } catch (error) {
-        message.error('Failed to fetch sessions');
-        console.error('Failed to fetch sessions', error);
-      }
+     
     },
     []
   );

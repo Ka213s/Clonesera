@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Table, Pagination, message, Input } from "antd";
+import { Table, Pagination, Input } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { getCourses, SearchOutlined } from "../../../utils/commonImports";
 import moment from "moment";
@@ -26,7 +26,6 @@ const CourseTable: React.FC = () => {
 
   const fetchCourses = useCallback(
     async (page: number, size: number, keyword: string) => {
-      try {
         const searchCondition = {
           keyword,
           category: "",
@@ -34,15 +33,10 @@ const CourseTable: React.FC = () => {
           is_deleted: false,
         };
         const response = await getCourses(searchCondition, page, size);
-        console.log(response);
         if (response) {
           setCourses(response.pageData);
           setTotalCourses(response.pageInfo.totalItems);
         }
-      } catch (error) {
-        message.error("Error fetching courses");
-        console.error("Error fetching courses:", error);
-      }
     },
     []
   );
@@ -53,7 +47,7 @@ const CourseTable: React.FC = () => {
 
   const handleSearch = (value: string) => {
     setSearchKeyword(value);
-    setPageNum(1); // Reset to first page on search
+    setPageNum(1); 
   };
 
   const columns: ColumnsType<Course> = [

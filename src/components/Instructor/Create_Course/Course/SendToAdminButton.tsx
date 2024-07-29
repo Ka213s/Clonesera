@@ -7,7 +7,7 @@ interface SendToAdminButtonProps {
 
 const SendToAdminButton: React.FC<SendToAdminButtonProps> = ({ courseIds }) => {
   const handleClick = () => {
-    console.log('Sending to admin the following course IDs:', courseIds);
+
 
     Modal.confirm({
       title: 'Confirm Send',
@@ -15,16 +15,11 @@ const SendToAdminButton: React.FC<SendToAdminButtonProps> = ({ courseIds }) => {
       okText: 'Send',
       cancelText: 'Cancel',
       onOk: async () => {
-        try {
-          await Promise.all(
-            courseIds.map(courseId => 
-              changeCourseStatus({ course_id: courseId.toString(), new_status: 'waiting_approve' })
-            )
-          );
-          console.log('Courses status changed to waiting_approve successfully');
-        } catch (error) {
-          console.error('Failed to change course statuses', error);
-        }
+        await Promise.all(
+          courseIds.map(courseId =>
+            changeCourseStatus({ course_id: courseId.toString(), new_status: 'waiting_approve' })
+          )
+        );
       },
     });
   };

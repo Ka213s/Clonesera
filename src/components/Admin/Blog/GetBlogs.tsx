@@ -50,15 +50,11 @@ const GetBlogs: React.FC = () => {
     setEditingBlogId(id);
   };
 
-  const handleSave = (id: string) => {
-    // Implement your save logic here
-    console.log('Save blog with ID:', id);
+  const handleSave = () => {
     setEditingBlogId(null);
   };
 
-  const handleDelete = (id: string) => {
-    // Implement your delete logic here
-    console.log('Delete blog with ID:', id);
+  const handleDelete = () => {
     setDeletingBlogId(null);
   };
 

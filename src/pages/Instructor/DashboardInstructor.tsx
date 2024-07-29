@@ -10,7 +10,6 @@ const InstructorDashboard: React.FC = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
                 const searchConditionCourses = {
                     keyword: '',
                     category: '',
@@ -18,23 +17,15 @@ const InstructorDashboard: React.FC = () => {
                     is_deleted: false,
                 };
                 const courseData = await getCourses(searchConditionCourses, 1, 10);
-                console.log("Total Courses:", courseData);
                 setTotalCourses(courseData.pageInfo.totalItems);
-
                 const searchConditionSubscribers = {
                     keyword: '',
                     is_delete: false,
                 };
                 const subscriberData = await getSubscribers(searchConditionSubscribers, 1, 10);
-                console.log("Total Subscribers:", subscriberData);
                 setTotalSubscribers(subscriberData.pageInfo.totalItems);
-
                 const currentUser = await getCurrentLogin();
-                console.log("Current User:", currentUser);
                 setBalanceTotal(currentUser.balance_total);
-            } catch (error) {
-                console.error('Failed to fetch data', error);
-            }
         };
 
         fetchData();

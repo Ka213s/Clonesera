@@ -240,7 +240,7 @@ const CourseDetails: React.FC = () => {
         <div className="p-4">
           <h2 className="text-xl font-bold mb-4">Course Content</h2>
           <Editor
-            apiKey="2yifh7kylzpd5szlkd3irl90etvaxhqgknrd2zfbdz4sjeox" // Replace with your actual TinyMCE API key
+            apiKey="2yifh7kylzpd5szlkd3irl90etvaxhqgknrd2zfbdz4sjeox" 
             initialValue={course?.content || ''}
             init={{
               menubar: false,

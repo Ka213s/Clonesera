@@ -1,4 +1,4 @@
-import { React, useState, useEffect, useCallback, Table, Pagination, Input, Alert, getItemsAdmin, SearchOutlined } from '../../utils/commonImports';
+import { React, useState, useEffect, useCallback, Table, Pagination, Input, getItemsAdmin, SearchOutlined } from '../../utils/commonImports';
 import moment from 'moment';
 import { getStatusTag } from '../../utils/statusTagUtils';
 
@@ -43,8 +43,7 @@ const Purchase: React.FC = () => {
   const [pageSize, setPageSize] = useState<number>(10);
   const [totalCourses, setTotalCourses] = useState<number>(0);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+
 
   const fetchPurchasedCourses = useCallback(
     async (page: number, size: number, keyword: string) => {
@@ -61,17 +60,10 @@ const Purchase: React.FC = () => {
           pageSize: size
         }
       };
+      const response = await getItemsAdmin(data);
+      setPurchasedCourses(response.pageData);
+      setTotalCourses(response.pageInfo.totalItems);
 
-      try {
-        const response = await getItemsAdmin(data);
-        console.log('response:', response);
-        setPurchasedCourses(response.pageData);
-        setTotalCourses(response.pageInfo.totalItems);
-      } catch (error) {
-        setError(error as Error);
-      } finally {
-        setLoading(false);
-      }
     },
     []
   );
@@ -82,7 +74,7 @@ const Purchase: React.FC = () => {
 
   const handleSearch = (value: string) => {
     setSearchKeyword(value);
-    setPageNum(1); // Reset to first page on search
+    setPageNum(1);
   };
 
   const columns = [
@@ -131,8 +123,7 @@ const Purchase: React.FC = () => {
     },
   ];
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <Alert message="Error" description={error.message} type="error" showIcon />;
+
 
   return (
     <div>

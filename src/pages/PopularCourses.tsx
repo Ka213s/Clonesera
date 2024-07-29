@@ -32,7 +32,7 @@ const PopularCourses: React.FC = () => {
 
   useEffect(() => {
     const fetchCourses = async () => {
-      try {
+    
         const data = {
           searchCondition: {
             keyword: '',
@@ -47,10 +47,7 @@ const PopularCourses: React.FC = () => {
         const response: ApiResponse = await NT_getPublicCourses(data);
         setCourses(response.pageData);
         setLoading(false);
-      } catch (error) {
-        console.error('Error fetching courses:', error);
-        setLoading(false); // Stop loading even if there's an error
-      }
+    
     };
 
     fetchCourses();

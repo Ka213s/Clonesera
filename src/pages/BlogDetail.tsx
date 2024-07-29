@@ -1,5 +1,3 @@
-// src/components/BlogDetail.tsx
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Typography, Spin } from 'antd';

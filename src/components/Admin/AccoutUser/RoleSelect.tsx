@@ -11,14 +11,8 @@ interface RoleSelectProps {
 
 const RoleSelect: React.FC<RoleSelectProps> = ({ userId, role, onChange }) => {
   const handleRoleChange = async (newRole: string) => {
-    try {
       await changeUserRole({ user_id: userId, role: newRole });
       onChange(userId, newRole);
-     
-    } catch (error) {
-     
-      console.error('Error changing user role:', error);
-    }
   };
 
   return (

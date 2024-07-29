@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Form, Input, Modal, Select, message } from 'antd';
+import { Button, Form, Input, Modal, Select } from 'antd';
 import { createBlog } from '../../../utils/commonImports';
-import useCategories from '../../useCategories'; // Adjust the path as needed
-import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor'; // Adjust the path as needed
-import FileUploader from '../../FileUploader'; // Adjust the path as needed
+import useCategories from '../../useCategories'; 
+import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor';
+import FileUploader from '../../FileUploader'; 
 
 const { Option } = Select;
 
-// Define TypeScript interface for form values
 interface BlogFormValues {
   title: string;
   content: string;
@@ -20,7 +19,7 @@ const CreateBlog: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editorContent, setEditorContent] = useState<string>('');
   const [imageUrl, setImageUrl] = useState<string>('');
-  const { categories, parents } = useCategories(); // Use the hook to get categories
+  const { categories, parents } = useCategories(); 
 
   useEffect(() => {
     form.setFieldsValue({
@@ -36,26 +35,18 @@ const CreateBlog: React.FC = () => {
     setIsModalVisible(false);
   };
 
-  const onFinish = async (values: BlogFormValues) => {
-    console.log('Received values:', values);
-    try {
+  const onFinish = async (values: BlogFormValues) => {  
       await createBlog({
         name: values.title,
         category_id: values.category_id,
-        image_url: imageUrl, // Use the uploaded image URL
+        image_url: imageUrl,
         description: values.description,
         content: editorContent,
       });
-      // Handle successful blog creation (e.g., show a success message)
-      setIsModalVisible(false); // Close the modal
-      form.resetFields(); // Optionally reset the form
-      setEditorContent(''); // Clear editor content
-      setImageUrl(''); // Clear uploaded image URL
-    } catch (error) {
-      // Handle error (e.g., show an error message)
-      message.error('Error creating blog');
-      console.error('Error creating blog:', error);
-    }
+      setIsModalVisible(false); 
+      form.resetFields(); 
+      setEditorContent(''); 
+      setImageUrl(''); 
   };
 
   const handleEditorChange = (content: string) => {

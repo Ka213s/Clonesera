@@ -1,5 +1,5 @@
 import { React, useState, useEffect, SearchOutlined } from "../../../utils/commonImports";
-import { Table, Pagination, message, Input } from "antd";
+import { Table, Pagination, Input } from "antd";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
 
@@ -58,18 +58,11 @@ const LessonTable: React.FC<LessonTableProps> = ({ lessons }) => {
 
   useEffect(() => {
     const fetchLessons = async () => {
-      try {
-        // Filter lessons based on search keyword
         const filteredData = lessons.filter((lesson) =>
           lesson.name.toLowerCase().includes(searchKeyword.toLowerCase())
         );
-
         setFilteredLessons(filteredData);
         setTotalLessons(filteredData.length);
-      } catch (error) {
-        message.error("Error filtering lessons");
-        console.error("Error filtering lessons:", error);
-      }
     };
 
     fetchLessons();

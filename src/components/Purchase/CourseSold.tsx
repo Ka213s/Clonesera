@@ -1,8 +1,9 @@
-import { React, useCallback, useEffect, useState, Table, Button, Input, message, Pagination, getItemsByInstructor, SearchOutlined } from '../../utils/commonImports';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Table, Button, Input, Pagination } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import { TablePaginationConfig } from 'antd/es/table';
+import { getItemsByInstructor, createPayout } from '../../utils/commonImports';
 import { getStatusTag } from '../../utils/statusTagUtils';
-import { createPayout } from '../../services/Api';
-import { toast } from 'react-toastify';
 
 interface PurchaseData {
   _id: string;
@@ -35,28 +36,23 @@ const Purchase: React.FC = () => {
   const [searchKeyword, setSearchKeyword] = useState<string>('');
 
   const fetchData = useCallback(async (pageInfo: { pageNum: number; pageSize: number }) => {
-    try {
-      const result: ApiResponse = await getItemsByInstructor({
-        searchCondition: { // Adapt this as necessary for your API
-          purchase_no: '',
-          cart_no: '',
-          course_id: '',
-          status: '',
-          is_delete: false,
-        },
-        pageInfo,
-      });
-      setData(result.pageData);
-      setPagination((prev) => ({
-        ...prev,
-        total: result.pageInfo.totalItems,
-        current: result.pageInfo.pageNum,
-        pageSize: result.pageInfo.pageSize,
-      }));
-    } catch (error) {
-      message.error('Failed to fetch data');
-      console.error('Failed to fetch data:', error);
-    }
+    const result: ApiResponse = await getItemsByInstructor({
+      searchCondition: {
+        purchase_no: '',
+        cart_no: '',
+        course_id: '',
+        status: '',
+        is_delete: false,
+      },
+      pageInfo,
+    });
+    setData(result.pageData);
+    setPagination((prev) => ({
+      ...prev,
+      total: result.pageInfo.totalItems,
+      current: result.pageInfo.pageNum,
+      pageSize: result.pageInfo.pageSize,
+    }));
   }, []);
 
   useEffect(() => {
@@ -67,7 +63,6 @@ const Purchase: React.FC = () => {
   }, [pagination.current, pagination.pageSize, fetchData]);
 
   useEffect(() => {
-    // Apply client-side search filtering
     if (searchKeyword) {
       const keywordLower = searchKeyword.toLowerCase();
       const filtered = data.filter(item =>
@@ -92,20 +87,13 @@ const Purchase: React.FC = () => {
   };
 
   const handleCreatePayout = async () => {
-    try {
-      const transactions = selectedRowKeys.map((id) => ({ purchase_id: id as string }));
-      const response = await createPayout(transactions);
-      console.log('Payout response:', response);
-      setSelectedRowKeys([]); // Clear selection after creation
-    } catch (error) {
-      toast.error("Failed to create payout");
-      console.error('Failed to create payout:', error);
-    }
+    const transactions = selectedRowKeys.map((id) => ({ purchase_id: id as string }));
+    await createPayout(transactions);
+    setSelectedRowKeys([]);
   };
 
   const handleSearch = (value: string) => {
     setSearchKeyword(value);
-    // Reset to first page on search
     setPagination((prev) => ({
       ...prev,
       current: 1,

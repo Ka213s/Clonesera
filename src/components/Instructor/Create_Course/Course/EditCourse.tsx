@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { EditOutlined } from '@ant-design/icons';
-import { Button, Modal, Form, Input, InputNumber, message, Select, Row, Col } from 'antd';
+import { Button, Modal, Form, Input, InputNumber, Select, Row, Col } from 'antd';
 import { getCourseById, updateCourse } from '../../../../utils/commonImports';
 import FileUploader from '../../../FileUploader';
 import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor';
@@ -32,15 +32,10 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
 
   useEffect(() => {
     const fetchCourse = async () => {
-      try {
         const courseData: Course = await getCourseById(courseId.toString());
         form.setFieldsValue(courseData);
         setVideoUrl(courseData.video_url);
         setImageUrl(courseData.image_url);
-      } catch (error) {
-        message.error('Error fetching course details');
-        console.error('Error fetching course:', error);
-      }
     };
 
     if (courseId) {
@@ -49,15 +44,9 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
   }, [courseId, form]);
 
   const handleOk = async () => {
-    try {
       const values = await form.validateFields();
-      console.log('Received values:', values);
       await updateCourse(courseId.toString(), { ...values, video_url: videoUrl, image_url: imageUrl });
-      setIsModalVisible(false);
-    } catch (error) {
-      message.error('Error updating course');
-      console.error('Error updating course:', error);
-    }
+      setIsModalVisible(false)
   };
 
   const handleCancel = () => {

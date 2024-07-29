@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useCallback, SearchOutlined, Table, Button, Pagination, Input, message, Modal } from '../../../utils/commonImports';
+import { React, useEffect, useState, useCallback, SearchOutlined, Table, Button, Pagination, Input, Modal } from '../../../utils/commonImports';
 // import { Link } from 'react-router-dom';
 import { getPayouts, updatePayout } from '../../../services/Api';
 import { toast } from 'react-toastify';
@@ -53,7 +53,6 @@ const RequestPayout: React.FC = () => {
     const [selectedPayoutId, setSelectedPayoutId] = useState<string | null>(null);
 
     const fetchData = useCallback(async (page: number, size: number, keyword: string) => {
-        try {
             const result: ApiResponse = await getPayouts({
                 searchCondition: {
                     payout_no: keyword,
@@ -67,17 +66,11 @@ const RequestPayout: React.FC = () => {
                     pageSize: size
                 }
             });
-            // Filter data to include only request_payout and rejected statuses
             const filteredData = result.pageData.filter(payout =>
                 payout.status === 'new' || payout.status === 'rejected' || payout.status === 'request_payout'
             );
-
             setData(filteredData);
             setTotalPayouts(result.pageInfo.totalItems);
-        } catch (error) {
-            message.error('Failed to fetch data');
-            console.error('Failed to fetch data:', error);
-        }
     }, []);
 
     useEffect(() => {
@@ -89,7 +82,6 @@ const RequestPayout: React.FC = () => {
     };
 
     const handleRequestPayout = async () => {
-        try {
             const selectedPayouts = selectedRowKeys.map(key => key.toString());
             for (const payoutId of selectedPayouts) {
                 await updatePayout(payoutId, {
@@ -100,10 +92,6 @@ const RequestPayout: React.FC = () => {
             toast.success('Payout request successfully. Please wait admin for approval!');
             fetchData(pageNum, pageSize, searchKeyword);
             setSelectedRowKeys([]);
-        } catch (error) {
-            toast.error('Failed to request payout');
-            console.error('Failed to request payout:', error);
-        }
     };
 
     const handleViewClick = (id: string) => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Alert } from 'antd';
+import { Table } from 'antd';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 import { getItemsByStudent } from '../../utils/commonImports';
@@ -37,10 +37,9 @@ interface FetchData {
   };
 }
 
-const PurchasedCours: React.FC = () => {
+const PurchasedCourses: React.FC = () => {
   const [purchasedCourses, setPurchasedCourses] = useState<Course[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+
 
   useEffect(() => {
     const fetchPurchasedCourses = async () => {
@@ -57,16 +56,8 @@ const PurchasedCours: React.FC = () => {
           pageSize: 10
         }
       };
-
-      try {
         const response = await getItemsByStudent(data);
-        console.log('response:', response);
         setPurchasedCourses(response.pageData);
-      } catch (error) {
-        setError(error as Error);
-      } finally {
-        setLoading(false);
-      }
     };
 
     fetchPurchasedCourses();
@@ -90,6 +81,7 @@ const PurchasedCours: React.FC = () => {
       title: 'Price Paid',
       dataIndex: 'price_paid',
       key: 'price_paid',
+      render: (price_paid: number) => price_paid.toLocaleString(),
     },
     {
       title: 'Discount',
@@ -114,8 +106,7 @@ const PurchasedCours: React.FC = () => {
     },
   ];
 
-  if (loading) return null;
-  if (error) return <Alert message="Error" description={error.message} type="error" showIcon />;
+ 
 
   return (
     <div>
@@ -124,4 +115,4 @@ const PurchasedCours: React.FC = () => {
   );
 };
 
-export default PurchasedCours;
+export default PurchasedCourses;

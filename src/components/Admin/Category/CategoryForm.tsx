@@ -55,12 +55,8 @@ const CategoryForm: React.FC<CategoryFormProps> = ({
             title={isEditing ? 'Edit Category' : 'Add Category'}
             open={isVisible}
             onOk={async () => {
-                try {
                     const values: FormValues = await form.validateFields();
                     onSubmit(values);
-                } catch (error) {
-                    console.error('Validation failed:', error);
-                }
             }}
             onCancel={onCancel}
         >

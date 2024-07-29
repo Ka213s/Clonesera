@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Form, Input, Button } from 'antd';
-
 import FileUploader from '../components/FileUploader';
 import { getUserData, updateAccount, getCurrentLogin } from '../utils/commonImports';
-import TinyMCEEditorComponent from '../utils/TinyMCEEditor'; // Import TinyMCE editor component
+import TinyMCEEditorComponent from '../utils/TinyMCEEditor';
 
 interface UserData {
     _id: string;
@@ -22,34 +21,25 @@ const AccountSettings: React.FC = () => {
     const [saving, setSaving] = useState(false);
     const [userData, setUserData] = useState<UserData | null>(null);
     const [imageURL, setImageURL] = useState<string | null>(null);
-    const [editorContent, setEditorContent] = useState<string>(''); // State for TinyMCE content
+    const [editorContent, setEditorContent] = useState<string>('');
    
     useEffect(() => {
         const initialize = async () => {
-            try {
                 const data = await getCurrentLogin();
-                console.log('data:', data);
+              
                 if (data && data._id) {
                     fetchUserData(data._id);
                 }
-            } catch (error) {
-                console.error('Error fetching current login:', error);
-            }
         };
 
         initialize();
     }, []);
 
     const fetchUserData = async (id: string) => {
-        try {
-            console.log('id:', id);
             const data = await getUserData(id);
             setUserData(data);
             setImageURL(data.avatar || null);
             setEditorContent(data.description || ''); // Set the existing description content
-        } catch (error) {
-            console.error('Error fetching user data:', error);
-        }
     };
 
     const handleSaveChanges = async (values: Partial<UserData>) => {
