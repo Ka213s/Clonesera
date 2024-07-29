@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Tag, Skeleton, Rate } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { NT_getPublicCourses, formatCurrency } from '../utils/commonImports';
+import { getPublicCourses, formatCurrency } from '../utils/commonImports';
 import { useNavigate, Link } from 'react-router-dom';
 
 interface Course {
@@ -43,7 +43,7 @@ const PopularCourses: React.FC = () => {
           pageSize: 10,
         },
       };
-      const response: ApiResponse = await NT_getPublicCourses(data);
+      const response: ApiResponse = await getPublicCourses(data);
       setCourses(response.pageData);
       setLoading(false);
     };
@@ -72,7 +72,7 @@ const PopularCourses: React.FC = () => {
   };
 
   const handleButtonClick = (courseId: number, isPurchased: boolean, e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation(); // Ngăn không cho sự kiện lan tỏa ra ngoài
+    e.stopPropagation(); 
     if (!isPurchased) {
       navigate(`/course-detail/${courseId}`);
     }
@@ -155,7 +155,7 @@ const PopularCourses: React.FC = () => {
                       onClick={(e) => handleButtonClick(course._id, course.is_purchased, e)}
                       className={`py-1 px-2 rounded-md transition duration-300 ${course.is_purchased ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-green-600 text-white hover:bg-green-700'}`}
                     >
-                      {course.is_purchased ? 'Learn' : 'Join Now'}
+                      {course.is_purchased ? 'Purchased' : 'Buy Now'}
                     </button>
                   </div>
                 </div>

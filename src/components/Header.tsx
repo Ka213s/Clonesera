@@ -4,8 +4,7 @@ import type { MenuProps } from 'antd';
 import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
-import { useCartContext } from '../consts/CartContext';
-import { getCurrentLogin } from '../utils/commonImports';
+import { useCartContext } from '../consts/CartContext'; 
 
 const { Text } = Typography;
 
@@ -18,38 +17,22 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { totalCartItems } = useCartContext();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setIsLoggedIn(false);
-        setIsLoading(false);
-        return;
+    const storedUserData = localStorage.getItem('userData');
+    if (storedUserData) {
+      const userData = JSON.parse(storedUserData);
+      if (userData.avatar) {
+        setAvatar(userData.avatar);
       }
-
-      try {
-        const userData = await getCurrentLogin();
-        if (userData) {
-          setAvatar(userData.avatar || null);
-          setRole(userData.role);
-          setUsername(userData.name);
-          setIsLoggedIn(true);
-        } else {
-          setIsLoggedIn(false);
-        }
-      } catch (error) {
-        console.error('Failed to fetch user data:', error);
-        setIsLoggedIn(false);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchUserData();
+      setRole(userData.role);
+      setUsername(userData.name);
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
+    }
   }, []);
 
   const handleLogoClick = (e: React.MouseEvent) => {
@@ -95,10 +78,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     },
   ];
 
-  if (isLoading) {
-    return null; 
-  }
-
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
       <div className="flex items-center space-x-4">
@@ -139,7 +118,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 
             <Divider className="border-gray-400 h-9" type="vertical" />
             <div className="">
-              <Dropdown menu={{ items: userMenu }} trigger={['hover']} overlayClassName="hover-dropdown">
+              <Dropdown menu={{ items: userMenu }} trigger={['click']}>
                 <Avatar
                   size="large"
                   src={avatar || 'default-avatar-path'}
