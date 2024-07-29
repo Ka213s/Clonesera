@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
 import logo from '../assets/Logo-2.png';
 import { useCartContext } from '../consts/CartContext'; // Import the custom hook
+import { getCurrentLogin } from '../utils/commonImports';
 
 const { Text } = Typography;
 const { Search } = Input;
@@ -19,18 +20,24 @@ const HeaderNoMenu: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUserData = localStorage.getItem('userData');
-    if (storedUserData) {
-      const userData = JSON.parse(storedUserData);
-      if (userData.avatar) {
-        setAvatar(userData.avatar);
+    const fetchUserData = async () => {
+      try {
+        const userData = await getCurrentLogin();
+        if (userData) {
+          setAvatar(userData.avatar || null);
+          setRole(userData.role || null);
+          setUsername(userData.name || null);
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+        setIsLoggedIn(false);
       }
-      setRole(userData.role);
-      setUsername(userData.name);
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
+    };
+
+    fetchUserData();
   }, []);
 
   const handleLogoClick = (e: React.MouseEvent) => {
