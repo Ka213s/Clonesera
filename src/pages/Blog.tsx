@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Skeleton } from 'antd';
+import { Skeleton } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 import { getBlogsPublic } from '../utils/commonImports';
-
-const { Title } = Typography;
 
 interface Blog {
   _id: string;
