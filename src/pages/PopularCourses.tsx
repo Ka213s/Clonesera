@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Tag, Skeleton, Rate } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { NT_getPublicCourses, formatCurrency } from '../utils/commonImports';
+import { getPublicCourses, formatCurrency } from '../utils/commonImports'; // Updated function import
 import { useNavigate, Link } from 'react-router-dom';
 
 interface Course {
@@ -42,7 +42,7 @@ const PopularCourses: React.FC = () => {
           pageSize: 20,
         },
       };
-      const response: ApiResponse = await NT_getPublicCourses(data);
+      const response: ApiResponse = await getPublicCourses(data); // Updated function usage
       setCourses(response.pageData);
       setLoading(false);
     };
@@ -67,6 +67,12 @@ const PopularCourses: React.FC = () => {
     if (!isPurchased) {
       navigate(`/course-detail/${courseId}`);
     }
+  };
+
+  const truncateText = (text: string, wordLimit: number): string => {
+    const words = text.split(' ');
+    if (words.length <= wordLimit) return text;
+    return `${words.slice(0, wordLimit).join(' ')}...`;
   };
 
   return (
@@ -124,7 +130,7 @@ const PopularCourses: React.FC = () => {
                   </div>
                   <div className="p-2 flex flex-col flex-grow">
                     <h2 className="text-lg font-semibold mt-1 h-10 overflow-hidden overflow-ellipsis whitespace-nowrap">
-                      {course.name}
+                      {truncateText(course.name, 4)}
                     </h2>
                     <p className="text-sm text-gray-600 mb-2">
                       <Tag color="blue">
