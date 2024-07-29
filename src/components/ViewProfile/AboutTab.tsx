@@ -1,7 +1,6 @@
 import React from 'react';
-import { Editor } from '@tinymce/tinymce-react';
 import { Card, Typography } from 'antd';
-
+import parse from 'html-react-parser';
 const { Title } = Typography;
 
 interface UserData {
@@ -37,26 +36,10 @@ const AboutTab: React.FC<AboutTabProps> = ({ userData }) => {
           </video>
         </Card>
       )}
-      <Editor
-        apiKey="2yifh7kylzpd5szlkd3irl90etvaxhqgknrd2zfbdz4sjeox" // Replace with your actual TinyMCE API key
-        initialValue={userData?.description || ''}
-        init={{
-          menubar: false,
-          plugins: [
-            'autoresize'
-          ],
-          toolbar: false,
-          autoresize_bottom_margin: 20,
-          autoresize_overflow_padding: 10,
-          setup: (editor) => {
-            editor.on('init', () => {
-              editor.getContainer().style.overflow = 'hidden';
-              editor.getContainer().style.border = 'none'; // Remove the border
-            });
-          }
-        }}
-        disabled={true}
-      />
+      <div className="mt-4 text-lg">
+        {parse(userData?.description || '')}
+      </div>
+   
     </>
   );
 };
