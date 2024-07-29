@@ -3,11 +3,12 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { NT_getCourseDetail, getCourseDetail, createCart, getCart, formatCurrency } from '../../utils/commonImports';
 import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse, Skeleton } from 'antd';
 import { PlayCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import { Editor } from '@tinymce/tinymce-react';
 import 'tailwindcss/tailwind.css';
 import ReviewSection from './ReviewSection';
+import ReviewSubmit from './ReviewSubmit';
 import { useCartContext } from '../../consts/CartContext';
 import { toast } from 'react-toastify';
+import parse from 'html-react-parser';
 
 const { Panel } = Collapse;
 
@@ -53,7 +54,7 @@ const CourseDetails: React.FC = () => {
   const [course, setCourse] = useState<Course | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
-  const { setTotalCartItems } = useCartContext();  
+  const { setTotalCartItems } = useCartContext();
 
   useEffect(() => {
     const fetchCourseDetail = async () => {
@@ -86,6 +87,7 @@ const CourseDetails: React.FC = () => {
   const handleAddToCart = async () => {
     const token = localStorage.getItem('token');
     if (!token) {
+      navigate('/login');
       toast.error('Please login to add course to cart');
       return;
     }
@@ -239,26 +241,11 @@ const CourseDetails: React.FC = () => {
         <Divider />
         <div className="p-4">
           <h2 className="text-xl font-bold mb-4">Course Content</h2>
-          <Editor
-            apiKey="2yifh7kylzpd5szlkd3irl90etvaxhqgknrd2zfbdz4sjeox" 
-            initialValue={course?.content || ''}
-            init={{
-              menubar: false,
-              plugins: ['autoresize'],
-              toolbar: false,
-              autoresize_bottom_margin: 20,
-              autoresize_overflow_padding: 10,
-              setup: (editor) => {
-                editor.on('init', () => {
-                  editor.getContainer().style.overflow = 'hidden';
-                  editor.getContainer().style.border = 'none'; // Remove the border
-                });
-              },
-            }}
-            disabled={true}
-          />
-
-          <h2 className="text-xl font-bold mb-4">Course Session</h2>
+          <div className="mt-4 text-lg">
+            {parse(course?.content || '')}
+          </div>
+         
+          <h2 className="text-xl font-bold mb-4 mt-5">Course Session</h2>
           <Collapse accordion>
             {course?.session_list.map((session) => (
               <Panel
@@ -297,6 +284,8 @@ const CourseDetails: React.FC = () => {
             ))}
           </Collapse>
           <Divider />
+          <ReviewSubmit courseId={course ? course._id : null} />
+
           {course?.is_purchased && <ReviewSection courseId={course._id} />}
         </div>
       </Card>

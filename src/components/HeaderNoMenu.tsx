@@ -35,10 +35,12 @@ const HeaderNoMenu: React.FC = () => {
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (role === 'admin') {
-      navigate('/display-account');
-    } else {
-      navigate('/homepage');
+    switch (role) {
+      case 'admin':
+        navigate('/display-account');
+        break;
+      default:
+        navigate('/homepage');
     }
   };
 
@@ -127,7 +129,7 @@ const HeaderNoMenu: React.FC = () => {
 
             <Divider className="border-gray-400 h-9" type="vertical" />
             <div className="">
-              <Dropdown menu={{ items: userMenu }} trigger={['click']}>
+              <Dropdown menu={{ items: userMenu }} trigger={['hover']}>
                 <Avatar
                   size="large"
                   src={avatar || 'default-avatar-path'}

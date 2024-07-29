@@ -1,23 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Badge, Dropdown, Avatar, Typography, Divider } from 'antd';
-import type { MenuProps } from 'antd';
-import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import { Button, Badge, Dropdown, Avatar, Typography, Divider, Input } from 'antd';
+import { PlusOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
+import type { MenuProps } from 'antd';
 import logo from '../assets/Logo-2.png';
 import { useCartContext } from '../consts/CartContext'; // Import the custom hook
 
 const { Text } = Typography;
+const { Search } = Input;
 
-type HeaderProps = {
-  toggleMenu: () => void;
-};
-
-const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
+const HeaderNoMenu: React.FC = () => {
   const [avatar, setAvatar] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
   const { totalCartItems } = useCartContext();
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,21 +50,25 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     navigate('/view-cart');
   };
 
+  const handleSearch = (value: string) => {
+    navigate(`/homepage/view-all-course?search=${value}`);
+  };
+
   const userMenu: MenuProps['items'] = [
     {
       key: 'welcome',
-      label: <Text>Welcome, {username}!</Text>,
+      label: (
+        <Text>Welcome, {username}!</Text>
+      )
     },
-    {
-      type: 'divider',
-    },
+    { type: 'divider' },
     {
       key: 'profile',
       label: (
         <Link to="/view-my-profile">
           <UserOutlined /> Profile
         </Link>
-      ),
+      )
     },
     {
       key: 'logout',
@@ -74,22 +76,29 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         <span onClick={() => navigate('/logout')}>
           <UserOutlined /> Logout
         </span>
-      ),
-    },
+      )
+    }
   ];
 
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
-      <div className="flex items-center space-x-4">
-        <Button
-          icon={<MenuOutlined />}
-          onClick={toggleMenu}
-          shape="circle"
-          className="button-menu"
-        />
+      <div className="flex items-center space-x-4 ml-5">
         <Link to="/" onClick={handleLogoClick}>
           <img src={logo} alt="Logo" className="h-12 w-auto cursor-pointer" />
         </Link>
+      </div>
+
+      <div className="flex-grow flex justify-center">
+        <Search
+          placeholder="Search courses"
+          enterButton={
+            <Button type="primary" style={{ backgroundColor: '#22c55e', borderColor: '#22c55e' }}>
+              <SearchOutlined />
+            </Button>
+          }
+          onSearch={handleSearch}
+          style={{ width: 300 }}
+        />
       </div>
 
       <div className="flex items-center ml-auto space-x-8 pr-4">
@@ -130,10 +139,10 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         ) : (
           <>
             <Link to="/login">
-              <Button type="primary">Login</Button>
+              <Button type="primary" className="custom-button">Login</Button>
             </Link>
             <Link to="/register">
-              <Button type="primary">Register</Button>
+              <Button type="primary" className="custom-button">Register</Button>
             </Link>
           </>
         )}
@@ -142,4 +151,4 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   );
 };
 
-export default Header;
+export default HeaderNoMenu;

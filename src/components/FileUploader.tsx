@@ -71,7 +71,9 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
 
       uploadTask.on(
         'state_changed',
-       
+        (snapshot) => {
+          console.log(`${type.toUpperCase()} upload state:`, snapshot.state);
+        },
         (error) => {
           message.error('Upload error');
           console.error('Upload error:', error);
@@ -81,10 +83,10 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
           const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
           onUploadSuccess(downloadURL);
           setUploading(false);
-          setButtonVisible(false);
+          setButtonVisible(false); // Hide the button after upload
           if (type === 'video') {
             setVideoUrl(downloadURL);
-            setTimeout(() => setVideoVisible(true), 100); 
+            setTimeout(() => setVideoVisible(true), 100); // Add delay for smooth transition
           }
         }
       );
@@ -119,7 +121,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
     showUploadList: {
       showRemoveIcon: !uploading,
     },
-    accept: type === 'image' ? 'image/*' : 'video/*',
+    accept: type === 'image' ? 'image/*' : 'video/*', // Set accept attribute based on type
   };
 
   const uploadButton = (
