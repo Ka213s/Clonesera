@@ -1,36 +1,48 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Badge, Dropdown, Avatar, Typography, Divider, Input } from 'antd';
-import { PlusOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
-import { Link, useNavigate } from 'react-router-dom';
+import { Button, Badge, Dropdown, Avatar, Typography, Divider } from 'antd';
 import type { MenuProps } from 'antd';
+import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
-import { useCartContext } from '../consts/CartContext'; // Import the custom hook
+import { useCartContext } from '../consts/CartContext';
+import { getCurrentLogin } from '../utils/commonImports';
 
 const { Text } = Typography;
-const { Search } = Input;
 
-const HeaderNoMenu: React.FC = () => {
+type HeaderProps = {
+  toggleMenu: () => void;
+};
+
+const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
   const [avatar, setAvatar] = useState<string | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [role, setRole] = useState<string | null>(null);
   const [username, setUsername] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const { totalCartItems } = useCartContext();
-
   const navigate = useNavigate();
 
   useEffect(() => {
-    const storedUserData = localStorage.getItem('userData');
-    if (storedUserData) {
-      const userData = JSON.parse(storedUserData);
-      if (userData.avatar) {
-        setAvatar(userData.avatar);
+    const fetchUserData = async () => {
+      try {
+        const userData = await getCurrentLogin();
+        if (userData) {
+          setAvatar(userData.avatar || null);
+          setRole(userData.role);
+          setUsername(userData.name);
+          setIsLoggedIn(true);
+        } else {
+          setIsLoggedIn(false);
+        }
+      } catch (error) {
+        console.error('Failed to fetch user data:', error);
+        setIsLoggedIn(false);
+      } finally {
+        setIsLoading(false);
       }
-      setRole(userData.role);
-      setUsername(userData.name);
-      setIsLoggedIn(true);
-    } else {
-      setIsLoggedIn(false);
-    }
+    };
+
+    fetchUserData();
   }, []);
 
   const handleLogoClick = (e: React.MouseEvent) => {
@@ -50,25 +62,21 @@ const HeaderNoMenu: React.FC = () => {
     navigate('/view-cart');
   };
 
-  const handleSearch = (value: string) => {
-    navigate(`/homepage/view-all-course?search=${value}`);
-  };
-
   const userMenu: MenuProps['items'] = [
     {
       key: 'welcome',
-      label: (
-        <Text>Welcome, {username}!</Text>
-      )
+      label: <Text>Welcome, {username}!</Text>,
     },
-    { type: 'divider' },
+    {
+      type: 'divider',
+    },
     {
       key: 'profile',
       label: (
         <Link to="/view-my-profile">
           <UserOutlined /> Profile
         </Link>
-      )
+      ),
     },
     {
       key: 'logout',
@@ -76,29 +84,26 @@ const HeaderNoMenu: React.FC = () => {
         <span onClick={() => navigate('/logout')}>
           <UserOutlined /> Logout
         </span>
-      )
-    }
+      ),
+    },
   ];
+
+  if (isLoading) {
+    return null; 
+  }
 
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
-      <div className="flex items-center space-x-4 ml-5">
+      <div className="flex items-center space-x-4">
+        <Button
+          icon={<MenuOutlined />}
+          onClick={toggleMenu}
+          shape="circle"
+          className="button-menu"
+        />
         <Link to="/" onClick={handleLogoClick}>
           <img src={logo} alt="Logo" className="h-12 w-auto cursor-pointer" />
         </Link>
-      </div>
-
-      <div className="flex-grow flex justify-center">
-        <Search
-          placeholder="Search courses"
-          enterButton={
-            <Button type="primary" style={{ backgroundColor: '#22c55e', borderColor: '#22c55e' }}>
-              <SearchOutlined />
-            </Button>
-          }
-          onSearch={handleSearch}
-          style={{ width: 300 }}
-        />
       </div>
 
       <div className="flex items-center ml-auto space-x-8 pr-4">
@@ -127,7 +132,7 @@ const HeaderNoMenu: React.FC = () => {
 
             <Divider className="border-gray-400 h-9" type="vertical" />
             <div className="">
-              <Dropdown menu={{ items: userMenu }} trigger={['click']}>
+              <Dropdown menu={{ items: userMenu }} trigger={['hover']} overlayClassName="hover-dropdown">
                 <Avatar
                   size="large"
                   src={avatar || 'default-avatar-path'}
@@ -139,10 +144,10 @@ const HeaderNoMenu: React.FC = () => {
         ) : (
           <>
             <Link to="/login">
-              <Button type="primary" className="custom-button">Login</Button>
+              <Button type="primary">Login</Button>
             </Link>
             <Link to="/register">
-              <Button type="primary" className="custom-button">Register</Button>
+              <Button type="primary">Register</Button>
             </Link>
           </>
         )}
@@ -151,4 +156,4 @@ const HeaderNoMenu: React.FC = () => {
   );
 };
 
-export default HeaderNoMenu;
+export default Header;
