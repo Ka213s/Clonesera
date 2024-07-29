@@ -137,7 +137,9 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ courseId }) => {
         >
           <Input.TextArea placeholder="Enter your review" rows={4} />
         </Form.Item>
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" 
+                htmlType="submit"
+                className="mb-4 custom-button p-4 bg-green-500 text-black">
           {editingReview ? "Update Review" : "Submit Review"}
         </Button>
       </Form>
