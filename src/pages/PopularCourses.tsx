@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Tag, Skeleton, Rate } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { NT_getPublicCourses, formatCurrency } from '../utils/commonImports';
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, Link } from 'react-router-dom';
 
 interface Course {
   _id: number;
@@ -17,6 +16,7 @@ interface Course {
   session_count: number;
   full_time: number;
   average_rating: number;
+  is_purchased: boolean;
 }
 
 interface ApiResponse {
@@ -32,46 +32,49 @@ const PopularCourses: React.FC = () => {
 
   useEffect(() => {
     const fetchCourses = async () => {
-    
-        const data = {
-          searchCondition: {
-            keyword: '',
-            category_id: '',
-            is_deleted: false,
-          },
-          pageInfo: {
-            pageNum: 1,
-            pageSize: 10,
-          },
-        };
-        const response: ApiResponse = await NT_getPublicCourses(data);
-        setCourses(response.pageData);
-        setLoading(false);
-    
+      const data = {
+        searchCondition: {
+          keyword: '',
+          category_id: '',
+          is_deleted: false,
+        },
+        pageInfo: {
+          pageNum: 1,
+          pageSize: 10,
+        },
+      };
+      const response: ApiResponse = await NT_getPublicCourses(data);
+      setCourses(response.pageData);
+      setLoading(false);
     };
 
     fetchCourses();
   }, []);
 
-  const handleViewDetails = (courseId: number) => navigate(`/course-detail/${courseId}`);
-
   const handlePrevClick = () => {
     if (currentIndex > 0 && !isAnimating) {
       setIsAnimating(true);
       setTimeout(() => {
-        setCurrentIndex(currentIndex - 2);
+        setCurrentIndex(currentIndex - 4);
         setIsAnimating(false);
       }, 300);
     }
   };
 
   const handleNextClick = () => {
-    if (currentIndex + 2 < courses.length && !isAnimating) {
+    if (currentIndex + 4 < courses.length && !isAnimating) {
       setIsAnimating(true);
       setTimeout(() => {
-        setCurrentIndex(currentIndex + 2);
+        setCurrentIndex(currentIndex + 4);
         setIsAnimating(false);
       }, 300);
+    }
+  };
+
+  const handleButtonClick = (courseId: number, isPurchased: boolean, e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation(); // Ngăn không cho sự kiện lan tỏa ra ngoài
+    if (!isPurchased) {
+      navigate(`/course-detail/${courseId}`);
     }
   };
 
@@ -87,28 +90,29 @@ const PopularCourses: React.FC = () => {
         <h2 className="text-3xl font-bold text-left">Popular Courses</h2>
         <button
           onClick={handleNextClick}
-          className={`bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 ${currentIndex + 2 >= courses.length ? 'invisible' : 'visible'}`}
+          className={`bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 ${currentIndex + 4 >= courses.length ? 'invisible' : 'visible'}`}
         >
           <RightOutlined className="text-lg" />
         </button>
       </div>
       <div className="relative">
-        <div className={`grid grid-cols-1 sm:grid-cols-2 gap-4 pb-6 transition-transform duration-300 ${isAnimating ? 'transform -translate-x-full' : ''}`}>
+        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pb-6 transition-transform duration-300 ${isAnimating ? 'transform -translate-x-full' : ''}`}>
           {loading ? (
-            Array.from({ length: 2 }).map((_, index) => (
+            Array.from({ length: 4 }).map((_, index) => (
               <Skeleton key={index} active paragraph={{ rows: 5 }} />
             ))
           ) : (
-            courses.slice(currentIndex, currentIndex + 2).map((course) => (
-              <div
+            courses.slice(currentIndex, currentIndex + 4).map((course) => (
+              <Link
+                to={`/course-detail/${course._id}`}
                 key={course._id}
-                className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl"
-                style={{ height: '360px', width: '340px' }} // Updated dimensions
+                className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl p-4 cursor-pointer" // Thêm cursor-pointer để chỉ rõ đây là phần có thể nhấp chuột
+                style={{ height: '395px' }}
               >
                 <img
                   src={course.image_url}
                   alt={course.name}
-                  className="w-full h-40 object-cover" // Adjusted height for image
+                  className="w-full h-40 object-cover mb-4"
                 />
                 <div className="flex items-center mt-2 space-x-2 ml-2">
                   <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
@@ -148,14 +152,14 @@ const PopularCourses: React.FC = () => {
                       <span className="text-sm text-gray-500 ml-2"></span>
                     </div>
                     <button
-                      onClick={() => handleViewDetails(course._id)}
-                      className="bg-green-600 text-white py-1 px-2 rounded-md hover:bg-green-700 transition duration-300"
+                      onClick={(e) => handleButtonClick(course._id, course.is_purchased, e)}
+                      className={`py-1 px-2 rounded-md transition duration-300 ${course.is_purchased ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-green-600 text-white hover:bg-green-700'}`}
                     >
-                      Join Now
+                      {course.is_purchased ? 'Learn' : 'Join Now'}
                     </button>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))
           )}
         </div>
