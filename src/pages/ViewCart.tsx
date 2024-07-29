@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useNavigate, getCart, updateCart, message, Button, Checkbox, getCourseDetail } from '../utils/commonImports';
+import { React, useEffect, useState, useNavigate, getCart, updateCart, message, Button, Checkbox } from '../utils/commonImports';
 import DeleteCart from '../components/Cart/DeleteCart';
 
 interface CartItem {
@@ -10,7 +10,7 @@ interface CartItem {
     discount: number;
     cart_no: string;
     status: string;
-    image_url: string;
+    course_image: string;
 }
 
 const ViewCart: React.FC = () => {
@@ -31,23 +31,13 @@ const ViewCart: React.FC = () => {
                 },
             };
             const response = await getCart(data);
-            const courseIds = response.pageData.map((item: CartItem) => item.course_id);
-
-            const courseDetails = await Promise.all(courseIds.map(async (id: string) => {
-                return await getCourseDetail(id);
-            }));
 
             const getCartItems = response.pageData
-                .map((item: CartItem, index: number) => ({
-                    ...item,
-                    image_url: courseDetails[index] ? courseDetails[index].image_url : ''
-                }))
                 .filter((item: CartItem) =>
                     item.status === 'new' || item.status === 'cancel'
                 );
 
             setCartItems(getCartItems);
-
         };
         fetchCartItems();
     }, []);
@@ -117,7 +107,7 @@ const ViewCart: React.FC = () => {
                                     handleSelectChange(newSelectedRowKeys);
                                 }}
                             />
-                            <img src={item.image_url} alt={item.course_name} className="w-10 h-10 mr-2" />
+                            <img src={item.course_image} alt={item.course_name} className="w-18 h-16 mr-2" />
                             <div className="flex flex-col w-full">
                                 <div className="flex justify-between items-center mb-1">
                                     <h2 className="text-sm font-semibold">{item.course_name}</h2>

@@ -39,7 +39,7 @@ const PopularCourses: React.FC = () => {
         },
         pageInfo: {
           pageNum: 1,
-          pageSize: 10,
+          pageSize: 20,
         },
       };
       const response: ApiResponse = await NT_getPublicCourses(data);
