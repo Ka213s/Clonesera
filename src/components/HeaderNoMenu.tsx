@@ -21,6 +21,12 @@ const HeaderNoMenu: React.FC = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setIsLoggedIn(false);
+        return;
+      }
+
       try {
         const userData = await getCurrentLogin();
         if (userData) {

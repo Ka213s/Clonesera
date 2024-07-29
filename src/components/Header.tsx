@@ -24,6 +24,13 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
 
   useEffect(() => {
     const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setIsLoggedIn(false);
+        setIsLoading(false);
+        return;
+      }
+
       try {
         const userData = await getCurrentLogin();
         if (userData) {
