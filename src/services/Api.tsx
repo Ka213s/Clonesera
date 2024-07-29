@@ -246,7 +246,6 @@ export const getSubscribers = async (searchCondition: { keyword: string; is_dele
 
 export const updateSubscribed = async (instructor_id: string) => {
   const response = await tokenAxiosInstance.post('/api/subscription', { instructor_id });
-  toast.success("Subscription updated successfully");
   return response.data;
 };
 

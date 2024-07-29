@@ -121,7 +121,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
     showUploadList: {
       showRemoveIcon: !uploading,
     },
-    accept: type === 'image' ? 'image/*' : 'video/*', // Set accept attribute based on type
+    accept: type === 'image' ? 'image/*' : 'video/*', 
   };
 
   const uploadButton = (
