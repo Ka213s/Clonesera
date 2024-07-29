@@ -112,6 +112,7 @@ export const changePassword = async (data: { user_id: string; old_password: stri
 
 export const updateAccount = async (id: string, data: { name?: string; description?: string; phone_number?: string; avatar?: string; dob?: string }) => {
   const response = await tokenAxiosInstance.put(`/api/users/${id}`, data);
+  toast.success("Account updated successfully");
   return response.data;
 };
 
