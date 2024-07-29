@@ -105,7 +105,7 @@ const PopularCourses: React.FC = () => {
                   <img
                     src={course.image_url}
                     alt={course.name}
-                    className="w-full h-40 object-cover mb-4"
+                    className="w-full h-36 object-cover mb-4"
                   />
                   <div className="flex items-center mt-2 space-x-2 ml-2">
                     <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
