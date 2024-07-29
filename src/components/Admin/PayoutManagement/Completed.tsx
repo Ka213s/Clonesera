@@ -1,5 +1,5 @@
 import { React, useEffect, useState, useCallback, SearchOutlined } from '../../../utils/commonImports';
-import { Table, Pagination, Input } from 'antd';
+import { Table, Pagination, Input, Button } from 'antd';
 import { Link } from 'react-router-dom';
 import { getPayouts } from '../../../services/Api';
 
@@ -81,7 +81,7 @@ const Completed: React.FC = () => {
 
     const handleSearch = (value: string) => {
         setSearchKeyword(value);
-        setCurrent(1); 
+        setCurrent(1);
     };
 
     const columns = [
@@ -94,6 +94,17 @@ const Completed: React.FC = () => {
             title: 'Instructor Name',
             dataIndex: 'instructor_name',
             key: 'instructor_name',
+        },
+        {
+            title: 'Transaction',
+            key: 'transaction_id',
+            render: (record: PayoutData) => (
+                <Button type='link'>
+                    <Link to={`/transaction/${record._id}`}>
+                        View
+                    </Link>
+                </Button>
+            ),
         },
         {
             title: 'Balance Origin',
@@ -112,15 +123,6 @@ const Completed: React.FC = () => {
             dataIndex: 'balance_instructor_received',
             key: 'balance_instructor_received',
             render: (balance_instructor_received: number) => balance_instructor_received.toLocaleString(),
-        },
-        {
-            title: 'Transaction',
-            key: 'transaction_id',
-            render: (record: PayoutData) => (
-                <Link to={`/transaction/${record._id}`}>
-                    View
-                </Link>
-            ),
         },
     ];
 

@@ -152,6 +152,15 @@ const RequestPaid: React.FC = () => {
             key: 'instructor_name',
         },
         {
+            title: 'Transaction',
+            key: 'transaction_id',
+            render: (record: PayoutData) => (
+                <Button type='link'>
+                    <Link to={`/transaction/${record._id}`}>View</Link>
+                </Button>
+            ),
+        },
+        {
             title: 'Balance Origin',
             dataIndex: 'balance_origin',
             key: 'balance_origin',
@@ -168,13 +177,6 @@ const RequestPaid: React.FC = () => {
             dataIndex: 'balance_instructor_received',
             key: 'balance_instructor_received',
             render: (balance_instructor_received: number) => balance_instructor_received.toLocaleString(),
-        },
-        {
-            title: 'Transaction',
-            key: 'transaction_id',
-            render: (record: PayoutData) => (
-                <Link to={`/transaction/${record._id}`}>View</Link>
-            ),
         },
         {
             title: 'Action',
