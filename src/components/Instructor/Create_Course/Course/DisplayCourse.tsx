@@ -81,7 +81,7 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
         ) : (
           <Select
             defaultValue={record.status}
-            style={{ width: 120, marginLeft: 10 }}
+            style={{ width: 220, marginLeft: 10 }}
             onChange={(value) => handleChangeStatus(record._id, value)}
           >
             <Option value="active">Active</Option>
