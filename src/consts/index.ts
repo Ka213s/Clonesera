@@ -105,7 +105,6 @@ export const sidebarMenuItemsData = {
 export const SidebarIntructorData = {
   insSidebarItem: [
     { text: "Dashboard", icon: "AppstoreOutlined", url: "/dashboard-instructor" },
-    { text: "My Profile", icon: "UserOutlined", url: "/view-my-profile" },
     { text: "Manage Course", icon: "BookOutlined", url: "/courses" },
     { text: "Subscription", icon: "BellOutlined", url: "/list-subscription" },
     { text: "Log Course", icon: "BookOutlined", url: "/log-course" },

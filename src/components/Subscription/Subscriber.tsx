@@ -1,10 +1,16 @@
-import { React, useEffect, useState, useCallback, useMemo, Table, Pagination, Input, getSubscribers, SearchOutlined } from '../../utils/commonImports';
-import { ColumnsType } from 'antd/es/table';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Card, Pagination, Input, Row, Col } from 'antd';
+import { getSubscribers, getUserData } from '../../utils/commonImports';
+import { SearchOutlined, PhoneOutlined, MailOutlined } from '@ant-design/icons';
 
 interface Subscriber {
     _id: string;
     subscriber_name: string;
     is_subscribed: boolean;
+    subscriber_id: string;
+    avatar?: string;
+    phone_number?: string;
+    email?: string;
 }
 
 const { Search } = Input;
@@ -19,16 +25,28 @@ const Subscriber: React.FC = () => {
 
     const fetchSubscribers = useCallback(
         async (page: number, pageSize: number) => {
-                const data = await getSubscribers(
-                    { keyword: '', is_delete: false },
-                    page,
-                    pageSize
-                );
-                const filteredData = data.pageData.filter((sub: Subscriber) => sub.is_subscribed);
-                setAllSubscribers(filteredData);
-                const paginatedData = filteredData.slice((page - 1) * pageSize, page * pageSize);
-                setSubscribers(paginatedData);
-                setTotalItems(filteredData.length); // Set total items based on subscribed users
+            const data = await getSubscribers(
+                { keyword: '', is_delete: false },
+                page,
+                pageSize
+            );
+            const filteredData = data.pageData.filter((sub: Subscriber) => sub.is_subscribed);
+
+            // Fetch user data for each subscriber using subscriber_id
+            const enrichedSubscribers = await Promise.all(filteredData.map(async (sub: Subscriber) => {
+                const userData = await getUserData(sub.subscriber_id); // Use subscriber_id here
+                return {
+                    ...sub,
+                    avatar: userData.avatar,
+                    phone_number: userData.phone_number,
+                    email: userData.email
+                };
+            }));
+
+            setAllSubscribers(enrichedSubscribers);
+            const paginatedData = enrichedSubscribers.slice((page - 1) * pageSize, page * pageSize);
+            setSubscribers(paginatedData);
+            setTotalItems(enrichedSubscribers.length); // Set total items based on subscribed users
         },
         []
     );
@@ -45,17 +63,6 @@ const Subscriber: React.FC = () => {
         setSubscribers(paginatedFiltered);
         setTotalItems(filtered.length);
     }, [searchKeyword, allSubscribers, pageNum, pageSize]);
-
-    const columns: ColumnsType<Subscriber> = useMemo(
-        () => [
-            {
-                title: 'Subscriber Name',
-                dataIndex: 'subscriber_name',
-                key: 'subscriber_name',
-            },
-        ],
-        []
-    );
 
     const handleSearch = (value: string) => {
         setSearchKeyword(value);
@@ -74,25 +81,49 @@ const Subscriber: React.FC = () => {
                     style={{ width: 300 }}
                 />
             </div>
-            <Table
-                columns={columns}
-                dataSource={subscribers.map(sub => ({ ...sub, key: sub._id }))}
-                pagination={false}
-                className="mb-4"
-            />
-            <Pagination
-                current={pageNum}
-                pageSize={pageSize}
-                total={totalItems}
-                showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
-                onChange={(page, pageSize) => {
-                    setPageNum(page);
-                    setPageSize(pageSize);
-                    fetchSubscribers(page, pageSize);
-                }}
-                showSizeChanger
-                className="text-center"
-            />
+            <Row gutter={16}>
+                {subscribers.map(sub => (
+                    <Col key={sub._id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-4 mb-8">
+                        <Card
+                            hoverable
+                            className="flex flex-col items-center justify-center p-6 h-full"
+                        >
+                            <div className="flex flex-col items-center text-center">
+                                <img
+                                    alt="Avatar"
+                                    src={sub.avatar || 'https://via.placeholder.com/150'}
+                                    className="w-24 h-24 rounded-full mb-4"
+                                />
+                                <div className="text-xl text-center font-bold mb-2">{sub.subscriber_name}</div>
+                                <div className="flex items-center text-gray-700 mb-2">
+                                    <PhoneOutlined className="mr-2 text-blue-500" />
+                                    <span>{sub.phone_number}</span>
+                                </div>
+                                <div className="flex items-center text-gray-700">
+                                    <MailOutlined className="mr-2 text-blue-500" />
+                                    <span>{sub.email}</span>
+                                </div>
+                            </div>
+                        </Card>
+                    </Col>
+                ))}
+            </Row>
+            <div className="flex justify-end mt-5">
+                <Pagination
+                    current={pageNum}
+                    pageSize={pageSize}
+                    total={totalItems}
+                    showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
+                    onChange={(page, pageSize) => {
+                        setPageNum(page);
+                        setPageSize(pageSize);
+                        fetchSubscribers(page, pageSize);
+                    }}
+                    showSizeChanger
+                    className="text-center"
+                />
+            </div>
+
         </div>
     );
 };
