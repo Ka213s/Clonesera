@@ -87,6 +87,7 @@ tokenAxiosInstance.interceptors.response.use(
       
       if (response.data.message !== 'Token is expired') {
         handleHttpErrors(response.status);
+        window.location.href = '/homepage';
       } else {
         localStorage.removeItem('token');
         localStorage.removeItem('userData');
@@ -106,7 +107,6 @@ const handleErrorByToast = (errors: AxiosError<ErrorResponse>) => {
       message = errorMessages.join(', ');
     }
   }
-  console.log('Error:', data);
   toast.error(message);
   return Promise.reject(data?.errors ?? { message });
 };

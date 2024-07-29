@@ -29,18 +29,16 @@ const RequestManagement: React.FC = () => {
 
     const fetchUsers = useCallback(
         async (page: number, pageSize: number, keyword: string) => {
-            try {
-                const data = await getUsers(
-                    { keyword, role: 'instructor', status: true, is_deleted: false, is_verified: "false" },
-                    page,
-                    pageSize
-                );
-                const filteredData = data.pageData.filter((user: User) => !user.is_verified);
-                setUsers(filteredData);
-                setTotalItems(data.pageInfo.totalItems);
-            } catch (error) {
-                toast.error('Failed to fetch users');
-            }
+
+            const data = await getUsers(
+                { keyword, role: 'instructor', status: true, is_deleted: false, is_verified: "false" },
+                page,
+                pageSize
+            );
+            const filteredData = data.pageData.filter((user: User) => !user.is_verified);
+            setUsers(filteredData);
+            setTotalItems(data.pageInfo.totalItems);
+
         },
         []
     );
@@ -50,12 +48,10 @@ const RequestManagement: React.FC = () => {
     }, [pageNum, pageSize, searchKeyword, fetchUsers]);
 
     const handleApprove = async (userId: string) => {
-        try {
-            await reviewProfileInstructor({ user_id: userId, status: 'approve', comment: '' });
-            fetchUsers(pageNum, pageSize, searchKeyword);
-        } catch (error) {
-            toast.error('Failed to approve user');
-        }
+
+        await reviewProfileInstructor({ user_id: userId, status: 'approve', comment: '' });
+        fetchUsers(pageNum, pageSize, searchKeyword);
+
     };
 
     const handleReject = (userId: string) => {

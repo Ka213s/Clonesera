@@ -1,7 +1,9 @@
-import { React, useEffect, useState, useCallback, SearchOutlined, Table, Button, Pagination, Input, message } from '../../../utils/commonImports';
-import { Link } from 'react-router-dom';
+import { React, useEffect, useState, useCallback, SearchOutlined, Table, Button, Pagination, Input, Modal } from '../../../utils/commonImports';
+// import { Link } from 'react-router-dom';
 import { getPayouts, updatePayout } from '../../../services/Api';
 import { toast } from 'react-toastify';
+import { getStatusTag } from '../../../utils/statusTagUtils';
+import TransactionDetail from '../../../pages/TransactionDetail';
 
 interface Transaction {
     _id: string; // Transaction ID
@@ -47,9 +49,10 @@ const RequestPayout: React.FC = () => {
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalPayouts, setTotalPayouts] = useState<number>(0);
     const [searchKeyword, setSearchKeyword] = useState<string>("");
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+    const [selectedPayoutId, setSelectedPayoutId] = useState<string | null>(null);
 
     const fetchData = useCallback(async (page: number, size: number, keyword: string) => {
-        try {
             const result: ApiResponse = await getPayouts({
                 searchCondition: {
                     payout_no: keyword,
@@ -63,17 +66,11 @@ const RequestPayout: React.FC = () => {
                     pageSize: size
                 }
             });
-            // Filter data to include only request_payout and rejected statuses
             const filteredData = result.pageData.filter(payout =>
                 payout.status === 'new' || payout.status === 'rejected' || payout.status === 'request_payout'
             );
-
             setData(filteredData);
             setTotalPayouts(result.pageInfo.totalItems);
-        } catch (error) {
-            message.error('Failed to fetch data');
-            console.error('Failed to fetch data:', error);
-        }
     }, []);
 
     useEffect(() => {
@@ -85,7 +82,6 @@ const RequestPayout: React.FC = () => {
     };
 
     const handleRequestPayout = async () => {
-        try {
             const selectedPayouts = selectedRowKeys.map(key => key.toString());
             for (const payoutId of selectedPayouts) {
                 await updatePayout(payoutId, {
@@ -96,10 +92,11 @@ const RequestPayout: React.FC = () => {
             toast.success('Payout request successfully. Please wait admin for approval!');
             fetchData(pageNum, pageSize, searchKeyword);
             setSelectedRowKeys([]);
-        } catch (error) {
-            toast.error('Failed to request payout');
-            console.error('Failed to request payout:', error);
-        }
+    };
+
+    const handleViewClick = (id: string) => {
+        setSelectedPayoutId(id);
+        setIsModalVisible(true);
     };
 
     const columns = [
@@ -112,20 +109,40 @@ const RequestPayout: React.FC = () => {
             title: 'Status',
             dataIndex: 'status',
             key: 'status',
+            render: (status: string) => getStatusTag(status),
+        },
+        {
+            title: 'Created At',
+            dataIndex: 'created_at',
+            key: 'created_at',
+            render: (created_at: string) => new Date(created_at).toLocaleDateString(),
         },
         {
             title: 'Transaction ID',
             key: 'transaction_id',
             render: (record: PayoutData) => (
-                <Link to={`/transaction/${record._id}`}>
+                <Button type="link" onClick={() => handleViewClick(record._id)}>
                     View
-                </Link>
+                </Button>
             ),
         },
         {
-            title: 'Price Paid',
-            key: 'price_paid',
-            render: (record: PayoutData) => record.transactions.reduce((total, transaction) => total + transaction.price_paid, 0).toLocaleString(),
+            title: 'Balance Origin',
+            dataIndex: 'balance_origin',
+            key: 'balance_origin',
+            render: (balance_origin: number) => balance_origin.toLocaleString(),
+        },
+        {
+            title: 'Balance Instructor Paid',
+            dataIndex: 'balance_instructor_paid',
+            key: 'balance_instructor_paid',
+            render: (balance_instructor_paid: number) => balance_instructor_paid.toLocaleString(),
+        },
+        {
+            title: 'Balance Instructor Received',
+            dataIndex: 'balance_instructor_received',
+            key: 'balance_instructor_received',
+            render: (balance_instructor_received: number) => balance_instructor_received.toLocaleString(),
         },
     ];
 
@@ -176,6 +193,15 @@ const RequestPayout: React.FC = () => {
                     showSizeChanger
                 />
             </div>
+            <Modal
+                title="Transaction Details"
+                visible={isModalVisible}
+                onCancel={() => setIsModalVisible(false)}
+                footer={null}
+                width={1000}
+            >
+                {selectedPayoutId && <TransactionDetail payoutId={selectedPayoutId} />}
+            </Modal>
         </div>
     );
 };

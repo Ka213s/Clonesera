@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Table, Pagination, message, Input } from "antd";
+import { Table, Pagination, Input } from "antd";
 import { getCourses, getCourseLogs, SearchOutlined } from "../../../utils/commonImports";
 import { getStatusTag } from "../../../utils/statusTagUtils";
 
@@ -31,13 +31,11 @@ const LogCourse: React.FC = () => {
 
   const fetchCoursesAndLogs = useCallback(
     async (page: number, size: number, keyword: string) => {
-      try {
         const coursesData = await getCourses(
           { keyword, category: "", status: "", is_deleted: false },
           page,
           size
         );
-
         if (coursesData && coursesData.pageData) {
           setCourses(coursesData.pageData);
           const courseIds: string[] = coursesData.pageData.map(
@@ -49,17 +47,12 @@ const LogCourse: React.FC = () => {
               pageInfo: { pageNum: page, pageSize: size },
             })
           );
-
           const logsDataArray = await Promise.all(logsDataPromises);
           const allLogs = logsDataArray.flatMap((logData) => logData.pageData);
           setLogs(allLogs);
           // Assuming logsDataArray[0].pageInfo contains totalItems
           setTotalLogs(logsDataArray[0].pageInfo.totalItems);
         }
-      } catch (error) {
-        message.error("Error fetching data");
-        console.error("Error fetching data:", error);
-      }
     },
     []
   );

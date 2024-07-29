@@ -47,7 +47,6 @@ const Rejected: React.FC = () => {
     const [searchKeyword, setSearchKeyword] = useState<string>("");
 
     const fetchData = useCallback(async (pageInfo: { pageNum: number; pageSize: number }, keyword: string) => {
-        try {
             const result: ApiResponse = await getPayouts({
                 searchCondition: {
                     payout_no: keyword,
@@ -61,9 +60,7 @@ const Rejected: React.FC = () => {
 
             setData(result.pageData);
             setTotal(result.pageInfo.totalItems);
-        } catch (error) {
-            console.error('Failed to fetch data:', error);
-        }
+        
     }, []);
 
     useEffect(() => {

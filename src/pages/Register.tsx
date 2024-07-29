@@ -44,12 +44,11 @@ const Register: React.FC = () => {
                     password: values.password,
                     role: values.role,
                 };
-                console.log('Registering student:', studentData);
                 await registerAccountStudent(studentData);
-                toast.success('Đăng ký thành công. Vui lòng kiểm tra email của bạn.');
+                toast.success('Registration successful. Please check your email.');
                 setTimeout(() => {
                     navigate('/login');
-                }, 2000); // Đợi 2 giây trước khi chuyển hướng
+                }, 2000); 
             } else if (values.role === 'instructor') {
                 if (!isInstructorDetailsVisible) {
                     setIsInstructorDetailsVisible(true);
@@ -65,15 +64,14 @@ const Register: React.FC = () => {
                     video: values.videoUrl!,
                     avatar: values.avatarUrl!,
                 };
-                console.log('Registering instructor:', instructorData);
                 await registerAccountInstructor(instructorData);
-                toast.success('Đăng ký thành công. Vui lòng kiểm tra email của bạn.');
+                toast.success('Registration successful. Please check your email.');
                 setTimeout(() => {
                     navigate('/login');
-                }, 2000); // Đợi 2 giây trước khi chuyển hướng
+                }, 2000); 
             }
         } catch (error) {
-            toast.error('Đăng ký thất bại');
+            toast.error('Registration failed');
         } finally {
             setIsButtonDisabled(false);
         }

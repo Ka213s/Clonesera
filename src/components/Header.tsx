@@ -35,14 +35,11 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     }
   }, []);
 
-
-
   const handleLogoClick = (e: React.MouseEvent) => {
+    e.preventDefault();
     if (role === 'admin') {
-      e.preventDefault();
       navigate('/display-account');
     } else {
-      e.preventDefault();
       navigate('/homepage');
     }
   };
@@ -98,17 +95,20 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       <div className="flex items-center ml-auto space-x-8 pr-4">
         {isLoggedIn ? (
           <>
-            <Button type="primary" className="custom-button" onClick={handleCreateCourse}>
-              Create New Course
-            </Button>
-            <Button
-              type="primary"
-              shape="circle"
-              icon={<PlusOutlined />}
-              className="block md:hidden bg-black border-none hover:bg-gray-800"
-              onClick={handleCreateCourse}
-            />
-
+            {role === 'instructor' && (
+              <>
+                <Button type="primary" className="custom-button" onClick={handleCreateCourse}>
+                  Create New Course
+                </Button>
+                <Button
+                  type="primary"
+                  shape="circle"
+                  icon={<PlusOutlined />}
+                  className="block md:hidden bg-black border-none hover:bg-gray-800"
+                  onClick={handleCreateCourse}
+                />
+              </>
+            )}
             <Badge count={totalCartItems}>
               <ShoppingCartOutlined
                 className="icon-size text-2xl cursor-pointer text-black"
@@ -129,12 +129,12 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
           </>
         ) : (
           <>
-              <Link to="/login">
-                <Button type="primary">Login</Button>
-              </Link>
-              <Link to="/register">
-                <Button type="primary">Register</Button>
-              </Link>
+            <Link to="/login">
+              <Button type="primary">Login</Button>
+            </Link>
+            <Link to="/register">
+              <Button type="primary">Register</Button>
+            </Link>
           </>
         )}
       </div>

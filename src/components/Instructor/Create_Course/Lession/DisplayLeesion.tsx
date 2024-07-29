@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useCallback, Table, Pagination, Input, message, getLessons, SearchOutlined } from '../../../../utils/commonImports';
+import { React, useEffect, useState, useCallback, Table, Pagination, Input, getLessons, SearchOutlined } from '../../../../utils/commonImports';
 import moment from 'moment';
 import UpdateLesson from './EditLesson';
 import DeleteLesson from './DeleteLesson';
@@ -35,22 +35,19 @@ const DisplayLesson: React.FC = () => {
 
   const fetchLessons = useCallback(
     async (page: number, size: number, keyword: string) => {
-      try {
-        const searchCondition: SearchCondition = {
-          keyword: keyword,
-          course_id: '',
-          session_id: '',
-          lesson_type: '',
-          is_position_order: false,
-          is_deleted: false,
-        };
-        const data = await getLessons(searchCondition, page, size);
-        setLessons(data.pageData); // Ensure `data.pageData` includes necessary fields
-        setTotalLessons(data.pageInfo.totalItems); // Assuming `data.pageInfo` contains `totalItems`
-      } catch (error) {
-        message.error('Failed to fetch lessons');
-        console.error('Error fetching lessons:', error);
-      }
+
+      const searchCondition: SearchCondition = {
+        keyword: keyword,
+        course_id: '',
+        session_id: '',
+        lesson_type: '',
+        is_position_order: false,
+        is_deleted: false,
+      };
+      const data = await getLessons(searchCondition, page, size);
+      setLessons(data.pageData); // Ensure `data.pageData` includes necessary fields
+      setTotalLessons(data.pageInfo.totalItems); // Assuming `data.pageInfo` contains `totalItems`
+
     },
     []
   );

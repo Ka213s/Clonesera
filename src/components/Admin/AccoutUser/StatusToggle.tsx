@@ -11,14 +11,8 @@ interface StatusToggleProps {
 
 const StatusToggle: React.FC<StatusToggleProps> = ({ userId, status, onChange }) => {
   const handleStatusChange = async (checked: boolean) => {
-    try {
       await changeUserStatus({ user_id: userId, status: checked });
       onChange(userId, checked);
-   
-    } catch (error) {
-    
-      console.error('Error changing user status:', error);
-    }
   };
 
   return (

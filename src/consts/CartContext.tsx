@@ -1,5 +1,5 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { getCart } from '../services/Api'; // Import your API call
+import { getCart } from '../services/Api'; 
 
 interface CartContextType {
   totalCartItems: number;
@@ -23,20 +23,13 @@ export const CartProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const fetchCartItems = async () => {
       const token = localStorage.getItem('token');
       if (!token) {
-        console.log('No token found in local storage');
         return;
       }
-
-      try {
         const cartData = await getCart({
           searchCondition: { status: 'new', is_deleted: false },
           pageInfo: { pageNum: 1, pageSize: 10 }
         });
-        console.log('Cart data:', cartData);
         setTotalCartItems(cartData.pageInfo.totalItems);
-      } catch (error) {
-        console.error('Failed to fetch cart items:', error);
-      }
     };
 
     fetchCartItems();

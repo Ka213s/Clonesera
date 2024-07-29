@@ -13,15 +13,10 @@ const ButtonDelete: React.FC<ButtonDeleteProps> = ({ _id }) => {
       title: 'Are you sure you want to delete this session?',
       content: 'This action cannot be undone.',
       onOk: async () => {
-        try {
-          await deleteSession(_id);
-          console.log('Session deleted successfully');
-        } catch (error) {
-          console.error('Failed to delete session:', error);
-        }
+     
+          await deleteSession(_id);      
       },
       onCancel() {
-        console.log('Delete action cancelled');
       },
     });
   };

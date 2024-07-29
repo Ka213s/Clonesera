@@ -10,17 +10,12 @@ interface DeleteButtonProps {
 const DeleteButton: React.FC<DeleteButtonProps> = ({ courseId }) => {
   const handleClick = () => {
     Modal.confirm({
-      title: 'Xác nhận xóa',
-      content: 'Bạn có chắc chắn muốn xóa khóa học này không?',
-      okText: 'Xóa',
-      cancelText: 'Hủy',
+      title: 'Confirm Deletion',
+      content: 'Are you sure you want to delete this course?',
+      okText: 'Delete',
+      cancelText: 'Cancel',
       onOk: async () => {
-        try {
           await deleteCourse(courseId.toString());
-          console.log('Course deleted successfully');
-        } catch (error) {
-          console.error('Failed to delete course', error);
-        }
       },
     });
   };

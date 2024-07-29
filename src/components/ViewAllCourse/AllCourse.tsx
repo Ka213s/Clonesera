@@ -50,7 +50,6 @@ const AllCourse: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   const fetchCategories = async () => {
-    try {
       const data = {
         searchCondition: {
           keyword: '',
@@ -63,9 +62,6 @@ const AllCourse: React.FC = () => {
       };
       const response: ApiResponse<Category> = await NT_getCategoriesClient(data);
       setCategories(response.pageData);
-    } catch (error) {
-      console.error('Error fetching categories:', error);
-    }
   };
 
   const fetchCourses = async (keyword: string, categoryId: string | null, pageNum: number, pageSize: number) => {

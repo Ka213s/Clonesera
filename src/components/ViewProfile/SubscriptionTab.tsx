@@ -1,55 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import { getSubscribeds, getUserData } from '../../utils/commonImports';
+import { Card, Row, Col } from 'antd';
 
 interface Subscription {
   _id: string;
   name: string;
   instructor_id: string;
-
 }
 
 interface UserData {
   _id: string;
   name: string;
+  avatar: string;
+  phone_number: string;
+  email: string;
 }
 
 const SubscriptionTab: React.FC = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
-  const [user, setUser] = useState<UserData | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [userDetails, setUserDetails] = useState<UserData[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
+     
         const subscribedsResponse = await getSubscribeds({ keyword: '', is_delete: false }, 1, 10);
         setSubscriptions(subscribedsResponse.pageData);
-        if (subscribedsResponse.pageData.length > 0) {
-          const instructorId = subscribedsResponse.pageData[0].instructor_id;
-          const userData = await getUserData(instructorId);
-          setUser(userData);
-        }
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
+        const userDetailsPromises = subscribedsResponse.pageData.map((subscription: Subscription) => 
+          getUserData(subscription.instructor_id)
+        );
+        
+        const userDetailsResponse = await Promise.all(userDetailsPromises);
+        setUserDetails(userDetailsResponse);
+     
     };
 
     fetchData();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <div>
-      <h2>SubscriptionTab</h2>
-      {user && (
-        <div>
-          <h3>Instructor: {user.name}</h3>
-        </div>
-      )}
+      <Row gutter={[16, 16]}>
+        {userDetails.map((user) => (
+          <Col key={user._id} span={8}>
+            <Card
+              hoverable
+              cover={<img alt="avatar" src={user.avatar} />}
+            >
+              <Card.Meta 
+                title={user.name} 
+                description={
+                  <>
+                    <p>Phone: {user.phone_number}</p>
+                    <p>Email: {user.email}</p>
+                  </>
+                } 
+              />
+            </Card>
+          </Col>
+        ))}
+      </Row>
       <ul>
         {subscriptions.map((subscription) => (
           <li key={subscription._id}>{subscription.name}</li>

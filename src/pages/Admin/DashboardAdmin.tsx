@@ -14,7 +14,6 @@ const AdminDashboard: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
         const settingData = await getSettingDefault();
         setTotalMoney(settingData.balance_total);
 
@@ -26,7 +25,6 @@ const AdminDashboard: React.FC = () => {
           is_verified: '',
         };
         const userData = await getUsers(searchConditionUsers, 1, 10);
-        console.log("Test Total Users:", userData);
         setTotalUsers(userData.pageInfo.totalItems);
 
         const searchConditionCategories = {
@@ -36,7 +34,6 @@ const AdminDashboard: React.FC = () => {
           is_deleted: false,
         };
         const categoryData = await getCategories(searchConditionCategories, 1, 10);
-        console.log("Test Total Categories:", categoryData);
         setTotalCategories(categoryData.pageInfo.totalItems);
 
         const searchConditionCourses = {
@@ -46,7 +43,6 @@ const AdminDashboard: React.FC = () => {
           is_deleted: false,
         };
         const courseData = await getCourses(searchConditionCourses, 1, 10);
-        console.log("Test Total Courses:", courseData);
         setTotalCourses(courseData.pageInfo.totalItems);
 
         const searchConditionBlogs = {
@@ -54,11 +50,7 @@ const AdminDashboard: React.FC = () => {
           is_deleted: false,
         };
         const blogData = await getBlogs({ searchCondition: searchConditionBlogs, pageInfo: { pageNum: 1, pageSize: 10 } });
-        console.log("Test Total Blogs:", blogData);
         setTotalBlogs(blogData.pageInfo.totalItems);
-      } catch (error) {
-        console.error('Failed to fetch data', error);
-      }
     };
 
     fetchData();

@@ -6,10 +6,10 @@ import dayjs from 'dayjs';
 
 const CustomCalendar: React.FC = () => {
   const { token } = theme.useToken();
-  const [value, setValue] = useState<Dayjs>(dayjs()); // Khởi tạo giá trị với ngày hiện tại
+  const [value, setValue] = useState<Dayjs>(dayjs()); 
 
-  const onPanelChange: CalendarProps<Dayjs>['onPanelChange'] = (value, mode) => {
-    console.log(value.format('YYYY-MM-DD'), mode);
+  const onPanelChange: CalendarProps<Dayjs>['onPanelChange'] = () => {
+   
   };
 
   const onSelect: CalendarProps<Dayjs>['onSelect'] = (value) => {

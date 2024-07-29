@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Table, Pagination, message, Input } from 'antd';
+import { Table, Pagination, Input } from 'antd';
 import moment from 'moment';
 import { getLessons, SearchOutlined } from '../../../utils/commonImports';
 import { ColumnsType } from 'antd/es/table';
@@ -36,7 +36,6 @@ const DisplayLesson: React.FC = () => {
 
   const fetchLessons = useCallback(
     async (page: number, size: number, keyword: string) => {
-      try {
         const searchCondition: SearchCondition = {
           keyword,
           course_id: '',
@@ -51,10 +50,6 @@ const DisplayLesson: React.FC = () => {
           setLessons(response.pageData);
           setTotalLessons(response.pageInfo.totalItems);
         }
-      } catch (error) {
-        message.error('Error fetching lessons');
-        console.error('Error fetching lessons:', error);
-      }
     },
     []
   );

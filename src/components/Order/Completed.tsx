@@ -1,4 +1,7 @@
-import { React, useState, useEffect, useCallback, SearchOutlined, Table, Alert, Input, Pagination, getItemsByStudent } from '../../utils/commonImports';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Table, Input, Button, Pagination } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { getItemsByStudent } from '../../utils/commonImports';
 import moment from 'moment';
 import { Link } from 'react-router-dom';
 
@@ -39,8 +42,6 @@ const { Search } = Input;
 
 const Completed: React.FC = () => {
   const [purchasedCourses, setPurchasedCourses] = useState<Course[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
   const [pageNum, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [totalItems, setTotalItems] = useState<number>(0);
@@ -61,25 +62,18 @@ const Completed: React.FC = () => {
       },
     };
 
-    try {
-      const response = await getItemsByStudent(data);
-      console.log('response:', response);
-      setPurchasedCourses(response.pageData);
-      setTotalItems(response.pageInfo.totalItems); // Assuming API provides totalItems
-    } catch (error) {
-      setError(error as Error);
-    } finally {
-      setLoading(false);
-    }
+    const response = await getItemsByStudent(data);
+    setPurchasedCourses(response.pageData);
+    setTotalItems(response.pageInfo.totalItems);
   }, []);
 
   useEffect(() => {
-    fetchPurchasedCourses(pageNum, pageSize, searchKeyword);
+    fetchPurchasedCourses(pageNum, pageSize, searchKeyword).catch();
   }, [pageNum, pageSize, searchKeyword, fetchPurchasedCourses]);
 
   const handleSearch = (value: string) => {
     setSearchKeyword(value);
-    setPageNum(1); // Reset to the first page on search
+    setPageNum(1);
   };
 
   const handlePageChange = (page: number, pageSize: number) => {
@@ -93,7 +87,9 @@ const Completed: React.FC = () => {
       dataIndex: 'course_name',
       key: 'course_name',
       render: (text: string, record: Course) => (
-        <Link to={`/course-detail/${record.course_id}`}>{text}</Link>
+        <Button type="link">
+          <Link to={`/course-detail/${record.course_id}`}>{text}</Link>
+        </Button>
       ),
     },
     {
@@ -102,15 +98,10 @@ const Completed: React.FC = () => {
       key: 'purchase_no',
     },
     {
-      title: 'Price Paid',
-      dataIndex: 'price_paid',
-      key: 'price_paid',
-      render: (price_paid: number) => price_paid.toLocaleString(),
-    },
-    {
-      title: 'Discount',
-      dataIndex: 'discount',
-      key: 'discount',
+      title: 'Created At',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (text: string) => moment(text).format('DD/MM/YYYY'),
     },
     {
       title: 'Student Name',
@@ -123,15 +114,19 @@ const Completed: React.FC = () => {
       key: 'instructor_name',
     },
     {
-      title: 'Created At',
-      dataIndex: 'created_at',
-      key: 'created_at',
-      render: (text: string) => moment(text).format('DD/MM/YYYY'),
+      title: 'Price Paid',
+      dataIndex: 'price_paid',
+      key: 'price_paid',
+      render: (price_paid: number) => price_paid.toLocaleString(),
+    },
+    {
+      title: 'Discount',
+      dataIndex: 'discount',
+      key: 'discount',
     },
   ];
 
-  if (loading) return <div>Loading...</div>;
-  if (error) return <Alert message="Error" description={error.message} type="error" showIcon />;
+
 
   return (
     <div>

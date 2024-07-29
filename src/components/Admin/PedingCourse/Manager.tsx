@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Tabs, Button, Row, Col, Tag } from 'antd';
+import { Tabs, Button, Row, Col, Tag, message } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import CourseTable from './CourseTable';
 import SessionTable from './SessionTable';
@@ -91,7 +91,7 @@ const MainPage: React.FC = () => {
     if (selectedCourseIds.length > 0) {
       setIsModalVisible(true);
     } else {
-      alert('Please select at least one course');
+      message.warning('Please select at least one course');
     }
   };
 

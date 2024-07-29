@@ -27,13 +27,8 @@ const ViewProfile: React.FC = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const data = await getCurrentLogin();
-                console.log('User data:', data);
-                setUserData(data);
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
+            const data = await getCurrentLogin();
+            setUserData(data);
         };
 
         fetchData();

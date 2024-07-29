@@ -22,7 +22,6 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ courseId }) => {
 
   useEffect(() => {
     const fetchReviews = async () => {
-      try {
         const data = await getReviews({
           searchCondition: {
             course_id: courseId,
@@ -33,12 +32,7 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ courseId }) => {
           },
           pageInfo: { pageNum: 1, pageSize: 10 },
         });
-        console.log(courseId);
         setReviews(data.pageData);
-      } catch (error) {
-        message.error("Error fetching reviews");
-        console.error("Error fetching reviews:", error);
-      }
     };
 
     fetchReviews();
@@ -46,8 +40,7 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ courseId }) => {
 
   const handleSubmit = async (values: { reviewer: string; comment: string; rating: number }) => {
     if (editingReview) {
-      // Update review
-      try {
+   
         await updateReview(editingReview.id, {
           course_id: courseId,
           comment: values.comment,
@@ -65,13 +58,9 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ courseId }) => {
         message.success("Review updated successfully");
         setEditingReview(null);
         form.resetFields();
-      } catch (error) {
-        message.error("Error updating review");
-        console.error("Error updating review:", error);
-      }
+     
     } else {
-      // Create new review
-      try {
+   
         await createReview({
           course_id: courseId,
           comment: values.comment,
@@ -89,9 +78,7 @@ const ReviewSection: React.FC<ReviewSectionProps> = ({ courseId }) => {
           },
         ]);
         form.resetFields();
-      } catch (error) {
-        console.error("Error submitting review:", error);
-      }
+      
     }
   };
 

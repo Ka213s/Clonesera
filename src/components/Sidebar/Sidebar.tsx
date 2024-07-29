@@ -12,9 +12,8 @@ import {
   QuestionCircleOutlined,
   HistoryOutlined,
   SendOutlined,
-
 } from '@ant-design/icons';
-import { sidebarMenuItemsData } from '../../consts'; 
+import { sidebarMenuItemsData } from '../../consts';
 
 interface SidebarProps {
   showMenu: boolean;
@@ -32,7 +31,6 @@ const iconComponents: { [key: string]: JSX.Element } = {
   QuestionCircleOutlined: <QuestionCircleOutlined />,
   HistoryOutlined: <HistoryOutlined />,
   SendOutlined: <SendOutlined />,
- 
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
@@ -43,7 +41,7 @@ const Sidebar: React.FC<SidebarProps> = ({ showMenu }) => {
       item.subItems ? (
         <Menu.SubMenu key={item.text} title={item.text} icon={iconComponents[item.icon || '']}>
           {item.subItems.map((subItem) => (
-            <Menu.Item key={subItem.url} onClick={() => console.log('Navigate to:', subItem.url)}>
+            <Menu.Item key={subItem.url} onClick={() => window.location.href = subItem.url}>
               {subItem.text}
             </Menu.Item>
           ))}

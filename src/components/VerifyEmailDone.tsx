@@ -30,7 +30,6 @@ function VerifyEmailDone() {
       } catch (err) {
         const error = err as { response?: { status: number, data?: { message?: string } } };
         if (error.response && error.response.status === 400) {
-          console.log('Token is not valid:', error.response.data?.message);
           setIsTokenExpired(true);
         } else {
           message.error('Error verifying email');

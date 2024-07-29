@@ -26,12 +26,8 @@ const EditForm: React.FC<EditUserFormProps> = ({ userId, onClose }) => {
 
     useEffect(() => {
         const fetchUserData = async () => {
-            try {
                 const userDetail = await getUserData(userId);
                 setUserData(userDetail);
-            } catch (error) {
-                console.error('Error fetching user data:', error);
-            }
         };
 
         fetchUserData();

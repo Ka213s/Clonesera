@@ -37,7 +37,6 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
 
   useEffect(() => {
     const fetchCourses = async (): Promise<void> => {
-      try {
         const response = await getCourses({
           keyword: '',
           category: '',
@@ -45,24 +44,14 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
           is_deleted: false,
         }, 1, 100);
         setCourses(response.pageData);
-        console.log('Fetched coaaurses:', response.pageData);
-      } catch (error) {
-        console.error('Error fetching courses:', error);
-      }
     };
 
     const fetchLesson = async (): Promise<void> => {
-      try {
         const lessonData: Lesson = await getLessonById(lesson_id);
         setLesson(lessonData);
         const course = courses.find(course => course._id === lessonData.course_id);
         const courseName = course ? course.name : '';
         form.setFieldsValue({ ...lessonData, course_name: courseName });
-        console.log('Fetched lesson:', lessonData);
-        console.log('Form values:', form.getFieldsValue());
-      } catch (error) {
-        console.error('Error fetching lesson:', error);
-      }
     };
 
     fetchCourses();
@@ -77,19 +66,15 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
   };
 
   const handleOk = async (values: Omit<Lesson, 'course_id'> & { course_name: string; full_time: string }): Promise<void> => {
-    try {
       const fullTimeString = values.full_time as unknown as string;
       const match = fullTimeString.match(/(\d+)h (\d+)m/) || [];
       const hours = match[1] ? parseInt(match[1], 10) : 0;
       const minutes = match[2] ? parseInt(match[2], 10) : parseInt(fullTimeString.replace('m', ''), 10);
       const fullTimeInMinutes = hours * 60 + minutes;
-
       const selectedCourse = courses.find(course => course.name === values.course_name);
-
       if (!selectedCourse) {
         throw new Error('Selected course not found');
       }
-
       const updatedValues: Lesson = {
         ...values,
         course_id: selectedCourse._id,
@@ -97,14 +82,9 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
         video_url: values.video_url || "",
         image_url: values.image_url || "",
       };
-
       await updateLesson(lesson_id, updatedValues);
       setIsModalVisible(false);
       message.success('Lesson updated successfully');
-    } catch (error) {
-      console.error('Error updating lesson:', error);
-      message.error('Failed to update lesson');
-    }
   };
 
   const handleCancel = (): void => {

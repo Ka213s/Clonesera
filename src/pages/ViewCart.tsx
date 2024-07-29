@@ -30,37 +30,25 @@ const ViewCart: React.FC = () => {
                     pageSize: 100,
                 },
             };
+            const response = await getCart(data);
+            const courseIds = response.pageData.map((item: CartItem) => item.course_id);
 
-            try {
-                const response = await getCart(data);
-                const courseIds = response.pageData.map((item: CartItem) => item.course_id);
+            const courseDetails = await Promise.all(courseIds.map(async (id: string) => {
+                return await getCourseDetail(id);
+            }));
 
-                const courseDetails = await Promise.all(courseIds.map(async (id: string) => {
-                    try {
-                        return await getCourseDetail(id);
-                    } catch (error) {
-                        console.error(`Error fetching course details for course_id ${id}:`, error);
-                        return null;
-                    }
-                }));
+            const getCartItems = response.pageData
+                .map((item: CartItem, index: number) => ({
+                    ...item,
+                    image_url: courseDetails[index] ? courseDetails[index].image_url : ''
+                }))
+                .filter((item: CartItem) =>
+                    item.status === 'new' || item.status === 'cancel'
+                );
 
-                // Get course image and filter course with status new and cancel to display
-                const getCartItems = response.pageData
-                    .map((item: CartItem, index: number) => ({
-                        ...item,
-                        image_url: courseDetails[index] ? courseDetails[index].image_url : ''
-                    }))
-                    .filter((item: CartItem) =>
-                        item.status === 'new' || item.status === 'cancel'
-                    );
+            setCartItems(getCartItems);
 
-                setCartItems(getCartItems);
-            } catch (error) {
-                console.error('Error fetching cart items:', error);
-                message.error('Error fetching cart items');
-            }
         };
-
         fetchCartItems();
     }, []);
 
@@ -79,7 +67,6 @@ const ViewCart: React.FC = () => {
             message.warning('Please select items to checkout');
             return;
         }
-
         const data = {
             status: 'waiting_paid',
             items: selectedItems.map(item => ({
@@ -87,16 +74,10 @@ const ViewCart: React.FC = () => {
                 cart_no: item.cart_no
             }))
         };
-
-        try {
-            await updateCart(data);
-            setCartItems(cartItems.filter(item => !selectedRowKeys.includes(item._id)));
-            setSelectedRowKeys([]);
-            navigate('/payment');
-        } catch (error) {
-            console.error('Error updating cart:', error);
-            message.error('Error during checkout');
-        }
+        await updateCart(data);
+        setCartItems(cartItems.filter(item => !selectedRowKeys.includes(item._id)));
+        setSelectedRowKeys([]);
+        navigate('/payment');
     };
 
     const selectedItems = cartItems.filter(item => selectedRowKeys.includes(item._id));
