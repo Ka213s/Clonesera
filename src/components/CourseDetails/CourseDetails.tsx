@@ -154,7 +154,7 @@ const CourseDetails: React.FC = () => {
         <Button
           type="default"
           onClick={() => handleLearnCourse()}
-          className="mb-4 custom-button p-4 bg-green-500 text-white hover:bg-green-600"
+          className="mb-4 custom-button p-4 bg-green-500 text-black hover:bg-green-600"
         >
           Learn Course
         </Button>
@@ -164,7 +164,7 @@ const CourseDetails: React.FC = () => {
         <Button
           type="default"
           onClick={course?.is_in_cart ? handleViewCart : handleAddToCart}
-          className="mb-4 custom-button p-4 bg-blue-500 text-white hover:bg-blue-600"
+          className="mb-4 custom-button p-4 bg-green-500 text-black hover:bg-blue-600"
         >
           {course?.is_in_cart ? 'View Cart' : 'Add to Cart'}
         </Button>
@@ -174,7 +174,7 @@ const CourseDetails: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 text-sm">
-      <Button onClick={() => navigate('/homepage')} className="mb-4 bg-blue-500 text-white hover:bg-blue-600">
+      <Button onClick={() => navigate('/homepage')} className="mb-4 custom-button p-4 bg-green-500 text-black hover:bg-blue-600">
         Back to Homepage
       </Button>
       <Card className="shadow-lg rounded-lg overflow-hidden">
@@ -224,7 +224,7 @@ const CourseDetails: React.FC = () => {
                   type="default"
                   icon={<PlayCircleOutlined />}
                   onClick={showModal}
-                  className="mb-4 custom-button p-4 bg-yellow-500 text-white hover:bg-yellow-600"
+                  className="mb-4 custom-button p-4 bg-green-500 text-black hover:bg-yellow-600"
                 >
                   Watch Introduction
                 </Button>
