@@ -107,7 +107,7 @@ const ViewCart: React.FC = () => {
                                     handleSelectChange(newSelectedRowKeys);
                                 }}
                             />
-                            <img src={item.course_image} alt={item.course_name} className="w-18 h-16 mr-2" />
+                            <img src={item.course_image} alt={item.course_name} className="w-18 h-16 mr-2 rounded-sm mt-1   " />
                             <div className="flex flex-col w-full">
                                 <div className="flex justify-between items-center mb-1">
                                     <h2 className="text-sm font-semibold">{item.course_name}</h2>

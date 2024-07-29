@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Tag, Skeleton, Rate } from 'antd';
+import { Tag, Skeleton, Rate, Tooltip } from 'antd'; // Import Tooltip
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
 import { getPublicCourses, formatCurrency } from '../utils/commonImports'; // Updated function import
 import { useNavigate, Link } from 'react-router-dom';
@@ -129,9 +129,11 @@ const PopularCourses: React.FC = () => {
                     </div>
                   </div>
                   <div className="p-2 flex flex-col flex-grow">
-                    <h2 className="text-lg font-semibold mt-1 h-10 overflow-hidden overflow-ellipsis whitespace-nowrap">
-                      {truncateText(course.name, 4)}
-                    </h2>
+                    <Tooltip title={course.name}>
+                      <h2 className="text-lg font-semibold mt-1 h-10 overflow-hidden overflow-ellipsis whitespace-nowrap">
+                        {truncateText(course.name, 4)}
+                      </h2>
+                    </Tooltip>
                     <p className="text-sm text-gray-600 mb-2">
                       <Tag color="blue">
                         {course.category_name || 'Default Category'}
