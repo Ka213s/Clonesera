@@ -1,4 +1,4 @@
-import { React, useState, useEffect, SearchOutlined, Table, Pagination, message, Input } from "../../../utils/commonImports";
+import { React, useState, useEffect, SearchOutlined, Table, Pagination, Input } from "../../../utils/commonImports";
 import { ColumnsType } from "antd/lib/table";
 import moment from "moment";
 
@@ -24,18 +24,11 @@ const SessionTable: React.FC<SessionTableProps> = ({ sessions }) => {
 
   useEffect(() => {
     const fetchSessions = async () => {
-      try {
-        // Filter sessions based on search keyword
         const filteredData = sessions.filter((session) =>
           session.name.toLowerCase().includes(searchKeyword.toLowerCase())
         );
-
         setFilteredSessions(filteredData);
         setTotalSessions(filteredData.length);
-      } catch (error) {
-        message.error("Error filtering sessions");
-        console.error("Error filtering sessions:", error);
-      }
     };
 
     fetchSessions();

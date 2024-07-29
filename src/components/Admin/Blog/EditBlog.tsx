@@ -14,38 +14,25 @@ interface EditBlogProps {
 
 const EditBlog: React.FC<EditBlogProps> = ({ visible, id, onClose, onSave }) => {
   const [form] = Form.useForm();
-  const [loading, setLoading] = useState<boolean>(false);
   const [content, setContent] = useState<string>('');
   const [imageUrl, setImageUrl] = useState<string>('');
   const [admins, setAdmins] = useState<{ _id: string; name: string }[]>([]);
-
-  // Use the custom hook to get categories
   const { categories, parents } = useCategories();
 
   useEffect(() => {
     if (id) {
       const fetchBlog = async () => {
-        try {
-          const result = await getBlogById(id);
-          form.setFieldsValue(result);
-          setContent(result.content || '');
-          setImageUrl(result.image_url || '');
-        } catch (err) {
-          message.error('Failed to fetch blog details');
-        }
-      };
+        const result = await getBlogById(id);
+        form.setFieldsValue(result);
+        setContent(result.content || '');
+        setImageUrl(result.image_url || '');
 
+      };
       fetchBlog();
     }
-
-    // Fetch admins
     const fetchAdmins = async () => {
-      try {
-        const data = await getUsers({ keyword: '', role: 'admin', status: true, is_deleted: false, is_verified: "true" }, 1, 100);
-        setAdmins(data.pageData); // Adjust if necessary to match your API response structure
-      } catch (err) {
-        message.error('Failed to fetch admins');
-      }
+      const data = await getUsers({ keyword: '', role: 'admin', status: true, is_deleted: false, is_verified: "true" }, 1, 100);
+      setAdmins(data.pageData);
     };
 
     fetchAdmins();
@@ -61,36 +48,19 @@ const EditBlog: React.FC<EditBlogProps> = ({ visible, id, onClose, onSave }) => 
   };
 
   const handleSave = async () => {
-    try {
-      setLoading(true);
-      const values = await form.validateFields();
-      const { category_id, user_id } = values;
-
-      // Validate user_id and category_id
-      if (!user_id || typeof user_id !== 'string') {
-        message.error('Invalid or missing user_id');
-        setLoading(false);
-        return;
-      }
-      if (!category_id || typeof category_id !== 'string') {
-        message.error('Invalid or missing category_id');
-        setLoading(false);
-        return;
-      }
-
-      // Log the values before sending
-      console.log('Form Values:', values);
-      console.log('Editor Content:', content);
-      console.log('Image URL:', imageUrl);
-
-      await updateBlog(id!, { ...values, content, image_url: imageUrl });
-     
-      onSave(id!);
-    } catch (err) {
-      message.error('Failed to update blog');
-    } finally {
-      setLoading(false);
+    const values = await form.validateFields();
+    const { category_id, user_id } = values;
+    if (!user_id || typeof user_id !== 'string') {
+      message.error('Invalid or missing user_id');
+      return;
     }
+    if (!category_id || typeof category_id !== 'string') {
+      message.error('Invalid or missing category_id');
+      return;
+    }
+    await updateBlog(id!, { ...values, content, image_url: imageUrl });
+
+    onSave(id!);
   };
 
   return (
@@ -101,7 +71,6 @@ const EditBlog: React.FC<EditBlogProps> = ({ visible, id, onClose, onSave }) => 
       cancelText="Cancel"
       onCancel={onClose}
       onOk={handleSave}
-      confirmLoading={loading}
     >
       <Form form={form} layout="vertical">
         <Form.Item

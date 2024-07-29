@@ -22,25 +22,18 @@ const Subscribed: React.FC = () => {
 
     const fetchSubscriptions = useCallback(
         async (page: number, pageSize: number) => {
-            try {
+       
                 const data = await getSubscribeds(
-                    { keyword: '', is_delete: false },  // No search filtering here
+                    { keyword: '', is_delete: false }, 
                     page,
                     pageSize
                 );
-                console.log(data);
-
-                // Filter and store data locally
                 const filteredData = data.pageData.filter((sub: Subscribed) => sub.is_subscribed);
                 setAllSubscriptions(filteredData);
-                // Only set the displayed data based on current page
                 const paginatedData = filteredData.slice((page - 1) * pageSize, page * pageSize);
-                setSubscriptions(paginatedData);
-                // Total items count is based on filtered data
+                setSubscriptions(paginatedData)
                 setTotalItems(filteredData.length);
-            } catch (error) {
-                toast.error('Failed to fetch subscriptions');
-            }
+          
         },
         []
     );
@@ -50,17 +43,17 @@ const Subscribed: React.FC = () => {
     }, [pageNum, pageSize, fetchSubscriptions]);
 
     useEffect(() => {
-        // Filter subscriptions based on search keyword
+    
         const filtered = allSubscriptions.filter(sub =>
             sub.instructor_name.toLowerCase().includes(searchKeyword.toLowerCase())
         );
         setSubscriptions(filtered.slice((pageNum - 1) * pageSize, pageNum * pageSize));
-        setTotalItems(filtered.length); // Update total items based on filtered results
-        setPageNum(1);  // Reset to the first page on search
+        setTotalItems(filtered.length); 
+        setPageNum(1);
     }, [searchKeyword, allSubscriptions, pageNum, pageSize]);
 
     const handleSubscribeToggle = async (instructor_id: string, is_subscribed: boolean) => {
-        try {
+       
             await updateSubscribed(instructor_id);
             toast.success(is_subscribed ? 'Unsubscribed successfully' : 'Subscribed successfully');
             setAllSubscriptions(prev =>
@@ -70,9 +63,6 @@ const Subscribed: React.FC = () => {
                         : sub
                 )
             );
-        } catch (error) {
-            toast.error('Failed to update subscription');
-        }
     };
 
     const columns: ColumnsType<Subscribed> = useMemo(

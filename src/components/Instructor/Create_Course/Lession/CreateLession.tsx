@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form, Input, Select } from 'antd';
-import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { getSessions, createLesson, getCourses } from '../../../../utils/commonImports';
 import FileUploader from '../../../FileUploader';
@@ -42,7 +41,7 @@ const CreateLessonButton: React.FC = () => {
   const [lessonType, setLessonType] = useState<string>('video');
 
   const fetchCourses = async () => {
-    try {
+   
       const response = await getCourses({
         keyword: '',
         category: '',
@@ -50,13 +49,11 @@ const CreateLessonButton: React.FC = () => {
         is_deleted: false,
       }, 1, 10);
       setCourses(response.pageData);
-    } catch (error) {
-      console.error('Failed to fetch courses', error);
-    }
+   
   };
 
   const fetchSessions = async (courseId: string) => {
-    try {
+   
       const response = await getSessions({
         keyword: '',
         course_id: courseId,
@@ -64,9 +61,7 @@ const CreateLessonButton: React.FC = () => {
         is_deleted: false,
       }, 1, 10);
       setSessions(response.pageData);
-    } catch (error) {
-      console.error('Failed to fetch sessions', error);
-    }
+    
   };
 
   useEffect(() => {
@@ -79,7 +74,7 @@ const CreateLessonButton: React.FC = () => {
   };
 
   const handleCreateLesson = async (values: Omit<LessonData, 'video_url' | 'image_url' | 'description'>) => {
-    try {
+  
       const lessonData: LessonData = {
         ...values,
         video_url: videoURL,
@@ -94,10 +89,7 @@ const CreateLessonButton: React.FC = () => {
       setVideoURL('');
       setImageURL('');
       setEditorContent('');
-    } catch (error) {
-      toast.error("Failed to create lesson");
-      console.error('Failed to create lesson', error);
-    }
+    
   };
 
   return (

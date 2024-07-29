@@ -106,7 +106,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
-    }, 300); // Match the duration with CSS transition
+    }, 300); 
   };
 
   const uploadProps: UploadProps = {

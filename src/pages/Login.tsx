@@ -17,7 +17,7 @@ const Login: React.FC = () => {
   const [video, setVideo] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [avatar, setAvatar] = useState<string>('');
-  const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);  
+  const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);
   const navigate = useNavigate();
 
   const handleLoginClick = () => { navigate('/register'); };
@@ -27,13 +27,14 @@ const Login: React.FC = () => {
     setIsButtonDisabled(true);
     try {
       const response = await loginAccount(values);
-      console.log('Login response:', response);
-      const currentLogin = await getCurrentLogin();
-      localStorage.setItem('userData', JSON.stringify(currentLogin));
-      if (currentLogin.role === 'admin') {
-        navigate('/display-account');
-      } else {
-        navigate('/homepage');
+      if (response) {
+        const currentLogin = await getCurrentLogin();
+        localStorage.setItem('userData', JSON.stringify(currentLogin));
+        if (currentLogin.role === 'admin') {
+          navigate('/display-account');
+        } else {
+          navigate('/homepage');
+        }
       }
     } catch (error) {
       console.error('Error logging in:', error);
@@ -50,7 +51,6 @@ const Login: React.FC = () => {
 
     try {
       const googleResponse = await loginUserByGoogle({ google_id: response.credential });
-      console.log('Google login response:', googleResponse);
       if (googleResponse) {
         const token = googleResponse.token;
         localStorage.setItem('token', token);
@@ -84,8 +84,8 @@ const Login: React.FC = () => {
       avatar: avatar,
     };
 
-    try {  
-       await registerUserByGoogle(payload);      
+    try {
+      await registerUserByGoogle(payload);
       setIsRoleModalVisible(false);
       navigate('/login');
     } catch (error) {

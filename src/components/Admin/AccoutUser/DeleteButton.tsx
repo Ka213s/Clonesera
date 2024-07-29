@@ -10,14 +10,8 @@ interface DeleteButtonProps {
 
 const DeleteButton: React.FC<DeleteButtonProps> = ({ userId, onDelete }) => {
   const handleDelete = async () => {
-    try {
       await deleteUser(userId);
       onDelete(userId);
-     
-    } catch (error) {
-   
-      console.error('Error deleting user:', error);
-    }
   };
 
   return (

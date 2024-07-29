@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { Table, Pagination, Button, Modal, Select, Input, message } from 'antd';
+import { Table, Pagination, Button, Modal, Select, Input } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import { getCategories, createCategory, editCategory, deleteCategory } from '../../utils/commonImports';
 import CategoryForm from '../../components/Admin/Category/CategoryForm';
@@ -34,32 +34,25 @@ const Category: React.FC = () => {
 
     const fetchCategories = useCallback(
         async (page: number, size: number, keyword: string, filterOption: string) => {
-            try {
-                const searchCondition = {
-                    keyword: keyword,
-                    category: '',
-                    status: '',
-                    is_deleted: false,
-                };
 
-                const data = await getCategories(searchCondition, page, size);
-
-                let filteredCategories = data.pageData;
-                if (filterOption === 'parent') {
-                    filteredCategories = filteredCategories.filter((cat: Category) => cat.parent_category_id === null);
-                } else if (filterOption === 'sub') {
-                    filteredCategories = filteredCategories.filter((cat: Category) => cat.parent_category_id !== null);
-                }
-
-                setCategories(filteredCategories);
-                setTotalCategories(data.pageInfo.totalItems); // Adjust based on your API response
-
-                const parentData = await getCategories({ keyword: '', category: '', status: '', is_deleted: false }, 1, 1000);
-                setParentCategories(parentData.pageData);
-            } catch (error) {
-                message.error('Error fetching categories');
-                console.error('Error fetching categories:', error);
+            const searchCondition = {
+                keyword: keyword,
+                category: '',
+                status: '',
+                is_deleted: false,
+            };
+            const data = await getCategories(searchCondition, page, size);
+            let filteredCategories = data.pageData;
+            if (filterOption === 'parent') {
+                filteredCategories = filteredCategories.filter((cat: Category) => cat.parent_category_id === null);
+            } else if (filterOption === 'sub') {
+                filteredCategories = filteredCategories.filter((cat: Category) => cat.parent_category_id !== null);
             }
+            setCategories(filteredCategories);
+            setTotalCategories(data.pageInfo.totalItems); // Adjust based on your API response
+            const parentData = await getCategories({ keyword: '', category: '', status: '', is_deleted: false }, 1, 1000);
+            setParentCategories(parentData.pageData);
+
         },
         []
     );
@@ -123,28 +116,21 @@ const Category: React.FC = () => {
         Modal.confirm({
             title: 'Are you sure you want to delete this category?',
             onOk: async () => {
-                try {
-                    await deleteCategory(id);
-                    fetchCategories(pageNum, pageSize, searchKeyword, filterOption);
-                } catch (error) {
-                    console.error('Failed to delete category:', error);
-                }
+                await deleteCategory(id);
+                fetchCategories(pageNum, pageSize, searchKeyword, filterOption);
             },
         });
     };
 
     const handleSubmit = async (values: FormValues) => {
-        try {
-            if (isEditing && editingCategory) {
-                await editCategory(editingCategory._id, values);
-            } else {
-                await createCategory(values);
-            }
-            setIsModalVisible(false);
-            fetchCategories(pageNum, pageSize, searchKeyword, filterOption);
-        } catch (error) {
-            console.error('Failed to save category:', error);
+        if (isEditing && editingCategory) {
+            await editCategory(editingCategory._id, values);
+        } else {
+            await createCategory(values);
         }
+        setIsModalVisible(false);
+        fetchCategories(pageNum, pageSize, searchKeyword, filterOption);
+
     };
 
     const handleCancel = () => {
@@ -153,7 +139,7 @@ const Category: React.FC = () => {
 
     const handleSearch = (value: string) => {
         setSearchKeyword(value);
-        setPageNum(1); // Reset to first page on search
+        setPageNum(1); 
     };
 
     return (
@@ -164,7 +150,7 @@ const Category: React.FC = () => {
                     placeholder="Select"
                     onChange={(value) => {
                         setFilterOption(value as 'parent' | 'sub' | '');
-                        setPageNum(1); // Reset to first page on filter change
+                        setPageNum(1);
                     }}
                     allowClear
                     className="mr-2 w-40"

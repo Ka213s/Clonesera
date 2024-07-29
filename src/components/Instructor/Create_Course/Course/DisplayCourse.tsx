@@ -3,7 +3,7 @@ import { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
 import EditButton from './EditCourse';
 import DeleteButton from './DeleteCourse';
-import { getStatusTag } from '../../../../utils/statusTagUtils'; 
+import { getStatusTag } from '../../../../utils/statusTagUtils';
 
 const { Option } = Select;
 const { Search } = Input;
@@ -32,21 +32,15 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
 
   const fetchCourses = useCallback(
     async (keyword: string, page: number, pageSize: number) => {
-      try {
-        const searchCondition = {
-          keyword: keyword,
-          category: '',
-          status: '',
-          is_deleted: false,
-        };
-        const response = await getCourses(searchCondition, page, pageSize);
-        setCourses(response.pageData);
-        setTotalItems(response.pageInfo.totalItems); // Assuming response contains pageInfo with totalItems
-        console.log('Fetched courses:', response.pageData);
-      } catch (error) {
-        message.error('Error fetching courses');
-        console.error('Error fetching courses:', error);
-      }
+      const searchCondition = {
+        keyword: keyword,
+        category: '',
+        status: '',
+        is_deleted: false,
+      };
+      const response = await getCourses(searchCondition, page, pageSize);
+      setCourses(response.pageData);
+      setTotalItems(response.pageInfo.totalItems);
     },
     []
   );
@@ -57,21 +51,16 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
 
   useEffect(() => {
     setSelectedCourseIds(selectedRowKeys);
-    console.log('Selected Row Keys in CourseTable component:', selectedRowKeys);
+
   }, [selectedRowKeys, setSelectedCourseIds]);
 
   const handleChangeStatus = async (courseId: number, newStatus: string) => {
-    try {
-      await changeCourseStatus({ course_id: courseId.toString(), new_status: newStatus });
-      setCourses(prevCourses =>
-        prevCourses.map(course =>
-          course._id === courseId ? { ...course, status: newStatus } : course
-        )
-      );
-      console.log('Changed status of course ID:', courseId, 'to:', newStatus);
-    } catch (error) {
-      console.error('Error updating course status:', error);
-    }
+    await changeCourseStatus({ course_id: courseId.toString(), new_status: newStatus });
+    setCourses(prevCourses =>
+      prevCourses.map(course =>
+        course._id === courseId ? { ...course, status: newStatus } : course
+      )
+    );
   };
 
   const renderActions = (record: Course) => {
@@ -92,7 +81,7 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
         ) : (
           <Select
             defaultValue={record.status}
-            style={{ width: 120, marginLeft: 10 }}
+            style={{ width: 220, marginLeft: 10 }}
             onChange={(value) => handleChangeStatus(record._id, value)}
           >
             <Option value="active">Active</Option>

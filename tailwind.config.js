@@ -4,7 +4,7 @@ export default {
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
- 
+
     // Or if using `src` directory:
     "./src/**/*.{js,ts,jsx,tsx,mdx}",
   ],
@@ -12,6 +12,13 @@ export default {
     extend: {
       animation: {
         'blob': 'blob 8s infinite',
+      },
+      maxWidth: {
+        '4/5': '80%',
+      },
+      container: {
+        center: true,
+        padding: '1rem',
       },
       keyframes: {
         blob: {

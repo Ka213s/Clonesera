@@ -29,34 +29,24 @@ const WaitingPaid: React.FC = () => {
                 is_deleted: false,
             },
             pageInfo: {
-                pageNum: 1, // Fetching all items without pagination
-                pageSize: 1000, // Assuming a high page size to fetch all items
+                pageNum: 1,
+                pageSize: 1000,
             },
         };
+        const response = await getCart(data);
+        const courseIds = response.pageData.map((item: CartItem) => item.course_id);
 
-        try {
-            const response = await getCart(data);
-            const courseIds = response.pageData.map((item: CartItem) => item.course_id);
+        const courseDetails = await Promise.all(courseIds.map(async (id: string) => {
+                return await getCourseDetail(id);
+        }));
 
-            const courseDetails = await Promise.all(courseIds.map(async (id: string) => {
-                try {
-                    return await getCourseDetail(id);
-                } catch (error) {
-                    console.error(`Error fetching course details for course_id ${id}:`, error);
-                    return null;
-                }
-            }));
+        const getCartImage = response.pageData.map((item: CartItem, index: number) => ({
+            ...item,
+            image_url: courseDetails[index] ? courseDetails[index].image_url : ''
+        }));
 
-            const getCartImage = response.pageData.map((item: CartItem, index: number) => ({
-                ...item,
-                image_url: courseDetails[index] ? courseDetails[index].image_url : ''
-            }));
+        setCartItems(getCartImage);
 
-            setCartItems(getCartImage);
-        } catch (error) {
-            console.error('Error fetching cart items:', error);
-            message.error('Error fetching cart items');
-        }
     }, []);
 
     useEffect(() => {
@@ -64,17 +54,12 @@ const WaitingPaid: React.FC = () => {
     }, [fetchCartItems]);
 
     const handleDelete = async (itemId: string, cartNo: string) => {
-        try {
-            await updateCart({
-                status: 'cancel',
-                items: [{ _id: itemId, cart_no: cartNo }]
-            });
-            setCartItems(cartItems.filter(item => item._id !== itemId));
-            toast.success('Item deleted successfully');
-        } catch (error) {
-            console.error('Error deleting item:', error);
-            toast.error('Error deleting item');
-        }
+        await updateCart({
+            status: 'cancel',
+            items: [{ _id: itemId, cart_no: cartNo }]
+        });
+        setCartItems(cartItems.filter(item => item._id !== itemId));
+        toast.success('Item deleted successfully');
     };
 
     const handleSelectChange = (selectedKeys: React.Key[]) => {
@@ -87,7 +72,6 @@ const WaitingPaid: React.FC = () => {
             message.warning('Please select items to checkout');
             return;
         }
-
         const courseIds = selectedItems.map(item => item.course_id);
         navigate('/payment', { state: { courseIds } });
     };

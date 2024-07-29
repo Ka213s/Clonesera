@@ -1,7 +1,5 @@
 import { React, useEffect, useState, useCallback, useMemo, Table, Pagination, Input, getSubscribers, SearchOutlined } from '../../utils/commonImports';
 import { ColumnsType } from 'antd/es/table';
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 interface Subscriber {
     _id: string;
@@ -21,28 +19,16 @@ const Subscriber: React.FC = () => {
 
     const fetchSubscribers = useCallback(
         async (page: number, pageSize: number) => {
-            try {
-                // Fetch paginated data
                 const data = await getSubscribers(
                     { keyword: '', is_delete: false },
                     page,
                     pageSize
                 );
-                console.log(data);
-
-                // Filter out only subscribed users
                 const filteredData = data.pageData.filter((sub: Subscriber) => sub.is_subscribed);
-
-                // Store all data to filter locally
                 setAllSubscribers(filteredData);
-
-                // Update subscribers based on current page and page size
                 const paginatedData = filteredData.slice((page - 1) * pageSize, page * pageSize);
                 setSubscribers(paginatedData);
                 setTotalItems(filteredData.length); // Set total items based on subscribed users
-            } catch (error) {
-                toast.error('Failed to fetch subscribers');
-            }
         },
         []
     );
@@ -52,13 +38,12 @@ const Subscriber: React.FC = () => {
     }, [pageNum, pageSize, fetchSubscribers]);
 
     useEffect(() => {
-        // Filter subscribers based on search keyword
         const filtered = allSubscribers.filter(sub =>
             sub.subscriber_name.toLowerCase().includes(searchKeyword.toLowerCase())
         );
         const paginatedFiltered = filtered.slice((pageNum - 1) * pageSize, pageNum * pageSize);
         setSubscribers(paginatedFiltered);
-        setTotalItems(filtered.length); // Update total items based on filtered results
+        setTotalItems(filtered.length);
     }, [searchKeyword, allSubscribers, pageNum, pageSize]);
 
     const columns: ColumnsType<Subscriber> = useMemo(

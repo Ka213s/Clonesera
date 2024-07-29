@@ -4,38 +4,42 @@ import { PlusOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined } from
 import { Link, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
 import logo from '../assets/Logo-2.png';
-import { useCartContext } from '../consts/CartContext'; // Import the custom hook
+import { useCartContext } from '../consts/CartContext';
 
 const { Text } = Typography;
 const { Search } = Input;
 
 const HeaderNoMenu: React.FC = () => {
-  const [avatar, setAvatar] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
-  const [role, setRole] = useState<string | null>(null);
-  const [username, setUsername] = useState<string | null>(null);
+  const [userState, setUserState] = useState({
+    avatar: null,
+    isLoggedIn: false,
+    role: null,
+    username: null
+  });
   const { totalCartItems } = useCartContext();
-
   const navigate = useNavigate();
 
   useEffect(() => {
     const storedUserData = localStorage.getItem('userData');
     if (storedUserData) {
       const userData = JSON.parse(storedUserData);
-      if (userData.avatar) {
-        setAvatar(userData.avatar);
-      }
-      setRole(userData.role);
-      setUsername(userData.name);
-      setIsLoggedIn(true);
+      setUserState({
+        avatar: userData.avatar || null,
+        isLoggedIn: true,
+        role: userData.role,
+        username: userData.name
+      });
     } else {
-      setIsLoggedIn(false);
+      setUserState(prevState => ({
+        ...prevState,
+        isLoggedIn: false
+      }));
     }
   }, []);
 
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    if (role === 'admin') {
+    if (userState.role === 'admin') {
       navigate('/display-account');
     } else {
       navigate('/homepage');
@@ -58,7 +62,7 @@ const HeaderNoMenu: React.FC = () => {
     {
       key: 'welcome',
       label: (
-        <Text>Welcome, {username}!</Text>
+        <Text>Welcome, {userState.username}!</Text>
       )
     },
     { type: 'divider' },
@@ -102,9 +106,9 @@ const HeaderNoMenu: React.FC = () => {
       </div>
 
       <div className="flex items-center ml-auto space-x-8 pr-4">
-        {isLoggedIn ? (
+        {userState.isLoggedIn ? (
           <>
-            {role === 'instructor' && (
+            {userState.role === 'instructor' && (
               <>
                 <Button type="primary" className="custom-button" onClick={handleCreateCourse}>
                   Create New Course
@@ -130,7 +134,7 @@ const HeaderNoMenu: React.FC = () => {
               <Dropdown menu={{ items: userMenu }} trigger={['click']}>
                 <Avatar
                   size="large"
-                  src={avatar || 'default-avatar-path'}
+                  src={userState.avatar || 'default-avatar-path'}
                   className="border-2 hover:border-gray-800 transition duration-300 ease-in-out"
                 />
               </Dropdown>

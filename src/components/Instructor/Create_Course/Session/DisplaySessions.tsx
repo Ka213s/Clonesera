@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useCallback, Table, Pagination, Input, message, getSessions, SearchOutlined } from '../../../../utils/commonImports';
+import { React, useEffect, useState, useCallback, Table, Pagination, Input, getSessions, SearchOutlined } from '../../../../utils/commonImports';
 import moment from 'moment';
 import ButtonEdit from './EditSession';
 import ButtonDelete from './DeleteSession';
@@ -22,23 +22,19 @@ const DisplaySessions: React.FC = () => {
 
   const fetchSessions = useCallback(
     async (page: number, size: number, keyword: string) => {
-      try {
-        const response = await getSessions(
-          {
-            keyword: keyword,
-            course_id: '',
-            is_position_order: false,
-            is_deleted: false,
-          },
-          page,
-          size
-        );
-        setSessions(response.pageData);
-        setTotalSessions(response.pageInfo.totalItems); // Assuming response contains pageInfo with totalItems
-      } catch (error) {
-        message.error('Failed to fetch sessions');
-        console.error('Failed to fetch sessions', error);
-      }
+
+      const response = await getSessions(
+        {
+          keyword: keyword,
+          course_id: '',
+          is_position_order: false,
+          is_deleted: false,
+        },
+        page,
+        size
+      );
+      setSessions(response.pageData);
+      setTotalSessions(response.pageInfo.totalItems); // Assuming response contains pageInfo with totalItems
     },
     []
   );

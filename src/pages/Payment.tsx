@@ -60,6 +60,7 @@ const Payment: React.FC = () => {
             await updateCart(data);
             if (status === 'completed') {
                 toast.success('Checkout completed');
+                navigate('/'); // Redirect to the home page after successful checkout
             } else if (status === 'cancel') {
                 toast.success('Checkout canceled');
                 navigate('/view-cart');

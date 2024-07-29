@@ -31,15 +31,11 @@ const ViewProfile: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (id) {
-                try {
-                    const data = await getUserData(id);
-                    setUserData(data);
-                    const subscribeds = await getSubscribeds({ keyword: "", is_delete: false }, 1, 10);
-                    console.log('Subscribeds:', subscribeds);
-                    setIsSubscribed(subscribeds.total > 0);
-                } catch (error) {
-                    console.error('Error fetching user data:', error);
-                }
+                const data = await getUserData(id);
+                setUserData(data);
+                const subscribeds = await getSubscribeds({ keyword: "", is_delete: false }, 1, 10);
+                setIsSubscribed(subscribeds.total > 0);
+
             } else {
                 console.error('No user ID provided');
             }
@@ -50,27 +46,15 @@ const ViewProfile: React.FC = () => {
 
     const handleSubscribe = async () => {
         if (userData) {
-            try {
-                await updateSubscribed(userData._id);
-                setIsSubscribed(true);
-                alert('Subscribed successfully!');
-            } catch (error) {
-                console.error('Error subscribing:', error);
-                alert('Failed to subscribe.');
-            }
+            await updateSubscribed(userData._id);
+            setIsSubscribed(true);
         }
     };
 
     const handleUnsubscribe = async () => {
         if (userData) {
-            try {
-                await updateSubscribed(userData._id);
-                setIsSubscribed(false);
-                alert('Unsubscribed successfully!');
-            } catch (error) {
-                console.error('Error unsubscribing:', error);
-                alert('Failed to unsubscribe.');
-            }
+            await updateSubscribed(userData._id);
+            setIsSubscribed(false);
         }
     };
 

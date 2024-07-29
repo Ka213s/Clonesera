@@ -48,7 +48,6 @@ const Completed: React.FC = () => {
     const [searchKeyword, setSearchKeyword] = useState<string>("");
 
     const fetchData = useCallback(async (pageInfo: { pageNum: number; pageSize: number }, keyword: string) => {
-        try {
             const result: ApiResponse = await getPayouts({
                 searchCondition: {
                     payout_no: keyword,
@@ -59,12 +58,9 @@ const Completed: React.FC = () => {
                 },
                 pageInfo
             });
-
             setData(result.pageData);
             setTotal(result.pageInfo.totalItems);
-        } catch (error) {
-            console.error('Failed to fetch data:', error);
-        }
+        
     }, []);
 
     useEffect(() => {

@@ -2,7 +2,6 @@ import React from 'react';
 import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
 import Statistic from './Statistic';
 import PopularCourses from './PopularCourses';
-import CustomCalendar from './CustomCalendar';
 import Blog from './Blog';
 import JoinAvatar from '../assets/Course.png';
 
@@ -41,18 +40,18 @@ const HomePage: React.FC = () => {
           </div>
         </div>
 
-        {/* Popular Courses and Calendar Section */}
-        <div className="grid grid-cols-3 gap-6 mb-8">
-          <div className="col-span-2 flex flex-col space-y-8">
+        {/* Popular Courses Section */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div className="col-span-3 flex flex-col space-y-8">
             <PopularCourses />
           </div>
-          <div>
-            <CustomCalendar />
-          </div>
         </div>
+
+        {/* Blog Section */}
         <div className="mt-12">
           <Blog />
         </div>
+
         {/* Info Blocks */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">

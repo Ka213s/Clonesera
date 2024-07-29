@@ -19,34 +19,23 @@ interface UserData {
 const SubscriptionTab: React.FC = () => {
   const [subscriptions, setSubscriptions] = useState<Subscription[]>([]);
   const [userDetails, setUserDetails] = useState<UserData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
+     
         const subscribedsResponse = await getSubscribeds({ keyword: '', is_delete: false }, 1, 10);
-        console.log('Subscribeds:', subscribedsResponse);
         setSubscriptions(subscribedsResponse.pageData);
-
         const userDetailsPromises = subscribedsResponse.pageData.map((subscription: Subscription) => 
           getUserData(subscription.instructor_id)
         );
         
         const userDetailsResponse = await Promise.all(userDetailsPromises);
         setUserDetails(userDetailsResponse);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      } finally {
-        setLoading(false);
-      }
+     
     };
 
     fetchData();
   }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <div>

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { Breadcrumb, message, Layout, Menu, Spin, Button } from "antd";
+import { Breadcrumb, Layout, Menu, Spin, Button } from "antd";
 import { getCourseDetail, getLessonById } from "../utils/commonImports";
 import {
     FileOutlined,
@@ -42,11 +42,6 @@ interface Course {
 
 const LearnCourseDetail: React.FC = () => {
     const { id, lessonId } = useParams<{ id: string, lessonId?: string }>();
-    
-    // Log the two IDs
-    console.log("Course ID:", id);
-    console.log("Lesson ID:", lessonId);
-    
     const [course, setCourse] = useState<Course | null>(null);
     const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
     const [collapsed, setCollapsed] = useState(false);
@@ -55,23 +50,16 @@ const LearnCourseDetail: React.FC = () => {
     useEffect(() => {
         const fetchCourseDetail = async () => {
             if (!id) {
-                message.error("Course ID is missing");
                 return;
             }
-
-            try {
-                const data = await getCourseDetail(id);
-                setCourse(data);
-                if (lessonId) {
-                    fetchLessonDetail(lessonId);
-                } else if (data.session_list.length > 0 && data.session_list[0].lesson_list.length > 0) {
-                    const firstLessonId = data.session_list[0].lesson_list[0]._id;
-                    fetchLessonDetail(firstLessonId);
-                    navigate(`/learn-course-detail/${id}/lesson/${firstLessonId}`);
-                }
-            } catch (error) {
-                message.error("Error fetching course details");
-                console.error("Error fetching course details:", error);
+            const data = await getCourseDetail(id);
+            setCourse(data);
+            if (lessonId) {
+                fetchLessonDetail(lessonId);
+            } else if (data.session_list.length > 0 && data.session_list[0].lesson_list.length > 0) {
+                const firstLessonId = data.session_list[0].lesson_list[0]._id;
+                fetchLessonDetail(firstLessonId);
+                navigate(`/learn-course-detail/${id}/lesson/${firstLessonId}`);
             }
         };
 
@@ -79,13 +67,10 @@ const LearnCourseDetail: React.FC = () => {
     }, [id, lessonId, navigate]);
 
     const fetchLessonDetail = async (lessonId: string) => {
-        try {
-            const lesson = await getLessonById(lessonId);
-            setSelectedLesson(lesson);
-        } catch (error) {
-            message.error("Error fetching lesson details");
-            console.error("Error fetching lesson details:", error);
-        }
+
+        const lesson = await getLessonById(lessonId);
+        setSelectedLesson(lesson);
+
     };
 
     const handleLessonClick = (lesson: Lesson) => {

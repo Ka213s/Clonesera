@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { Table, Rate, message, Input, Pagination } from 'antd';
+import { Table, Rate, Input, Pagination } from 'antd';
 import { getReviews } from '../../../utils/commonImports';
 import { SearchOutlined } from '@ant-design/icons';
 
@@ -23,7 +23,7 @@ const { Search } = Input;
 
 const Review: React.FC = () => {
   const [filteredReviews, setFilteredReviews] = useState<ReviewData[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
+
   const [pageNum, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [totalReviews, setTotalReviews] = useState<number>(0);
@@ -31,7 +31,7 @@ const Review: React.FC = () => {
 
   const fetchReviews = useCallback(
     async (page: number, size: number) => {
-      try {
+  
         const reviewData: ReviewResponse = await getReviews({
           searchCondition: {
             course_id: "", 
@@ -42,19 +42,12 @@ const Review: React.FC = () => {
           },
           pageInfo: { pageNum: page, pageSize: size },
         });
-
-        // Filter reviews client-side based on search keyword
         const filtered = reviewData.pageData.filter(review =>
           review.course_name.toLowerCase().includes(searchKeyword.toLowerCase())
         );
         setFilteredReviews(filtered);
         setTotalReviews(reviewData.pageInfo.totalItems);
-      } catch (error) {
-        message.error('Error fetching reviews');
-        console.error('Error fetching reviews:', error);
-      } finally {
-        setLoading(false);
-      }
+    
     },
     [searchKeyword]
   );
@@ -114,7 +107,7 @@ const Review: React.FC = () => {
         columns={columns}
         dataSource={filteredReviews}
         rowKey="_id"
-        loading={loading}
+      
         pagination={false} 
       />
       <div className="flex justify-end mt-5">
