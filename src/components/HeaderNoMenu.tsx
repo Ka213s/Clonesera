@@ -10,12 +10,18 @@ const { Text } = Typography;
 const { Search } = Input;
 
 const HeaderNoMenu: React.FC = () => {
-  const [userState, setUserState] = useState({
+  const [userState, setUserState] = useState<{
+    avatar: string | null;
+    isLoggedIn: boolean;
+    role: 'admin' | 'instructor' | 'student' | null;
+    username: string | null;
+  }>({
     avatar: null,
     isLoggedIn: false,
     role: null,
-    username: null
+    username: null,
   });
+
   const { totalCartItems } = useCartContext();
   const navigate = useNavigate();
 
@@ -27,12 +33,12 @@ const HeaderNoMenu: React.FC = () => {
         avatar: userData.avatar || null,
         isLoggedIn: true,
         role: userData.role,
-        username: userData.name
+        username: userData.name,
       });
     } else {
       setUserState(prevState => ({
         ...prevState,
-        isLoggedIn: false
+        isLoggedIn: false,
       }));
     }
   }, []);
@@ -58,6 +64,22 @@ const HeaderNoMenu: React.FC = () => {
     navigate(`/homepage/view-all-course?search=${value}`);
   };
 
+  const handleProfileClick = () => {
+    switch (userState.role) {
+      case 'admin':
+        navigate('/dashboard-admin');
+        break;
+      case 'instructor':
+        navigate('/dashboard-instructor');
+        break;
+      case 'student':
+        navigate('/dashboard-student');
+        break;
+      default:
+        navigate('/view-my-profile');
+    }
+  };
+
   const userMenu: MenuProps['items'] = [
     {
       key: 'welcome',
@@ -69,9 +91,9 @@ const HeaderNoMenu: React.FC = () => {
     {
       key: 'profile',
       label: (
-        <Link to="/view-my-profile">
+        <span onClick={handleProfileClick}>
           <UserOutlined /> Profile
-        </Link>
+        </span>
       )
     },
     {

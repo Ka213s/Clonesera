@@ -124,7 +124,7 @@ const InstructorDashboard: React.FC = () => {
                 <Table
                     columns={columns}
                     dataSource={transactions}
-                    rowKey="_id" // Use a unique identifier from your data
+                    rowKey="_id" 
                     pagination={false}
                 />
                 <Pagination
