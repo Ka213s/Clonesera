@@ -198,9 +198,9 @@ html, body, #root {
 }
 
 .course-slide {
-  flex: 0 0 25%; /* Each course takes up 25% of the container width */
+  flex: 0 0 24%; /* Each course takes up 25% of the container width */
   box-sizing: border-box;
-  margin-right: 16px; /* Add margin to space out the course cards */
+  margin-right: 15px; /* Add margin to space out the course cards */
 }
 
 .course-slide:last-child {

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Tag, Skeleton, Rate, Tooltip } from 'antd'; // Import Tooltip
+import { Tag, Skeleton, Rate, Tooltip } from 'antd';
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { getPublicCourses, formatCurrency } from '../utils/commonImports'; // Updated function import
+import { getPublicCourses, formatCurrency } from '../utils/commonImports';
 import { useNavigate, Link } from 'react-router-dom';
 
 interface Course {
@@ -28,6 +28,7 @@ const PopularCourses: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const coursesPerPage = 4; // Number of courses to display per page
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -42,7 +43,7 @@ const PopularCourses: React.FC = () => {
           pageSize: 20,
         },
       };
-      const response: ApiResponse = await getPublicCourses(data); // Updated function usage
+      const response: ApiResponse = await getPublicCourses(data);
       setCourses(response.pageData);
       setLoading(false);
     };
@@ -57,13 +58,13 @@ const PopularCourses: React.FC = () => {
   };
 
   const handleNextClick = () => {
-    if (currentIndex + 1 < courses.length) {
+    if (currentIndex + coursesPerPage < courses.length) {
       setCurrentIndex(currentIndex + 1);
     }
   };
 
   const handleButtonClick = (courseId: number, isPurchased: boolean, e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation(); // Prevent event from propagating
+    e.stopPropagation();
     if (!isPurchased) {
       navigate(`/course-detail/${courseId}`);
     }
@@ -87,15 +88,15 @@ const PopularCourses: React.FC = () => {
         <h2 className="text-3xl font-bold text-left">Popular Courses</h2>
         <button
           onClick={handleNextClick}
-          className={`bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 ${currentIndex + 1 >= courses.length ? 'invisible' : 'visible'}`}
+          className={`bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 ${currentIndex + coursesPerPage >= courses.length ? 'invisible' : 'visible'}`}
         >
           <RightOutlined className="text-lg" />
         </button>
       </div>
       <div className="relative overflow-hidden">
-        <div className="course-slider" style={{ transform: `translateX(-${currentIndex * 25}%)` }}>
+        <div className="course-slider" style={{ transform: `translateX(-${currentIndex * (100 / coursesPerPage)}%)` }}>
           {loading ? (
-            Array.from({ length: 4 }).map((_, index) => (
+            Array.from({ length: coursesPerPage }).map((_, index) => (
               <div key={index} className="course-slide">
                 <Skeleton active paragraph={{ rows: 5 }} />
               </div>
