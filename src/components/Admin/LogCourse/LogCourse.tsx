@@ -94,7 +94,7 @@ const LogCourse: React.FC = () => {
 
   const handleSearch = (value: string) => {
     setSearchKeyword(value);
-    setPageNum(1); // Reset to first page on search
+    setPageNum(1); 
   };
 
   return (

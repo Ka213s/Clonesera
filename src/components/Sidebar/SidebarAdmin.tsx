@@ -9,7 +9,8 @@ import {
   ShoppingCartOutlined,
   MessageOutlined,
   FileTextOutlined,
-  AppstoreOutlined
+  AppstoreOutlined,
+  TagsOutlined
 } from '@ant-design/icons';
 import { SidebarAdminData } from '../../consts';
 
@@ -31,7 +32,9 @@ const iconComponents: { [key: string]: JSX.Element } = {
   ShoppingCartOutlined: <ShoppingCartOutlined />,
   MessageOutlined: <MessageOutlined />,
   FileTextOutlined: <FileTextOutlined />,
-  AppstoreOutlined: <AppstoreOutlined />
+  AppstoreOutlined: <AppstoreOutlined />,
+  TagsOutlined: <TagsOutlined />
+
 };
 
 const renderMenuItems = (items: MenuItem[], navigate: (path: string) => void) =>

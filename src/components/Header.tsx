@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Badge, Dropdown, Avatar, Typography, Divider } from 'antd';
 import type { MenuProps } from 'antd';
-import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
+import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, UserOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
 import { useCartContext } from '../consts/CartContext';
@@ -91,7 +91,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       key: 'profile',
       label: (
         <span onClick={handleProfileClick}>
-          <UserOutlined /> Profile
+          <UserOutlined /> My dashboard
         </span>
       ),
     },
@@ -99,7 +99,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       key: 'logout',
       label: (
         <span onClick={() => navigate('/logout')}>
-          <UserOutlined /> Logout
+          <LogoutOutlined /> Logout
         </span>
       ),
     },
