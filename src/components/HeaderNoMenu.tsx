@@ -153,7 +153,7 @@ const HeaderNoMenu: React.FC = () => {
 
             <Divider className="border-gray-400 h-9" type="vertical" />
             <div className="">
-              <Dropdown menu={{ items: userMenu }} trigger={['click']}>
+              <Dropdown menu={{ items: userMenu }} trigger={['hover']}>
                 <Avatar
                   size="large"
                   src={userState.avatar || 'default-avatar-path'}
