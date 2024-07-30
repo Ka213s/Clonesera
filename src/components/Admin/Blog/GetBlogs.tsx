@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Table, message, Button, Input, Row, Col, Pagination } from 'antd';
-import { CloseCircleOutlined } from '@ant-design/icons';
+import { Table, message, Button, Input, Pagination } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import { getBlogs } from '../../../utils/commonImports';
-import EditBlog from './EditBlog'; // Ensure the path is correct
-import DeleteBlog from './DeleteBlog'; // Ensure the path is correct
+import EditBlog from './EditBlog';
+import DeleteBlog from './DeleteBlog';
 
 interface Blog {
   _id: string;
@@ -14,6 +14,8 @@ interface Blog {
   image_url: string;
   content: string;
 }
+
+const { Search } = Input;
 
 const GetBlogs: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
@@ -34,8 +36,8 @@ const GetBlogs: React.FC = () => {
       };
       const result = await getBlogs(data);
       setBlogs(result.pageData);
-      setAllBlogs(result.pageData); // Save all blogs to state
-      setTotalItems(result.pageInfo.totalItems); // Set total items for pagination
+      setAllBlogs(result.pageData);
+      setTotalItems(result.pageInfo.totalItems);
     } catch (err) {
       setError('Failed to fetch blogs');
       message.error('Failed to fetch blogs');
@@ -60,19 +62,18 @@ const GetBlogs: React.FC = () => {
 
   const handleSearch = (value: string) => {
     setSearchCategoryName(value);
-    const matchedBlog = allBlogs.find(blog => blog.category_name.toLowerCase() === value.toLowerCase());
-    if (matchedBlog) {
-      fetchBlogs(matchedBlog.category_id, currentPage, pageSize);
+    if (value === '') {
+      fetchBlogs('', 1, pageSize);
+      setCurrentPage(1);
     } else {
-      setBlogs([]);
+      const matchedBlog = allBlogs.find(blog => blog.category_name.toLowerCase() === value.toLowerCase());
+      if (matchedBlog) {
+        fetchBlogs(matchedBlog.category_id, 1, pageSize);
+      } else {
+        setBlogs([]);
+      }
+      setCurrentPage(1);
     }
-  };
-
-  const handleReset = () => {
-    setSearchCategoryName('');
-    setCurrentPage(1);
-    setPageSize(10);
-    fetchBlogs('', 1, 10);
   };
 
   const columns = [
@@ -111,24 +112,16 @@ const GetBlogs: React.FC = () => {
 
   return (
     <div>
-      <Row gutter={16} style={{ marginBottom: 20 }}>
-        <Col flex="auto">
-          <Input.Search
-            placeholder="Search by category name"
-            value={searchCategoryName}
-            onChange={e => setSearchCategoryName(e.target.value)}
-            onSearch={handleSearch}
-            allowClear
-          />
-        </Col>
-        <Col>
-          <Button 
-            icon={<CloseCircleOutlined />} 
-            onClick={handleReset} 
-            style={{ marginLeft: 8 }}
-          />
-        </Col>
-      </Row>
+      <Search
+        placeholder="Search by category name"
+        enterButton={<SearchOutlined />}
+        allowClear
+        size="large"
+        onSearch={handleSearch}
+        value={searchCategoryName}
+        onChange={e => setSearchCategoryName(e.target.value)}
+        className="mr-4 w-80 mb-4"
+      />
 
       {error ? (
         <div>{error}</div>

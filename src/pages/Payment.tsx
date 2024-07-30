@@ -60,7 +60,7 @@ const Payment: React.FC = () => {
             await updateCart(data);
             if (status === 'completed') {
                 toast.success('Checkout completed');
-                navigate('/'); // Redirect to the home page after successful checkout
+                navigate('/');
             } else if (status === 'cancel') {
                 toast.success('Checkout canceled');
                 navigate('/view-cart');
@@ -104,7 +104,7 @@ const Payment: React.FC = () => {
                                         <Text className="text-gray-800 text-lg font-medium">{item.course_name}</Text>
                                     </Col>
                                     <Col span={8} className="text-right">
-                                        <Text className="text-red-600 text-lg font-semibold">${item.price}</Text>
+                                        <Text className="text-red-600 text-lg font-semibold">${item.price.toLocaleString()}</Text>
                                     </Col>
                                 </Row>
                             </List.Item>
@@ -115,7 +115,7 @@ const Payment: React.FC = () => {
                             <DollarOutlined className="text-yellow-500 text-2xl" />
                             <div className="flex-1 ml-4">
                                 <Text className="text-gray-800 text-lg font-medium">Original Price:</Text>
-                                <Text className="text-gray-900 text-lg font-bold">${totalPrice}</Text>
+                                <Text className="text-gray-900 text-lg font-bold">${totalPrice.toLocaleString()}</Text>
                             </div>
                         </div>
                         <div className="flex justify-between items-center mb-4 p-4 bg-green-50 border-l-8 border-green-400 rounded-lg">
@@ -129,7 +129,7 @@ const Payment: React.FC = () => {
                             <TagOutlined className="text-blue-500 text-2xl" />
                             <div className="flex-1 ml-4">
                                 <Text className="text-gray-800 text-xl font-semibold">Total Price:</Text>
-                                <Text className="text-blue-900 text-xl font-bold">${totalBill}</Text>
+                                <Text className="text-blue-900 text-xl font-bold">${totalBill.toLocaleString()}</Text>
                             </div>
                         </div>
                     </div>

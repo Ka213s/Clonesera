@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Badge, Dropdown, Avatar, Typography, Divider, Input } from 'antd';
-import { PlusOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined } from '@ant-design/icons';
+import { PlusOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
 import logo from '../assets/Logo-2.png';
@@ -92,7 +92,7 @@ const HeaderNoMenu: React.FC = () => {
       key: 'profile',
       label: (
         <span onClick={handleProfileClick}>
-          <UserOutlined /> Profile
+          <UserOutlined /> My dashboard
         </span>
       )
     },
@@ -100,7 +100,7 @@ const HeaderNoMenu: React.FC = () => {
       key: 'logout',
       label: (
         <span onClick={() => navigate('/logout')}>
-          <UserOutlined /> Logout
+          <LogoutOutlined /> Logout
         </span>
       )
     }

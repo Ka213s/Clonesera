@@ -1,7 +1,7 @@
 import React from 'react';
 import { Menu } from 'antd';
 import { Link } from 'react-router-dom';
-import { UserOutlined } from '@ant-design/icons';
+import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
 
 export const UserMenu: React.FC = () => (
   <Menu>
@@ -12,7 +12,7 @@ export const UserMenu: React.FC = () => (
     </Menu.Item>
     <Menu.Item key="logout">
       <Link to="/logout">
-        <UserOutlined /> Logout
+        <LogoutOutlined /> Logout
       </Link>
     </Menu.Item>
   </Menu>

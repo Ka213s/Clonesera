@@ -37,7 +37,7 @@ const WaitingPaid: React.FC = () => {
         const courseIds = response.pageData.map((item: CartItem) => item.course_id);
 
         const courseDetails = await Promise.all(courseIds.map(async (id: string) => {
-                return await getCourseDetail(id);
+            return await getCourseDetail(id);
         }));
 
         const getCartImage = response.pageData.map((item: CartItem, index: number) => ({
@@ -128,16 +128,16 @@ const WaitingPaid: React.FC = () => {
                                     <div className="flex items-center">
                                         {item.discount > 0 && (
                                             <>
-                                                <span className="text-gray-500 line-through text-xs">${item.price.toFixed(2)}</span>
+                                                <span className="text-gray-500 line-through text-xs">${item.price.toLocaleString()}</span>
                                                 <span className="ml-1 flex items-center">
                                                     <i className="fas fa-tag text-green-500 text-xs"></i>
-                                                    <span className="text-green-500 text-xs ml-1">Discount: ${item.discount.toFixed(2)}</span>
+                                                    <span className="text-green-500 text-xs ml-1">Discount: ${item.discount}</span>
                                                 </span>
                                             </>
                                         )}
                                     </div>
                                     <span className={`text-sm font-bold ${item.discount > 0 ? 'text-red-500' : 'text-black'}`}>
-                                        ${(item.price - item.discount).toFixed(2)}
+                                        ${(item.price - item.discount).toLocaleString()}
                                     </span>
                                 </div>
                             </div>
@@ -149,15 +149,15 @@ const WaitingPaid: React.FC = () => {
                 <h2 className="text-lg font-bold mb-2">Order Summary</h2>
                 <div className="flex justify-between mb-1">
                     <span>Subtotal</span>
-                    <span className="text-sm font-bold">${totalPrice.toFixed(2)}</span>
+                    <span className="text-sm font-bold">${totalPrice.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between mb-1">
                     <span>Total Discount</span>
-                    <span className="text-sm font-bold">-${totalDiscount.toFixed(2)}</span>
+                    <span className="text-sm font-bold">-${totalDiscount}</span>
                 </div>
                 <div className="flex justify-between mb-2">
                     <span className="text-lg font-semibold">Total</span>
-                    <span className="text-lg font-semibold">${totalBill.toFixed(2)}</span>
+                    <span className="text-lg font-semibold">${totalBill.toLocaleString()}</span>
                 </div>
                 <Button type="primary" className="w-full py-2 text-sm font-semibold" onClick={handleCheckout}>
                     Checkout Now

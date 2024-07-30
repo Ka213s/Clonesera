@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Row, Col, Table, Pagination, Input } from 'antd';
+import { Card, Row, Col, Table, Pagination } from 'antd';
 import { DollarOutlined, TagsOutlined, BookOutlined, TeamOutlined, CommentOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { getSettingDefault, getUsers, getCategories, getCourses, getBlogs } from '../../services/Api';
 
@@ -30,7 +30,6 @@ const AdminDashboard: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
   const [totalTransactions, setTotalTransactions] = useState<number>(0);
-  const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,7 +37,7 @@ const AdminDashboard: React.FC = () => {
       setTotalMoney(settingData.balance_total);
 
       const searchConditionUsers = {
-        keyword: searchText,
+        keyword: '',
         role: 'all',
         status: true,
         is_deleted: false,
@@ -78,15 +77,11 @@ const AdminDashboard: React.FC = () => {
     };
 
     fetchData();
-  }, [currentPage, pageSize, searchText]);
+  }, [currentPage, pageSize]);
 
   const handlePageChange = (page: number, pageSize: number) => {
     setCurrentPage(page);
     setPageSize(pageSize);
-  };
-
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchText(e.target.value);
   };
 
   const formatNumber = (value: number | null): string | null => {
@@ -153,12 +148,6 @@ const AdminDashboard: React.FC = () => {
         <AppstoreOutlined style={{ fontSize: '24px', marginRight: '8px' }} />
         <h2 className="text-xl font-semibold">Admin Dashboard</h2>
       </div>
-      <Input.Search
-        placeholder="Search users"
-        onChange={handleSearchChange}
-        value={searchText}
-        className="mb-4"
-      />
       <Row gutter={[16, 16]}>
         {stats.map((stat, index) => (
           <Col key={index} xs={24} sm={12} lg={6}>
