@@ -1,15 +1,18 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
-import { Button, Table, Pagination, Input } from 'antd';
+import React, { useEffect, useState, useCallback } from 'react';
+import { Button, Card, Pagination, Input } from 'antd';
 import { toast } from 'react-toastify';
-import { getSubscribeds, updateSubscribed } from '../../utils/commonImports';
-import { ColumnsType } from 'antd/es/table';
 import 'react-toastify/dist/ReactToastify.css';
+import { getSubscribeds, updateSubscribed, getUserData } from '../../utils/commonImports';
+import { SearchOutlined, PhoneOutlined, MailOutlined } from '@ant-design/icons';
 
 interface Subscribed {
     _id: string;
     instructor_name: string;
     instructor_id: string;
     is_subscribed: boolean;
+    avatar?: string;
+    phone_number?: string;
+    email?: string;
 }
 
 const { Search } = Input;
@@ -24,16 +27,28 @@ const ListSubscribed: React.FC = () => {
 
     const fetchSubscriptions = useCallback(
         async (page: number, pageSize: number) => {
-                const data = await getSubscribeds(
-                    { keyword: '', is_delete: false },
-                    page,
-                    pageSize
-                );
-                const filteredData = data.pageData.filter((item: Subscribed) => item.is_subscribed);
-                setAllSubscriptions(filteredData);
-                const paginatedData = filteredData.slice((page - 1) * pageSize, page * pageSize);
-                setSubscriptions(paginatedData);
-                setTotalItems(filteredData.length);
+            const data = await getSubscribeds(
+                { keyword: '', is_delete: false },
+                page,
+                pageSize
+            );
+            const filteredData = data.pageData.filter((sub: Subscribed) => sub.is_subscribed);
+
+            // Fetch user details for each instructor
+            const detailedSubscriptions = await Promise.all(filteredData.map(async (sub: Subscribed) => {
+                const userData = await getUserData(sub.instructor_id);
+                return {
+                    ...sub,
+                    avatar: userData.avatar,
+                    phone_number: userData.phone_number,
+                    email: userData.email,
+                };
+            }));
+
+            setAllSubscriptions(detailedSubscriptions);
+            const paginatedData = detailedSubscriptions.slice((page - 1) * pageSize, page * pageSize);
+            setSubscriptions(paginatedData);
+            setTotalItems(detailedSubscriptions.length);
         },
         []
     );
@@ -52,46 +67,20 @@ const ListSubscribed: React.FC = () => {
     }, [searchKeyword, allSubscriptions, pageNum, pageSize]);
 
     const handleSubscribeToggle = async (instructor_id: string, is_subscribed: boolean) => {
-            await updateSubscribed(instructor_id);
-            toast.success(is_subscribed ? 'Unsubscribed successfully' : 'Subscribed successfully');
-            setAllSubscriptions(prev =>
-                prev.map((sub: Subscribed) =>
-                    sub.instructor_id === instructor_id
-                        ? { ...sub, is_subscribed: !is_subscribed }
-                        : sub
-                )
-            );
+        await updateSubscribed(instructor_id);
+        toast.success(is_subscribed ? 'Unsubscribed successfully' : 'Subscribed successfully');
+        setAllSubscriptions(prev =>
+            prev.map((sub: Subscribed) =>
+                sub.instructor_id === instructor_id
+                    ? { ...sub, is_subscribed: !is_subscribed }
+                    : sub
+            )
+        );
     };
-
-    const columns: ColumnsType<Subscribed> = useMemo(
-        () => [
-            {
-                title: 'Instructor Name',
-                dataIndex: 'instructor_name',
-                key: 'instructor_name',
-            },
-            {
-                title: 'Action',
-                key: 'action',
-                render: (record: Subscribed) => (
-                    <div className="flex space-x-2">
-                        <Button
-                            type="default"
-                            onClick={() => handleSubscribeToggle(record.instructor_id, record.is_subscribed)}
-                            className={record.is_subscribed ? 'text-red-500 hover:text-red-700' : 'text-blue-500 hover:text-blue-700'}
-                        >
-                            {record.is_subscribed ? 'Unsubscribe' : 'Subscribe'}
-                        </Button>
-                    </div>
-                ),
-            },
-        ],
-        [handleSubscribeToggle]
-    );
 
     const handleSearch = (value: string) => {
         setSearchKeyword(value);
-        setPageNum(1);
+        setPageNum(1); // Reset to the first page on search
     };
 
     return (
@@ -99,19 +88,49 @@ const ListSubscribed: React.FC = () => {
             <div style={{ marginBottom: 16 }}>
                 <Search
                     placeholder="Search by instructor name"
-                    enterButton="Search"
+                    enterButton={<SearchOutlined />}
                     allowClear
                     size="large"
                     onSearch={handleSearch}
-                    style={{ width: 400 }}
+                    style={{ width: 300 }}
                 />
             </div>
-            <Table
-                columns={columns}
-                dataSource={subscriptions.map(sub => ({ ...sub, key: sub._id }))}
-                pagination={false}
-                className="mb-4"
-            />
+            <div className="flex flex-wrap -mx-4">
+                {subscriptions.map(sub => (
+                    <div key={sub._id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-4 mb-8">
+                        <Card
+                            hoverable
+                            className="flex flex-col items-center justify-center p-6 h-full"
+                        >
+                            <div className="flex justify-center items-center mb-4">
+                                <img
+                                    alt="avatar"
+                                    src={sub.avatar}
+                                    className="w-24 h-24 rounded-full object-cover"
+                                />
+                            </div>
+                            <div className="flex flex-col items-center">
+                                <h3 className="text-lg text-center font-semibold">{sub.instructor_name}</h3>
+                                <div className="flex items-center mt-2">
+                                    <PhoneOutlined className="mr-2 text-blue-500" />
+                                    <span>{sub.phone_number}</span>
+                                </div>
+                                <div className="flex items-center mt-1">
+                                    <MailOutlined className="mr-2 text-blue-500" />
+                                    <span>{sub.email}</span>
+                                </div>
+                                <Button
+                                    type="default"
+                                    onClick={() => handleSubscribeToggle(sub.instructor_id, sub.is_subscribed)}
+                                    className={`mt-4 ${sub.is_subscribed ? 'text-red-500 hover:text-red-700' : 'text-blue-500 hover:text-blue-700'}`}
+                                >
+                                    {sub.is_subscribed ? 'Unsubscribe' : 'Subscribe'}
+                                </Button>
+                            </div>
+                        </Card>
+                    </div>
+                ))}
+            </div>
             <div className="flex justify-end mt-5">
                 <Pagination
                     current={pageNum}
