@@ -4,7 +4,7 @@ import type { MenuProps } from 'antd';
 import { MenuOutlined, PlusOutlined, ShoppingCartOutlined, UserOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../assets/Logo-2.png';
-import { useCartContext } from '../consts/CartContext'; 
+import { useCartContext } from '../consts/CartContext';
 
 const { Text } = Typography;
 
@@ -13,12 +13,18 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
-  const [userState, setUserState] = useState({
+  const [userState, setUserState] = useState<{
+    avatar: string | null;
+    isLoggedIn: boolean;
+    role: 'admin' | 'instructor' | 'student' | null;
+    username: string | null;
+  }>({
     avatar: null,
     isLoggedIn: false,
     role: null,
-    username: null
+    username: null,
   });
+
   const { totalCartItems } = useCartContext();
   const navigate = useNavigate();
 
@@ -30,12 +36,12 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
         avatar: userData.avatar || null,
         isLoggedIn: true,
         role: userData.role,
-        username: userData.name
+        username: userData.name,
       });
     } else {
       setUserState(prevState => ({
         ...prevState,
-        isLoggedIn: false
+        isLoggedIn: false,
       }));
     }
   }, []);
@@ -57,6 +63,22 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     navigate('/view-cart');
   };
 
+  const handleProfileClick = () => {
+    switch (userState.role) {
+      case 'admin':
+        navigate('/dashboard-admin');
+        break;
+      case 'instructor':
+        navigate('/dashboard-instructor');
+        break;
+      case 'student':
+        navigate('/dashboard-student');
+        break;
+      default:
+        navigate('/login');
+    }
+  };
+
   const userMenu: MenuProps['items'] = [
     {
       key: 'welcome',
@@ -68,9 +90,9 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     {
       key: 'profile',
       label: (
-        <Link to="/view-my-profile">
+        <span onClick={handleProfileClick}>
           <UserOutlined /> Profile
-        </Link>
+        </span>
       ),
     },
     {

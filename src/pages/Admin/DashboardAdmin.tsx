@@ -1,8 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { Card, Row, Col } from 'antd';
+import { Card, Row, Col, Table, Pagination, Input } from 'antd';
 import { DollarOutlined, TagsOutlined, BookOutlined, TeamOutlined, CommentOutlined, AppstoreOutlined } from '@ant-design/icons';
 import { getSettingDefault, getUsers, getCategories, getCourses, getBlogs } from '../../services/Api';
 
+interface Transaction {
+  _id: string;
+  payout_id: string;
+  payout_no: string;
+  payout_amount: number;
+  created_at: string;
+}
+
+interface User {
+  _id: string;
+  name: string;
+  email: string;
+  phone_number: string;
+  balance_total: number;
+  transactions: Transaction[];
+}
 
 const AdminDashboard: React.FC = () => {
   const [TotalMoney, setTotalMoney] = useState<number | null>(null);
@@ -10,51 +26,68 @@ const AdminDashboard: React.FC = () => {
   const [totalCategories, setTotalCategories] = useState<number | null>(null);
   const [totalCourses, setTotalCourses] = useState<number | null>(null);
   const [totalBlogs, setTotalBlogs] = useState<number | null>(null);
-
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize, setPageSize] = useState<number>(10);
+  const [totalTransactions, setTotalTransactions] = useState<number>(0);
+  const [searchText, setSearchText] = useState<string>('');
 
   useEffect(() => {
     const fetchData = async () => {
-        const settingData = await getSettingDefault();
-        setTotalMoney(settingData.balance_total);
+      const settingData = await getSettingDefault();
+      setTotalMoney(settingData.balance_total);
 
-        const searchConditionUsers = {
-          keyword: '',
-          role: 'all',
-          status: true,
-          is_deleted: false,
-          is_verified: '',
-        };
-        const userData = await getUsers(searchConditionUsers, 1, 10);
-        setTotalUsers(userData.pageInfo.totalItems);
+      const searchConditionUsers = {
+        keyword: searchText,
+        role: 'all',
+        status: true,
+        is_deleted: false,
+        is_verified: '',
+      };
+      const userData = await getUsers(searchConditionUsers, currentPage, pageSize);
+      setTotalUsers(userData.pageInfo.totalItems);
 
-        const searchConditionCategories = {
-          keyword: '',
-          category: '',
-          status: '',
-          is_deleted: false,
-        };
-        const categoryData = await getCategories(searchConditionCategories, 1, 10);
-        setTotalCategories(categoryData.pageInfo.totalItems);
+      const searchConditionCategories = {
+        keyword: '',
+        category: '',
+        status: '',
+        is_deleted: false,
+      };
+      const categoryData = await getCategories(searchConditionCategories, 1, 10);
+      setTotalCategories(categoryData.pageInfo.totalItems);
 
-        const searchConditionCourses = {
-          keyword: '',
-          category: '',
-          status: '',
-          is_deleted: false,
-        };
-        const courseData = await getCourses(searchConditionCourses, 1, 10);
-        setTotalCourses(courseData.pageInfo.totalItems);
+      const searchConditionCourses = {
+        keyword: '',
+        category: '',
+        status: '',
+        is_deleted: false,
+      };
+      const courseData = await getCourses(searchConditionCourses, 1, 10);
+      setTotalCourses(courseData.pageInfo.totalItems);
 
-        const searchConditionBlogs = {
-          category_id: '',
-          is_deleted: false,
-        };
-        const blogData = await getBlogs({ searchCondition: searchConditionBlogs, pageInfo: { pageNum: 1, pageSize: 10 } });
-        setTotalBlogs(blogData.pageInfo.totalItems);
+      const searchConditionBlogs = {
+        category_id: '',
+        is_deleted: false,
+      };
+      const blogData = await getBlogs({ searchCondition: searchConditionBlogs, pageInfo: { pageNum: 1, pageSize: 10 } });
+      setTotalBlogs(blogData.pageInfo.totalItems);
+
+      const transactionsData = userData.pageData.flatMap((user: User) => user.transactions);
+      setTotalTransactions(transactionsData.length);
+      setTransactions(transactionsData.slice((currentPage - 1) * pageSize, currentPage * pageSize));
     };
 
     fetchData();
-  }, []);
+  }, [currentPage, pageSize, searchText]);
+
+  const handlePageChange = (page: number, pageSize: number) => {
+    setCurrentPage(page);
+    setPageSize(pageSize);
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  };
 
   const formatNumber = (value: number | null): string | null => {
     if (value === null) return null;
@@ -89,12 +122,43 @@ const AdminDashboard: React.FC = () => {
     }
   ];
 
+  const columns = [
+    {
+      title: 'Payout ID',
+      dataIndex: 'payout_id',
+      key: 'payout_id',
+    },
+    {
+      title: 'Payout Number',
+      dataIndex: 'payout_no',
+      key: 'payout_no',
+    },
+    {
+      title: 'Amount',
+      dataIndex: 'payout_amount',
+      key: 'payout_amount',
+      render: (amount: number) => `$${amount.toLocaleString('en-US')}`,
+    },
+    {
+      title: 'Date',
+      dataIndex: 'created_at',
+      key: 'created_at',
+      render: (date: string) => new Date(date).toLocaleDateString('en-US'),
+    },
+  ];
+
   return (
     <div className="p-4">
       <div className="flex items-center mb-4">
         <AppstoreOutlined style={{ fontSize: '24px', marginRight: '8px' }} />
         <h2 className="text-xl font-semibold">Admin Dashboard</h2>
       </div>
+      <Input.Search
+        placeholder="Search users"
+        onChange={handleSearchChange}
+        value={searchText}
+        className="mb-4"
+      />
       <Row gutter={[16, 16]}>
         {stats.map((stat, index) => (
           <Col key={index} xs={24} sm={12} lg={6}>
@@ -110,6 +174,25 @@ const AdminDashboard: React.FC = () => {
           </Col>
         ))}
       </Row>
+      <div className="mt-8">
+        <h2 className="text-xl font-semibold mb-4">Latest Transactions</h2>
+        <Table
+          dataSource={transactions}
+          columns={columns}
+          rowKey="_id"
+          pagination={false}
+        />
+        <Pagination
+          size="small"
+          total={totalTransactions}
+          current={currentPage}
+          pageSize={pageSize}
+          onChange={handlePageChange}
+          showSizeChanger
+          showTotal={(total) => `Total ${total} items`}
+          className="mt-4"
+        />
+      </div>
     </div>
   );
 };
