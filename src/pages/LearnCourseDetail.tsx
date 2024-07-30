@@ -67,10 +67,8 @@ const LearnCourseDetail: React.FC = () => {
     }, [id, lessonId, navigate]);
 
     const fetchLessonDetail = async (lessonId: string) => {
-
         const lesson = await getLessonById(lessonId);
         setSelectedLesson(lesson);
-
     };
 
     const handleLessonClick = (lesson: Lesson) => {
@@ -111,8 +109,22 @@ const LearnCourseDetail: React.FC = () => {
                 <div className="flex-1">
                     {selectedLesson && (
                         <Breadcrumb>
-                            <Breadcrumb.Item>Home</Breadcrumb.Item>
-                            <Breadcrumb.Item>{course.name}</Breadcrumb.Item>
+                            <Breadcrumb.Item>
+                                <span 
+                                    className="cursor-pointer hover:text-blue-500 transition-colors duration-300 font-semibold" 
+                                    onClick={() => navigate('/homepage')}
+                                >
+                                    Home
+                                </span>
+                            </Breadcrumb.Item>
+                            <Breadcrumb.Item>
+                                <span 
+                                    className="cursor-pointer hover:text-blue-500 transition-colors duration-300 font-semibold" 
+                                    onClick={() => navigate(`/course-detail/${id}`)}
+                                >
+                                    {course.name}
+                                </span>
+                            </Breadcrumb.Item>
                             <Breadcrumb.Item>{selectedLesson.name}</Breadcrumb.Item>
                         </Breadcrumb>
                     )}

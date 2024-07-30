@@ -164,12 +164,14 @@ const HeaderNoMenu: React.FC = () => {
           </>
         ) : (
           <>
-            <Link to="/login">
-              <Button type="primary" className="custom-button">Login</Button>
-            </Link>
-            <Link to="/register">
-              <Button type="primary" className="custom-button">Register</Button>
-            </Link>
+            <div className="flex space-x-2">
+              <Link to="/login">
+                <Button type="primary" className="custom-button">Login</Button>
+              </Link>
+              <Link to="/register">
+                <Button type="primary" className="custom-button">Register</Button>
+              </Link>
+            </div>
           </>
         )}
       </div>
