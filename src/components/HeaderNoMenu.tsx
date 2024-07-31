@@ -93,17 +93,17 @@ const HeaderNoMenu: React.FC = () => {
     {
       key: 'profile',
       label: (
-        <span onClick={handleProfileClick}>
+        <a onClick={handleProfileClick}>
           <UserOutlined /> My dashboard
-        </span>
+        </a>
       )
     },
     {
       key: 'logout',
       label: (
-        <span onClick={() => navigate('/logout')}>
+        <a onClick={() => navigate('/logout')}>
           <LogoutOutlined /> Logout
-        </span>
+        </a>
       )
     }
   ];

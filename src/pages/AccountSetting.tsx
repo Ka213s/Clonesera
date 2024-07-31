@@ -124,7 +124,7 @@ const AccountSettings: React.FC = () => {
                         />
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" loading={saving}>
+                        <Button type="primary" htmlType="submit" className='custom-button' loading={saving}>
                             Save Changes
                         </Button>
                     </Form.Item>

@@ -56,20 +56,21 @@ const HomePage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-8">
           <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
             <InfoCircleOutlined className="text-4xl text-blue-600 mb-4" />
-            <h2 className="text-2xl font-bold mb-4">About us</h2>
-            <p className="text-gray-600 text-center">When an unknown printer took a galley of type and scrambled it</p>
+            <h2 className="text-2xl font-bold mb-4">About Us</h2>
+            <p className="text-gray-600 text-center">We provide high-quality courses from top industry experts.</p>
           </div>
           <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
             <CheckCircleOutlined className="text-4xl text-green-600 mb-4" />
             <h2 className="text-2xl font-bold mb-4">Certification</h2>
-            <p className="text-gray-600 text-center">When an unknown printer took a galley of type and scrambled it</p>
+            <p className="text-gray-600 text-center">Earn certificates upon completing courses to enhance your skills.</p>
           </div>
           <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col items-center">
             <UserOutlined className="text-4xl text-gray-600 mb-4" />
-            <h2 className="text-2xl font-bold mb-4">Member</h2>
-            <p className="text-gray-600 text-center">When an unknown printer took a galley of type and scrambled it</p>
+            <h2 className="text-2xl font-bold mb-4">Membership</h2>
+            <p className="text-gray-600 text-center">Join our learning community and connect with fellow learners.</p>
           </div>
         </div>
+
       </div>
     </div>
   );
