@@ -139,7 +139,7 @@ const Subscribed: React.FC = () => {
                     </div>
                 ))}
             </div>
-            <div className="flex justify-center mt-5">
+            <div className="flex justify-end mt-5">
                 <Pagination
                     current={pageNum}
                     pageSize={pageSize}

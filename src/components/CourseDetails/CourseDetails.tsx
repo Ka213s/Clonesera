@@ -377,14 +377,14 @@ const CourseDetails: React.FC = () => {
                       rules={[{ required: true, message: "Please enter your review" }]}
                       className="flex-1"
                     >
-                      <Input 
-                        placeholder="Add a public comment..." 
+                      <Input
+                        placeholder="Add a public comment..."
                         className="border rounded-full px-4 py-2 w-full"
                       />
                     </Form.Item>
-                    <Button 
-                      type="primary" 
-                      htmlType="submit" 
+                    <Button
+                      type="primary"
+                      htmlType="submit"
                       className="mb-4 custom-button p-4 bg-green-500 text-black"
                     >
                       Submit Review

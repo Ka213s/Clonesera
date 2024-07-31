@@ -72,11 +72,13 @@ const CourseTable: React.FC = () => {
       dataIndex: "price",
       key: "price",
       render: (price: number) => price.toLocaleString(),
+      className: 'text-right',
     },
     {
       title: <div className="center-header">Discount</div>,
       dataIndex: "discount",
       key: "discount",
+      className: 'text-right',
     },
     {
       title: <div className="center-header">Created At</div>,

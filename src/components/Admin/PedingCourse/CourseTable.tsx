@@ -97,6 +97,7 @@ const CourseTable: React.FC<CourseTableProps> = ({
       dataIndex: "price",
       key: "price",
       render: (price: number) => price.toLocaleString(),
+      className: 'text-right',
     },
     {
       title: "Discount",
