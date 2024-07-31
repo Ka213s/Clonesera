@@ -191,7 +191,7 @@ const CourseDetails: React.FC = () => {
   return (
     <div className="container mx-auto p-4 text-sm">
       <Card className="shadow-lg rounded-lg overflow-hidden relative">
-       
+
         <Skeleton loading={isLoading} active>
           <div className="flex flex-col md:flex-row items-start p-2">
             <img

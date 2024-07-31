@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getUserData, updateSubscribed, getCurrentLogin } from '../../utils/commonImports';
+import { getUserData, updateSubscribed, getCurrentLogin, NT_getUserData } from '../../utils/commonImports';
 import AboutTab from './AboutTab';
 
 interface UserData {
@@ -30,10 +30,18 @@ const ViewProfile: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (id) {
-                const [userData, currentUser] = await Promise.all([getUserData(id), getCurrentLogin()]);
-                setUserData(userData);
-                setIsSubscribed(userData.is_subscribed);
-                setCurrentUserId(currentUser._id);
+                try {
+                    const currentUser = await getCurrentLogin();
+                    setCurrentUserId(currentUser._id);
+                    const userData = await getUserData(id);
+                    setUserData(userData);
+                    setIsSubscribed(userData.is_subscribed);
+                } catch (error) {
+                    // Handle the case where there is no current user
+                    const userData = await NT_getUserData(id);
+                    setUserData(userData);
+                    setIsSubscribed(userData.is_subscribed);
+                }
             } else {
                 console.error('No user ID provided');
             }
@@ -72,7 +80,7 @@ const ViewProfile: React.FC = () => {
                             <p className="text-gray-600 mt-2">{userData?.phone_number || 'Location'}</p>
                         </div>
                     </div>
-                    {currentUserId !== userData?._id && (
+                    {currentUserId && currentUserId !== userData?._id && (
                         <button
                             className={`px-4 py-2 ${isSubscribed ? 'bg-red-600' : 'bg-green-600'} text-white rounded-lg`}
                             onClick={isSubscribed ? handleUnsubscribe : handleSubscribe}

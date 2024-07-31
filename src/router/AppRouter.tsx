@@ -70,7 +70,7 @@ const AppRouter: React.FC = () => {
                     <Route element={<LayoutRoute />}>
                         <Route path={INSTRUCTOR.COURSE} element={<PrivateRoute element={Course} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.DASHBOARD_INSTRUCTOR} element={<PrivateRoute element={InstructorDashboard} allowedRoles={[ROLES.INSTRUCTOR]} />} />
-                        <Route path={INSTRUCTOR.VIEW_PROFILE} element={<PrivateRoute element={ViewProfile} allowedRoles={[ROLES.INSTRUCTOR, ROLES.STUDENT]} />} />
+                        <Route path={INSTRUCTOR.VIEW_PROFILE} element={<ViewProfile/>} />
                         <Route path={INSTRUCTOR.LIST_SUBSCRIPTION} element={<PrivateRoute element={ListSubscription} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.REVIEW} element={<PrivateRoute element={ReViewInstructor} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.COURSE_SOLD} element={<PrivateRoute element={CourseSold} allowedRoles={[ROLES.INSTRUCTOR]} />} />
