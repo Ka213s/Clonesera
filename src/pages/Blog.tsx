@@ -16,9 +16,10 @@ interface Blog {
 
 const Blog: React.FC = () => {
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState<boolean>(true);
-  const [currentPage, setCurrentPage] = useState<number>(1);
   const navigate = useNavigate();
+  const blogsPerPage = 4; // Number of blogs to display per page
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -45,66 +46,69 @@ const Blog: React.FC = () => {
     fetchBlogs();
   }, []);
 
+  const handlePrevClick = () => {
+    if (currentIndex > 0) {
+      setCurrentIndex(currentIndex - 1);
+    }
+  };
+
+  const handleNextClick = () => {
+    if (currentIndex + blogsPerPage < blogs.length) {
+      setCurrentIndex(currentIndex + 1);
+    }
+  };
+
   const handleClick = (id: string) => {
     navigate(`/blog-detail/${id}`);
-  };
-
-  const blogsPerPage = 4;
-  const totalPages = Math.ceil(blogs.length / blogsPerPage);
-  const startIndex = (currentPage - 1) * blogsPerPage;
-  const currentBlogs = blogs.slice(startIndex, startIndex + blogsPerPage);
-
-  const handlePreviousPage = () => {
-    if (currentPage > 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (currentPage < totalPages) {
-      setCurrentPage(currentPage + 1);
-    }
   };
 
   return (
     <div className="relative">
       <div className="flex justify-between items-center mb-6">
         <button
-          onClick={handlePreviousPage}
-          className={`bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 ${currentPage === 1 ? 'invisible' : 'visible'}`}
+          onClick={handlePrevClick}
+          className={`bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 ${currentIndex === 0 ? 'invisible' : 'visible'}`}
         >
           <LeftOutlined className="text-lg" />
         </button>
         <h2 className="text-3xl font-bold text-left">Latest Blog Posts</h2>
         <button
-          onClick={handleNextPage}
-          className={`bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 ${currentPage === totalPages ? 'invisible' : 'visible'}`}
+          onClick={handleNextClick}
+          className={`bg-gray-200 p-2 rounded-full shadow-lg hover:bg-gray-300 transition duration-300 ${currentIndex + blogsPerPage >= blogs.length ? 'invisible' : 'visible'}`}
         >
           <RightOutlined className="text-lg" />
         </button>
       </div>
-      <div className="relative">
-        <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pb-6 transition-transform duration-300`}>
+      <div className="relative overflow-hidden">
+        <div className="blog-slider" style={{ transform: `translateX(-${currentIndex * (100 / blogsPerPage)}%)` }}>
           {loading ? (
             Array.from({ length: blogsPerPage }).map((_, index) => (
-              <Skeleton key={index} active paragraph={{ rows: 5 }} />
+              <div key={index} className="blog-slide">
+                <Skeleton active paragraph={{ rows: 5 }} />
+              </div>
             ))
           ) : (
-            currentBlogs.map(blog => (
-              <div
-                key={blog._id}
-                onClick={() => handleClick(blog._id)}
-                className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer p-4" // Added padding for spacing and cursor-pointer
-                style={{ height: '420px' }}
-              >
-                <img width={272} alt="blog" src={blog.image_url} className="rounded-lg mb-4" />
-                <div className="text-xl font-semibold mb-2">{blog.title}</div>
-                <div className="text-gray-500">
-                  <div><strong>Author:</strong> {blog.user_name}</div>
-                  <div><strong>Specialties:</strong> {blog.category_name}</div>
-                  <div><strong>Update:</strong> {new Date(blog.updated_at).toLocaleDateString()}</div>
+            blogs.map((blog) => (
+              <div key={blog._id} className="blog-slide">
+                <div
+                  onClick={() => handleClick(blog._id)}
+                  className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer p-4"
+                  style={{ height: '420px' }}
+                >
+                  <img
+                    width={272}
+                    alt="blog"
+                    src={blog.image_url}
+                    className="rounded-lg mb-4"
+                  />
+                  <div className="text-xl font-semibold mb-2">{blog.title}</div>
+                  <div className="text-gray-500">
+                    <div><strong>Author:</strong> {blog.user_name}</div>
+                    <div><strong>Specialties:</strong> {blog.category_name}</div>
+                    <div><strong>Update:</strong> {new Date(blog.updated_at).toLocaleDateString()}</div>
+                  </div>
+                  <p className="text-gray-700 mt-2">{blog.description}</p>
                 </div>
-                <p className="text-gray-700 mt-2">{blog.description}</p>
               </div>
             ))
           )}

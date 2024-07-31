@@ -206,3 +206,18 @@ html, body, #root {
 .course-slide:last-child {
   margin-right: 0; /* Remove margin for the last card to avoid extra space */
 }
+/* CSS for Blog component */
+.blog-slider {
+  display: flex;
+  transition: transform 0.5s ease;
+}
+
+.blog-slide {
+  flex: 0 0 24%; /* Each blog takes up 25% of the container width */
+  box-sizing: border-box;
+  margin-right: 15px; /* Add margin to space out the blog cards */
+}
+
+.blog-slide:last-child {
+  margin-right: 0; /* Remove margin for the last card to avoid extra space */
+}
