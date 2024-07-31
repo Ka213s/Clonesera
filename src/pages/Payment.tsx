@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCart, updateCart } from '../services/Api';
-import { message, Button, List, Typography, Card, Row, Col, Spin } from 'antd';
+import { message, List, Typography, Card, Row, Col, Spin } from 'antd';
 import { toast } from 'react-toastify';
 import { DollarOutlined, TagOutlined, TagFilled } from '@ant-design/icons';
 

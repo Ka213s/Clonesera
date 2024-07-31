@@ -1,4 +1,4 @@
-import { React, useEffect, useState, useNavigate, getCart, updateCart, message, Button, Checkbox } from '../utils/commonImports';
+import { React, useEffect, useState, useNavigate, getCart, updateCart, message, Checkbox } from '../utils/commonImports';
 import DeleteCart from '../components/Cart/DeleteCart';
 
 interface CartItem {
