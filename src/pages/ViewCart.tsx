@@ -151,9 +151,9 @@ const ViewCart: React.FC = () => {
                     <span className="text-lg font-semibold">Total</span>
                     <span className="text-lg font-semibold">${totalBill.toLocaleString()}</span>
                 </div>
-                <Button type="primary" className="w-full py-2 text-sm font-semibold" onClick={handleCheckout}>
+                <button className="w-full py-2 text-sm font-semibold rounded-3xl bg-[#22c55e] hover:bg-green-600 text-white" onClick={handleCheckout}>
                     Checkout Now
-                </Button>
+                </button>
             </div>
         </div>
     );
