@@ -123,10 +123,10 @@ const DisplayLesson: React.FC = () => {
       title: 'Actions',
       key: 'actions',
       render: (_, record: Lesson) => (
-        <>
+        <div className="flex space-x-2">
           <UpdateLesson lesson_id={record._id} />
           <DeleteLesson lesson_id={record._id} />
-        </>
+        </div>
       ),
       align: 'center',
     },

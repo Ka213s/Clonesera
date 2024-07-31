@@ -63,10 +63,10 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
   };
 
   const renderActions = (record: Course) => (
-    <>
+    <div className="flex space-x-2">
       <EditButton courseId={record._id} />
       <DeleteButton courseId={record._id} />
-    </>
+    </div>
   );
 
   const renderStatusChange = (record: Course) => {

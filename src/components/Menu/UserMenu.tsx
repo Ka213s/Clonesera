@@ -17,3 +17,4 @@ export const UserMenu: React.FC = () => (
     </Menu.Item>
   </Menu>
 );
+//Cái file này để làm gì z? Trong header có setup Menu rồi mà

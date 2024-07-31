@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { NT_getCourseDetail, getCourseDetail, createCart, getCart, formatCurrency } from '../../utils/commonImports';
 import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse, Skeleton, Rate } from 'antd';
-import { PlayCircleOutlined, InfoCircleOutlined, ArrowLeftOutlined } from '@ant-design/icons';
-import 'tailwindcss/tailwind.css';
+import { PlayCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
 import ReviewSection from './ReviewSection';
 import ReviewSubmit from './ReviewSubmit';
 import { useCartContext } from '../../consts/CartContext';
@@ -192,13 +191,7 @@ const CourseDetails: React.FC = () => {
   return (
     <div className="container mx-auto p-4 text-sm">
       <Card className="shadow-lg rounded-lg overflow-hidden relative">
-        {!isLoading && (
-          <ArrowLeftOutlined
-            onClick={() => navigate('/homepage')}
-            className="text-2xl absolute top-4 left-2 cursor-pointer"
-            style={{ fontWeight: 'bold', zIndex: 10 }}
-          />
-        )}
+       
         <Skeleton loading={isLoading} active>
           <div className="flex flex-col md:flex-row items-start p-2">
             <img

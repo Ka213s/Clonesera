@@ -95,6 +95,7 @@ const AppRouter: React.FC = () => {
 
                     {/* Routes with No Sidebar Layout */}
                     <Route element={<LayoutNoSidebar />}>
+
                         <Route path={PUBLIC.HOME} element={<HomePage />} />
                         <Route path={PUBLIC.VIEW_ALL_COURSE_HP} element={<ViewAllCourseHomePage />} />
                         <Route path={PUBLIC.LEARN_COURSE} element={<LearnCourseDetail />} />
@@ -103,6 +104,7 @@ const AppRouter: React.FC = () => {
                     </Route>
 
                     {/* Error Routes */}
+                    {/* <Route path={INSTRUCTOR.VIEW_PROFILE} element={<ViewProfile />} /> */}
                     <Route path={PUBLIC.LOGIN} element={<Login />} />
                     <Route path={PUBLIC.LOGOUT} element={<Logout />} />
                     <Route path={PUBLIC.REGISTER} element={<Register />} />

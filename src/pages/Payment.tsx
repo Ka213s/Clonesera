@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getCart, updateCart } from '../services/Api';
-import { message, Button, List, Typography, Card, Row, Col, Spin } from 'antd';
+import { message, List, Typography, Card, Row, Col, Spin } from 'antd';
 import { toast } from 'react-toastify';
 import { DollarOutlined, TagOutlined, TagFilled } from '@ant-design/icons';
 
@@ -135,20 +135,18 @@ const Payment: React.FC = () => {
                     </div>
                 </div>
                 <div className="flex gap-4 mt-8">
-                    <Button
-                        type="primary"
-                        className="w-full py-3 text-lg font-semibold bg-green-500 border-none hover:bg-green-600 transition duration-300"
+                    <button
+                        className="w-full py-3 text-lg font-semibold rounded-3xl bg-green-500 border-none text-white hover:bg-green-600 transition duration-300"
                         onClick={() => handleUpdateCart('completed')}
                     >
-                        Confirm Checkout
-                    </Button>
-                    <Button
-                        type="default"
-                        className="w-full py-3 text-lg font-semibold bg-red-500 border-none text-white hover:bg-red-600 transition duration-300"
+                        Confirm
+                    </button>
+                    <button
+                        className="w-full py-3 text-lg font-semibold rounded-3xl bg-red-500 border-none text-white hover:bg-red-600 transition duration-300"
                         onClick={() => handleUpdateCart('cancel')}
                     >
                         Cancel
-                    </Button>
+                    </button>
                 </div>
             </Card>
         </div>

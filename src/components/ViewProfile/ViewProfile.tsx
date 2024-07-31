@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getUserData, updateSubscribed, getSubscribeds } from '../../utils/commonImports';
+import { getUserData, updateSubscribed } from '../../utils/commonImports';
 import CourseTab from './CourseTab';
 import SubscriptionTab from './SubscriptionTab';
 import AboutTab from './AboutTab';
@@ -33,9 +33,7 @@ const ViewProfile: React.FC = () => {
             if (id) {
                 const data = await getUserData(id);
                 setUserData(data);
-                const subscribeds = await getSubscribeds({ keyword: "", is_delete: false }, 1, 10);
-                setIsSubscribed(subscribeds.total > 0);
-
+                setIsSubscribed(data.is_subscribed); // Assuming 'is_subscribed' is part of userData
             } else {
                 console.error('No user ID provided');
             }
