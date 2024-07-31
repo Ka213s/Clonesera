@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Badge, Dropdown, Avatar, Typography, Divider, Input } from 'antd';
+import { Button, Badge, Dropdown, Avatar, Typography, Divider, Input,Layout } from 'antd';
 import { PlusOutlined, ShoppingCartOutlined, UserOutlined, SearchOutlined, LogoutOutlined } from '@ant-design/icons';
 import { Link, useNavigate } from 'react-router-dom';
 import type { MenuProps } from 'antd';
@@ -8,6 +8,7 @@ import { useCartContext } from '../consts/CartContext';
 
 const { Text } = Typography;
 const { Search } = Input;
+const { Header: AntHeader } = Layout;
 
 const HeaderNoMenu: React.FC = () => {
   const [userState, setUserState] = useState<{
@@ -109,7 +110,7 @@ const HeaderNoMenu: React.FC = () => {
   ];
 
   return (
-    <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
+    <AntHeader className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
       <div className="flex items-center space-x-4 ml-2 md:ml-5">
         <Link to="/" onClick={handleLogoClick}>
           <img src={logo} alt="Logo" className="h-8 w-auto md:h-12 cursor-pointer" />
@@ -181,7 +182,7 @@ const HeaderNoMenu: React.FC = () => {
           </div>
         )}
       </div>
-    </header>
+    </AntHeader>
   );
 };
 

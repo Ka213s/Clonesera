@@ -27,7 +27,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <CartProvider>
-      <Layout className="overflow-hidden h-screen flex flex-col">
+      <Layout className="overflow-hidden flex flex-col">
         <HeaderNoMenu />
         <Content className="transition-all duration-300 overflow-auto ml-0">
           <div className="flex flex-col min-h-screen">
