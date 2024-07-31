@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { Typography, Skeleton } from 'antd';
-import { ArrowLeftOutlined } from '@ant-design/icons';
 import parse from 'html-react-parser';
 import { getBlogByIdPublic } from '../utils/commonImports';
 
@@ -21,7 +20,6 @@ const BlogDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get the blog ID from the URL
   const [blog, setBlog] = useState<BlogDetail | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBlog = async () => {
@@ -42,11 +40,6 @@ const BlogDetail: React.FC = () => {
 
   return (
     <div className="relative">
-      <ArrowLeftOutlined
-        onClick={() => navigate('/homepage')}
-        className="text-2xl absolute top-4 left-4 cursor-pointer"
-        style={{ fontWeight: 'bold' }}
-      />
       <div className="bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto">
         {loading ? (
           <>
@@ -63,6 +56,7 @@ const BlogDetail: React.FC = () => {
             <Paragraph><strong>Category:</strong> {blog.category_name}</Paragraph>
             <Paragraph><strong>Updated at:</strong> {new Date(blog.updated_at).toLocaleDateString()}</Paragraph>
             <Paragraph><strong>Description:</strong> {blog.description}</Paragraph>
+            <h1 className='text-lg font-bold text-center'>Content</h1>
             <div
               style={{
                 fontFamily: 'Arial, sans-serif',

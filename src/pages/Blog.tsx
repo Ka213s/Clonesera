@@ -62,6 +62,10 @@ const Blog: React.FC = () => {
     navigate(`/blog-detail/${id}`);
   };
 
+  const truncateDescription = (description: string, maxLength: number) => {
+    return description.length > maxLength ? `${description.substring(0, maxLength)}...` : description;
+  };
+
   return (
     <div className="relative">
       <div className="flex justify-between items-center mb-6">
@@ -104,10 +108,10 @@ const Blog: React.FC = () => {
                   <div className="text-xl font-semibold mb-2">{blog.title}</div>
                   <div className="text-gray-500">
                     <div><strong>Author:</strong> {blog.user_name}</div>
-                    <div><strong>Specialties:</strong> {blog.category_name}</div>
+                    <div><strong>Category:</strong> {blog.category_name}</div>
                     <div><strong>Update:</strong> {new Date(blog.updated_at).toLocaleDateString()}</div>
+                    <div><strong>Description:</strong> {truncateDescription(blog.description, 200)}</div>
                   </div>
-                  <p className="text-gray-700 mt-2">{blog.description}</p>
                 </div>
               </div>
             ))
