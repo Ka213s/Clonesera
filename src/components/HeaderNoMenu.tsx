@@ -63,7 +63,7 @@ const HeaderNoMenu: React.FC = () => {
 
   const handleSearch = (value: string) => {
     navigate(`/homepage/view-all-course?search=${value}`);
-    setSearchValue(''); // Reset search value after navigating
+    setSearchValue(''); 
   };
 
   const handleProfileClick = () => {

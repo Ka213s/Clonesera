@@ -30,17 +30,16 @@ const ViewProfile: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (id) {
-                try {
-                    const currentUser = await getCurrentLogin();
+                const token = localStorage.getItem('token');
+                const [userData, currentUser] = token
+                    ? await Promise.all([getUserData(id), getCurrentLogin()])
+                    : [await NT_getUserData(id), null];
+
+                setUserData(userData);
+                setIsSubscribed(userData.is_subscribed);
+
+                if (currentUser) {
                     setCurrentUserId(currentUser._id);
-                    const userData = await getUserData(id);
-                    setUserData(userData);
-                    setIsSubscribed(userData.is_subscribed);
-                } catch (error) {
-                    // Handle the case where there is no current user
-                    const userData = await NT_getUserData(id);
-                    setUserData(userData);
-                    setIsSubscribed(userData.is_subscribed);
                 }
             } else {
                 console.error('No user ID provided');
@@ -77,10 +76,10 @@ const ViewProfile: React.FC = () => {
                         <div className="ml-8">
                             <h1 className="text-3xl font-bold">{userData?.name || 'Your Name'}</h1>
                             <p className="text-gray-600">@{userData?.email || 'username'}</p>
-                            <p className="text-gray-600 mt-2">Phone: {userData?.phone_number || 'Location'}</p>
+                            <p className="text-gray-600 mt-2">{userData?.phone_number || 'Location'}</p>
                         </div>
                     </div>
-                    {currentUserId && currentUserId !== userData?._id && (
+                    {currentUserId !== userData?._id && (
                         <button
                             className={`px-4 py-2 ${isSubscribed ? 'bg-red-600' : 'bg-green-600'} text-white rounded-lg`}
                             onClick={isSubscribed ? handleUnsubscribe : handleSubscribe}

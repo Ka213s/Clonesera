@@ -48,20 +48,20 @@ const Rejected: React.FC = () => {
     const [searchKeyword, setSearchKeyword] = useState<string>("");
 
     const fetchData = useCallback(async (pageInfo: { pageNum: number; pageSize: number }, keyword: string) => {
-            const result: ApiResponse = await getPayouts({
-                searchCondition: {
-                    payout_no: keyword,
-                    instructor_id: '',
-                    status: 'rejected',
-                    is_instructor: false,
-                    is_delete: false,
-                },
-                pageInfo
-            });
+        const result: ApiResponse = await getPayouts({
+            searchCondition: {
+                payout_no: keyword,
+                instructor_id: '',
+                status: 'rejected',
+                is_instructor: false,
+                is_delete: false,
+            },
+            pageInfo
+        });
 
-            setData(result.pageData);
-            setTotal(result.pageInfo.totalItems);
-        
+        setData(result.pageData);
+        setTotal(result.pageInfo.totalItems);
+
     }, []);
 
     useEffect(() => {
@@ -108,18 +108,21 @@ const Rejected: React.FC = () => {
             dataIndex: 'balance_origin',
             key: 'balance_origin',
             render: (balance_origin: number) => balance_origin.toLocaleString(),
+            className: 'text-right',
         },
         {
             title: 'Balance Instructor Paid',
             dataIndex: 'balance_instructor_paid',
             key: 'balance_instructor_paid',
             render: (balance_instructor_paid: number) => balance_instructor_paid.toLocaleString(),
+            className: 'text-right',
         },
         {
             title: 'Balance Instructor Received',
             dataIndex: 'balance_instructor_received',
             key: 'balance_instructor_received',
             render: (balance_instructor_received: number) => balance_instructor_received.toLocaleString(),
+            className: 'text-right',
         },
     ];
 
