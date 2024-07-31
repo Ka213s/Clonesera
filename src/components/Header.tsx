@@ -90,17 +90,17 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
     {
       key: 'profile',
       label: (
-        <span onClick={handleProfileClick}>
+        <a onClick={handleProfileClick}>
           <UserOutlined /> My dashboard
-        </span>
+        </a>
       ),
     },
     {
       key: 'logout',
       label: (
-        <span onClick={() => navigate('/logout')}>
+        <a onClick={() => navigate('/logout')}>
           <LogoutOutlined /> Logout
-        </span>
+        </a>
       ),
     },
   ];
@@ -120,40 +120,38 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       </div>
 
       <div className="flex items-center ml-auto space-x-8 pr-4">
-        {
+        {userState.role === 'instructor' && (
           <>
-            {userState.role === 'instructor' && (
-              <>
-                <Button type="primary" className="custom-button" onClick={handleCreateCourse}>
-                  Create New Course
-                </Button>
-                <Button
-                  type="primary"
-                  shape="circle"
-                  icon={<PlusOutlined />}
-                  className="block md:hidden bg-black border-none hover:bg-gray-800"
-                  onClick={handleCreateCourse}
-                />
-              </>
-            )}
-            <Badge count={totalCartItems}>
-              <ShoppingCartOutlined
-                className="icon-size text-2xl cursor-pointer text-black"
-                onClick={handleViewCart}
-              />
-            </Badge>
-            <Divider className="border-gray-400 h-9" type="vertical" />
-            <div className="">
-              <Dropdown menu={{ items: userMenu }} trigger={['hover']}>
-                <Avatar
-                  size="large"
-                  src={userState.avatar || 'default-avatar-path'}
-                  className="border-2 hover:border-gray-800 transition duration-300 ease-in-out"
-                />
-              </Dropdown>
-            </div>
+            <Button type="primary" className="custom-button" onClick={handleCreateCourse}>
+              Create New Course
+            </Button>
+            <Button
+              type="primary"
+              shape="circle"
+              icon={<PlusOutlined />}
+              className="block md:hidden bg-black border-none hover:bg-gray-800"
+              onClick={handleCreateCourse}
+            />
           </>
-        }
+        )}
+        {userState.role !== 'admin' && (
+          <Badge count={totalCartItems}>
+            <ShoppingCartOutlined
+              className="icon-size text-2xl cursor-pointer text-black"
+              onClick={handleViewCart}
+            />
+          </Badge>
+        )}
+        <Divider className="border-gray-400 h-9" type="vertical" />
+        <div className="">
+          <Dropdown menu={{ items: userMenu }} trigger={['hover']}>
+            <Avatar
+              size="large"
+              src={userState.avatar || 'default-avatar-path'}
+              className="border-2 hover:border-gray-800 transition duration-300 ease-in-out"
+            />
+          </Dropdown>
+        </div>
       </div>
     </header>
   );
