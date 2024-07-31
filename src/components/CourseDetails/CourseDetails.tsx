@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
-import { NT_getCourseDetail, getCourseDetail, createCart, getCart, formatCurrency } from '../../utils/commonImports';
-import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse, Skeleton, Rate } from 'antd';
+import { NT_getCourseDetail, getCourseDetail, createCart, getCart, formatCurrency, createReview, getReviews } from '../../utils/commonImports';
+import { Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse, Skeleton, Rate, Form, Input } from 'antd';
 import { PlayCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
-import ReviewSection from './ReviewSection';
-import ReviewSubmit from './ReviewSubmit';
 import { useCartContext } from '../../consts/CartContext';
 import { toast } from 'react-toastify';
 import parse from 'html-react-parser';
@@ -48,6 +46,14 @@ interface Course {
   is_purchased: boolean;
 }
 
+interface Review {
+  id: string;
+  reviewer_name: string;
+  comment: string;
+  rating: number;
+  updated_at: string;
+}
+
 const CourseDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -55,11 +61,12 @@ const CourseDetails: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const { setTotalCartItems } = useCartContext();
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [form] = Form.useForm();
 
   useEffect(() => {
     const fetchCourseDetail = async () => {
       if (!id) {
-        message.error('Course ID is missing');
         navigate('/');
         return;
       }
@@ -74,7 +81,6 @@ const CourseDetails: React.FC = () => {
         }
         setCourse(data);
       } catch (error) {
-        message.error('Error fetching course details');
         console.error('Error fetching course details:', error);
       } finally {
         setIsLoading(false);
@@ -83,6 +89,30 @@ const CourseDetails: React.FC = () => {
 
     fetchCourseDetail();
   }, [id, navigate]);
+
+  useEffect(() => {
+    if (course?._id) {
+      fetchReviews(course._id);
+    }
+  }, [course]);
+
+  const fetchReviews = async (courseId: string) => {
+    try {
+      const data = await getReviews({
+        searchCondition: {
+          course_id: courseId,
+          rating: 0,
+          is_instructor: false,
+          is_rating_order: false,
+          is_deleted: false,
+        },
+        pageInfo: { pageNum: 1, pageSize: 10 },
+      });
+      setReviews(data.pageData);
+    } catch (error) {
+      console.error("Failed to load reviews");
+    }
+  };
 
   const handleAddToCart = async () => {
     const token = localStorage.getItem('token');
@@ -112,7 +142,6 @@ const CourseDetails: React.FC = () => {
         });
 
       } catch (error) {
-        message.error('Error adding course to cart');
         console.error('Error adding course to cart:', error);
       }
     }
@@ -188,10 +217,28 @@ const CourseDetails: React.FC = () => {
     }
   };
 
+  const handleSubmitReview = async (values: { reviewer: string; comment: string; rating: number }) => {
+    if (!course?._id) return;
+
+    try {
+      await createReview({
+        course_id: course._id,
+        comment: values.comment,
+        rating: values.rating,
+      });
+
+      form.resetFields();
+
+      // Fetch reviews again to include the new one
+      fetchReviews(course._id);
+    } catch (error) {
+      console.error("Failed to submit review");
+    }
+  };
+
   return (
     <div className="container mx-auto p-4 text-sm">
       <Card className="shadow-lg rounded-lg overflow-hidden relative">
-       
         <Skeleton loading={isLoading} active>
           <div className="flex flex-col md:flex-row items-start p-2">
             <img
@@ -287,10 +334,65 @@ const CourseDetails: React.FC = () => {
               ))}
             </Collapse>
             <Divider />
-            <Skeleton loading={isLoading} active>
-              <ReviewSubmit courseId={course ? course._id : null} />
-              {course?.is_purchased && <ReviewSection courseId={course._id} />}
-            </Skeleton>
+            <div className="mt-8">
+              <h2 className="text-3xl font-bold mb-4">Reviews</h2>
+              <List
+                className="mt-4"
+                header={`${reviews.length} reviews`}
+                itemLayout="horizontal"
+                dataSource={reviews}
+                renderItem={(review) => (
+                  <List.Item>
+                    <List.Item.Meta
+                      title={
+                        <div className="flex justify-between">
+                          <strong>{review.reviewer_name}</strong>
+                          <span className="text-gray-500">
+                            {new Date(review.updated_at).toLocaleString()}
+                          </span>
+                        </div>
+                      }
+                      description={
+                        <>
+                          <Rate disabled defaultValue={review.rating} />
+                          <p>{review.comment}</p>
+                        </>
+                      }
+                    />
+                  </List.Item>
+                )}
+              />
+              {course?.is_purchased && (
+                <div className="mt-8 border-2 border-gray-100 p-4 rounded-lg">
+                  <Form form={form} layout="vertical" onFinish={handleSubmitReview}>
+                    <Form.Item
+                      name="rating"
+                      label="Your Rating"
+                      rules={[{ required: true, message: "Please rate the course" }]}
+                    >
+                      <Rate />
+                    </Form.Item>
+                    <Form.Item
+                      name="comment"
+                      rules={[{ required: true, message: "Please enter your review" }]}
+                      className="flex-1"
+                    >
+                      <Input 
+                        placeholder="Add a public comment..." 
+                        className="border rounded-full px-4 py-2 w-full"
+                      />
+                    </Form.Item>
+                    <Button 
+                      type="primary" 
+                      htmlType="submit" 
+                      className="mb-4 custom-button p-4 bg-green-500 text-black"
+                    >
+                      Submit Review
+                    </Button>
+                  </Form>
+                </div>
+              )}
+            </div>
           </div>
         </Skeleton>
       </Card>

@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoute from './PrivateRoute';
 import { ROLES } from '../utils/commonImports';
 import { ADMIN, ERROR, INSTRUCTOR, PUBLIC } from '../consts';
+import ScrollToTop from './ScrollToTop';  // Import the ScrollToTop component
 
 const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
@@ -34,7 +35,6 @@ const CourseDetails = lazy(() => import('../pages/CourseDetails'));
 const LogCourse = lazy(() => import('../components/Admin/LogCourse/LogCourse'));
 const PedingCourse = lazy(() => import('../pages/Admin/PedingCourse'));
 const ViewAllCourse = lazy(() => import('../pages/Instructor/ViewAllCourse'));
-const ViewMyProfile = lazy(() => import('../components/ViewProfile/ViewMyProfile'));
 const ViewProfile = lazy(() => import('../components/ViewProfile/ViewProfile'));
 const ViewCart = lazy(() => import('../pages/ViewCart'));
 const ViewOrder = lazy(() => import('../pages/ViewOrder'));
@@ -51,6 +51,7 @@ const PageError403 = lazy(() => import('../pages/Error/PageError403'));
 const AppRouter: React.FC = () => {
     return (
         <Router>
+            <ScrollToTop />  
             <Suspense>
                 <Routes>
                     <Route path="/" element={<Navigate to="/homepage" />} />
@@ -69,7 +70,6 @@ const AppRouter: React.FC = () => {
                     <Route element={<LayoutRoute />}>
                         <Route path={INSTRUCTOR.COURSE} element={<PrivateRoute element={Course} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.DASHBOARD_INSTRUCTOR} element={<PrivateRoute element={InstructorDashboard} allowedRoles={[ROLES.INSTRUCTOR]} />} />
-                        <Route path={INSTRUCTOR.VIEW_MY_PROFILE} element={<PrivateRoute element={ViewMyProfile} allowedRoles={[ROLES.INSTRUCTOR, ROLES.STUDENT]} />} />
                         <Route path={INSTRUCTOR.VIEW_PROFILE} element={<PrivateRoute element={ViewProfile} allowedRoles={[ROLES.INSTRUCTOR, ROLES.STUDENT]} />} />
                         <Route path={INSTRUCTOR.LIST_SUBSCRIPTION} element={<PrivateRoute element={ListSubscription} allowedRoles={[ROLES.INSTRUCTOR]} />} />
                         <Route path={INSTRUCTOR.REVIEW} element={<PrivateRoute element={ReViewInstructor} allowedRoles={[ROLES.INSTRUCTOR]} />} />
@@ -95,7 +95,6 @@ const AppRouter: React.FC = () => {
 
                     {/* Routes with No Sidebar Layout */}
                     <Route element={<LayoutNoSidebar />}>
-
                         <Route path={PUBLIC.HOME} element={<HomePage />} />
                         <Route path={PUBLIC.VIEW_ALL_COURSE_HP} element={<ViewAllCourseHomePage />} />
                         <Route path={PUBLIC.LEARN_COURSE} element={<LearnCourseDetail />} />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getUserData, updateSubscribed } from '../../utils/commonImports';
+import { getUserData, updateSubscribed, getCurrentLogin } from '../../utils/commonImports';
 import AboutTab from './AboutTab';
 
 interface UserData {
@@ -18,20 +18,22 @@ interface UserData {
     created_at: Date;
     updated_at: Date;
     is_deleted: boolean;
-    is_subscribed: boolean; // Added is_subscribed field
+    is_subscribed: boolean;
 }
 
 const ViewProfile: React.FC = () => {
     const [userData, setUserData] = useState<UserData | null>(null);
+    const [currentUserId, setCurrentUserId] = useState<string | null>(null);
     const [isSubscribed, setIsSubscribed] = useState(false);
     const { id } = useParams<{ id: string }>();
 
     useEffect(() => {
         const fetchData = async () => {
             if (id) {
-                const data = await getUserData(id);
-                setUserData(data);
-                setIsSubscribed(data.is_subscribed); // Assuming 'is_subscribed' is part of userData
+                const [userData, currentUser] = await Promise.all([getUserData(id), getCurrentLogin()]);
+                setUserData(userData);
+                setIsSubscribed(userData.is_subscribed);
+                setCurrentUserId(currentUser._id);
             } else {
                 console.error('No user ID provided');
             }
@@ -67,15 +69,17 @@ const ViewProfile: React.FC = () => {
                         <div className="ml-8">
                             <h1 className="text-3xl font-bold">{userData?.name || 'Your Name'}</h1>
                             <p className="text-gray-600">@{userData?.email || 'username'}</p>
-                            <p className="text-gray-600 mt-2">{userData?.phone_number || 'Location'}</p>
+                            <p className="text-gray-600 mt-2">Phone: {userData?.phone_number || 'Location'}</p>
                         </div>
                     </div>
-                    <button
-                        className={`px-4 py-2 ${isSubscribed ? 'bg-red-600' : 'bg-green-600'} text-white rounded-lg`}
-                        onClick={isSubscribed ? handleUnsubscribe : handleSubscribe}
-                    >
-                        {isSubscribed ? 'Unsubscribe' : 'Subscribe'}
-                    </button>
+                    {currentUserId !== userData?._id && (
+                        <button
+                            className={`px-4 py-2 ${isSubscribed ? 'bg-red-600' : 'bg-green-600'} text-white rounded-lg`}
+                            onClick={isSubscribed ? handleUnsubscribe : handleSubscribe}
+                        >
+                            {isSubscribed ? 'Unsubscribe' : 'Subscribe'}
+                        </button>
+                    )}
                 </div>
             </div>
             <div className="mt-8 bg-white p-6 rounded-lg shadow-lg">

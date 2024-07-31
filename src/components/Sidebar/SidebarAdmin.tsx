@@ -34,12 +34,18 @@ const iconComponents: { [key: string]: JSX.Element } = {
   FileTextOutlined: <FileTextOutlined />,
   AppstoreOutlined: <AppstoreOutlined />,
   TagsOutlined: <TagsOutlined />
-
 };
 
 const renderMenuItems = (items: MenuItem[], navigate: (path: string) => void) =>
   items.map((item) => (
-    <Menu.Item key={item.key} icon={iconComponents[item.icon || '']} onClick={() => navigate(item.key)}>
+    <Menu.Item 
+      key={item.key} 
+      icon={iconComponents[item.icon || '']} 
+      onClick={() => {
+        console.log(`Navigating to ${item.key}`);
+        navigate(item.key);
+      }}
+    >
       {item.label}
     </Menu.Item>
   ));
