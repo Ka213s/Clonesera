@@ -64,10 +64,10 @@ const DisplaySessions: React.FC = () => {
       title: 'Actions',
       key: 'actions',
       render: (_, record: Session) => (
-        <>
+        <div className="flex justify-center space-x-2">
           <ButtonEdit _id={record._id} />
           <ButtonDelete _id={record._id} />
-        </>
+        </div>
       ),
       align: 'center',
     },
