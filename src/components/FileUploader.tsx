@@ -106,7 +106,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
       if (fileInputRef.current) {
         fileInputRef.current.value = '';
       }
-    }, 300); 
+    }, 300);
   };
 
   const uploadProps: UploadProps = {
@@ -121,7 +121,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
     showUploadList: {
       showRemoveIcon: !uploading,
     },
-    accept: type === 'image' ? 'image/*' : 'video/*', 
+    accept: type === 'image' ? 'image/*' : 'video/*',
   };
 
   const uploadButton = (
@@ -170,7 +170,7 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
           />
           {buttonVisible && (
             <Button
-            type='dashed'
+              type='dashed'
               icon={<PlusOutlined />}
               loading={uploading}
               style={{
@@ -191,6 +191,8 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
           {videoUrl && (
             <div
               style={{
+                position: 'relative',
+                display: 'inline-block',
                 opacity: videoVisible ? 1 : 0,
                 transition: 'opacity 0.3s ease-in-out',
                 marginTop: 20,
@@ -200,16 +202,25 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
               <Button
                 icon={<DeleteOutlined />}
                 style={{
-                  marginTop: 10,
-                  display: 'block',
-                  marginRight: 'auto',
+                  position: 'absolute',
+                  top: 10, // Adjust to your preference
+                  right: 170, // Adjust to your preference
+                  backgroundColor: 'rgba(255, 255, 255, 0.7)',
+                  border: 'none', // Remove border if necessary
+                  borderRadius: '50%', // Ensure button is round
+                  padding: 0, // Remove default padding
+                  width: 30, // Adjust size
+                  height: 30, // Adjust size
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  zIndex: 10, // Ensure button is above the video
                 }}
                 onClick={handleDelete}
-              >
-                Delete Video
-              </Button>
+              />
             </div>
           )}
+
         </div>
       )}
     </>
