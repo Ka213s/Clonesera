@@ -86,18 +86,21 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({ payoutId }) => {
       title: 'Price',
       dataIndex: 'price',
       key: 'price',
+      className: 'text-right',
       render: (value: number) => `$${value.toFixed(2)}`,
     },
     {
       title: 'Discount',
       dataIndex: 'discount',
       key: 'discount',
+      className: 'text-right',
       render: (value: number) => `${value}%`,
     },
     {
       title: 'Price Paid',
       dataIndex: 'price_paid',
       key: 'price_paid',
+      className: 'text-right',
       render: (value: number) => `$${value.toFixed(2)}`,
     },
     {

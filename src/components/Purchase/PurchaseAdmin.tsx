@@ -98,12 +98,14 @@ const Purchase: React.FC = () => {
       title: 'Price Paid',
       dataIndex: 'price_paid',
       key: 'price_paid',
+      className: 'text-right',
       render: (price_paid: number) => price_paid.toLocaleString(),
     },
     {
       title: 'Discount',
       dataIndex: 'discount',
       key: 'discount',
+      className: 'text-right',
     },
     {
       title: 'Student Name',

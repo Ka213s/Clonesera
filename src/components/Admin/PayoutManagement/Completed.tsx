@@ -106,18 +106,21 @@ const Completed: React.FC = () => {
             title: 'Balance Origin',
             dataIndex: 'balance_origin',
             key: 'balance_origin',
+            className: 'text-right',
             render: (balance_origin: number) => balance_origin.toLocaleString(),
         },
         {
             title: 'Balance Instructor Paid',
             dataIndex: 'balance_instructor_paid',
             key: 'balance_instructor_paid',
+            className: 'text-right',
             render: (balance_instructor_paid: number) => balance_instructor_paid.toLocaleString(),
         },
         {
             title: 'Balance Instructor Received',
             dataIndex: 'balance_instructor_received',
             key: 'balance_instructor_received',
+            className: 'text-right',
             render: (balance_instructor_received: number) => balance_instructor_received.toLocaleString(),
         },
     ];

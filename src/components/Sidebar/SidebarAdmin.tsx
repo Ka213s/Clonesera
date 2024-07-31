@@ -42,7 +42,7 @@ const renderMenuItems = (items: MenuItem[], navigate: (path: string) => void) =>
       key={item.key} 
       icon={iconComponents[item.icon || '']} 
       onClick={() => {
-        console.log(`Navigating to ${item.key}`);
+      
         navigate(item.key);
       }}
     >
