@@ -51,7 +51,6 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
 
   useEffect(() => {
     setSelectedCourseIds(selectedRowKeys);
-
   }, [selectedRowKeys, setSelectedCourseIds]);
 
   const handleChangeStatus = async (courseId: number, newStatus: string) => {
@@ -63,32 +62,32 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
     );
   };
 
-  const renderActions = (record: Course) => {
+  const renderActions = (record: Course) => (
+    <>
+      <EditButton courseId={record._id} />
+      <DeleteButton courseId={record._id} />
+    </>
+  );
+
+  const renderStatusChange = (record: Course) => {
     const isWaitingApprove = ['new', 'waiting_approve'].includes(record.status);
 
-    return (
-      <>
-        <EditButton courseId={record._id} />
-        <DeleteButton courseId={record._id} />
-        {isWaitingApprove ? (
-          <Button
-            type="primary"
-            style={{ marginLeft: 10 }}
-            onClick={() => message.info('Click here Send to admin to send to admin for approval')}
-          >
-           Wait for admin approval to activate
-          </Button>
-        ) : (
-          <Select
-            defaultValue={record.status}
-            style={{ width: 120, marginLeft: 10 }}
-            onChange={(value) => handleChangeStatus(record._id, value)}
-          >
-            <Option value="active">Active</Option>
-            <Option value="inactive">Inactive</Option>
-          </Select>
-        )}
-      </>
+    return isWaitingApprove ? (
+      <Button
+        type="primary"
+        onClick={() => message.info('Click here Send to admin to send to admin for approval')}
+      >
+        Waiting approval
+      </Button>
+    ) : (
+      <Select
+        defaultValue={record.status}
+        style={{ width: 140 }}
+        onChange={(value) => handleChangeStatus(record._id, value)}
+      >
+        <Option value="active">Active</Option>
+        <Option value="inactive">Inactive</Option>
+      </Select>
     );
   };
 
@@ -128,13 +127,17 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
         render: (text: string) => moment(text).format('DD-MM-YYYY'),
       },
       {
+        title: 'Change Status',
+        key: 'change_status',
+        render: (_, record) => renderStatusChange(record),
+      },
+      {
         title: 'Actions',
         key: 'actions',
         render: (_, record) => renderActions(record),
-       
       },
     ],
-    [renderActions]
+    [renderActions, renderStatusChange]
   );
 
   const rowSelection = {
@@ -146,7 +149,7 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
 
   const handleSearch = (value: string) => {
     setSearchKeyword(value);
-    setPageNum(1); 
+    setPageNum(1);
   };
 
   return (
