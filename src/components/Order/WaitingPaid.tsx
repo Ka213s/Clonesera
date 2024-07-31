@@ -87,7 +87,7 @@ const WaitingPaid: React.FC = () => {
 
     return (
         <div className="p-2 lg:p-4 flex flex-col lg:flex-row gap-4">
-            <div className="lg:w-2/3">
+            <div className="lg:w-2/3 flex flex-col gap-4">
                 <div className="flex items-center mb-2">
                     <Checkbox
                         onChange={e => {
@@ -102,7 +102,7 @@ const WaitingPaid: React.FC = () => {
                 </div>
                 <div className="flex flex-col gap-2">
                     {cartItems.map(item => (
-                        <div key={item._id} className="bg-white p-2 rounded-md shadow-sm flex items-start gap-2">
+                        <div key={item._id} className="bg-white p-2 rounded-md shadow-sm flex flex-col sm:flex-row items-start gap-2">
                             <Checkbox
                                 checked={selectedRowKeys.includes(item._id)}
                                 onChange={() => {
@@ -112,7 +112,7 @@ const WaitingPaid: React.FC = () => {
                                     handleSelectChange(newSelectedRowKeys);
                                 }}
                             />
-                            <img src={item.image_url} alt={item.course_name} className="w-10 h-10 mr-2" />
+                            <img src={item.image_url} alt={item.course_name} className="w-24 h-24 mb-2 sm:mb-0 sm:mr-2 object-cover" />
                             <div className="flex flex-col w-full">
                                 <div className="flex justify-between items-center mb-1">
                                     <h2 className="text-sm font-semibold">{item.course_name}</h2>

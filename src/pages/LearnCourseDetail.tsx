@@ -98,8 +98,8 @@ const LearnCourseDetail: React.FC = () => {
     }
 
     return (
-        <Layout className="min-h-screen overflow-auto">
-            <Header className="bg-white shadow-md flex items-center px-4">
+        <Layout className="min-h-screen">
+            <Header className="bg-white shadow-md flex items-center px-4 md:px-6 lg:px-8">
                 <Button
                     type="text"
                     icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
@@ -137,6 +137,8 @@ const LearnCourseDetail: React.FC = () => {
                     width={300}
                     className="bg-white shadow-md overflow-auto"
                     trigger={null}
+                    breakpoint="lg"
+                    collapsedWidth="0"
                 >
                     <Menu
                         mode="inline"
@@ -159,15 +161,15 @@ const LearnCourseDetail: React.FC = () => {
                     </Menu>
                 </Sider>
                 <Layout>
-                    <Content className="p-6 bg-gray-100">
+                    <Content className="p-4 md:p-6 lg:p-8 bg-gray-100">
                         {selectedLesson ? (
-                            <div className="bg-white p-6 rounded-lg shadow-lg">
-                                <h2 className="text-3xl font-bold mb-4">{selectedLesson.name}</h2>
+                            <div className="bg-white p-4 md:p-6 lg:p-8 rounded-lg shadow-lg">
+                                <h2 className="text-xl md:text-2xl lg:text-3xl font-bold mb-4">{selectedLesson.name}</h2>
                                 {selectedLesson.lesson_type === "video" && selectedLesson.video_url && (
                                     <div className="mb-4">
                                         <iframe
                                             width="100%"
-                                            height="400px"
+                                            height="250px"
                                             src={selectedLesson.video_url}
                                             title={selectedLesson.name}
                                             frameBorder="0"
@@ -186,7 +188,7 @@ const LearnCourseDetail: React.FC = () => {
                                     </div>
                                 )}
                                 {selectedLesson.description && (
-                                    <div className="mt-4 text-lg">
+                                    <div className="mt-4 text-sm md:text-base lg:text-lg">
                                         {parse(selectedLesson.description)}
                                     </div>
                                 )}
