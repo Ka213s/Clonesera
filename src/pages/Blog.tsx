@@ -94,7 +94,7 @@ const Blog: React.FC = () => {
               <div
                 key={blog._id}
                 onClick={() => handleClick(blog._id)}
-                className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl p-4" // Added padding for spacing
+                className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer p-4" // Added padding for spacing and cursor-pointer
                 style={{ height: '420px' }}
               >
                 <img width={272} alt="blog" src={blog.image_url} className="rounded-lg mb-4" />
@@ -106,7 +106,6 @@ const Blog: React.FC = () => {
                 </div>
                 <p className="text-gray-700 mt-2">{blog.description}</p>
               </div>
-
             ))
           )}
         </div>

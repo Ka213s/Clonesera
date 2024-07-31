@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Tag, Skeleton, Rate, Button, Input, Pagination, Select } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
-import { NT_getPublicCourses, NT_getCategoriesClient } from '../../utils/commonImports';
+import { getPublicCourses, NT_getCategoriesClient } from '../../utils/commonImports';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const { Search } = Input;
@@ -20,6 +20,7 @@ interface Course {
   session_count: number;
   full_time: number;
   average_rating: number;
+  is_purchased: boolean;
 }
 
 interface Category {
@@ -50,18 +51,18 @@ const AllCourse: React.FC = () => {
   const [searchParams] = useSearchParams();
 
   const fetchCategories = async () => {
-      const data = {
-        searchCondition: {
-          keyword: '',
-          is_delete: false,
-        },
-        pageInfo: {
-          pageNum: 1,
-          pageSize: 1000, // Set pageSize to 1000
-        },
-      };
-      const response: ApiResponse<Category> = await NT_getCategoriesClient(data);
-      setCategories(response.pageData);
+    const data = {
+      searchCondition: {
+        keyword: '',
+        is_delete: false,
+      },
+      pageInfo: {
+        pageNum: 1,
+        pageSize: 1000,
+      },
+    };
+    const response: ApiResponse<Category> = await NT_getCategoriesClient(data);
+    setCategories(response.pageData);
   };
 
   const fetchCourses = async (keyword: string, categoryId: string | null, pageNum: number, pageSize: number) => {
@@ -77,13 +78,13 @@ const AllCourse: React.FC = () => {
           pageSize,
         },
       };
-      const response: ApiResponse<Course> = await NT_getPublicCourses(data);
+      const response: ApiResponse<Course> = await getPublicCourses(data);
       setCourses(response.pageData);
       setTotalItems(response.pageInfo.totalItems);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching courses:', error);
-      setLoading(false); // Stop loading even if there's an error
+      setLoading(false);
     }
   };
 
@@ -97,8 +98,6 @@ const AllCourse: React.FC = () => {
     fetchCourses(keyword, selectedCategory, currentPage, pageSize);
   }, [selectedCategory, searchParams, currentPage, pageSize]);
 
-  const handleViewDetails = (courseId: number) => navigate(`/course-detail/${courseId}`);
-
   const handleSearch = (value: string) => {
     navigate(`/homepage/view-all-course?search=${value}`);
   };
@@ -108,6 +107,13 @@ const AllCourse: React.FC = () => {
     setSearchKeyword('');
     setCurrentPage(1);
     fetchCourses('', null, 1, pageSize);
+  };
+
+  const handleButtonClick = (courseId: number, isPurchased: boolean, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isPurchased) {
+      console.log('Buy course', courseId);
+    }
   };
 
   return (
@@ -152,13 +158,14 @@ const AllCourse: React.FC = () => {
           courses.map((course) => (
             <div
               key={course._id}
-              className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl"
-              style={{ height: '360px', width: '340px' }} // Updated dimensions
+              className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer"
+              style={{ height: '360px', width: '340px' }}
+              onClick={() => navigate(`/course-detail/${course._id}`)} // Added onClick event for navigation
             >
               <img
                 src={course.image_url}
                 alt={course.name}
-                className="w-full h-40 object-cover" // Adjusted height for image
+                className="w-full h-40 object-cover"
               />
               <div className="flex items-center mt-2 space-x-2 ml-2">
                 <div className="flex items-center bg-gray-100 rounded-full px-2 py-1">
@@ -198,10 +205,10 @@ const AllCourse: React.FC = () => {
                     <span className="text-sm text-gray-500 ml-2"></span>
                   </div>
                   <button
-                    onClick={() => handleViewDetails(course._id)}
-                    className="bg-green-600 text-white py-1 px-2 rounded-md hover:bg-green-700 transition duration-300"
+                    onClick={(e) => handleButtonClick(course._id, course.is_purchased, e)}
+                    className={`py-1 px-2 rounded-md transition duration-300 ${course.is_purchased ? 'bg-green-600 text-white hover:bg-green-800' : 'bg-red-500 text-white hover:bg-red-600'}`}
                   >
-                    Buy Now
+                    {course.is_purchased ? 'Purchased' : 'Buy Now'}
                   </button>
                 </div>
               </div>
