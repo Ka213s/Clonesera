@@ -53,24 +53,24 @@ const RequestPayout: React.FC = () => {
     const [selectedPayoutId, setSelectedPayoutId] = useState<string | null>(null);
 
     const fetchData = useCallback(async (page: number, size: number, keyword: string) => {
-            const result: ApiResponse = await getPayouts({
-                searchCondition: {
-                    payout_no: keyword,
-                    instructor_id: '',
-                    status: '',
-                    is_instructor: false,
-                    is_delete: false
-                },
-                pageInfo: {
-                    pageNum: page,
-                    pageSize: size
-                }
-            });
-            const filteredData = result.pageData.filter(payout =>
-                payout.status === 'new' || payout.status === 'rejected' || payout.status === 'request_payout'
-            );
-            setData(filteredData);
-            setTotalPayouts(result.pageInfo.totalItems);
+        const result: ApiResponse = await getPayouts({
+            searchCondition: {
+                payout_no: keyword,
+                instructor_id: '',
+                status: '',
+                is_instructor: false,
+                is_delete: false
+            },
+            pageInfo: {
+                pageNum: page,
+                pageSize: size
+            }
+        });
+        const filteredData = result.pageData.filter(payout =>
+            payout.status === 'new' || payout.status === 'rejected' || payout.status === 'request_payout'
+        );
+        setData(filteredData);
+        setTotalPayouts(result.pageInfo.totalItems);
     }, []);
 
     useEffect(() => {
@@ -82,16 +82,16 @@ const RequestPayout: React.FC = () => {
     };
 
     const handleRequestPayout = async () => {
-            const selectedPayouts = selectedRowKeys.map(key => key.toString());
-            for (const payoutId of selectedPayouts) {
-                await updatePayout(payoutId, {
-                    status: 'request_payout',
-                    comment: ''
-                });
-            }
-            toast.success('Payout request successfully. Please wait admin for approval!');
-            fetchData(pageNum, pageSize, searchKeyword);
-            setSelectedRowKeys([]);
+        const selectedPayouts = selectedRowKeys.map(key => key.toString());
+        for (const payoutId of selectedPayouts) {
+            await updatePayout(payoutId, {
+                status: 'request_payout',
+                comment: ''
+            });
+        }
+        toast.success('Payout request successfully. Please wait admin for approval!');
+        fetchData(pageNum, pageSize, searchKeyword);
+        setSelectedRowKeys([]);
     };
 
     const handleViewClick = (id: string) => {
