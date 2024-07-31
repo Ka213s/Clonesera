@@ -1,5 +1,5 @@
-import React from 'react';
-import { Tabs, Layout, Tag, Row, Col } from 'antd';
+import React, { useState } from 'react';
+import { Layout, Tag, Row, Col } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 import BasicInformation from './Course/Course';
 import SessionComponent from './Session/Session';
@@ -35,18 +35,47 @@ const StatusMenu = () => (
 );
 
 const CreateCourse: React.FC = () => {
-  const tabItems = [
-    { key: '1', label: 'Course', children: <BasicInformation /> },
-    { key: '2', label: 'Session', children: <SessionComponent /> },
-    { key: '3', label: 'Lesson', children: <LessonComponent /> },
-  ];
+  const [activeTab, setActiveTab] = useState('course');
+
+  const renderContent = () => {
+    switch (activeTab) {
+      case 'course':
+        return <BasicInformation />;
+      case 'session':
+        return <SessionComponent />;
+      case 'lesson':
+        return <LessonComponent />;
+      default:
+        return null;
+    }
+  };
 
   return (
     <Layout className="layout">
       <StatusMenu />
       <Content style={{ padding: '0 50px' }}>
         <div className="site-layout-content">
-          <Tabs defaultActiveKey="1" items={tabItems} />
+          <div className="custom-tabs">
+            <button
+              className={`py-2 px-3 sm:px-4 text-sm font-medium ${activeTab === 'course' ? 'text-green-500 border-b-2 border-green-500' : 'text-gray-500'}`}
+              onClick={() => setActiveTab('course')}
+            >
+              Course
+            </button>
+            <button
+              className={`py-2 px-3 sm:px-4 text-sm font-medium ${activeTab === 'session' ? 'text-green-500 border-b-2 border-green-500' : 'text-gray-500'}`}
+              onClick={() => setActiveTab('session')}
+            >
+              Session
+            </button>
+            <button
+              className={`py-2 px-3 sm:px-4 text-sm font-medium ${activeTab === 'lesson' ? 'text-green-500 border-b-2 border-green-500' : 'text-gray-500'}`}
+              onClick={() => setActiveTab('lesson')}
+            >
+              Lesson
+            </button>
+          </div>
+          {renderContent()}
         </div>
       </Content>
     </Layout>
