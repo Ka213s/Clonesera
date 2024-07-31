@@ -204,7 +204,7 @@ const CourseDetails: React.FC = () => {
             <img
               src={course?.image_url || 'https://via.placeholder.com/400'}
               alt={course?.name}
-              className="w-full md:w-1/3 object-cover rounded-lg mb-4 md:mb-0"
+              className="w-full h-96 md:w-1/3 object-cover rounded-lg mb-4 md:mb-0"
             />
             <div className="md:ml-4 flex-1">
               <h1 className="text-2xl font-bold mb-4">{course?.name}</h1>
