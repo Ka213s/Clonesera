@@ -67,6 +67,7 @@ const AllCourse: React.FC = () => {
 
   const fetchCourses = async (keyword: string, categoryId: string | null, pageNum: number, pageSize: number) => {
     try {
+      setLoading(true);  // Start loading effect
       const data = {
         searchCondition: {
           keyword,
@@ -81,10 +82,10 @@ const AllCourse: React.FC = () => {
       const response: ApiResponse<Course> = await getPublicCourses(data);
       setCourses(response.pageData);
       setTotalItems(response.pageInfo.totalItems);
-      setLoading(false);
+      setLoading(false); // End loading effect
     } catch (error) {
       console.error('Error fetching courses:', error);
-      setLoading(false);
+      setLoading(false); // End loading effect in case of error
     }
   };
 
@@ -106,6 +107,7 @@ const AllCourse: React.FC = () => {
     setSelectedCategory(null);
     setSearchKeyword('');
     setCurrentPage(1);
+    navigate(`/homepage/view-all-course`);
     fetchCourses('', null, 1, pageSize);
   };
 
@@ -133,6 +135,7 @@ const AllCourse: React.FC = () => {
           style={{ width: 200 }}
           placeholder="Select a category"
           onChange={(value) => setSelectedCategory(value)}
+          value={selectedCategory}
           allowClear
           showSearch
           filterOption={(input, option) =>
@@ -154,6 +157,8 @@ const AllCourse: React.FC = () => {
           Array.from({ length: pageSize }).map((_, index) => (
             <Skeleton key={index} active paragraph={{ rows: 5 }} />
           ))
+        ) : courses.length === 0 ? (
+          <div className="col-span-4 text-center text-gray-500 text-lg">No data with search keyword</div>
         ) : (
           courses.map((course) => (
             <div
