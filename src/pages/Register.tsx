@@ -97,7 +97,7 @@ const Register: React.FC = () => {
                         form={form}
                         onFinish={handleSubmit}
                         layout="vertical"
-                        className="flex flex-col gap-3"
+                        className={`flex flex-col gap-3 ${selectedRole === 'instructor' ? 'max-h-96 overflow-y-auto' : ''}`}
                         initialValues={{ role: 'student' }}
                     >
                         <Form.Item
