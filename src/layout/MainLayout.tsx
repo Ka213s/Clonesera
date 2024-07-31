@@ -68,7 +68,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <CartProvider>
-      <Layout className="overflow-hidden h-screen flex flex-col">
+      <Layout className="overflow-hidden h-screen flex flex-col pt-16">
         <Header toggleMenu={toggleMenu} />
         <Loading isLoading={isLoading}>
           {renderSidebar}

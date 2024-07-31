@@ -109,7 +109,7 @@ const HeaderNoMenu: React.FC = () => {
   ];
 
   return (
-    <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
+    <header className="fixed top-0 left-0 right-0 z-30 bg-white shadow-md flex items-center justify-between p-2.5 h-16 mx-4 md:mx-10">
       <div className="flex items-center space-x-4 ml-2 md:ml-5">
         <Link to="/" onClick={handleLogoClick}>
           <img src={logo} alt="Logo" className="h-8 w-auto md:h-12 cursor-pointer" />
@@ -131,7 +131,7 @@ const HeaderNoMenu: React.FC = () => {
         />
       </div>
 
-      <div className="flex items-center ml-auto space-x-2 md:space-x-4 pr-2 md:pr-4">
+      <div className="flex items-center ml-auto space-x-2 md:space-x-4 pr-2 md:pr-16">
         {userState.isLoggedIn ? (
           <>
             {userState.role === 'instructor' && (
