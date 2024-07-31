@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import HeaderNoMenu from '../components/HeaderNoMenu';
 import Footer from '../components/Footer';
 import { Layout } from 'antd';
-import { CartProvider } from '../consts/CartContext';  // Import the provider
+import { CartProvider } from '../consts/CartContext';  
 
 const { Content } = Layout;
 
@@ -21,8 +21,8 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (location.pathname === '/home' && role === 'admin') {
-      navigate('/admin/request-management');
+    if (location.pathname === '/homepage' && role === 'admin') {
+      navigate('/dashboard-admin');
     }
   }, [location.pathname, role, navigate]);
 

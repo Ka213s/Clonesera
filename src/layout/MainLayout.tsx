@@ -40,7 +40,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const renderSidebar = useMemo(() => {
    
 
-    if (location.pathname === '/home') {
+    if (location.pathname === '/homepage') {
       switch (role) {
         case 'student':
           return <SidebarStudent showMenu={showMenu} />;

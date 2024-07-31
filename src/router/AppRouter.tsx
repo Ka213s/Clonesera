@@ -61,7 +61,7 @@ const AppRouter: React.FC = () => {
                         <Route path={PUBLIC.VIEW_ORDER} element={<ViewOrder />} />
                         <Route path={PUBLIC.PAYMENT} element={<Payment />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
-                        <Route path={PUBLIC.BLOG_DETAIL} element={<BlogDetail />} />
+                  
                         <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />
                         <Route path={PUBLIC.DASHBOARD_STUDENT} element={<PrivateRoute element={DashboardStudent} allowedRoles={[ROLES.STUDENT]} />} />
                     </Route>
@@ -96,10 +96,11 @@ const AppRouter: React.FC = () => {
 
                     {/* Routes with No Sidebar Layout */}
                     <Route element={<LayoutNoSidebar />}>
-                        <Route path={PUBLIC.HOME} element={<HomePage />} />
+                        <Route path={PUBLIC.HOME} element={<PrivateRoute element={HomePage} allowedRoles={[ROLES.STUDENT, ROLES.INSTRUCTOR]} />} />
                         <Route path={PUBLIC.VIEW_ALL_COURSE_HP} element={<ViewAllCourseHomePage />} />
                         <Route path={PUBLIC.LEARN_COURSE} element={<LearnCourseDetail />} />
                         <Route path={PUBLIC.COURSE_DETAIL} element={<CourseDetails />} />
+                        <Route path={PUBLIC.BLOG_DETAIL} element={<BlogDetail />} />
                     </Route>
 
                     {/* Error Routes */}

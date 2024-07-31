@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { NT_getCourseDetail, getCourseDetail, createCart, getCart, formatCurrency } from '../../utils/commonImports';
 import { message, Button, Card, Tag, Divider, Tooltip, List, Modal, Collapse, Skeleton, Rate } from 'antd';
-import { PlayCircleOutlined, InfoCircleOutlined } from '@ant-design/icons';
+import { PlayCircleOutlined, InfoCircleOutlined, ArrowLeftOutlined } from '@ant-design/icons';
 import 'tailwindcss/tailwind.css';
 import ReviewSection from './ReviewSection';
 import ReviewSubmit from './ReviewSubmit';
@@ -191,12 +191,16 @@ const CourseDetails: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 text-sm">
-      <Button onClick={() => navigate('/homepage')} className="mb-4 custom-button p-4 bg-green-500 text-black hover:bg-blue-600">
-        Back to Homepage
-      </Button>
-      <Card className="shadow-lg rounded-lg overflow-hidden">
+      <Card className="shadow-lg rounded-lg overflow-hidden relative">
+        {!isLoading && (
+          <ArrowLeftOutlined
+            onClick={() => navigate('/homepage')}
+            className="text-2xl absolute top-4 left-2 cursor-pointer"
+            style={{ fontWeight: 'bold', zIndex: 10 }}
+          />
+        )}
         <Skeleton loading={isLoading} active>
-          <div className="flex flex-col md:flex-row items-start">
+          <div className="flex flex-col md:flex-row items-start p-2">
             <img
               src={course?.image_url || 'https://via.placeholder.com/400'}
               alt={course?.name}
@@ -245,53 +249,57 @@ const CourseDetails: React.FC = () => {
           </div>
         </Skeleton>
         <Divider />
-        <div className="p-4">
-          <h2 className="text-xl font-bold mb-4">Course Content</h2>
-          <div className="mt-4 text-lg">
-            {parse(course?.content || '')}
+        <Skeleton loading={isLoading} active>
+          <div className="p-4">
+            <h2 className="text-xl font-bold mb-4">Course Content</h2>
+            <div className="mt-4 text-lg">
+              {parse(course?.content || '')}
+            </div>
+            <h2 className="text-xl font-bold mb-4 mt-5">Course Session</h2>
+            <Collapse accordion>
+              {course?.session_list.map((session) => (
+                <Panel
+                  header={
+                    <div className="flex justify-between items-center">
+                      <h3 className="text-lg font-semibold">{session.name}</h3>
+                      <p>
+                        {session.lesson_list.length} lessons • {formatFullTime(session.full_time)}
+                      </p>
+                    </div>
+                  }
+                  key={session._id}
+                >
+                  <List
+                    dataSource={session.lesson_list}
+                    renderItem={(lesson) => (
+                      <List.Item
+                        className={`flex justify-between items-center ${course?.is_purchased ? 'cursor-pointer' : 'cursor-default'}`}
+                        onClick={course?.is_purchased ? () => handleLearnCourse(lesson._id) : undefined}
+                      >
+                        <div>
+                          <Tooltip title={lesson.lesson_type}>
+                            <InfoCircleOutlined className="mr-2" />
+                          </Tooltip>
+                          {course?.is_purchased ? (
+                            <span className="text-blue-600 hover:underline">{lesson.name}</span>
+                          ) : (
+                            <span>{lesson.name}</span>
+                          )}
+                        </div>
+                        <div>{formatFullTime(lesson.full_time)}</div>
+                      </List.Item>
+                    )}
+                  />
+                </Panel>
+              ))}
+            </Collapse>
+            <Divider />
+            <Skeleton loading={isLoading} active>
+              <ReviewSubmit courseId={course ? course._id : null} />
+              {course?.is_purchased && <ReviewSection courseId={course._id} />}
+            </Skeleton>
           </div>
-          <h2 className="text-xl font-bold mb-4 mt-5">Course Session</h2>
-          <Collapse accordion>
-            {course?.session_list.map((session) => (
-              <Panel
-                header={
-                  <div className="flex justify-between items-center">
-                    <h3 className="text-lg font-semibold">{session.name}</h3>
-                    <p>
-                      {session.lesson_list.length} lessons • {formatFullTime(session.full_time)}
-                    </p>
-                  </div>
-                }
-                key={session._id}
-              >
-                <List
-                  dataSource={session.lesson_list}
-                  renderItem={(lesson) => (
-                    <List.Item
-                      className={`flex justify-between items-center ${course?.is_purchased ? 'cursor-pointer' : 'cursor-default'}`}
-                      onClick={course?.is_purchased ? () => handleLearnCourse(lesson._id) : undefined}
-                    >
-                      <div>
-                        <Tooltip title={lesson.lesson_type}>
-                          <InfoCircleOutlined className="mr-2" />
-                        </Tooltip>
-                        {course?.is_purchased ? (
-                          <span className="text-blue-600 hover:underline">{lesson.name}</span>
-                        ) : (
-                          <span>{lesson.name}</span>
-                        )}
-                      </div>
-                      <div>{formatFullTime(lesson.full_time)}</div>
-                    </List.Item>
-                  )}
-                />
-              </Panel>
-            ))}
-          </Collapse>
-          <Divider />
-          <ReviewSubmit courseId={course ? course._id : null} />
-          {course?.is_purchased && <ReviewSection courseId={course._id} />}
-        </div>
+        </Skeleton>
       </Card>
       <Modal title="Course Introduction" visible={isModalVisible} onCancel={handleCancel} footer={null}>
         <iframe
