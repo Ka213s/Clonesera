@@ -77,7 +77,7 @@ const ViewProfile: React.FC = () => {
                         <div className="ml-8">
                             <h1 className="text-3xl font-bold">{userData?.name || 'Your Name'}</h1>
                             <p className="text-gray-600">@{userData?.email || 'username'}</p>
-                            <p className="text-gray-600 mt-2">{userData?.phone_number || 'Location'}</p>
+                            <p className="text-gray-600 mt-2">Phone: {userData?.phone_number || 'Location'}</p>
                         </div>
                     </div>
                     {currentUserId && currentUserId !== userData?._id && (

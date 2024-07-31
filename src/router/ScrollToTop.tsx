@@ -6,6 +6,7 @@ const ScrollToTop: React.FC = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
+
   }, [pathname]);
 
   return null;

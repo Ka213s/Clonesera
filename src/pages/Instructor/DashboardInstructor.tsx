@@ -124,19 +124,21 @@ const InstructorDashboard: React.FC = () => {
                 <Table
                     columns={columns}
                     dataSource={transactions}
-                    rowKey="_id" 
+                    rowKey="_id"
                     pagination={false}
                 />
-                <Pagination
-                    size="small"
-                    total={totalTransactions}
-                    current={currentPage}
-                    pageSize={pageSize}
-                    onChange={handlePageChange}
-                    showSizeChanger
-                    showTotal={(total) => `Total ${total} items`}
-                    className="mt-4"
-                />
+                <div className="flex justify-end items-center mt-6">
+                    <Pagination
+                        size="small"
+                        total={totalTransactions}
+                        current={currentPage}
+                        pageSize={pageSize}
+                        onChange={handlePageChange}
+                        showSizeChanger
+                        showTotal={(total) => `Total ${total} items`}
+                        className="mt-4"
+                    />
+                </div>  
             </div>
         </div>
     );
