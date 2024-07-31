@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getUserData, updateSubscribed, getCurrentLogin } from '../../utils/commonImports';
+import { getUserData, updateSubscribed, getCurrentLogin, NT_getUserData } from '../../utils/commonImports';
 import AboutTab from './AboutTab';
 
 interface UserData {
@@ -30,10 +30,17 @@ const ViewProfile: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (id) {
-                const [userData, currentUser] = await Promise.all([getUserData(id), getCurrentLogin()]);
+                const token = localStorage.getItem('token');
+                const [userData, currentUser] = token
+                    ? await Promise.all([getUserData(id), getCurrentLogin()])
+                    : [await NT_getUserData(id), null];
+
                 setUserData(userData);
                 setIsSubscribed(userData.is_subscribed);
-                setCurrentUserId(currentUser._id);
+
+                if (currentUser) {
+                    setCurrentUserId(currentUser._id);
+                }
             } else {
                 console.error('No user ID provided');
             }
@@ -69,7 +76,7 @@ const ViewProfile: React.FC = () => {
                         <div className="ml-8">
                             <h1 className="text-3xl font-bold">{userData?.name || 'Your Name'}</h1>
                             <p className="text-gray-600">@{userData?.email || 'username'}</p>
-                            <p className="text-gray-600 mt-2">Phone: {userData?.phone_number || 'Location'}</p>
+                            <p className="text-gray-600 mt-2">{userData?.phone_number || 'Location'}</p>
                         </div>
                     </div>
                     {currentUserId !== userData?._id && (

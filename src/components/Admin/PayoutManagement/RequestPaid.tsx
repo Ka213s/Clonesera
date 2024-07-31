@@ -165,31 +165,34 @@ const RequestPaid: React.FC = () => {
             dataIndex: 'balance_origin',
             key: 'balance_origin',
             render: (balance_origin: number) => balance_origin.toLocaleString(),
+            className: 'text-right',
         },
         {
             title: 'Balance Instructor Paid',
             dataIndex: 'balance_instructor_paid',
             key: 'balance_instructor_paid',
             render: (balance_instructor_paid: number) => balance_instructor_paid.toLocaleString(),
+            className: 'text-right',
         },
         {
             title: 'Balance Instructor Received',
             dataIndex: 'balance_instructor_received',
             key: 'balance_instructor_received',
             render: (balance_instructor_received: number) => balance_instructor_received.toLocaleString(),
+            className: 'text-right',
         },
         {
             title: 'Action',
             key: 'action',
             render: (record: PayoutData) => (
-                <>
-                    <Button type="primary" onClick={() => handleApprove(record._id)} style={{ marginRight: 8 }}>
+                <div className="flex space-x-2">
+                    <Button type="primary" onClick={() => handleApprove(record._id)}>
                         Approve
                     </Button>
                     <Button type="default" onClick={() => handleRejectClick(record._id)}>
                         Reject
                     </Button>
-                </>
+                </div>
             ),
         },
     ];

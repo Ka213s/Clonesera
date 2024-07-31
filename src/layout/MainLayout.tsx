@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Header from '../components/Header';
+import HeaderNoMenu from '../components/HeaderNoMenu';
 import Footer from '../components/Footer';
 import Loading from '../components/Loading';
 import SidebarStudent from '../components/Sidebar/SidebarStudent';
@@ -15,6 +16,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [showMenu, setShowMenu] = useState(true);
   const [role, setRole] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
@@ -23,6 +25,9 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     if (userData) {
       const parsedData = JSON.parse(userData);
       setRole(parsedData.role);
+      setIsLoggedIn(true);
+    } else {
+      setIsLoggedIn(false);
     }
   }, []);
 
@@ -70,8 +75,8 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
   return (
     <CartProvider>
-      <Layout className="overflow-hidden flex flex-col">
-        <Header toggleMenu={toggleMenu} />
+      <Layout className="overflow-hidden h-screen flex flex-col">
+        {isLoggedIn ? <Header toggleMenu={toggleMenu} /> : <HeaderNoMenu />}
         <Loading isLoading={isLoading}>
           {renderSidebar}
           <Content className={`transition-all duration-300 overflow-auto ${showMenu ? 'ml-56' : 'ml-0'}`}>
@@ -89,3 +94,4 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 export default MainLayout;
+
