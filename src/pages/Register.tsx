@@ -4,8 +4,6 @@ import { Form, Input, Button, Radio } from 'antd';
 import { EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import { registerAccountInstructor, registerAccountStudent, logo } from '../utils/commonImports';
 import FileUploader from '../components/FileUploader';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import type { RadioChangeEvent } from 'antd';
 import Lottie from 'lottie-react';
 import animationData from '../assets/Animation - 1721792712537.json';
@@ -27,7 +25,6 @@ const Register: React.FC = () => {
     const navigate = useNavigate();
     const [isButtonDisabled, setIsButtonDisabled] = useState(false);
     const [selectedRole, setSelectedRole] = useState<'student' | 'instructor'>('student');
-    const [isInstructorDetailsVisible, setIsInstructorDetailsVisible] = useState(false);
 
     const handleLoginClick = () => {
         navigate('/login');
@@ -45,15 +42,11 @@ const Register: React.FC = () => {
                     role: values.role,
                 };
                 await registerAccountStudent(studentData);
-                toast.success('Registration successful. Please check your email.');
+          
                 setTimeout(() => {
                     navigate('/login');
                 }, 2000); 
             } else if (values.role === 'instructor') {
-                if (!isInstructorDetailsVisible) {
-                    setIsInstructorDetailsVisible(true);
-                    return; // Do not submit form yet
-                }
                 const instructorData = {
                     name: values.fullName,
                     email: values.email,
@@ -65,13 +58,13 @@ const Register: React.FC = () => {
                     avatar: values.avatarUrl!,
                 };
                 await registerAccountInstructor(instructorData);
-                toast.success('Registration successful. Please check your email.');
+              
                 setTimeout(() => {
                     navigate('/login');
                 }, 2000); 
             }
         } catch (error) {
-            toast.error('Registration failed');
+            console.error('Registration failed');
         } finally {
             setIsButtonDisabled(false);
         }
@@ -81,7 +74,6 @@ const Register: React.FC = () => {
 
     const handleRoleChange = (e: RadioChangeEvent) => {
         setSelectedRole(e.target.value as 'student' | 'instructor');
-        setIsInstructorDetailsVisible(false); // Hide additional details if role changes
     };
 
     const handleVideoUploadSuccess = (url: string) => {
@@ -92,16 +84,11 @@ const Register: React.FC = () => {
         form.setFieldsValue({ avatarUrl: url });
     };
 
-
-    const handleBackClick = () => {
-        setIsInstructorDetailsVisible(false);
-    };
-
     return (
         <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-green-400 to-white-500 relative">
-            <ToastContainer />
-            <div className="flex flex-col w-full max-w-6xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10 md:flex-row">
-                <div className={`w-full md:w-1/2 px-4 md:px-20 py-10 flex flex-col justify-between ${isInstructorDetailsVisible ? 'hidden' : ''}`}>
+          
+            <div className="flex flex-col w-full max-w-4xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10 md:flex-row">
+                <div className="w-full md:w-1/2 px-4 md:px-20 py-10 flex flex-col justify-center">
                     <Link to="/">
                         <img src={logo} alt="Logo" className="h-10 w-auto mb-6 cursor-pointer" />
                     </Link>
@@ -114,73 +101,69 @@ const Register: React.FC = () => {
                         className="flex flex-col gap-3"
                         initialValues={{ role: 'student' }}
                     >
-                        {!isInstructorDetailsVisible && (
-                            <>
-                                <Form.Item
-                                    name="fullName"
-                                    rules={[{ required: true, message: 'Please input your full name!' }]}
-                                >
-                                    <Input placeholder='Full Name' size="large" />
-                                </Form.Item>
-                                <Form.Item
-                                    name="email"
-                                    rules={[
-                                        { required: true, message: 'Please input your email!' },
-                                        { type: 'email', message: 'Please enter a valid email!' }
-                                    ]}
-                                >
-                                    <Input placeholder='Email' size="large" />
-                                </Form.Item>
-                                <div className="flex flex-col md:flex-row gap-3">
-                                    <Form.Item
-                                        name="password"
-                                        rules={[
-                                            { required: true, message: 'Please input your password!' },
-                                            { min: 6, message: 'Password must be at least 6 characters long!' }
-                                        ]}
-                                        className="w-full md:w-1/2"
-                                    >
-                                        <Input.Password
-                                            placeholder='Password'
-                                            size="large"
-                                            iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
-                                        />
-                                    </Form.Item>
-                                    <Form.Item
-                                        name="confirmPassword"
-                                        dependencies={['password']}
-                                        rules={[
-                                            { required: true, message: 'Please confirm your password!' },
-                                            ({ getFieldValue }) => ({
-                                                validator(_, value) {
-                                                    if (!value || getFieldValue('password') === value) {
-                                                        return Promise.resolve();
-                                                    }
-                                                    return Promise.reject(new Error('The two passwords that you entered do not match!'));
-                                                },
-                                            }),
-                                        ]}
-                                        className="w-full md:w-1/2"
-                                    >
-                                        <Input.Password
-                                            placeholder='Confirm Password'
-                                            size="large"
-                                            iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
-                                        />
-                                    </Form.Item>
-                                </div>
-                                <Form.Item
-                                    name="role"
-                                    rules={[{ required: true, message: 'Please select a role!' }]}
-                                >
-                                    <Radio.Group onChange={handleRoleChange} className="flex flex-col md:flex-row gap-2">
-                                        <Radio value="student">Student</Radio>
-                                        <Radio value="instructor">Instructor</Radio>
-                                    </Radio.Group>
-                                </Form.Item>
-                            </>
-                        )}
-                        {isInstructorDetailsVisible && (
+                        <Form.Item
+                            name="fullName"
+                            rules={[{ required: true, message: 'Please input your full name!' }]}
+                        >
+                            <Input placeholder='Full Name' size="large" />
+                        </Form.Item>
+                        <Form.Item
+                            name="email"
+                            rules={[
+                                { required: true, message: 'Please input your email!' },
+                                { type: 'email', message: 'Please enter a valid email!' }
+                            ]}
+                        >
+                            <Input placeholder='Email' size="large" />
+                        </Form.Item>
+                        <div className="flex flex-col md:flex-row gap-3">
+                            <Form.Item
+                                name="password"
+                                rules={[
+                                    { required: true, message: 'Please input your password!' },
+                                    { min: 6, message: 'Password must be at least 6 characters long!' }
+                                ]}
+                                className="w-full md:w-1/2"
+                            >
+                                <Input.Password
+                                    placeholder='Password'
+                                    size="large"
+                                    iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+                                />
+                            </Form.Item>
+                            <Form.Item
+                                name="confirmPassword"
+                                dependencies={['password']}
+                                rules={[
+                                    { required: true, message: 'Please confirm your password!' },
+                                    ({ getFieldValue }) => ({
+                                        validator(_, value) {
+                                            if (!value || getFieldValue('password') === value) {
+                                                return Promise.resolve();
+                                            }
+                                            return Promise.reject(new Error('The two passwords that you entered do not match!'));
+                                        },
+                                    }),
+                                ]}
+                                className="w-full md:w-1/2"
+                            >
+                                <Input.Password
+                                    placeholder='Confirm Password'
+                                    size="large"
+                                    iconRender={visible => (visible ? <EyeOutlined /> : <EyeInvisibleOutlined />)}
+                                />
+                            </Form.Item>
+                        </div>
+                        <Form.Item
+                            name="role"
+                            rules={[{ required: true, message: 'Please select a role!' }]}
+                        >
+                            <Radio.Group onChange={handleRoleChange} className="flex flex-col md:flex-row gap-2">
+                                <Radio value="student">Student</Radio>
+                                <Radio value="instructor">Instructor</Radio>
+                            </Radio.Group>
+                        </Form.Item>
+                        {selectedRole === 'instructor' && (
                             <>
                                 <Form.Item
                                     name="phone_number"
@@ -221,21 +204,10 @@ const Register: React.FC = () => {
                                 disabled={isButtonDisabled}
                                 className='w-full py-3 text-lg font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700'
                             >
-                                {selectedRole === 'instructor' && !isInstructorDetailsVisible
-                                    ? 'Next'
-                                    : isButtonDisabled
-                                        ? 'Please wait...'
-                                        : 'Register'}
+                                {isButtonDisabled
+                                    ? 'Please wait...'
+                                    : 'Register'}
                             </Button>
-                            {isInstructorDetailsVisible && (
-                                <Button
-                                    type="default"
-                                    onClick={handleBackClick}
-                                    className='w-full py-3 mt-3 text-lg font-semibold text-gray-600 border rounded-lg hover:bg-gray-200'
-                                >
-                                    Back
-                                </Button>
-                            )}
                         </Form.Item>
                     </Form>
                     <div className='mt-3 text-base flex justify-between items-center'>
@@ -245,7 +217,7 @@ const Register: React.FC = () => {
                         </Button>
                     </div>
                 </div>
-                <div className={`hidden md:flex relative w-full md:w-1/2 items-center justify-center bg-gradient-to-r from-blue-500 to-green-600 ${!isInstructorDetailsVisible ? 'hidden' : ''}`}>
+                <div className="hidden md:flex relative w-full md:w-1/2 items-center justify-center bg-gradient-to-r from-blue-500 to-green-600">
                     <div className="absolute inset-0 w-full h-full">
                         <Lottie animationData={animationData} loop={true} className="w-full h-full" />
                     </div>
