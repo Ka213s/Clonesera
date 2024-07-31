@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, Pagination, Input, Row, Col } from 'antd';
 import { getSubscribers, getUserData } from '../../utils/commonImports';
 import { SearchOutlined, PhoneOutlined, MailOutlined } from '@ant-design/icons';
@@ -8,6 +9,7 @@ interface Subscriber {
     subscriber_name: string;
     is_subscribed: boolean;
     subscriber_id: string;
+ 
     avatar?: string;
     phone_number?: string;
     email?: string;
@@ -22,6 +24,7 @@ const Subscriber: React.FC = () => {
     const [pageSize, setPageSize] = useState<number>(10);
     const [totalItems, setTotalItems] = useState<number>(0);
     const [searchKeyword, setSearchKeyword] = useState<string>("");
+    const navigate = useNavigate();
 
     const fetchSubscribers = useCallback(
         async (page: number, pageSize: number) => {
@@ -69,6 +72,10 @@ const Subscriber: React.FC = () => {
         setPageNum(1); // Reset to the first page on search
     };
 
+    const handleCardClick = (id: string) => {
+        navigate(`/view-profile/${id}`);
+    };
+
     return (
         <div className="p-4">
             <div style={{ marginBottom: 16 }}>
@@ -87,6 +94,8 @@ const Subscriber: React.FC = () => {
                         <Card
                             hoverable
                             className="flex flex-col items-center justify-center p-6 h-full"
+                            onClick={() => handleCardClick(sub.subscriber_id
+                            )}
                         >
                             <div className="flex flex-col items-center text-center">
                                 <img
@@ -123,7 +132,6 @@ const Subscriber: React.FC = () => {
                     className="text-center"
                 />
             </div>
-
         </div>
     );
 };
