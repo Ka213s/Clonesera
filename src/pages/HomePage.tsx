@@ -8,9 +8,6 @@ import JoinAvatar from '../assets/Course.png';
 
 const HomePage: React.FC = () => {
  
-
-
-
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <div className="max-w-7xl mx-auto">

@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import HeaderNoMenu from '../components/HeaderNoMenu';
 import Footer from '../components/Footer';
 import { Layout } from 'antd';
-import { CartProvider } from '../consts/CartContext';  
+import { CartProvider } from '../consts/CartContext';
 
 const { Content } = Layout;
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [role, setRole] = useState<string | null>(null);
-  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,10 +20,10 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    if (location.pathname === '/homepage' && role === 'admin') {
+    if (role === 'admin') {
       navigate('/dashboard-admin');
     }
-  }, [location.pathname, role, navigate]);
+  }, [role, navigate]);
 
   return (
     <CartProvider>
