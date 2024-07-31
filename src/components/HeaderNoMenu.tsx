@@ -22,6 +22,7 @@ const HeaderNoMenu: React.FC = () => {
     username: null,
   });
 
+  const [searchValue, setSearchValue] = useState<string>('');
   const { totalCartItems } = useCartContext();
   const navigate = useNavigate();
 
@@ -62,6 +63,7 @@ const HeaderNoMenu: React.FC = () => {
 
   const handleSearch = (value: string) => {
     navigate(`/homepage/view-all-course?search=${value}`);
+    setSearchValue(''); // Reset search value after navigating
   };
 
   const handleProfileClick = () => {
@@ -122,6 +124,8 @@ const HeaderNoMenu: React.FC = () => {
               <SearchOutlined />
             </Button>
           }
+          value={searchValue}
+          onChange={e => setSearchValue(e.target.value)}
           onSearch={handleSearch}
           style={{ width: 300 }}
         />

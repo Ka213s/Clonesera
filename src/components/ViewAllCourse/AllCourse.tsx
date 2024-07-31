@@ -201,7 +201,7 @@ const AllCourse: React.FC = () => {
                     onClick={() => handleViewDetails(course._id)}
                     className="bg-green-600 text-white py-1 px-2 rounded-md hover:bg-green-700 transition duration-300"
                   >
-                    Join Now
+                    Buy Now
                   </button>
                 </div>
               </div>

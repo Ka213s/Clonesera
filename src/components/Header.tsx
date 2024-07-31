@@ -142,7 +142,6 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
                 onClick={handleViewCart}
               />
             </Badge>
-
             <Divider className="border-gray-400 h-9" type="vertical" />
             <div className="">
               <Dropdown menu={{ items: userMenu }} trigger={['hover']}>
