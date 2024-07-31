@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
 import Statistic from './Statistic';
 import PopularCourses from './PopularCourses';

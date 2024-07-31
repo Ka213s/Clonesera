@@ -70,6 +70,11 @@ export const getUserData = async (id: string) => {
   return response.data;
 };
 
+export const NT_getUserData = async (id: string) => {
+  const response = await defaultAxiosInstance.get(`/api/users/${id}`);
+  return response.data;
+};
+
 export const getUsers = async (searchCondition: { keyword: string; role: string; status: boolean; is_deleted: boolean; is_verified: string; }, pageNum: number, pageSize: number) => {
   const response = await tokenAxiosInstance.post('/api/users/search', {
     searchCondition,

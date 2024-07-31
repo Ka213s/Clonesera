@@ -63,6 +63,7 @@ const BlogDetail: React.FC = () => {
             <Paragraph><strong>Category:</strong> {blog.category_name}</Paragraph>
             <Paragraph><strong>Updated at:</strong> {new Date(blog.updated_at).toLocaleDateString()}</Paragraph>
             <Paragraph><strong>Description:</strong> {blog.description}</Paragraph>
+      
             <div
               style={{
                 fontFamily: 'Arial, sans-serif',

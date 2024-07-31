@@ -48,19 +48,19 @@ const Completed: React.FC = () => {
     const [searchKeyword, setSearchKeyword] = useState<string>("");
 
     const fetchData = useCallback(async (pageInfo: { pageNum: number; pageSize: number }, keyword: string) => {
-            const result: ApiResponse = await getPayouts({
-                searchCondition: {
-                    payout_no: keyword,
-                    instructor_id: '',
-                    status: 'completed',
-                    is_instructor: false,
-                    is_delete: false,
-                },
-                pageInfo
-            });
-            setData(result.pageData);
-            setTotal(result.pageInfo.totalItems);
-        
+        const result: ApiResponse = await getPayouts({
+            searchCondition: {
+                payout_no: keyword,
+                instructor_id: '',
+                status: 'completed',
+                is_instructor: false,
+                is_delete: false,
+            },
+            pageInfo
+        });
+        setData(result.pageData);
+        setTotal(result.pageInfo.totalItems);
+
     }, []);
 
     useEffect(() => {

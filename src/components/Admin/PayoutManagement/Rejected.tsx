@@ -48,20 +48,20 @@ const Rejected: React.FC = () => {
     const [searchKeyword, setSearchKeyword] = useState<string>("");
 
     const fetchData = useCallback(async (pageInfo: { pageNum: number; pageSize: number }, keyword: string) => {
-            const result: ApiResponse = await getPayouts({
-                searchCondition: {
-                    payout_no: keyword,
-                    instructor_id: '',
-                    status: 'rejected',
-                    is_instructor: false,
-                    is_delete: false,
-                },
-                pageInfo
-            });
+        const result: ApiResponse = await getPayouts({
+            searchCondition: {
+                payout_no: keyword,
+                instructor_id: '',
+                status: 'rejected',
+                is_instructor: false,
+                is_delete: false,
+            },
+            pageInfo
+        });
 
-            setData(result.pageData);
-            setTotal(result.pageInfo.totalItems);
-        
+        setData(result.pageData);
+        setTotal(result.pageInfo.totalItems);
+
     }, []);
 
     useEffect(() => {
