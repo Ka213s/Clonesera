@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { InfoCircleOutlined, CheckCircleOutlined, UserOutlined } from '@ant-design/icons';
 import Statistic from './Statistic';
 import PopularCourses from './PopularCourses';
@@ -6,6 +7,10 @@ import Blog from './Blog';
 import JoinAvatar from '../assets/Course.png';
 
 const HomePage: React.FC = () => {
+ 
+
+
+
   return (
     <div className="bg-gray-100 min-h-screen p-6">
       <div className="max-w-7xl mx-auto">
@@ -70,7 +75,6 @@ const HomePage: React.FC = () => {
             <p className="text-gray-600 text-center">Join our learning community and connect with fellow learners.</p>
           </div>
         </div>
-
       </div>
     </div>
   );
