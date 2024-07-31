@@ -30,22 +30,22 @@ const ButtonEdit: React.FC<ButtonEditProps> = ({ _id }) => {
 
   const showModal = async () => {
     setVisible(true);
-      const session = await getSessionById(_id);
-      const course = courses.find(course => course._id === session.course_id);
-      const courseName = course ? course.name : '';
-      form.setFieldsValue({
-        ...session,
-        course_name: courseName
-      });
+    const session = await getSessionById(_id);
+    const course = courses.find(course => course._id === session.course_id);
+    const courseName = course ? course.name : '';
+    form.setFieldsValue({
+      ...session,
+      course_name: courseName
+    });
   };
 
   const handleOk = async () => {
 
-      const values = await form.validateFields();
-      const selectedCourse = courses.find(course => course.name === values.course_name);
-      await updateSession(_id, { ...values, course_id: selectedCourse?._id });
-      setVisible(false);
-      form.resetFields();
+    const values = await form.validateFields();
+    const selectedCourse = courses.find(course => course.name === values.course_name);
+    await updateSession(_id, { ...values, course_id: selectedCourse?._id });
+    setVisible(false);
+    form.resetFields();
   };
 
   const handleCancel = () => {
@@ -55,9 +55,7 @@ const ButtonEdit: React.FC<ButtonEditProps> = ({ _id }) => {
 
   return (
     <>
-      <Button className='mr-2' icon={<EditOutlined />} onClick={showModal}>
-        Edit
-      </Button>
+      <Button className='mr-2' icon={<EditOutlined />} onClick={showModal} />
       <Modal
         visible={visible}
         title="Edit Session"

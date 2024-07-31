@@ -108,8 +108,8 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
-        width={800} // Adjust the modal width
-        style={{ top: '20px' }} // Adjust the modal margin-top
+        width={800} 
+        style={{ top: '20px' }} 
       >
         {lesson && (
           <Form form={form} onFinish={handleOk} initialValues={lesson}>

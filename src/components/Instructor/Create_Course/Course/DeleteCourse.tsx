@@ -21,7 +21,7 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({ courseId }) => {
   };
 
   return (
-    <Button icon={<DeleteOutlined />} onClick={handleClick} />
+    <Button icon={<DeleteOutlined />} onClick={handleClick} danger />
   );
 };
 

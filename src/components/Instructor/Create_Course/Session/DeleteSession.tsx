@@ -13,8 +13,8 @@ const ButtonDelete: React.FC<ButtonDeleteProps> = ({ _id }) => {
       title: 'Are you sure you want to delete this session?',
       content: 'This action cannot be undone.',
       onOk: async () => {
-     
-          await deleteSession(_id);      
+
+        await deleteSession(_id);
       },
       onCancel() {
       },
@@ -22,9 +22,7 @@ const ButtonDelete: React.FC<ButtonDeleteProps> = ({ _id }) => {
   };
 
   return (
-    <Button icon={<DeleteOutlined />} onClick={handleDelete} danger>
-    
-    </Button>
+    <Button icon={<DeleteOutlined />} onClick={handleDelete} danger />
   );
 };
 
