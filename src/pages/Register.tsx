@@ -86,8 +86,8 @@ const Register: React.FC = () => {
 
     return (
         <div className="flex items-center justify-center w-full h-screen bg-gradient-to-r from-green-400 to-white-500 relative">
-            <div className="flex flex-col w-full max-w-5xl bg-white rounded-lg shadow-lg overflow-hidden relative z-10 md:flex-row">
-                <div className="w-full md:w-1/2 px-4 md:px-20 py-10 flex flex-col justify-center">
+            <div className="flex flex-col w-full max-w-7xl  bg-white rounded-lg shadow-lg overflow-hidden relative z-10 md:flex-row">
+                <div className="w-full max-h-screen md:w-1/2 px-4 md:px-20 py-10 p-10 flex flex-col justify-center">
                     <Link to="/">
                         <img src={logo} alt="Logo" className="h-10 w-auto mb-6 cursor-pointer" />
                     </Link>
@@ -97,7 +97,7 @@ const Register: React.FC = () => {
                         form={form}
                         onFinish={handleSubmit}
                         layout="vertical"
-                        className={`flex flex-col gap-3 ${selectedRole === 'instructor' ? 'max-h-96 overflow-y-auto' : ''}`}
+                        className={`flex flex-col gap-3 p-2 ${selectedRole === 'instructor' ? 'max-h-96 overflow-y-auto' : ''}`}
                         initialValues={{ role: 'student' }}
                     >
                         <Form.Item

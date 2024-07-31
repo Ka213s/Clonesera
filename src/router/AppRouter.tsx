@@ -7,7 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoute from './PrivateRoute';
 import { ROLES } from '../utils/commonImports';
 import { ADMIN, ERROR, INSTRUCTOR, PUBLIC } from '../consts';
-import ScrollToTop from './ScrollToTop';  // Import the ScrollToTop component
+
 
 const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
@@ -51,7 +51,7 @@ const PageError403 = lazy(() => import('../pages/Error/PageError403'));
 const AppRouter: React.FC = () => {
     return (
         <Router>
-            <ScrollToTop />  
+       
             <Suspense>
                 <Routes>
                     <Route path="/" element={<Navigate to="/homepage" />} />

@@ -9,7 +9,7 @@ import SidebarInstructor from '../components/Sidebar/SidebarInstructor';
 import SidebarAdmin from '../components/Sidebar/SidebarAdmin';
 import { Layout } from 'antd';
 import { setGlobalLoadingHandler } from '../services/axiosInstance';
-import { CartProvider } from '../consts/CartContext';  
+import { CartProvider } from '../consts/CartContext';
 const { Content } = Layout;
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -37,6 +37,10 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
       navigate('/admin/request-management');
     }
   }, [location.pathname, role, navigate]);
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [location.pathname]);
 
   const toggleMenu = () => {
     setShowMenu(!showMenu);
@@ -90,3 +94,4 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 export default MainLayout;
+
