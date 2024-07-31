@@ -22,8 +22,8 @@ const ViewOrder: React.FC = () => {
     };
 
     return (
-        <div className="p-6">
-            <nav className="space-x-4 border-b mb-4">
+        <div className="pt-0">
+            <nav className="space-x-4 border-b mb-2">
                 {tabs.map((tab) => (
                     <button
                         key={tab.key}

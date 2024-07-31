@@ -46,11 +46,11 @@ const StudentDashboard: React.FC = () => {
 
     return (
         <div className="p-4">
-            <div className="flex items-center mb-4">
+            <div className="flex items-center mb-2">
                 <AppstoreOutlined style={{ fontSize: '24px', marginRight: '8px' }} />
                 <h2 className="text-xl font-semibold">Student Dashboard</h2>
             </div>
-            <Row gutter={[16, 16]}>
+            <Row gutter={[16, 16]} className="mt-0">
                 {stats.map((stat, index) => (
                     <Col key={index} xs={24} sm={12} lg={6}>
                         <Card className="hover:shadow-md">
