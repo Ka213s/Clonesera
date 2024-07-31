@@ -26,33 +26,32 @@ const LogCourse: React.FC = () => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [pageNum, setPageNum] = useState<number>(1);
   const [pageSize, setPageSize] = useState<number>(10);
-  const [totalLogs, setTotalLogs] = useState<number>(0);
+  const [totalCourses, setTotalCourses] = useState<number>(0);
   const [searchKeyword, setSearchKeyword] = useState<string>("");
 
   const fetchCoursesAndLogs = useCallback(
     async (page: number, size: number, keyword: string) => {
-        const coursesData = await getCourses(
-          { keyword, category: "", status: "", is_deleted: false },
-          page,
-          size
+      const coursesData = await getCourses(
+        { keyword, category: "", status: "", is_deleted: false },
+        page,
+        size
+      );
+      if (coursesData && coursesData.pageData) {
+        setCourses(coursesData.pageData);
+        setTotalCourses(coursesData.pageInfo.totalItems);
+        const courseIds: string[] = coursesData.pageData.map(
+          (course: Course) => course._id
         );
-        if (coursesData && coursesData.pageData) {
-          setCourses(coursesData.pageData);
-          const courseIds: string[] = coursesData.pageData.map(
-            (course: Course) => course._id
-          );
-          const logsDataPromises = courseIds.map((courseId: string) =>
-            getCourseLogs({
-              searchCondition: { course_id: courseId },
-              pageInfo: { pageNum: page, pageSize: size },
-            })
-          );
-          const logsDataArray = await Promise.all(logsDataPromises);
-          const allLogs = logsDataArray.flatMap((logData) => logData.pageData);
-          setLogs(allLogs);
-          // Assuming logsDataArray[0].pageInfo contains totalItems
-          setTotalLogs(logsDataArray[0].pageInfo.totalItems);
-        }
+        const logsDataPromises = courseIds.map((courseId: string) =>
+          getCourseLogs({
+            searchCondition: { course_id: courseId },
+            pageInfo: { pageNum: 1, pageSize: size },
+          })
+        );
+        const logsDataArray = await Promise.all(logsDataPromises);
+        const allLogs = logsDataArray.flatMap((logData) => logData.pageData);
+        setLogs(allLogs);
+      }
     },
     []
   );
@@ -114,7 +113,7 @@ const LogCourse: React.FC = () => {
         <Pagination
           current={pageNum}
           pageSize={pageSize}
-          total={totalLogs}
+          total={totalCourses}
           showTotal={(total, range) => `${range[0]}-${range[1]} of ${total} items`}
           onChange={(page, pageSize) => {
             setPageNum(page);
