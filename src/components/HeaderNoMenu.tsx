@@ -110,13 +110,13 @@ const HeaderNoMenu: React.FC = () => {
 
   return (
     <header className="flex items-center justify-between p-2.5 bg-white shadow-md fixed top-0 left-0 w-full z-30">
-      <div className="flex items-center space-x-4 ml-5">
+      <div className="flex items-center space-x-4 ml-2 md:ml-5">
         <Link to="/" onClick={handleLogoClick}>
-          <img src={logo} alt="Logo" className="h-12 w-auto cursor-pointer" />
+          <img src={logo} alt="Logo" className="h-8 w-auto md:h-12 cursor-pointer" />
         </Link>
       </div>
 
-      <div className="flex-grow flex justify-center">
+      <div className="flex-grow flex justify-center mx-2 md:mx-4">
         <Search
           placeholder="Search courses"
           enterButton={
@@ -127,16 +127,20 @@ const HeaderNoMenu: React.FC = () => {
           value={searchValue}
           onChange={e => setSearchValue(e.target.value)}
           onSearch={handleSearch}
-          style={{ width: 300 }}
+          className="w-full md:w-80"
         />
       </div>
 
-      <div className="flex items-center ml-auto space-x-8 pr-4">
+      <div className="flex items-center ml-auto space-x-2 md:space-x-4 pr-2 md:pr-4">
         {userState.isLoggedIn ? (
           <>
             {userState.role === 'instructor' && (
               <>
-                <Button type="primary" className="custom-button" onClick={handleCreateCourse}>
+                <Button
+                  type="primary"
+                  className="hidden md:inline-block custom-button"
+                  onClick={handleCreateCourse}
+                >
                   Create New Course
                 </Button>
                 <Button
@@ -150,12 +154,12 @@ const HeaderNoMenu: React.FC = () => {
             )}
             <Badge count={totalCartItems}>
               <ShoppingCartOutlined
-                className="icon-size text-2xl cursor-pointer text-black"
+                className="text-2xl cursor-pointer text-black"
                 onClick={handleViewCart}
               />
             </Badge>
 
-            <Divider className="border-gray-400 h-9" type="vertical" />
+            <Divider className="border-gray-400 h-9 hidden md:block" type="vertical" />
             <div className="">
               <Dropdown menu={{ items: userMenu }} trigger={['hover']}>
                 <Avatar
@@ -167,16 +171,14 @@ const HeaderNoMenu: React.FC = () => {
             </div>
           </>
         ) : (
-          <>
-            <div className="flex space-x-2">
-              <Link to="/login">
-                <Button type="primary" className="custom-button">Login</Button>
-              </Link>
-              <Link to="/register">
-                <Button type="primary" className="custom-button">Register</Button>
-              </Link>
-            </div>
-          </>
+          <div className="flex space-x-2">
+            <Link to="/login">
+              <Button type="primary" className="custom-button">Login</Button>
+            </Link>
+            <Link to="/register">
+              <Button type="primary" className="custom-button">Register</Button>
+            </Link>
+          </div>
         )}
       </div>
     </header>
