@@ -51,7 +51,7 @@ const PageError403 = lazy(() => import('../pages/Error/PageError403'));
 const AppRouter: React.FC = () => {
     return (
         <Router>
-            <ScrollToTop />  {/* Include the ScrollToTop component */}
+            <ScrollToTop />  
             <Suspense>
                 <Routes>
                     <Route path="/" element={<Navigate to="/homepage" />} />
