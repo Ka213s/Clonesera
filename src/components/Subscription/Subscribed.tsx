@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button, Card, Pagination, Input } from 'antd';
 import { toast } from 'react-toastify';
 import { getSubscribeds, updateSubscribed, getUserData } from '../../utils/commonImports';
@@ -23,6 +24,7 @@ const Subscribed: React.FC = () => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const [searchKeyword, setSearchKeyword] = useState<string>("");
     const [allSubscriptions, setAllSubscriptions] = useState<Subscribed[]>([]);
+    const navigate = useNavigate();
 
     const fetchSubscriptions = useCallback(
         async (page: number, pageSize: number) => {
@@ -33,7 +35,6 @@ const Subscribed: React.FC = () => {
             );
             const filteredData = data.pageData.filter((sub: Subscribed) => sub.is_subscribed);
 
-            // Fetch user details for each instructor
             const detailedSubscriptions = await Promise.all(filteredData.map(async (sub: Subscribed) => {
                 const userData = await getUserData(sub.instructor_id);
                 return {
@@ -82,6 +83,10 @@ const Subscribed: React.FC = () => {
         setPageNum(1); // Reset to the first page on search
     };
 
+    const handleCardClick = (id: string) => {
+        navigate(`/view-profile/${id}`);
+    };
+
     return (
         <div className="p-4">
             <div style={{ marginBottom: 16 }}>
@@ -100,6 +105,7 @@ const Subscribed: React.FC = () => {
                         <Card
                             hoverable
                             className="flex flex-col items-center justify-center p-6 h-full"
+                            onClick={() => handleCardClick(sub.instructor_id)}
                         >
                             <div className="flex justify-center items-center mb-4">
                                 <img
@@ -120,7 +126,10 @@ const Subscribed: React.FC = () => {
                                 </div>
                                 <Button
                                     type="default"
-                                    onClick={() => handleSubscribeToggle(sub.instructor_id, sub.is_subscribed)}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleSubscribeToggle(sub.instructor_id, sub.is_subscribed);
+                                    }}
                                     className={`mt-4 ${sub.is_subscribed ? 'text-red-500 hover:text-red-700' : 'text-blue-500 hover:text-blue-700'}`}
                                 >
                                     {sub.is_subscribed ? 'Unsubscribe' : 'Subscribe'}

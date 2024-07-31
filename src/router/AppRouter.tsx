@@ -61,7 +61,6 @@ const AppRouter: React.FC = () => {
                         <Route path={PUBLIC.VIEW_ORDER} element={<ViewOrder />} />
                         <Route path={PUBLIC.PAYMENT} element={<Payment />} />
                         <Route path={PUBLIC.SETTING_PAGE} element={<SettingPage />} />
-                       
                         <Route path={PUBLIC.LIST_SUBSCRIBED} element={<PrivateRoute element={ListSubscribed} allowedRoles={[ROLES.STUDENT]} />} />
                         <Route path={PUBLIC.DASHBOARD_STUDENT} element={<PrivateRoute element={DashboardStudent} allowedRoles={[ROLES.STUDENT]} />} />
                     </Route>
