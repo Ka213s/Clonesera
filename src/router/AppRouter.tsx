@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import PrivateRoute from './PrivateRoute';
 import { ROLES } from '../utils/commonImports';
 import { ADMIN, ERROR, INSTRUCTOR, PUBLIC } from '../consts';
+import ScrollToTop from './ScrollToTop';  // Import the ScrollToTop component
 
 const HomePage = lazy(() => import('../pages/HomePage'));
 const Login = lazy(() => import('../pages/Login'));
@@ -51,6 +52,7 @@ const PageError403 = lazy(() => import('../pages/Error/PageError403'));
 const AppRouter: React.FC = () => {
     return (
         <Router>
+            <ScrollToTop />  {/* Include the ScrollToTop component */}
             <Suspense>
                 <Routes>
                     <Route path="/" element={<Navigate to="/homepage" />} />
@@ -95,7 +97,6 @@ const AppRouter: React.FC = () => {
 
                     {/* Routes with No Sidebar Layout */}
                     <Route element={<LayoutNoSidebar />}>
-
                         <Route path={PUBLIC.HOME} element={<HomePage />} />
                         <Route path={PUBLIC.VIEW_ALL_COURSE_HP} element={<ViewAllCourseHomePage />} />
                         <Route path={PUBLIC.LEARN_COURSE} element={<LearnCourseDetail />} />
