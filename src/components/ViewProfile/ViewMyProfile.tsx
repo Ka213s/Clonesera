@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { getCurrentLogin } from '../../utils/commonImports';
-import CourseTab from './CourseTab';
-import SubscriptionTab from './SubscriptionTab';
 import AboutTab from './AboutTab';
 
 interface UserData {
@@ -36,16 +34,10 @@ const ViewProfile: React.FC = () => {
 
     const renderTabContent = () => {
         if (!userData) return null;
-        switch (activeTab) {
-            case 'About':
-                return <AboutTab userData={userData} />;
-            case 'Course':
-                return <CourseTab />;
-            case 'Subscription':
-                return <SubscriptionTab />;
-            default:
-                return null;
+        if (activeTab === 'About') {
+            return <AboutTab userData={userData} />;
         }
+        return null;
     };
 
     return (
@@ -70,15 +62,12 @@ const ViewProfile: React.FC = () => {
                     {/* Tabs */}
                     <div className="bg-white p-6 rounded-lg shadow-lg">
                         <div className="flex space-x-6 border-b border-gray-200 pb-3">
-                            {['About', 'Course', 'Subscription'].map((tab) => (
-                                <button
-                                    key={tab}
-                                    className={`text-gray-600 pb-2 focus:outline-none ${activeTab === tab ? 'border-b-2 border-[#9997F5] font-semibold text-[#9997F5]' : ''}`}
-                                    onClick={() => setActiveTab(tab)}
-                                >
-                                    {tab}
-                                </button>
-                            ))}
+                            <button
+                                className={`text-gray-600 pb-2 focus:outline-none ${activeTab === 'About' ? 'border-b-2 border-[#9997F5] font-semibold text-[#9997F5]' : ''}`}
+                                onClick={() => setActiveTab('About')}
+                            >
+                                About
+                            </button>
                         </div>
                         {renderTabContent()}
                     </div>
