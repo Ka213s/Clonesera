@@ -19,7 +19,7 @@ const Blog: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
-  const blogsPerPage = 4; // Number of blogs to display per page
+  const blogsPerPage = window.innerWidth < 768 ? 1 : 4; // Number of blogs to display per page
 
   useEffect(() => {
     const fetchBlogs = async () => {

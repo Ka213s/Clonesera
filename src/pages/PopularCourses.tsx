@@ -28,7 +28,7 @@ const PopularCourses: React.FC = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const coursesPerPage = 4; // Number of courses to display per page
+  const coursesPerPage = window.innerWidth < 768 ? 1 : 4; // Number of courses to display per page
 
   useEffect(() => {
     const fetchCourses = async () => {

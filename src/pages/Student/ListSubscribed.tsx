@@ -84,38 +84,38 @@ const ListSubscribed: React.FC = () => {
     };
 
     return (
-        <div className="p-4">
-            <div style={{ marginBottom: 16 }}>
+        <div className="p-4 sm:p-6">
+            <div className="mb-4">
                 <Search
                     placeholder="Search by instructor name"
                     enterButton={<SearchOutlined />}
                     allowClear
                     size="large"
                     onSearch={handleSearch}
-                    style={{ width: 300 }}
+                    style={{ width: '100%', maxWidth: 300 }}
                 />
             </div>
-            <div className="flex flex-wrap -mx-4">
+            <div className="flex flex-wrap -mx-2">
                 {subscriptions.map(sub => (
-                    <div key={sub._id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-4 mb-8">
+                    <div key={sub._id} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 px-2 mb-4">
                         <Card
                             hoverable
-                            className="flex flex-col items-center justify-center p-6 h-full"
+                            className="flex flex-col items-center p-4"
                         >
                             <div className="flex justify-center items-center mb-4">
                                 <img
                                     alt="avatar"
                                     src={sub.avatar}
-                                    className="w-24 h-24 rounded-full object-cover"
+                                    className="w-20 h-20 rounded-full object-cover"
                                 />
                             </div>
                             <div className="flex flex-col items-center">
-                                <h3 className="text-lg text-center font-semibold">{sub.instructor_name}</h3>
-                                <div className="flex items-center mt-2">
+                                <h3 className="text-base sm:text-lg text-center font-semibold">{sub.instructor_name}</h3>
+                                <div className="flex items-center mt-2 text-sm">
                                     <PhoneOutlined className="mr-2 text-blue-500" />
                                     <span>{sub.phone_number}</span>
                                 </div>
-                                <div className="flex items-center mt-1">
+                                <div className="flex items-center mt-1 text-sm">
                                     <MailOutlined className="mr-2 text-blue-500" />
                                     <span>{sub.email}</span>
                                 </div>
@@ -131,7 +131,7 @@ const ListSubscribed: React.FC = () => {
                     </div>
                 ))}
             </div>
-            <div className="flex justify-end mt-5">
+            <div className="flex justify-center mt-5">
                 <Pagination
                     current={pageNum}
                     pageSize={pageSize}
@@ -143,7 +143,6 @@ const ListSubscribed: React.FC = () => {
                         fetchSubscriptions(page, pageSize);
                     }}
                     showSizeChanger
-                    className="text-center"
                 />
             </div>
         </div>

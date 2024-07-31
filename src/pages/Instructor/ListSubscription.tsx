@@ -1,5 +1,4 @@
-// ListSubscription.tsx
-import  { React, useState } from '../../utils/commonImports';
+import { React, useState } from '../../utils/commonImports';
 import Subscribed from '../../components/Subscription/Subscribed';
 import Subscriber from '../../components/Subscription/Subscriber';
 
@@ -23,13 +22,13 @@ const ListSubscription: React.FC = () => {
     };
 
     return (
-        <div className="p-6">
-            <nav className="flex space-x-4 border-b mb-4">
+        <div className="p-4 sm:p-6">
+            <nav className="flex flex-wrap space-x-2 sm:space-x-4 border-b mb-4">
                 {tabs.map((tab) => (
                     <button
                         key={tab.key}
                         onClick={() => setActiveTab(tab.key)}
-                        className={`py-2 px-4 text-sm font-medium ${activeTab === tab.key
+                        className={`py-2 px-3 sm:px-4 text-sm font-medium ${activeTab === tab.key
                             ? 'text-green-500 border-b-2 border-green-500'
                             : 'text-gray-500'
                             }`}
@@ -38,7 +37,9 @@ const ListSubscription: React.FC = () => {
                     </button>
                 ))}
             </nav>
-            {renderTabContent()}
+            <div className="mt-4">
+                {renderTabContent()}
+            </div>
         </div>
     );
 };
