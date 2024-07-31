@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import AccountSetting from '../pages/AccountSetting';
 import ChangePassword from '../pages/ChangePassword';
 
-
 const SettingPage: React.FC = () => {
     const [activeTab, setActiveTab] = useState('Account');
 
@@ -19,13 +18,17 @@ const SettingPage: React.FC = () => {
 
     return (
         <div>
-            <div className="container mx-auto p-4 ">
+            <div className="container mx-auto p-4">
                 <h1 className="text-2xl font-bold text-gray-700 mb-4">Settings</h1>
                 <div className="border-b border-gray-200">
                     <ul className="flex -mb-px">
                         <li className="mr-2">
                             <button
-                                className={`inline-block p-4 border-b-2 ${activeTab === 'Account' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
+                                className={`inline-block p-4 border-b-2 ${
+                                    activeTab === 'Account' 
+                                    ? 'text-green-500 border-b-2 border-green-500' 
+                                    : 'text-gray-500 border-transparent'
+                                }`}
                                 onClick={() => setActiveTab('Account')}
                             >
                                 Account
@@ -33,7 +36,11 @@ const SettingPage: React.FC = () => {
                         </li>
                         <li className="mr-2">
                             <button
-                                className={`inline-block p-4 border-b-2 ${activeTab === 'Change Password' ? 'border-[#9997F5] text-[#9997F5]' : 'border-transparent text-gray-500'}`}
+                                className={`inline-block p-4 border-b-2 ${
+                                    activeTab === 'Change Password' 
+                                    ? 'text-green-500 border-b-2 border-green-500' 
+                                    : 'text-gray-500 border-transparent'
+                                }`}
                                 onClick={() => setActiveTab('Change Password')}
                             >
                                 Change Password

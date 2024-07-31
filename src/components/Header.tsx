@@ -120,7 +120,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
       </div>
 
       <div className="flex items-center ml-auto space-x-8 pr-4">
-        {userState.isLoggedIn ? (
+        {
           <>
             {userState.role === 'instructor' && (
               <>
@@ -154,16 +154,7 @@ const Header: React.FC<HeaderProps> = ({ toggleMenu }) => {
               </Dropdown>
             </div>
           </>
-        ) : (
-          <>
-            <Link to="/login">
-              <Button type="primary">Login</Button>
-            </Link>
-            <Link to="/register">
-              <Button type="primary">Register</Button>
-            </Link>
-          </>
-        )}
+        }
       </div>
     </header>
   );

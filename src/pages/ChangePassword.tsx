@@ -86,7 +86,7 @@ const ChangePassword: React.FC = () => {
                     <Button
                         type="primary"
                         htmlType="submit"
-                        className="bg-[#9997F5] hover:bg-[#8886E5] text-white font-bold py-2 px-4 rounded"
+                        className="bg-green-500 hover:bg-[#8886E5] text-white font-bold py-2 px-4 rounded"
                     >
                         Change Password
                     </Button>

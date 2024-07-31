@@ -155,9 +155,9 @@ const PopularCourses: React.FC = () => {
                       </div>
                       <button
                         onClick={(e) => handleButtonClick(course._id, course.is_purchased, e)}
-                        className={`py-1 px-2 rounded-md transition duration-300 ${course.is_purchased ? 'bg-blue-600 text-white hover:bg-blue-700' : 'bg-green-600 text-white hover:bg-green-700'}`}
+                        className={`py-1 px-2 rounded-md transition duration-300 ${course.is_purchased ? 'bg-green-600 text-white hover:bg-green-800' : 'bg-red-500 text-white hover:bg-red-600'}`}
                       >
-                        {course.is_purchased ? 'Learn' : 'Join Now'}
+                        {course.is_purchased ? 'Purchased' : 'Buy Now'}
                       </button>
                     </div>
                   </div>
@@ -166,6 +166,16 @@ const PopularCourses: React.FC = () => {
             ))
           )}
         </div>
+      </div>
+      <div className="flex justify-end items-center mt-2">
+        {!loading && (
+          <Link
+            to="/homepage/view-all-course?search="
+            className="text-green-600 font-semibold"
+          >
+            View All
+          </Link>
+        )}
       </div>
     </div>
   );

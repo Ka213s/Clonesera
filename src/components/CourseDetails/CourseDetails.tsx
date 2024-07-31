@@ -220,15 +220,15 @@ const CourseDetails: React.FC = () => {
               <p className="mb-2">
                 <strong>Full Time:</strong> {formatFullTime(course?.full_time || 0)}
               </p>
-              <p className="mb-4">
-                <strong>Description:</strong> {course?.description.replace(/<\/?p>/g, '')}
-              </p>
               <div className="mb-4">
                 <strong>Rating:</strong>
                 <span className="relative top-[2px] ml-2">
                   <Rate disabled defaultValue={course?.average_rating} allowHalf />
                 </span>
               </div>
+              <p className="mb-4">
+                <strong>Description:</strong> {course?.description.replace(/<\/?p>/g, '')}
+              </p>
 
               <div className="flex space-x-4 mt-8">
                 {renderCourseButton()}
@@ -268,7 +268,7 @@ const CourseDetails: React.FC = () => {
                   dataSource={session.lesson_list}
                   renderItem={(lesson) => (
                     <List.Item
-                      className="flex justify-between items-center cursor-pointer"
+                      className={`flex justify-between items-center ${course?.is_purchased ? 'cursor-pointer' : 'cursor-default'}`}
                       onClick={course?.is_purchased ? () => handleLearnCourse(lesson._id) : undefined}
                     >
                       <div>
