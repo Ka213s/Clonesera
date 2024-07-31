@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { Button, Card, Pagination, Input } from 'antd';
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { getSubscribeds, updateSubscribed, getUserData } from '../../utils/commonImports';
 import { SearchOutlined, PhoneOutlined, MailOutlined } from '@ant-design/icons';
 

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Modal, Form, Input, Select } from 'antd';
-import 'react-toastify/dist/ReactToastify.css';
 import { getSessions, createLesson, getCourses } from '../../../../utils/commonImports';
 import FileUploader from '../../../FileUploader';
 import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor';
