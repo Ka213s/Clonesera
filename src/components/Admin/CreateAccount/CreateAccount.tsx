@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { Form, Input, Select, Button, Row, Col } from 'antd';
 import { createUser } from '../../../utils/commonImports';
 import TinyMCEEditorComponent from '../../../utils/TinyMCEEditor';
-import FileUploader from '../../FileUploader'; 
+import FileUploader from '../../FileUploader';
 
 const { Option } = Select;
-
 
 interface FormValues {
   name: string;
@@ -18,7 +17,11 @@ interface FormValues {
   video?: string;
 }
 
-const CreateAccount: React.FC = () => {
+interface CreateAccountProps {
+  onClose: () => void;
+}
+
+const CreateAccount: React.FC<CreateAccountProps> = ({ onClose }) => {
   const [form] = Form.useForm();
   const [role, setRole] = useState<string>('student');
   const [description, setDescription] = useState<string>('');
@@ -45,11 +48,12 @@ const CreateAccount: React.FC = () => {
     if (role !== 'student') {
       userData = { ...userData, avatar: avatarUrl, video: videoUrl };
     }
-      await createUser(userData);
-      form.resetFields();
-      setDescription('');
-      setAvatarUrl('');
-      setVideoUrl('');
+    await createUser(userData);
+    form.resetFields();
+    setDescription('');
+    setAvatarUrl('');
+    setVideoUrl('');
+    onClose(); // Close the modal after creating the user
   };
 
   const handleRoleChange = (value: string) => {
@@ -59,7 +63,6 @@ const CreateAccount: React.FC = () => {
   return (
     <Row justify="center" style={{ padding: '10px' }}>
       <Col span={16}>
-        
         <Form form={form} layout="vertical" onFinish={onFinish}>
           <Form.Item name="name" label="Name" rules={[{ required: true, message: 'Please input the name!' }]}>
             <Input />

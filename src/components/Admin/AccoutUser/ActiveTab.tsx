@@ -10,11 +10,8 @@ const ActiveTab: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
+    console.log('Button Clicked!'); // Log message to verify button click
     setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
   };
 
   const handleCancel = () => {
@@ -22,33 +19,34 @@ const ActiveTab: React.FC = () => {
   };
 
   return (
-    <div style={{ position: 'relative' }}>
-      <Button
-        type="primary"
-        style={{ position: 'absolute', top: 0, right: 0, }}
-        onClick={showModal}
-        className='custom-button'
+    <div>
+      <Tabs
+        defaultActiveKey="1"
+        tabBarExtraContent={
+          <Button
+            type="primary"
+            onClick={showModal}
+            className='custom-button'
+          >
+            Add User
+          </Button>
+        }
       >
-        Add User
-      </Button>
-      <Tabs defaultActiveKey="1">
         <TabPane tab="All accounts" key="1">
           <DisplayAccount status={true} isDeleted={false} />
         </TabPane>
         <TabPane tab="Unverified accounts" key="2">
           <AccountIsVerify status={true} isDeleted={false} />
         </TabPane>
-
       </Tabs>
       <Modal
         title="Create New Account"
         visible={isModalVisible}
-        onOk={handleOk}
         onCancel={handleCancel}
         footer={null}
         width={800} // Adjust the width as needed
       >
-        <CreateAccount />
+        <CreateAccount onClose={handleCancel} />
       </Modal>
     </div>
   );
