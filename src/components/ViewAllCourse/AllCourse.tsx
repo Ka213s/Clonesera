@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Tag, Skeleton, Rate, Button, Input, Pagination, Select } from 'antd';
 import { ReloadOutlined } from '@ant-design/icons';
-import { getPublicCourses, NT_getCategoriesClient } from '../../utils/commonImports';
+import { getPublicCourses, NT_getCategoriesClient, formatCurrency } from '../../utils/commonImports';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 const { Search } = Input;
@@ -205,7 +205,7 @@ const AllCourse: React.FC = () => {
                 <div className="flex items-center justify-between mt-auto mb-2">
                   <div className="text-lg font-semibold text-green-600">
                     <span className="text-xl">
-                      {course.price_paid === 0 ? 'Free' : `$${course.price_paid}`}
+                      {course.price_paid === 0 ? 'Free' : formatCurrency(course.price_paid)}
                     </span>
                     <span className="text-sm text-gray-500 ml-2"></span>
                   </div>
