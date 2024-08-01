@@ -28,10 +28,6 @@ const ChangePassword: React.FC = () => {
             form.resetFields();
         } catch (error) {
             console.error('Error changing password:', error);
-            notification.error({
-                message: 'Error',
-                description: 'Error changing password',
-            });
         }
     };
 

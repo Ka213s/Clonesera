@@ -1,7 +1,8 @@
 import { React, useEffect, useState, useCallback, SearchOutlined } from '../../../utils/commonImports';
-import { Table, Pagination, Input, Button } from 'antd';
-import { Link } from 'react-router-dom';
+import { Table, Pagination, Input, Button, Modal } from 'antd';
+// import { Link } from 'react-router-dom';
 import { getPayouts } from '../../../services/Api';
+import TransactionDetail from '../../../pages/TransactionDetail';
 
 interface Transaction {
     _id: string;
@@ -46,6 +47,8 @@ const Completed: React.FC = () => {
     const [pageSize, setPageSize] = useState<number>(10);
     const [total, setTotal] = useState<number>(0);
     const [searchKeyword, setSearchKeyword] = useState<string>("");
+    const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+    const [selectedPayoutId, setSelectedPayoutId] = useState<string | null>(null);
 
     const fetchData = useCallback(async (pageInfo: { pageNum: number; pageSize: number }, keyword: string) => {
         const result: ApiResponse = await getPayouts({
@@ -60,7 +63,6 @@ const Completed: React.FC = () => {
         });
         setData(result.pageData);
         setTotal(result.pageInfo.totalItems);
-
     }, []);
 
     useEffect(() => {
@@ -80,6 +82,16 @@ const Completed: React.FC = () => {
         setCurrent(1);
     };
 
+    const handleViewTransaction = (payoutId: string) => {
+        setSelectedPayoutId(payoutId);
+        setIsModalVisible(true);
+    };
+
+    const handleModalClose = () => {
+        setIsModalVisible(false);
+        setSelectedPayoutId(null);
+    };
+
     const columns = [
         {
             title: 'Payout No',
@@ -95,10 +107,8 @@ const Completed: React.FC = () => {
             title: 'Transaction',
             key: 'transaction_id',
             render: (record: PayoutData) => (
-                <Button type='link'>
-                    <Link to={`/transaction/${record._id}`}>
-                        View
-                    </Link>
+                <Button type='link' onClick={() => handleViewTransaction(record._id)}>
+                    View
                 </Button>
             ),
         },
@@ -154,6 +164,15 @@ const Completed: React.FC = () => {
                     showSizeChanger
                 />
             </div>
+            <Modal
+                title="Transaction Details"
+                visible={isModalVisible}
+                onCancel={handleModalClose}
+                footer={null}
+                width={1000}
+            >
+                {selectedPayoutId && <TransactionDetail payoutId={selectedPayoutId} />}
+            </Modal>
         </div>
     );
 };

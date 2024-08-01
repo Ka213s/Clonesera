@@ -119,11 +119,6 @@ const AdminDashboard: React.FC = () => {
 
   const columns = [
     {
-      title: 'Payout ID',
-      dataIndex: 'payout_id',
-      key: 'payout_id',
-    },
-    {
       title: 'Payout Number',
       dataIndex: 'payout_no',
       key: 'payout_no',

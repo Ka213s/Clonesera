@@ -87,7 +87,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({ payoutId }) => {
       dataIndex: 'price',
       key: 'price',
       className: 'text-right',
-      render: (value: number) => `$${value.toFixed(2)}`,
+      render: (value: number) => `$${value.toLocaleString()}`,
     },
     {
       title: 'Discount',
@@ -101,7 +101,7 @@ const TransactionDetail: React.FC<TransactionDetailProps> = ({ payoutId }) => {
       dataIndex: 'price_paid',
       key: 'price_paid',
       className: 'text-right',
-      render: (value: number) => `$${value.toFixed(2)}`,
+      render: (value: number) => `$${value.toLocaleString()}`,
     },
     {
       title: 'Purchase ID',

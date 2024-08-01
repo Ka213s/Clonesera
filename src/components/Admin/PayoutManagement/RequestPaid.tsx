@@ -1,8 +1,8 @@
 import { React, useEffect, useState, useCallback, SearchOutlined, Table, Button, Modal, Input, Pagination } from '../../../utils/commonImports';
 import { TablePaginationConfig } from 'antd/lib/table';
-import { Link } from 'react-router-dom';
 import { getPayouts, updatePayout } from '../../../services/Api';
 import { toast } from 'react-toastify';
+import TransactionDetail from '../../../pages/TransactionDetail';
 
 interface Transaction {
     _id: string;
@@ -52,6 +52,8 @@ const RequestPaid: React.FC = () => {
     const [rejectComment, setRejectComment] = useState('');
     const [currentPayoutId, setCurrentPayoutId] = useState<string | null>(null);
     const [searchKeyword, setSearchKeyword] = useState<string>("");
+    const [transactionModalVisible, setTransactionModalVisible] = useState(false); // State to control transaction modal visibility
+    const [selectedTransactionId, setSelectedTransactionId] = useState<string | null>(null); // State to store selected transaction ID
 
     const fetchData = useCallback(async (pageInfo: { pageNum: number; pageSize: number }, keyword: string) => {
         try {
@@ -140,6 +142,16 @@ const RequestPaid: React.FC = () => {
         }
     };
 
+    const handleViewTransaction = (transactionId: string) => {
+        setSelectedTransactionId(transactionId);
+        setTransactionModalVisible(true);
+    };
+
+    const handleTransactionModalClose = () => {
+        setTransactionModalVisible(false);
+        setSelectedTransactionId(null);
+    };
+
     const columns = [
         {
             title: 'Payout No',
@@ -155,8 +167,8 @@ const RequestPaid: React.FC = () => {
             title: 'Transaction',
             key: 'transaction_id',
             render: (record: PayoutData) => (
-                <Button type='link'>
-                    <Link to={`/transaction/${record._id}`}>View</Link>
+                <Button type='link' onClick={() => handleViewTransaction(record._id)}>
+                    View
                 </Button>
             ),
         },
@@ -244,6 +256,15 @@ const RequestPaid: React.FC = () => {
                     placeholder="Enter the reason for rejection"
                     rows={4}
                 />
+            </Modal>
+            <Modal
+                title="Transaction Details"
+                visible={transactionModalVisible}
+                onCancel={handleTransactionModalClose}
+                footer={null}
+                width={1000} 
+            >
+                {selectedTransactionId && <TransactionDetail payoutId={selectedTransactionId} />}
             </Modal>
         </div>
     );
