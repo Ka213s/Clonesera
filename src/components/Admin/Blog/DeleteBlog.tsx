@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal, Button } from 'antd';
-import { deleteBlog } from '../../../utils/commonImports'; // Ensure the path is correct
+import { deleteBlog } from '../../../utils/commonImports'; 
 
 interface DeleteBlogProps {
   visible: boolean;

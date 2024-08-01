@@ -47,7 +47,7 @@ const ActiveTab: React.FC = () => {
         onOk={handleOk}
         onCancel={handleCancel}
         footer={null}
-        width={800} // Adjust the width as needed
+        width={800} 
       >
         <CreateAccount />
       </Modal>
