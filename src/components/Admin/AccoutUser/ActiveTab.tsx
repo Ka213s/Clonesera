@@ -13,39 +13,43 @@ const ActiveTab: React.FC = () => {
     setIsModalVisible(true);
   };
 
+  const handleOk = () => {
+    setIsModalVisible(false);
+  };
+
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
   return (
-    <div>
-      <Tabs
-        defaultActiveKey="1"
-        tabBarExtraContent={
-          <Button
-            type="primary"
-            onClick={showModal}
-            className='custom-button'
-          >
-            Add User
-          </Button>
-        }
-      >
-        <TabPane tab="All accounts" key="1">
-          <DisplayAccount status={true} isDeleted={false} />
-        </TabPane>
-        <TabPane tab="Unverified accounts" key="2">
-          <AccountIsVerify status={true} isDeleted={false} />
-        </TabPane>
-      </Tabs>
+    <div style={{ position: 'relative' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between'}}>
+        <Tabs defaultActiveKey="1" style={{ flex: 1 }}>
+          <TabPane tab="All accounts" key="1">
+            <DisplayAccount status={true} isDeleted={false} />
+          </TabPane>
+          <TabPane tab="Unverified accounts" key="2">
+            <AccountIsVerify status={true} isDeleted={false} />
+          </TabPane>
+        </Tabs>
+        <Button
+          type="primary"
+          onClick={showModal}
+          className='custom-button'
+          style={{ marginBottom: '16px' }}
+        >
+          Add User
+        </Button>
+      </div>
       <Modal
         title="Create New Account"
         visible={isModalVisible}
+        onOk={handleOk}
         onCancel={handleCancel}
         footer={null}
         width={800} // Adjust the width as needed
       >
-        <CreateAccount onClose={handleCancel} />
+        <CreateAccount />
       </Modal>
     </div>
   );
