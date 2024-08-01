@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Button, Form, Input, Select, message, Row, Col } from 'antd';
+import { Modal, Button, Form, Input, Row, Col } from 'antd';
 import { EditOutlined } from '@ant-design/icons';
-import { getLessonById, updateLesson, getCourses } from '../../../../utils/commonImports';
+import { getLessonById, updateLesson } from '../../../../utils/commonImports';
 import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor';
 import FileUploader from '../../../FileUploader';
-
-const { Option } = Select;
 
 interface UpdateLessonProps {
   lesson_id: string;
@@ -17,44 +15,24 @@ interface Lesson {
   session_id: string;
   user_id: string;
   lesson_type: string;
-  description?: string;
+  description: string; // Ensuring description is a string
   video_url?: string;
   image_url?: string;
   full_time: number;
   position_order: number;
 }
 
-interface Course {
-  _id: string;
-  name: string;
-}
-
 const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [lesson, setLesson] = useState<Lesson | null>(null);
-  const [courses, setCourses] = useState<Course[]>([]);
   const [form] = Form.useForm();
 
   useEffect(() => {
-    const fetchCourses = async (): Promise<void> => {
-        const response = await getCourses({
-          keyword: '',
-          category: '',
-          status: 'new',
-          is_deleted: false,
-        }, 1, 100);
-        setCourses(response.pageData);
-    };
-
     const fetchLesson = async (): Promise<void> => {
-        const lessonData: Lesson = await getLessonById(lesson_id);
-        setLesson(lessonData);
-        const course = courses.find(course => course._id === lessonData.course_id);
-        const courseName = course ? course.name : '';
-        form.setFieldsValue({ ...lessonData, course_name: courseName });
+      const lessonData: Lesson = await getLessonById(lesson_id);
+      setLesson(lessonData);
+      form.setFieldsValue({ ...lessonData, full_time: `${Math.floor(lessonData.full_time / 60)}h ${lessonData.full_time % 60}m` });
     };
-
-    fetchCourses();
 
     if (isModalVisible) {
       fetchLesson();
@@ -65,26 +43,28 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
     setIsModalVisible(true);
   };
 
-  const handleOk = async (values: Omit<Lesson, 'course_id'> & { course_name: string; full_time: string }): Promise<void> => {
-      const fullTimeString = values.full_time as unknown as string;
-      const match = fullTimeString.match(/(\d+)h (\d+)m/) || [];
-      const hours = match[1] ? parseInt(match[1], 10) : 0;
-      const minutes = match[2] ? parseInt(match[2], 10) : parseInt(fullTimeString.replace('m', ''), 10);
-      const fullTimeInMinutes = hours * 60 + minutes;
-      const selectedCourse = courses.find(course => course.name === values.course_name);
-      if (!selectedCourse) {
-        throw new Error('Selected course not found');
-      }
-      const updatedValues: Lesson = {
-        ...values,
-        course_id: selectedCourse._id,
-        full_time: fullTimeInMinutes,
-        video_url: values.video_url || "",
-        image_url: values.image_url || "",
-      };
-      await updateLesson(lesson_id, updatedValues);
-      setIsModalVisible(false);
-      message.success('Lesson updated successfully');
+  const handleOk = async (values: Omit<Lesson, 'full_time'> & { full_time: string }): Promise<void> => {
+    const fullTimeString = values.full_time as unknown as string;
+    const match = fullTimeString.match(/(\d+)h (\d+)m/) || [];
+    const hours = match[1] ? parseInt(match[1], 10) : 0;
+    const minutes = match[2] ? parseInt(match[2], 10) : parseInt(fullTimeString.replace('m', ''), 10);
+    const fullTimeInMinutes = hours * 60 + minutes;
+
+    const updatedValues: Lesson = {
+      ...values,
+      full_time: fullTimeInMinutes,
+      video_url: values.video_url || "",
+      image_url: values.image_url || "",
+      course_id: lesson?.course_id || '',
+      session_id: lesson?.session_id || '',
+      user_id: lesson?.user_id || '',
+    };
+
+    console.log('Updated Values:', updatedValues); 
+
+    await updateLesson(lesson_id, updatedValues);
+    setIsModalVisible(false);
+   
   };
 
   const handleCancel = (): void => {
@@ -97,7 +77,7 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
     } else if (type === 'image') {
       form.setFieldsValue({ image_url: url });
     }
-    message.success('File uploaded successfully');
+  
   };
 
   return (
@@ -108,8 +88,8 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={null}
-        width={800} 
-        style={{ top: '20px' }} 
+        width={800}
+        style={{ top: '20px' }}
       >
         {lesson && (
           <Form form={form} onFinish={handleOk} initialValues={lesson}>
@@ -120,32 +100,12 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Form.Item name="course_name" label="Course" rules={[{ required: true, message: 'Please input the course!' }]}>
-                  <Select>
-                    {courses.map(course => (
-                      <Option key={course._id} value={course.name}>
-                        {course.name}
-                      </Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Col>
-            </Row>
-            <Row gutter={16}>
-              <Col span={12}>
-                <Form.Item name="session_id" label="Session ID" rules={[{ required: true, message: 'Please input the session ID!' }]}>
-                  <Input />
-                </Form.Item>
-              </Col>
-              <Col span={12}>
                 <Form.Item name="lesson_type" label="Lesson Type" rules={[{ required: true, message: 'Please input the lesson type!' }]}>
                   <Input />
                 </Form.Item>
               </Col>
             </Row>
-            <Row gutter={16}>
-            </Row>
-            <Form.Item label="Description">
+            <Form.Item name="description" label="Description">
               <TinyMCEEditorComponent
                 value={lesson.description || ''}
                 onEditorChange={(content) => form.setFieldsValue({ description: content })}
@@ -204,6 +164,16 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
                   </Row>
                 ) : null
               }
+            </Form.Item>
+            {/* Hidden fields for course_id, session_id, and user_id */}
+            <Form.Item name="course_id" style={{ display: 'none' }}>
+              <Input type="hidden" />
+            </Form.Item>
+            <Form.Item name="session_id" style={{ display: 'none' }}>
+              <Input type="hidden" />
+            </Form.Item>
+            <Form.Item name="user_id" style={{ display: 'none' }}>
+              <Input type="hidden" />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit">Update</Button>

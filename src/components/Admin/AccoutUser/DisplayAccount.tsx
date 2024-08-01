@@ -104,17 +104,13 @@ const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDelete
       ),
     },
     {
-      title: 'Edit',
-      key: 'edit',
+      title: 'Actions',
+      key: 'actions',
       render: (record: User) => (
-        <EditButton userId={record._id} onEdit={handleEdit} />
-      ),
-    },
-    {
-      title: 'Delete',
-      key: 'delete',
-      render: (record: User) => (
-        <DeleteButton userId={record._id} onDelete={handleDelete} />
+        <>
+          <EditButton userId={record._id} onEdit={handleEdit} />
+          <DeleteButton userId={record._id} onDelete={handleDelete} />
+        </>
       ),
     },
   ];
