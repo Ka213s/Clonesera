@@ -74,11 +74,6 @@ const InstructorDashboard: React.FC = () => {
     // Define columns for the table
     const columns = [
         {
-            title: 'Payout ID',
-            dataIndex: 'payout_id',
-            key: 'payout_id',
-        },
-        {
             title: 'Payout No',
             dataIndex: 'payout_no',
             key: 'payout_no',
@@ -138,7 +133,7 @@ const InstructorDashboard: React.FC = () => {
                         showTotal={(total) => `Total ${total} items`}
                         className="mt-4"
                     />
-                </div>  
+                </div>
             </div>
         </div>
     );

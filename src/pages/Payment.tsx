@@ -49,7 +49,7 @@ const Payment: React.FC = () => {
 
     const selectedItems = cartItems;
     const totalPrice = selectedItems.reduce((acc, item) => acc + item.price, 0);
-    const totalDiscount = selectedItems.reduce((acc, item) => acc + item.discount, 0);
+    const totalDiscount = selectedItems.reduce((acc, item) => acc + (item.price * item.discount / 100), 0);
     const totalBill = totalPrice - totalDiscount;
 
     const handleUpdateCart = async (status: string) => {
@@ -121,8 +121,8 @@ const Payment: React.FC = () => {
                         <div className="flex justify-between items-center mb-4 p-4 bg-green-50 border-l-8 border-green-400 rounded-lg">
                             <TagFilled className="text-green-500 text-2xl" />
                             <div className="flex-1 ml-4">
-                                <Text className="text-gray-800 text-lg font-medium">Total Discount:</Text>
-                                <Text className="text-green-700 text-lg font-bold">-${totalDiscount}</Text>
+                                <Text className="text-gray-800 text-lg font-medium">Discount Amount:</Text>
+                                <Text className="text-green-700 text-lg font-bold">-${totalDiscount.toLocaleString()}</Text>
                             </div>
                         </div>
                         <div className="flex justify-between items-center p-4 bg-blue-50 border-l-8 border-blue-400 rounded-lg">

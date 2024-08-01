@@ -72,7 +72,7 @@ const ViewCart: React.FC = () => {
 
     const selectedItems = cartItems.filter(item => selectedRowKeys.includes(item._id));
     const totalPrice = selectedItems.reduce((acc, item) => acc + item.price, 0);
-    const totalDiscount = selectedItems.reduce((acc, item) => acc + item.discount, 0);
+    const totalDiscount = selectedItems.reduce((acc, item) => acc + (item.price * (item.discount / 100)), 0);
     const totalBill = totalPrice - totalDiscount;
 
     if (cartItems.length === 0) {
@@ -123,13 +123,13 @@ const ViewCart: React.FC = () => {
                                                 <span className="text-gray-500 line-through text-xs">${item.price.toLocaleString()}</span>
                                                 <span className="ml-1 flex items-center">
                                                     <i className="fas fa-tag text-green-500 text-xs"></i>
-                                                    <span className="text-green-500 text-xs ml-1">Discount: ${item.discount}</span>
+                                                    <span className="text-green-500 text-xs ml-1">Discount: {item.discount}%</span>
                                                 </span>
                                             </>
                                         )}
                                     </div>
                                     <span className={`text-sm font-bold ${item.discount > 0 ? 'text-red-500' : 'text-black'}`}>
-                                        ${(item.price - item.discount).toLocaleString()}
+                                        ${(item.price - (item.price * (item.discount / 100))).toLocaleString()}
                                     </span>
                                 </div>
                             </div>
@@ -140,15 +140,15 @@ const ViewCart: React.FC = () => {
             <div className="lg:w-1/3 p-4 bg-white rounded-md shadow-sm">
                 <h2 className="text-lg font-bold mb-2">Order Summary</h2>
                 <div className="flex justify-between mb-1">
-                    <span>Subtotal</span>
+                    <span>Original Price</span>
                     <span className="text-sm font-bold">${totalPrice.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between mb-1">
-                    <span>Total Discount</span>
-                    <span className="text-sm font-bold">-${totalDiscount}</span>
+                    <span>Discount Amount</span>
+                    <span className="text-sm font-bold">-${totalDiscount.toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between mb-2">
-                    <span className="text-lg font-semibold">Total</span>
+                    <span className="text-lg font-semibold">Total Price</span>
                     <span className="text-lg font-semibold">${totalBill.toLocaleString()}</span>
                 </div>
                 <button className="w-full py-2 text-sm font-semibold rounded-3xl bg-[#22c55e] hover:bg-green-600 text-white" onClick={handleCheckout}>
