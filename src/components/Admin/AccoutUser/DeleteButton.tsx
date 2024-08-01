@@ -10,13 +10,13 @@ interface DeleteButtonProps {
 
 const DeleteButton: React.FC<DeleteButtonProps> = ({ userId, onDelete }) => {
   const handleDelete = async () => {
-      await deleteUser(userId);
-      onDelete(userId);
+    await deleteUser(userId);
+    onDelete(userId);
   };
 
   return (
     <Tooltip title="Delete">
-      <Button type="link" icon={<DeleteOutlined />} onClick={handleDelete} />
+      <Button type="link" icon={<DeleteOutlined />} onClick={handleDelete} danger />
     </Tooltip>
   );
 };

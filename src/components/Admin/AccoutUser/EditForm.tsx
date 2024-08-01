@@ -30,7 +30,7 @@ const EditForm: React.FC<EditUserFormProps> = ({ userId, onClose }) => {
     const fetchUserData = async () => {
       const userDetail = await getUserData(userId);
       setUserData(userDetail);
-      setImageURL(userDetail.avatar); // Set initial image URL
+      setImageURL(userDetail.avatar); 
     };
 
     fetchUserData();

@@ -102,7 +102,8 @@ const CourseTable: React.FC<CourseTableProps> = ({
     {
       title: "Discount",
       dataIndex: "discount",
-      key: "discount"
+      key: "discount",
+      className: 'text-right',
     },
     {
       title: "Created At",
