@@ -10,7 +10,6 @@ const ActiveTab: React.FC = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   const showModal = () => {
-    console.log('Button Clicked!'); // Log message to verify button click
     setIsModalVisible(true);
   };
 
