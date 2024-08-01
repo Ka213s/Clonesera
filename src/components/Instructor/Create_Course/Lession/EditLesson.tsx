@@ -7,6 +7,7 @@ import FileUploader from '../../../FileUploader';
 
 interface UpdateLessonProps {
   lesson_id: string;
+  onLessonUpdated: () => void; // Add this prop to notify parent component
 }
 
 interface Lesson {
@@ -15,14 +16,14 @@ interface Lesson {
   session_id: string;
   user_id: string;
   lesson_type: string;
-  description: string; // Ensuring description is a string
+  description: string; 
   video_url?: string;
   image_url?: string;
   full_time: number;
   position_order: number;
 }
 
-const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
+const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id, onLessonUpdated }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [lesson, setLesson] = useState<Lesson | null>(null);
   const [form] = Form.useForm();
@@ -60,11 +61,9 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
       user_id: lesson?.user_id || '',
     };
 
-    console.log('Updated Values:', updatedValues); 
-
     await updateLesson(lesson_id, updatedValues);
     setIsModalVisible(false);
-   
+    onLessonUpdated(); // Call this function to refresh the lesson list
   };
 
   const handleCancel = (): void => {
@@ -77,7 +76,6 @@ const UpdateLesson: React.FC<UpdateLessonProps> = ({ lesson_id }) => {
     } else if (type === 'image') {
       form.setFieldsValue({ image_url: url });
     }
-  
   };
 
   return (

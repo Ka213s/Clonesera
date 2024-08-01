@@ -10,7 +10,11 @@ interface Course {
   name: string;
 }
 
-const AddSession: React.FC = () => {
+interface AddSessionProps {
+  onSessionCreated: () => void; // Add this prop to notify parent component
+}
+
+const AddSession: React.FC<AddSessionProps> = ({ onSessionCreated }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [form] = Form.useForm();
@@ -24,11 +28,10 @@ const AddSession: React.FC = () => {
   }, []);
 
   const handleSubmit = async (values: { name: string; course_id: string; description: string; }) => {
-   
-      await createSession(values);
-      setIsOpen(false);
-      form.resetFields();
-    
+    await createSession(values);
+    setIsOpen(false);
+    form.resetFields();
+    onSessionCreated(); // Call this function to refresh the session list
   };
 
   return (

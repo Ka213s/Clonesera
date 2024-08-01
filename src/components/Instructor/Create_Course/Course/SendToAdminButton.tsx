@@ -1,14 +1,14 @@
 import React from 'react';
 import { Button, Modal } from 'antd';
 import { changeCourseStatus } from '../../../../utils/commonImports';
+
 interface SendToAdminButtonProps {
   courseIds: number[];
+  refreshCourses: () => void;
 }
 
-const SendToAdminButton: React.FC<SendToAdminButtonProps> = ({ courseIds }) => {
+const SendToAdminButton: React.FC<SendToAdminButtonProps> = ({ courseIds, refreshCourses }) => {
   const handleClick = () => {
-
-
     Modal.confirm({
       title: 'Confirm Send',
       content: `Are you sure you want to send ${courseIds.length} course(s) to admin for approval?`,
@@ -20,6 +20,7 @@ const SendToAdminButton: React.FC<SendToAdminButtonProps> = ({ courseIds }) => {
             changeCourseStatus({ course_id: courseId.toString(), new_status: 'waiting_approve' })
           )
         );
+        refreshCourses();
       },
     });
   };

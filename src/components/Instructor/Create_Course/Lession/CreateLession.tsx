@@ -29,7 +29,11 @@ interface LessonData {
   position_order: number;
 }
 
-const CreateLessonButton: React.FC = () => {
+interface CreateLessonButtonProps {
+  onLessonCreated: () => void; // Add this prop to notify parent component
+}
+
+const CreateLessonButton: React.FC<CreateLessonButtonProps> = ({ onLessonCreated }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [courses, setCourses] = useState<Course[]>([]);
@@ -40,27 +44,23 @@ const CreateLessonButton: React.FC = () => {
   const [lessonType, setLessonType] = useState<string>('video');
 
   const fetchCourses = async () => {
-   
-      const response = await getCourses({
-        keyword: '',
-        category: '',
-        status: 'new',
-        is_deleted: false,
-      }, 1, 10);
-      setCourses(response.pageData);
-   
+    const response = await getCourses({
+      keyword: '',
+      category: '',
+      status: 'new',
+      is_deleted: false,
+    }, 1, 10);
+    setCourses(response.pageData);
   };
 
   const fetchSessions = async (courseId: string) => {
-   
-      const response = await getSessions({
-        keyword: '',
-        course_id: courseId,
-        is_position_order: false,
-        is_deleted: false,
-      }, 1, 10);
-      setSessions(response.pageData);
-    
+    const response = await getSessions({
+      keyword: '',
+      course_id: courseId,
+      is_position_order: false,
+      is_deleted: false,
+    }, 1, 10);
+    setSessions(response.pageData);
   };
 
   useEffect(() => {
@@ -73,22 +73,21 @@ const CreateLessonButton: React.FC = () => {
   };
 
   const handleCreateLesson = async (values: Omit<LessonData, 'video_url' | 'image_url' | 'description'>) => {
-  
-      const lessonData: LessonData = {
-        ...values,
-        video_url: videoURL,
-        image_url: imageURL,
-        description: editorContent,
-        full_time: parseInt(values.full_time.toString(), 10),
-        position_order: parseInt(values.position_order.toString(), 10),
-      };
-      await createLesson(lessonData);
-      form.resetFields();
-      setIsModalVisible(false);
-      setVideoURL('');
-      setImageURL('');
-      setEditorContent('');
-    
+    const lessonData: LessonData = {
+      ...values,
+      video_url: videoURL,
+      image_url: imageURL,
+      description: editorContent,
+      full_time: parseInt(values.full_time.toString(), 10),
+      position_order: parseInt(values.position_order.toString(), 10),
+    };
+    await createLesson(lessonData);
+    form.resetFields();
+    setIsModalVisible(false);
+    setVideoURL('');
+    setImageURL('');
+    setEditorContent('');
+    onLessonCreated(); // Call this function to refresh the lesson list
   };
 
   return (

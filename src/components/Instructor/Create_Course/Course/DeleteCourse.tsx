@@ -5,9 +5,10 @@ import { deleteCourse } from '../../../../utils/commonImports';
 
 interface DeleteButtonProps {
   courseId: number;
+  refreshCourses: () => void;
 }
 
-const DeleteButton: React.FC<DeleteButtonProps> = ({ courseId }) => {
+const DeleteButton: React.FC<DeleteButtonProps> = ({ courseId, refreshCourses }) => {
   const handleClick = () => {
     Modal.confirm({
       title: 'Confirm Deletion',
@@ -16,6 +17,7 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({ courseId }) => {
       cancelText: 'Cancel',
       onOk: async () => {
           await deleteCourse(courseId.toString());
+          refreshCourses();
       },
     });
   };

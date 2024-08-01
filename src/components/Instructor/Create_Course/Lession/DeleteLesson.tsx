@@ -6,9 +6,10 @@ const { confirm } = Modal;
 
 interface DeleteLessonProps {
   lesson_id: string;
+  onLessonDeleted: () => void; // Add this prop to notify parent component
 }
 
-const DeleteLesson: React.FC<DeleteLessonProps> = ({ lesson_id }) => {
+const DeleteLesson: React.FC<DeleteLessonProps> = ({ lesson_id, onLessonDeleted }) => {
   const showDeleteConfirm = () => {
     confirm({
       title: 'Are you sure delete this lesson?',
@@ -21,7 +22,8 @@ const DeleteLesson: React.FC<DeleteLessonProps> = ({ lesson_id }) => {
   };
 
   const handleDeleteLesson = async (id: string) => {
-      await deleteLesson(id);
+    await deleteLesson(id);
+    onLessonDeleted(); // Call this function to refresh the lesson list
   };
 
   return (
@@ -30,7 +32,6 @@ const DeleteLesson: React.FC<DeleteLessonProps> = ({ lesson_id }) => {
       onClick={showDeleteConfirm}
       danger
     >
-    
     </Button>
   );
 };

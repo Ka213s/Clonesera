@@ -13,16 +13,17 @@ interface Course {
 
 interface ButtonEditProps {
   _id: string;
+  onSessionUpdated: () => void; // Add this prop to notify parent component
 }
 
-const ButtonEdit: React.FC<ButtonEditProps> = ({ _id }) => {
+const ButtonEdit: React.FC<ButtonEditProps> = ({ _id, onSessionUpdated }) => {
   const [visible, setVisible] = useState(false);
   const [courses, setCourses] = useState<Course[]>([]);
   const [form] = Form.useForm();
 
   useEffect(() => {
     const fetchCourses = async () => {
-      const response = await getCourses({ keyword: '', category: '', status: 'new', is_deleted: false }, 1, 100);
+      const response = await getCourses({ keyword: '', category: '', status: '', is_deleted: false }, 1, 100);
       setCourses(response.pageData);
     };
     fetchCourses();
@@ -40,12 +41,12 @@ const ButtonEdit: React.FC<ButtonEditProps> = ({ _id }) => {
   };
 
   const handleOk = async () => {
-
     const values = await form.validateFields();
     const selectedCourse = courses.find(course => course.name === values.course_name);
     await updateSession(_id, { ...values, course_id: selectedCourse?._id });
     setVisible(false);
     form.resetFields();
+    onSessionUpdated(); // Call this function to refresh the session list
   };
 
   const handleCancel = () => {

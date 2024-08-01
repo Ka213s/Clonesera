@@ -19,11 +19,12 @@ export interface Course {
 
 interface EditButtonProps {
   courseId: number;
+  refreshCourses: () => void;
 }
 
 const { Option } = Select;
 
-const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
+const EditButton: React.FC<EditButtonProps> = ({ courseId, refreshCourses }) => {
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
   const [form] = Form.useForm();
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
@@ -46,7 +47,8 @@ const EditButton: React.FC<EditButtonProps> = ({ courseId }) => {
   const handleOk = async () => {
       const values = await form.validateFields();
       await updateCourse(courseId.toString(), { ...values, video_url: videoUrl, image_url: imageUrl });
-      setIsModalVisible(false)
+      setIsModalVisible(false);
+      refreshCourses();
   };
 
   const handleCancel = () => {

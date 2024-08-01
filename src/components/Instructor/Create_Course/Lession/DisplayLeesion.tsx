@@ -1,4 +1,6 @@
-import { React, useEffect, useState, useCallback, Table, Pagination, Input, getLessons, SearchOutlined } from '../../../../utils/commonImports';
+import React from 'react';
+import { Table, Pagination, Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import UpdateLesson from './EditLesson';
 import DeleteLesson from './DeleteLesson';
@@ -15,46 +17,29 @@ interface Lesson {
   image_url?: string;
 }
 
-interface SearchCondition {
-  keyword: string;
-  course_id: string;
-  session_id: string;
-  lesson_type: string;
-  is_position_order: boolean;
-  is_deleted: boolean;
+interface DisplayLessonProps {
+  lessons: Lesson[];
+  totalLessons: number;
+  pageNum: number;
+  pageSize: number;
+  setPageNum: (page: number) => void;
+  setPageSize: (size: number) => void;
+  setSearchKeyword: (keyword: string) => void;
+  fetchLessons: (page: number, size: number, keyword: string) => void;
 }
 
 const { Search } = Input;
 
-const DisplayLesson: React.FC = () => {
-  const [lessons, setLessons] = useState<Lesson[]>([]);
-  const [totalLessons, setTotalLessons] = useState<number>(0);
-  const [pageNum, setPageNum] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
-  const [searchKeyword, setSearchKeyword] = useState<string>('');
-
-  const fetchLessons = useCallback(
-    async (page: number, size: number, keyword: string) => {
-
-      const searchCondition: SearchCondition = {
-        keyword: keyword,
-        course_id: '',
-        session_id: '',
-        lesson_type: '',
-        is_position_order: false,
-        is_deleted: false,
-      };
-      const data = await getLessons(searchCondition, page, size);
-      setLessons(data.pageData); // Ensure `data.pageData` includes necessary fields
-      setTotalLessons(data.pageInfo.totalItems); // Assuming `data.pageInfo` contains `totalItems`
-
-    },
-    []
-  );
-
-  useEffect(() => {
-    fetchLessons(pageNum, pageSize, searchKeyword);
-  }, [pageNum, pageSize, searchKeyword, fetchLessons]);
+const DisplayLesson: React.FC<DisplayLessonProps> = ({
+  lessons,
+  totalLessons,
+  pageNum,
+  pageSize,
+  setPageNum,
+  setPageSize,
+  setSearchKeyword,
+  fetchLessons,
+}) => {
 
   const formatFullTime = (minutes: number) => {
     if (minutes >= 60) {
@@ -124,8 +109,8 @@ const DisplayLesson: React.FC = () => {
       key: 'actions',
       render: (_, record: Lesson) => (
         <div className="flex space-x-2">
-          <UpdateLesson lesson_id={record._id} />
-          <DeleteLesson lesson_id={record._id} />
+          <UpdateLesson lesson_id={record._id} onLessonUpdated={() => fetchLessons(pageNum, pageSize, '')} />
+          <DeleteLesson lesson_id={record._id} onLessonDeleted={() => fetchLessons(pageNum, pageSize, '')} />
         </div>
       ),
       align: 'center',

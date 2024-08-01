@@ -1,4 +1,7 @@
-import { React, useEffect, useState, useCallback, useMemo, Table, message, Select, Button, Input, Pagination, getCourses, changeCourseStatus, SearchOutlined } from '../../../../utils/commonImports';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import { Table, message, Select, Button, Input, Pagination } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
+import { getCourses, changeCourseStatus } from '../../../../utils/commonImports';
 import { ColumnsType } from 'antd/es/table';
 import moment from 'moment';
 import EditButton from './EditCourse';
@@ -20,9 +23,11 @@ interface Course {
 
 interface CourseTableProps {
   setSelectedCourseIds: React.Dispatch<React.SetStateAction<number[]>>;
+  refreshFlag: boolean;
+  refreshCourses: () => void;
 }
 
-const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
+const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds, refreshFlag, refreshCourses }) => {
   const [courses, setCourses] = useState<Course[]>([]);
   const [selectedRowKeys, setSelectedRowKeys] = useState<number[]>([]);
   const [searchKeyword, setSearchKeyword] = useState<string>('');
@@ -47,7 +52,7 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
 
   useEffect(() => {
     fetchCourses(searchKeyword, pageNum, pageSize);
-  }, [searchKeyword, pageNum, pageSize, fetchCourses]);
+  }, [searchKeyword, pageNum, pageSize, fetchCourses, refreshFlag]);
 
   useEffect(() => {
     setSelectedCourseIds(selectedRowKeys);
@@ -64,8 +69,8 @@ const CourseTable: React.FC<CourseTableProps> = ({ setSelectedCourseIds }) => {
 
   const renderActions = (record: Course) => (
     <div className="flex space-x-2">
-      <EditButton courseId={record._id} />
-      <DeleteButton courseId={record._id} />
+      <EditButton courseId={record._id} refreshCourses={refreshCourses} />
+      <DeleteButton courseId={record._id} refreshCourses={refreshCourses} />
     </div>
   );
 

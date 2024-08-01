@@ -5,7 +5,11 @@ import TinyMCEEditorComponent from '../../../../utils/TinyMCEEditor';
 import useCategories from '../../../useCategories';
 const { Option } = Select;
 
-const CreateCourseButton: React.FC = () => {
+interface CreateCourseButtonProps {
+  refreshCourses: () => void;
+}
+
+const CreateCourseButton: React.FC<CreateCourseButtonProps> = ({ refreshCourses }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [form] = Form.useForm();
   const [imageURL, setImageURL] = useState<string | null>(null);
@@ -39,6 +43,7 @@ const CreateCourseButton: React.FC = () => {
     setDescription('');
     setContent('');
     setIsFree(true);
+    refreshCourses();
   };
 
   const handleCancel = () => {

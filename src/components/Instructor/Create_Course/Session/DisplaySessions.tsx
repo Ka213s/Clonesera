@@ -1,4 +1,6 @@
-import { React, useEffect, useState, useCallback, Table, Pagination, Input, getSessions, SearchOutlined } from '../../../../utils/commonImports';
+import React from 'react';
+import { Table, Pagination, Input } from 'antd';
+import { SearchOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import ButtonEdit from './EditSession';
 import ButtonDelete from './DeleteSession';
@@ -11,37 +13,29 @@ interface Session {
   created_at: string;
 }
 
+interface DisplaySessionsProps {
+  sessions: Session[];
+  totalSessions: number;
+  pageNum: number;
+  pageSize: number;
+  setPageNum: (page: number) => void;
+  setPageSize: (size: number) => void;
+  setSearchKeyword: (keyword: string) => void;
+  fetchSessions: (page: number, size: number, keyword: string) => void;
+}
+
 const { Search } = Input;
 
-const DisplaySessions: React.FC = () => {
-  const [sessions, setSessions] = useState<Session[]>([]);
-  const [totalSessions, setTotalSessions] = useState<number>(0);
-  const [pageNum, setPageNum] = useState<number>(1);
-  const [pageSize, setPageSize] = useState<number>(10);
-  const [searchKeyword, setSearchKeyword] = useState<string>('');
-
-  const fetchSessions = useCallback(
-    async (page: number, size: number, keyword: string) => {
-
-      const response = await getSessions(
-        {
-          keyword: keyword,
-          course_id: '',
-          is_position_order: false,
-          is_deleted: false,
-        },
-        page,
-        size
-      );
-      setSessions(response.pageData);
-      setTotalSessions(response.pageInfo.totalItems); // Assuming response contains pageInfo with totalItems
-    },
-    []
-  );
-
-  useEffect(() => {
-    fetchSessions(pageNum, pageSize, searchKeyword);
-  }, [pageNum, pageSize, searchKeyword, fetchSessions]);
+const DisplaySessions: React.FC<DisplaySessionsProps> = ({
+  sessions,
+  totalSessions,
+  pageNum,
+  pageSize,
+  setPageNum,
+  setPageSize,
+  setSearchKeyword,
+    fetchSessions,
+}) => {
 
   const columns: ColumnsType<Session> = [
     {
@@ -65,8 +59,8 @@ const DisplaySessions: React.FC = () => {
       key: 'actions',
       render: (_, record: Session) => (
         <div className="flex justify-center space-x-2">
-          <ButtonEdit _id={record._id} />
-          <ButtonDelete _id={record._id} />
+          <ButtonEdit _id={record._id} onSessionUpdated={() => fetchSessions(pageNum, pageSize, '')} />
+          <ButtonDelete _id={record._id} onSessionDeleted={() => fetchSessions(pageNum, pageSize, '')} />
         </div>
       ),
       align: 'center',
