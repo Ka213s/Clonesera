@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Table, message, Button, Input, Pagination } from 'antd';
-import { SearchOutlined } from '@ant-design/icons';
+import { SearchOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import { getBlogs } from '../../../utils/commonImports';
 import EditBlog from './EditBlog';
 import DeleteBlog from './DeleteBlog';
@@ -102,9 +102,9 @@ const GetBlogs: React.FC = () => {
       title: 'Action',
       key: 'action',
       render: (_: undefined, record: Blog) => (
-        <div>
-          <Button type="link" onClick={() => handleEdit(record._id)}>Edit</Button>
-          <Button type="link" danger onClick={() => setDeletingBlogId(record._id)}>Delete</Button>
+        <div className="flex space-x-2">
+          <Button type="link" icon={<EditOutlined />} onClick={() => handleEdit(record._id)} />
+          <Button type="link" danger icon={<DeleteOutlined />} onClick={() => setDeletingBlogId(record._id)} />
         </div>
       ),
     },
