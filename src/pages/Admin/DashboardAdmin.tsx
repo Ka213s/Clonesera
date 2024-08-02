@@ -91,7 +91,7 @@ const AdminDashboard: React.FC = () => {
 
   const stats = [
     {
-      title: 'Total Money',
+      title: 'Total Balance',
       value: formatNumber(TotalMoney),
       icon: <DollarOutlined style={{ fontSize: '48px', color: '#faad14' }} />
     },

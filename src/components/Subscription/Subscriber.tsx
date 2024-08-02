@@ -9,7 +9,6 @@ interface Subscriber {
     subscriber_name: string;
     is_subscribed: boolean;
     subscriber_id: string;
- 
     avatar?: string;
     phone_number?: string;
     email?: string;
@@ -37,7 +36,7 @@ const Subscriber: React.FC = () => {
 
             // Fetch user data for each subscriber using subscriber_id
             const enrichedSubscribers = await Promise.all(filteredData.map(async (sub: Subscriber) => {
-                const userData = await getUserData(sub.subscriber_id); // Use subscriber_id here
+                const userData = await getUserData(sub.subscriber_id);
                 return {
                     ...sub,
                     avatar: userData.avatar,
@@ -49,7 +48,7 @@ const Subscriber: React.FC = () => {
             setAllSubscribers(enrichedSubscribers);
             const paginatedData = enrichedSubscribers.slice((page - 1) * pageSize, page * pageSize);
             setSubscribers(paginatedData);
-            setTotalItems(enrichedSubscribers.length); // Set total items based on subscribed users
+            setTotalItems(enrichedSubscribers.length);
         },
         []
     );
@@ -94,8 +93,7 @@ const Subscriber: React.FC = () => {
                         <Card
                             hoverable
                             className="flex flex-col items-center justify-center p-6 h-full"
-                            onClick={() => handleCardClick(sub.subscriber_id
-                            )}
+                            onClick={() => handleCardClick(sub.subscriber_id)}
                         >
                             <div className="flex flex-col items-center text-center">
                                 <img

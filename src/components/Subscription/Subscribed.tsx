@@ -84,7 +84,7 @@ const Subscribed: React.FC = () => {
     };
 
     const handleCardClick = (id: string) => {
-        navigate(`/view-profile/${id}`);
+        navigate(`/view-profile/${id}`); // Navigate to ViewProfile with instructor_id
     };
 
     return (
