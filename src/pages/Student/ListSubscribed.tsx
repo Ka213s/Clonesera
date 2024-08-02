@@ -25,7 +25,7 @@ const ListSubscribed: React.FC = () => {
     const [totalItems, setTotalItems] = useState<number>(0);
     const [searchKeyword, setSearchKeyword] = useState<string>("");
     const [allSubscriptions, setAllSubscriptions] = useState<Subscribed[]>([]);
-    const navigate = useNavigate(); // Initialize useNavigate
+    const navigate = useNavigate(); 
 
     const fetchSubscriptions = useCallback(
         async (page: number, pageSize: number) => {
@@ -82,11 +82,11 @@ const ListSubscribed: React.FC = () => {
 
     const handleSearch = (value: string) => {
         setSearchKeyword(value);
-        setPageNum(1); // Reset to the first page on search
+        setPageNum(1); 
     };
 
     const handleCardClick = (instructor_id: string) => {
-        navigate(`/view-profile/${instructor_id}`); // Navigate to the profile page
+        navigate(`/view-profile/${instructor_id}`); 
     };
 
     return (
@@ -107,7 +107,7 @@ const ListSubscribed: React.FC = () => {
                         <Card
                             hoverable
                             className="flex flex-col items-center p-4"
-                            onClick={() => handleCardClick(sub.instructor_id)} // Add onClick handler
+                            onClick={() => handleCardClick(sub.instructor_id)} 
                         >
                             <div className="flex justify-center items-center mb-4">
                                 <img
@@ -129,7 +129,7 @@ const ListSubscribed: React.FC = () => {
                                 <Button
                                     type="default"
                                     onClick={(e) => {
-                                        e.stopPropagation(); // Prevent triggering card click
+                                        e.stopPropagation(); 
                                         handleSubscribeToggle(sub.instructor_id, sub.is_subscribed);
                                     }}
                                     className={`mt-4 ${sub.is_subscribed ? 'text-red-500 hover:text-red-700' : 'text-blue-500 hover:text-blue-700'}`}

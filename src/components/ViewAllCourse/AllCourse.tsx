@@ -67,7 +67,7 @@ const AllCourse: React.FC = () => {
 
   const fetchCourses = async (keyword: string, categoryId: string | null, pageNum: number, pageSize: number) => {
     try {
-      setLoading(true);  // Start loading effect
+      setLoading(true);  
       const data = {
         searchCondition: {
           keyword,
@@ -82,10 +82,10 @@ const AllCourse: React.FC = () => {
       const response: ApiResponse<Course> = await getPublicCourses(data);
       setCourses(response.pageData);
       setTotalItems(response.pageInfo.totalItems);
-      setLoading(false); // End loading effect
+      setLoading(false); 
     } catch (error) {
       console.error('Error fetching courses:', error);
-      setLoading(false); // End loading effect in case of error
+      setLoading(false); 
     }
   };
 
@@ -165,7 +165,7 @@ const AllCourse: React.FC = () => {
               key={course._id}
               className="bg-white rounded-lg shadow-lg overflow-hidden flex flex-col transition-transform transform hover:scale-105 hover:shadow-2xl cursor-pointer"
               style={{ height: '360px', width: '340px' }}
-              onClick={() => navigate(`/course-detail/${course._id}`)} // Added onClick event for navigation
+              onClick={() => navigate(`/course-detail/${course._id}`)} 
             >
               <img
                 src={course.image_url}

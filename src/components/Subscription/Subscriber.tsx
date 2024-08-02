@@ -44,7 +44,7 @@ const Subscriber: React.FC = () => {
                     email: userData.email
                 };
             }));
-            
+
             setAllSubscribers(enrichedSubscribers);
             const paginatedData = enrichedSubscribers.slice((page - 1) * pageSize, page * pageSize);
             setSubscribers(paginatedData);
@@ -68,7 +68,7 @@ const Subscriber: React.FC = () => {
 
     const handleSearch = (value: string) => {
         setSearchKeyword(value);
-        setPageNum(1); // Reset to the first page on search
+        setPageNum(1); 
     };
 
     const handleCardClick = (id: string) => {
