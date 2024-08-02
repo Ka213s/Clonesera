@@ -79,7 +79,7 @@ const ViewProfile: React.FC = () => {
                             <p className="text-gray-600 mt-2">{userData?.phone_number || 'Location'}</p>
                         </div>
                     </div>
-                    {currentUserId !== userData?._id && (
+                    {currentUserId !== userData?._id && userData?.role !== 'student' && (
                         <button
                             className={`px-4 py-2 ${isSubscribed ? 'bg-red-600' : 'bg-green-600'} text-white rounded-lg`}
                             onClick={isSubscribed ? handleUnsubscribe : handleSubscribe}

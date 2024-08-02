@@ -68,7 +68,7 @@ const Subscriber: React.FC = () => {
 
     const handleSearch = (value: string) => {
         setSearchKeyword(value);
-        setPageNum(1); // Reset to the first page on search
+        setPageNum(1); 
     };
 
     const handleCardClick = (id: string) => {
