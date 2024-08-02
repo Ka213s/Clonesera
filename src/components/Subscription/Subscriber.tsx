@@ -44,7 +44,7 @@ const Subscriber: React.FC = () => {
                     email: userData.email
                 };
             }));
-
+            
             setAllSubscribers(enrichedSubscribers);
             const paginatedData = enrichedSubscribers.slice((page - 1) * pageSize, page * pageSize);
             setSubscribers(paginatedData);
