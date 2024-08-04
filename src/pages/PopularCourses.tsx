@@ -94,7 +94,7 @@ const PopularCourses: React.FC = () => {
         </button>
       </div>
       <div className="relative overflow-hidden">
-        <div className="course-slider" style={{ transform: `translateX(-${currentIndex * (100 / coursesPerPage)}%)` }}>
+        <div className="course-slider" style={{ transform: `translateX(-${currentIndex * (106 / coursesPerPage)}%)` }}>
           {loading ? (
             Array.from({ length: coursesPerPage }).map((_, index) => (
               <div key={index} className="course-slide">
