@@ -2,23 +2,31 @@ import React, { useState } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { Link, useNavigate } from 'react-router-dom';
 import { CredentialResponse } from '@react-oauth/google';
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button, Select, message } from 'antd';
 import { EyeOutlined, EyeInvisibleOutlined } from '@ant-design/icons';
 import FileUploader from '../components/FileUploader';
 import { loginAccount, getCurrentLogin, registerUserByGoogle, loginUserByGoogle, config, logo } from '../utils/commonImports';
 import Lottie from 'lottie-react';
 import animationData from '../assets/Animation - 1721792712537.json';
 
+const { Option } = Select;
+
+interface RoleSelectionFormValues {
+  role: string;
+  description: string;
+  phoneNumber: string;
+  avatar: string;
+  video: string;
+}
+
 const Login: React.FC = () => {
   const [isButtonDisabled, setIsButtonDisabled] = useState(false);
   const [googleId, setGoogleId] = useState<string | null>(null);
-  const [selectedRole, setSelectedRole] = useState<string | null>(null);
-  const [description, setDescription] = useState<string>('');
   const [video, setVideo] = useState<string>('');
-  const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [avatar, setAvatar] = useState<string>('');
   const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);
   const navigate = useNavigate();
+  const [form] = Form.useForm();
 
   const handleLoginClick = () => { navigate('/register'); };
   const handleForgotPasswordClick = () => { navigate('/forgot-password'); };
@@ -68,19 +76,20 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleRoleSelection = async () => {
-    if (!googleId || !selectedRole || !description || !phoneNumber) return;
-    if (selectedRole === 'instructor' && (!avatar || !video)) {
-      console.error('Instructor role requires avatar and video');
+  const handleRoleSelection = async (values: RoleSelectionFormValues) => {
+    if (!googleId) return;
+
+    if (values.role === 'instructor' && (!avatar || !video)) {
+      message.error('Instructor role requires both avatar and video.');
       return;
     }
 
     const payload = {
       google_id: googleId,
-      role: selectedRole,
-      description: description,
+      role: values.role,
+      description: values.description,
       video: video,
-      phone_number: phoneNumber,
+      phone_number: values.phoneNumber,
       avatar: avatar,
     };
 
@@ -99,10 +108,12 @@ const Login: React.FC = () => {
 
   const handleAvatarUploadSuccess = (url: string) => {
     setAvatar(url);
+    form.setFieldsValue({ avatar: url });
   };
 
   const handleVideoUploadSuccess = (url: string) => {
     setVideo(url);
+    form.setFieldsValue({ video: url });
   };
 
   return (
@@ -200,52 +211,75 @@ const Login: React.FC = () => {
               &times;
             </button>
             <h2 className="text-3xl font-semibold text-gray-800 mb-6">Sign up with Google</h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="col-span-2">
-                <select
-                  onChange={(e) => setSelectedRole(e.target.value)}
-                  className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            <Form
+              form={form}
+              name="roleSelection"
+              onFinish={handleRoleSelection}
+              className="grid grid-cols-2 gap-4"
+              initialValues={{
+                avatar: avatar,
+                video: video
+              }}
+            >
+              <Form.Item
+                name="role"
+                rules={[{ required: true, message: 'Please select your role!' }]}
+                className="col-span-2"
+              >
+                <Select
+                  placeholder="Select Role"
                 >
-                  <option value="">Select Role</option>
-                  <option value="student">Student</option>
-                  <option value="instructor">Instructor</option>
-                </select>
-              </div>
-              <div className="col-span-2">
-                <input
+                  <Option value="">Select Role</Option>
+                  <Option value="student">Student</Option>
+                  <Option value="instructor">Instructor</Option>
+                </Select>
+              </Form.Item>
+              <Form.Item
+                name="description"
+                rules={[{ required: true, message: 'Please input your description!' }]}
+                className="col-span-2"
+              >
+                <Input
                   type="text"
                   placeholder="Description"
                   className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
                 />
-              </div>
-              <div>
+              </Form.Item>
+              <Form.Item
+                name="avatar"
+                rules={[{ required: true, message: 'Please upload an avatar!' }]}
+              >
                 <label className="text-gray-600 mb-2">Upload Avatar</label>
                 <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
-              </div>
-              <div>
+              </Form.Item>
+              <Form.Item
+                name="video"
+                rules={[{ required: true, message: 'Please upload an introduction video!' }]}
+              >
                 <label className="text-gray-600 mb-2">Upload Introduction Video</label>
                 <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
-              </div>
-              <div className="col-span-2">
-                <input
+              </Form.Item>
+              <Form.Item
+                name="phoneNumber"
+                rules={[{ required: true, message: 'Please input your phone number!' }]}
+                className="col-span-2"
+              >
+                <Input
                   type="text"
                   placeholder="Phone Number"
                   className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  value={phoneNumber}
-                  onChange={(e) => setPhoneNumber(e.target.value)}
                 />
-              </div>
-              <div className="col-span-2">
-                <button
-                  onClick={handleRoleSelection}
+              </Form.Item>
+              <Form.Item className="col-span-2">
+                <Button
+                  type="primary"
+                  htmlType="submit"
                   className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300"
                 >
                   Submit
-                </button>
-              </div>
-            </div>
+                </Button>
+              </Form.Item>
+            </Form>
           </div>
         </div>
       )}
