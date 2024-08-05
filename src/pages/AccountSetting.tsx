@@ -3,6 +3,7 @@ import { Form, Input, Button } from 'antd';
 import FileUploader from '../components/FileUploader';
 import { getUserData, updateAccount, getCurrentLogin } from '../utils/commonImports';
 import TinyMCEEditorComponent from '../utils/TinyMCEEditor';
+import { EditOutlined } from '@ant-design/icons'; // Import icon
 
 interface UserData {
     _id: string;
@@ -21,25 +22,27 @@ const AccountSettings: React.FC = () => {
     const [saving, setSaving] = useState(false);
     const [userData, setUserData] = useState<UserData | null>(null);
     const [imageURL, setImageURL] = useState<string | null>(null);
+    const [videoURL, setVideoURL] = useState<string | null>(null);
     const [editorContent, setEditorContent] = useState<string>('');
-   
+    const [editMode, setEditMode] = useState<boolean>(false);
+
     useEffect(() => {
         const initialize = async () => {
-                const data = await getCurrentLogin();
-              
-                if (data && data._id) {
-                    fetchUserData(data._id);
-                }
+            const data = await getCurrentLogin();
+            if (data && data._id) {
+                fetchUserData(data._id);
+            }
         };
 
         initialize();
     }, []);
 
     const fetchUserData = async (id: string) => {
-            const data = await getUserData(id);
-            setUserData(data);
-            setImageURL(data.avatar || null);
-            setEditorContent(data.description || ''); // Set the existing description content
+        const data = await getUserData(id);
+        setUserData(data);
+        setImageURL(data.avatar || null);
+        setVideoURL(data.video || null); // Set the existing video URL
+        setEditorContent(data.description || ''); // Set the existing description content
     };
 
     const handleSaveChanges = async (values: Partial<UserData>) => {
@@ -49,6 +52,7 @@ const AccountSettings: React.FC = () => {
             ...userData!,
             ...values,
             avatar: imageURL || userData!.avatar,
+            video: videoURL || userData!.video,
             dob: values.dob || userData!.dob,
             description: editorContent, // Include the TinyMCE content
         };
@@ -80,16 +84,49 @@ const AccountSettings: React.FC = () => {
                         dob: userData.dob ? userData.dob.split('T')[0] : null,
                     }}
                 >
-                    <Form.Item
-                        label="Upload Image"
-                        rules={[{ required: true, message: 'Please upload an image!' }]}
-                    >
-                        <FileUploader
-                            type="image"
-                            onUploadSuccess={setImageURL}
-                            defaultImage={userData.avatar} 
-                        />
-                    </Form.Item>
+                    <div className="flex mb-4">
+                        <div className="w-1/2 flex flex-col items-center">
+                            <Form.Item
+                                rules={[{ required: true, message: 'Please upload an image!' }]}
+                            >
+                                <FileUploader
+                                    type="image"
+                                    onUploadSuccess={setImageURL}
+                                    defaultImage={userData.avatar} 
+                                />
+                            </Form.Item>
+                        </div>
+                        <div className="w-1/2 flex flex-col items-center">
+                            <div className="relative">
+                            {!editMode && videoURL && (
+                                    <div className="relative rounded-lg overflow-hidden border-2 border-gray-300">
+                                        <video width="240" height="180" controls className="rounded-lg">
+                                            <source src={videoURL} type="video/mp4" />
+                                            Your browser does not support the video tag.
+                                        </video>
+                                        <button
+                                            type="button"
+                                            className="absolute top-0 right-0 bg-gray-700 text-white px-2 py-1"
+                                            onClick={() => setEditMode(!editMode)}
+                                        >
+                                            <EditOutlined /> 
+                                        </button>
+                                    </div>
+                                )}
+                                {editMode && (
+                                    <Form.Item
+                                        label="Upload Video"
+                                        rules={[{ required: true, message: 'Please upload a video!' }]}
+                                    >
+                                        <FileUploader
+                                            type="video"
+                                            onUploadSuccess={setVideoURL}
+                                        />
+                                    </Form.Item>
+                                )}
+                            </div>
+                        </div>
+                    </div>
                     <Form.Item
                         label="Full Name"
                         name="name"

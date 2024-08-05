@@ -198,13 +198,13 @@ const FileUploader: React.FC<FileUploaderProps> = ({ type, onUploadSuccess, defa
                 marginTop: 20,
               }}
             >
-              <video src={videoUrl} controls style={{ width: '60%', borderRadius: '8px' }} />
+              <video src={videoUrl} controls style={{ width: '300px', borderRadius: '8px' }} /> {/* Giảm kích thước video */}
               <Button
                 icon={<DeleteOutlined />}
                 style={{
                   position: 'absolute',
                   top: 10, // Adjust to your preference
-                  right: 170, // Adjust to your preference
+                  right: 10, // Adjust to your preference
                   backgroundColor: 'rgba(255, 255, 255, 0.7)',
                   border: 'none', // Remove border if necessary
                   borderRadius: '50%', // Ensure button is round

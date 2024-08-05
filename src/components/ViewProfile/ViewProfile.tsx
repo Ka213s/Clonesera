@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { getUserData, updateSubscribed, getCurrentLogin, NT_getUserData } from '../../utils/commonImports';
 import AboutTab from './AboutTab';
+import { toast } from 'react-toastify';
 
 interface UserData {
     _id: string;
@@ -26,6 +27,7 @@ const ViewProfile: React.FC = () => {
     const [currentUserId, setCurrentUserId] = useState<string | null>(null);
     const [isSubscribed, setIsSubscribed] = useState(false);
     const { id } = useParams<{ id: string }>();
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchData = async () => {
@@ -51,15 +53,27 @@ const ViewProfile: React.FC = () => {
 
     const handleSubscribe = async () => {
         if (userData) {
-            await updateSubscribed(userData._id);
-            setIsSubscribed(true);
+            try {
+                await updateSubscribed(userData._id);
+                setIsSubscribed(true);
+               
+            } catch (error) {
+                toast.error('Please log in to subscribe');
+                navigate('/login');
+            }
         }
     };
 
     const handleUnsubscribe = async () => {
         if (userData) {
-            await updateSubscribed(userData._id);
-            setIsSubscribed(false);
+            try {
+                await updateSubscribed(userData._id);
+                setIsSubscribed(false);
+            
+            } catch (error) {
+               
+                navigate('/login');
+            }
         }
     };
 
