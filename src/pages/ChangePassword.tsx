@@ -1,4 +1,6 @@
-import { React, Form, Input, Button, notification, changePassword } from '../utils/commonImports';
+import React from 'react';
+import { Form, Input, Button,  } from 'antd';
+import { changePassword } from '../utils/commonImports'; 
 
 interface ChangePasswordFormValues {
     currentPassword: string;
@@ -15,19 +17,15 @@ const ChangePassword: React.FC = () => {
     const handleChangePassword = async (values: ChangePasswordFormValues) => {
         const { currentPassword, newPassword } = values;
 
-        if (!userId) {
-            notification.error({
-                message: 'Error',
-                description: 'User ID not found',
-            });
-            return;
-        }
+        
 
         try {
             await changePassword({ user_id: userId, old_password: currentPassword, new_password: newPassword });
             form.resetFields();
+          
         } catch (error) {
             console.error('Error changing password:', error);
+           
         }
     };
 
@@ -45,7 +43,7 @@ const ChangePassword: React.FC = () => {
                     name="currentPassword"
                     rules={[{ required: true, message: 'Current Password is required' }]}
                 >
-                    <Input />
+                    <Input.Password />
                 </Form.Item>
 
                 <Form.Item
@@ -56,7 +54,7 @@ const ChangePassword: React.FC = () => {
                         { min: 6, message: 'New Password must be at least 6 characters' },
                     ]}
                 >
-                    <Input />
+                    <Input.Password />
                 </Form.Item>
 
                 <Form.Item
@@ -75,7 +73,7 @@ const ChangePassword: React.FC = () => {
                         }),
                     ]}
                 >
-                    <Input />
+                    <Input.Password />
                 </Form.Item>
 
                 <Form.Item>
