@@ -25,6 +25,7 @@ const Login: React.FC = () => {
   const [video, setVideo] = useState<string>('');
   const [avatar, setAvatar] = useState<string>('');
   const [isRoleModalVisible, setIsRoleModalVisible] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<string>('');
   const navigate = useNavigate();
   const [form] = Form.useForm();
 
@@ -228,6 +229,7 @@ const Login: React.FC = () => {
               >
                 <Select
                   placeholder="Select Role"
+                  onChange={(value) => setSelectedRole(value)}
                 >
                   <Option value="">Select Role</Option>
                   <Option value="student">Student</Option>
@@ -245,20 +247,24 @@ const Login: React.FC = () => {
                   className="w-full p-3 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </Form.Item>
-              <Form.Item
-                name="avatar"
-                rules={[{ required: true, message: 'Please upload an avatar!' }]}
-              >
-                <label className="text-gray-600 mb-2">Upload Avatar</label>
-                <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
-              </Form.Item>
-              <Form.Item
-                name="video"
-                rules={[{ required: true, message: 'Please upload an introduction video!' }]}
-              >
-                <label className="text-gray-600 mb-2">Upload Introduction Video</label>
-                <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
-              </Form.Item>
+              {selectedRole === 'instructor' && (
+                <>
+                  <Form.Item
+                    name="avatar"
+                    rules={[{ required: true, message: 'Please upload an avatar!' }]}
+                  >
+                    <label className="text-gray-600 mb-2">Upload Avatar</label>
+                    <FileUploader type="image" onUploadSuccess={handleAvatarUploadSuccess} />
+                  </Form.Item>
+                  <Form.Item
+                    name="video"
+                    rules={[{ required: true, message: 'Please upload an introduction video!' }]}
+                  >
+                    <label className="text-gray-600 mb-2">Upload Introduction Video</label>
+                    <FileUploader type="video" onUploadSuccess={handleVideoUploadSuccess} />
+                  </Form.Item>
+                </>
+              )}
               <Form.Item
                 name="phoneNumber"
                 rules={[{ required: true, message: 'Please input your phone number!' }]}
