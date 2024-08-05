@@ -12,13 +12,13 @@ const ForgotPassword: React.FC = () => {
         try {
             const response = await forgotPassword(values);
             if (response && response.success) {
-                toast.success('Password reset email sent successfully');
+           
                 navigate('/login');
             } else {
                 toast.error(response?.message);
             }
         } catch (error) {
-            toast.error('Error sending password reset email');
+           
             console.error('Error:', error);
         } finally {
             setIsButtonDisabled(false);
