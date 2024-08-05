@@ -1,22 +1,31 @@
-import React from 'react';
+// StatusToggle.tsx
+import React, { useState } from 'react';
 import { Switch } from 'antd';
 import { changeUserStatus } from '../../../utils/commonImports';
-
 
 interface StatusToggleProps {
   userId: string;
   status: boolean;
-  onChange: (userId: string, status: boolean) => void;
+  onStatusChange: () => void;
 }
 
-const StatusToggle: React.FC<StatusToggleProps> = ({ userId, status, onChange }) => {
+const StatusToggle: React.FC<StatusToggleProps> = ({ userId, status, onStatusChange }) => {
+  const [tempStatus, setTempStatus] = useState(status);
+
   const handleStatusChange = async (checked: boolean) => {
+    setTempStatus(checked);
+    try {
       await changeUserStatus({ user_id: userId, status: checked });
-      onChange(userId, checked);
+   
+      onStatusChange();
+    } catch (error) {
+      console.error('Failed to update status');
+      setTempStatus(status);
+    }
   };
 
   return (
-    <Switch checked={status} onChange={handleStatusChange} />
+    <Switch checked={tempStatus} onChange={handleStatusChange} />
   );
 };
 

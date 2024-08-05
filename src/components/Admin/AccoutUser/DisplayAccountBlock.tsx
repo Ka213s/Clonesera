@@ -31,7 +31,7 @@ interface DisplayAccountProps {
 
 const { Search } = Input;
 
-const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = true, isDeleted = false }) => {
+const DisplayAccount: React.FC<DisplayAccountProps> = ({ status = false, isDeleted = false }) => {
   const [data, setData] = useState<User[]>([]);
   const [pagination, setPagination] = useState<PaginationData>({ current: 1, pageSize: 10, total: 0 });
   const [searchKeyword, setSearchKeyword] = useState<string>("");
