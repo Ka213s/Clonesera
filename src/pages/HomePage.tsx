@@ -14,20 +14,20 @@ const HomePage: React.FC = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
           <div className="col-span-1 md:col-span-2 relative bg-green-600 text-white p-4 rounded-lg overflow-hidden flex flex-col justify-between h-50">
             <div className="z-10 relative">
-              <h1 className="text-2xl md:text-3xl font-bold mb-4 text-black">Sharpen Your Skills with Professional Online Courses</h1>
-              <p className="text-lg mb-4 text-black">
+              <h1 className="text-2xl md:text-3xl font-bold mb-4 text-white">Sharpen Your Skills with Professional Online Courses</h1>
+              <p className="text-lg mb-4 text-white font-bold">
                 Join our platform to access high-quality courses taught by industry experts and enhance your skills from anywhere at any time.
               </p>
-              <button className="bg-black text-white px-6 py-2 rounded-full font-semibold inline-flex items-center">
-                Join Now
-              </button>
+              <p className="text-md mb-4 text-white font-bold" >
+                Whether you want to advance your career or explore new hobbies, we have the right courses for you. Start learning today!
+              </p>
             </div>
             <div className="absolute top-0 right-0 bottom-0 flex items-center justify-end p-4">
               <img
                 src={JoinAvatar}
                 alt="Online Learning"
-                className="object-cover h-auto opacity-50 ml-auto"
-                style={{ marginRight: '-50px' }}
+                className="object-cover h-auto opacity-30 ml-auto"
+                style={{ marginRight: '-60px' }}
               />
             </div>
             <div className="absolute top-0 right-0 bottom-0 left-0 overflow-hidden pointer-events-none">
