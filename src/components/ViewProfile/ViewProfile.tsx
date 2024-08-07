@@ -33,15 +33,15 @@ const ViewProfile: React.FC = () => {
         const fetchData = async () => {
             if (id) {
                 const token = localStorage.getItem('token');
-                const [userData, currentUser] = token
-                    ? await Promise.all([getUserData(id), getCurrentLogin()])
-                    : [await NT_getUserData(id), null];
-
-                setUserData(userData);
-                setIsSubscribed(userData.is_subscribed);
-
-                if (currentUser) {
+                if (token) {
+                    const [userData, currentUser] = await Promise.all([getUserData(id), getCurrentLogin()]);
+                    setUserData(userData);
+                    setIsSubscribed(userData.is_subscribed);
                     setCurrentUserId(currentUser._id);
+                } else {
+                    const userData = await NT_getUserData(id);
+                    setUserData(userData);
+                    setIsSubscribed(userData.is_subscribed);
                 }
             } else {
                 console.error('No user ID provided');
@@ -52,27 +52,37 @@ const ViewProfile: React.FC = () => {
     }, [id]);
 
     const handleSubscribe = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            toast.error('Please log in to subscribe');
+            navigate('/login');
+            return;
+        }
+
         if (userData) {
             try {
                 await updateSubscribed(userData._id);
                 setIsSubscribed(true);
-               
             } catch (error) {
-                toast.error('Please log in to subscribe');
-                navigate('/login');
+                toast.error('Error subscribing');
             }
         }
     };
 
     const handleUnsubscribe = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+            toast.error('Please log in to unsubscribe');
+            navigate('/login');
+            return;
+        }
+
         if (userData) {
             try {
                 await updateSubscribed(userData._id);
                 setIsSubscribed(false);
-            
             } catch (error) {
-               
-                navigate('/login');
+                toast.error('Error unsubscribing');
             }
         }
     };
