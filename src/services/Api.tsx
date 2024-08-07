@@ -8,7 +8,7 @@ export const registerAccountStudent = async (data: { name: string; email: string
 };
 export const registerAccountInstructor = async (data: { name: string; email: string; password: string; role: string; phone_number: string; description: string; video: string; avatar: string; }) => {
   const response = await tokenAxiosInstance.post("/api/users", data);
-  toast.success("Registration successful");
+  toast.success("Registration successful. Please wait for admin approval");
   return response.data;
 };
 
@@ -37,7 +37,7 @@ export const loginUserByGoogle = async (data: { google_id: string; }) => {
 
 export const registerUserByGoogle = async (data: { google_id: string; role: string; description: string; video: string; phone_number: string; }) => {
   const response = await tokenAxiosInstance.post("/api/users/google", data);
-  toast.success("Google registration successful");
+  toast.success("Google registration successful. . Please wait for admin approval");
   return response.data;
 };
 
